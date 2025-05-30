@@ -67,11 +67,11 @@
 
 | شماره | نام فصل (انگلیسی)      | نام فصل (فارسی)           | وضعیت     | لینک                                                                                             |
 | :--- | :--------------------- | :------------------------- | :--------- | :------------------------------------------------------------------------------------------------ |
-| 00   | Preface                | مقدمه                     | ✅         | [Book/00-Preface/Preface.md](Book/00-Preface/Preface.md)                                        |
-| 01   | Introduction           | معرفی C#                  | ❌         | [Book/01-Introduction/Introduction.md](Book/01-Introduction/Introduction.md)                    |
-| 02   | Language Basics        | اصول اولیه زبان          | ❌         | [Book/02-Language_Basics/Language_Basics.md](Book/02-Language-Basics/Language-Basics.md)        |
-| 03   | Creating Types in C#   | ایجاد انواع در C#        | ❌         | [Book/03-Creating_Types_in_C#/Creating_Types_in_C#.md](Book/03-Creating-Types-in-C#/Creating-Types-in-C#.md) |
-| 04   | Advanced C#            | C# پیشرفته                | ❌         | [Book/04-Advanced_C#/Advanced_C#.md](Book/04-Advanced-C#/Advanced-C#.md)                        |
+| 00   | Preface                | مقدمه                     | ✅         | [Book/00-Preface](Book/00-Preface/Preface.md)                                        |
+| 01   | Introduction           | معرفی C#                  | ❌         | [Book/01-Introduction](Book/01-Introduction/Introduction.md)                    |
+| 02   | Language Basics        | اصول اولیه زبان          | ❌         | [Book/02-Language_Basics](Book/02-Language-Basics/Language-Basics.md)        |
+| 03   | Creating Types in C#   | ایجاد انواع در C#        | ❌         | [Book/03-Creating_Types_in_C#](Book/03-Creating-Types-in-C#/Creating-Types-in-C#.md) |
+| 04   | Advanced C#            | C# پیشرفته                | ❌         | [Book/04-Advanced_C#]()                        |
 | ...  | **[ادامه فصول کتاب را اینجا اضافه کنید]** | **[ادامه فصول کتاب را اینجا اضافه کنید]** |            |                                                                                                   |
 
 ---
