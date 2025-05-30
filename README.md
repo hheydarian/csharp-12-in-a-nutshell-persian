@@ -1,2 +1,7 @@
-# csharp-12-in-a-nutshell-persian
-Persian translation of "C# 12 in a Nutshell: The Definitive Reference" by Joseph Albahari.
+<h1 align="center"> ترجمه آزاد کتاب  C# 12 
+in a Nutshell</h1>
+
+<p align="center">
+  <img src="assets/Cover.jpg"/>
+</p>
+
