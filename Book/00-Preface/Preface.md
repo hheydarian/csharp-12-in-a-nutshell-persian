@@ -40,7 +40,12 @@
 
 تصویر P-1: نمودار نمونه
 
-![Conventions-Used-in-This-Book](../assets/image/Preface01.jpeg)
+<div align="center">
+  
+  ![Conventions-UsedThis-Book](../../assets/image/Preface01.jpeg) 
+  
+</div>
+
 
 در این کتاب، قراردادهای تایپوگرافی (شیوه‌نامه‌های نوشتاری) زیر به کار رفته‌اند:
 
