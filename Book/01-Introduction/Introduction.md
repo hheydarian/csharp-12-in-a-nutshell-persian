@@ -872,3 +872,231 @@ await foreach (var number in RangeAsync (0, 10, 100))
 ```
 برای اطلاعات بیشتر، به "جریان‌های ناهمگام" در صفحه ۶۷۲ مراجعه کنید.
 
+## تازه‌های سی‌شارپ ۷.x
+
+سی‌شارپ ۷.x ابتدا با ویژوال استودیو ۲۰۱۷ عرضه شد. سی‌شارپ ۷.۳ امروز نیز توسط ویژوال استودیو ۲۰۱۹ زمانی که دات‌نت کور ۲، چارچوب دات‌نت ۴.۶ تا ۴.۸، یا دات‌نت استاندارد ۲.۰ را هدف قرار می‌دهید، استفاده می‌شود.
+
+### سی‌شارپ ۷.۳
+
+سی‌شارپ ۷.۳ بهبودهای جزئی در ویژگی‌های موجود ایجاد کرد، مانند فعال کردن استفاده از عملگرهای برابری با تاپِل‌ها، بهبود تفکیک بار اضافی متدها (overload resolution) و قابلیت اعمال خصیصه‌ها به فیلدهای پشتیبان خصوصیات خودکار:
+
+```C#
+
+[field:NonSerialized]
+public int MyProperty { get; set; }
+```
+سی‌شارپ ۷.۳ همچنین بر پایه ویژگی‌های برنامه‌نویسی پیشرفته با تخصیص حافظه پایین در سی‌شارپ ۷.۲ بنا شد، با قابلیت انتساب مجدد متغیرهای محلی ref، عدم نیاز به پین کردن هنگام اندیس‌گذاری فیلدهای ثابت، و پشتیبانی از مقداردهنده اولیه فیلد با stackalloc:
+
+```C#
+
+int* pointer  = stackalloc int[] {1, 2, 3};
+Span<int> arr = stackalloc []    
+{1, 2, 3};
+```
+توجه کنید که حافظه تخصیص‌یافته روی پشته (stack-allocated) را می‌توان مستقیماً به یک Span انتساب داد. ما در فصل ۲۳ اسپَن‌ها و دلیل استفاده از آن‌ها را شرح می‌دهیم.
+
+### سی‌شارپ ۷.۲
+
+سی‌شارپ ۷.۲ اصلاح‌کننده جدید private protected را اضافه کرد (اشتراک internal و protected)، قابلیت دنبال کردن آرگومان‌های نام‌گذاری شده با آرگومان‌های موقعیتی هنگام فراخوانی متدها، و ساختارهای readonly. یک ساختار readonly تضمین می‌کند که تمام فیلدها readonly هستند تا در اعلان نیت کمک کند و به کامپایلر آزادی بهینه‌سازی بیشتری بدهد:
+
+```C#
+
+readonly struct Point
+{
+  public readonly int X, Y;   // X and Y must be readonly
+}
+```
+سی‌شارپ ۷.۲ همچنین ویژگی‌های تخصصی را برای کمک به بهینه‌سازی‌های کوچک و برنامه‌نویسی با تخصیص حافظه پایین اضافه کرد: به "اصلاح‌کننده in" در صفحه ۷۲، "متغیرهای محلی Ref" در صفحه ۷۵، "بازگشت‌های Ref" در صفحه ۷۶، و "ساختارهای Ref" در صفحه ۱۴۴ مراجعه کنید.
+
+### سی‌شارپ ۷.۱
+
+از سی‌شارپ ۷.۱، در صورت امکان استنباط نوع، می‌توانید هنگام استفاده از کلمه کلیدی default، نوع را حذف کنید:
+
+```C#
+
+decimal number = default;   // number is decimal
+```
+سی‌شارپ ۷.۱ همچنین قوانین مربوط به دستورات switch را آسان‌تر کرد (به طوری که می‌توانید بر روی پارامترهای نوع عمومی تطبیق الگو انجام دهید)، اجازه داد متد Main یک برنامه ناهمگام باشد، و اجازه داد نام عناصر تاپل استنباط شوند:
+
+```C#
+
+var now = DateTime.Now;
+var tuple = (now.Hour, now.Minute, now.Second);
+```
+### بهبودهای ثابت‌های عددی
+
+ثابت‌های عددی در سی‌شارپ ۷ می‌توانند شامل زیرخط‌هایی برای بهبود خوانایی باشند. این‌ها جداکننده‌های ارقام نامیده می‌شوند و توسط کامپایلر نادیده گرفته می‌شوند:
+
+```C#
+
+int million = 1_000_000;
+```
+ثابت‌های دودویی را می‌توان با پیشوند 0b مشخص کرد:
+
+```C#
+
+var b = 0b1010_1011_1100_1101_1110_1111;
+```
+### متغیرهای out و discardها
+
+سی‌شارپ ۷ فراخوانی متدهایی که شامل پارامترهای out هستند را آسان‌تر می‌کند. اول اینکه، اکنون می‌توانید متغیرهای out را به صورت لحظه‌ای اعلان کنید (به "متغیرهای out و discardها" در صفحه ۷۲):
+
+```C#
+
+bool successful = int.TryParse ("123", out int result);
+Console.WriteLine (result);
+```
+و هنگام فراخوانی متدی با چندین پارامتر out، می‌توانید با کاراکتر زیرخط (_) آن‌هایی را که به آن‌ها علاقه‌ای ندارید، نادیده بگیرید (discard):
+
+```C#
+
+SomeBigMethod (out _, out _, out _, out int x, out _, out _, out _);
+Console.WriteLine (x);
+```
+### الگوهای نوع و متغیرهای الگو
+
+شما می‌توانید متغیرها را به صورت لحظه‌ای با عملگر is نیز معرفی کنید. این‌ها متغیرهای الگو نامیده می‌شوند (به "معرفی یک متغیر الگو" در صفحه ۱۳۰):
+
+```C#
+
+void Foo (object x)
+{
+  if (x is string s)
+    Console.WriteLine (s.Length);
+}
+```
+دستور switch نیز از الگوهای نوع پشتیبانی می‌کند، بنابراین می‌توانید علاوه بر ثابت‌ها، بر اساس نوع نیز switch کنید (به "سوئیچ کردن بر روی انواع" در صفحه ۸۹). می‌توانید شرایط را با یک عبارت when مشخص کنید و همچنین بر روی مقدار null نیز switch کنید:
+
+```C#
+
+switch (x)
+{
+  case int i:
+    Console.WriteLine ("It's an int!");
+    break;
+  case string s:
+    Console.WriteLine (s.Length);    // We can use the s variable
+    break;
+  case bool b when b == true:        // Matches only when b is true
+    Console.WriteLine ("True");
+    break;
+  case null:
+    Console.WriteLine ("Nothing");
+    break;
+}
+```
+### متدهای محلی
+
+یک متد محلی، متدی است که در داخل تابع دیگری اعلان می‌شود (به "متدهای محلی" در صفحه ۱۰۶):
+
+```C#
+
+void WriteCubes()
+{
+  Console.WriteLine (Cube (3));
+  Console.WriteLine (Cube (4));
+  Console.WriteLine (Cube (5));
+ int Cube (int value) => value * value * value;
+}
+```
+متدهای محلی فقط برای تابع حاوی قابل مشاهده هستند و می‌توانند متغیرهای محلی را به همان روشی که عبارات لامبدا انجام می‌دهند، شکار کنند.
+
+### اعضای بیشتر با بدنه عبارت
+
+سی‌شارپ ۶ نحو "پیکان چاق" با بدنه عبارت را برای متدها، خصوصیات فقط خواندنی، عملگرها و اندیس‌گذارها معرفی کرد. سی‌شارپ ۷ این را به سازنده‌ها، خصوصیات خواندنی/نوشتنی و نهایی‌کننده‌ها (finalizers) گسترش می‌دهد:
+
+```C#
+
+public class Person
+{
+  string name;
+ public Person (string name) => Name = name;
+  public string Name
+  {
+ get => name;
+ set => name = value ?? "";
+  }
+ ~Person () => Console.WriteLine ("finalize");
+}
+```
+### تفکیک‌کننده‌ها
+
+سی‌شارپ ۷ الگوی تفکیک‌کننده (deconstructor) را معرفی می‌کند (به "تفکیک‌کننده‌ها" در صفحه ۱۱۰). در حالی که یک سازنده معمولاً مجموعه‌ای از مقادیر (به عنوان پارامتر) را می‌گیرد و به فیلدها انتساب می‌دهد، یک تفکیک‌کننده برعکس عمل می‌کند و فیلدها را به مجموعه‌ای از متغیرها بازگردانده و انتساب می‌دهد. ما می‌توانیم یک تفکیک‌کننده برای کلاس Person در مثال قبلی به شکل زیر بنویسیم (صرف نظر از مدیریت خطا):
+
+```C#
+
+public void Deconstruct (out string firstName, out string lastName)
+{
+  int spacePos = name.IndexOf (' ');
+  firstName = name.Substring (0, spacePos);
+  lastName = name.Substring (spacePos + 1);
+}
+```
+تفکیک‌کننده‌ها با نحو خاص زیر فراخوانی می‌شوند:
+
+```C#
+
+var joe = new Person ("Joe Bloggs");
+var (first, last) = joe;          // Deconstruction
+Console.WriteLine (first);        // Joe
+Console.WriteLine (last);         // Bloggs
+```
+### تاپِل‌ها Tuples
+
+شاید قابل توجه‌ترین بهبود سی‌شارپ ۷، پشتیبانی صریح از تاپِل‌ها باشد (به "تاپِل‌ها" در صفحه ۲۲۲). تاپِل‌ها راهی ساده برای ذخیره مجموعه‌ای از مقادیر مرتبط فراهم می‌کنند:
+
+```C#
+
+var bob = ("Bob", 23);
+Console.WriteLine (bob.Item1);   // Bob
+Console.WriteLine (bob.Item2);   // 23
+```
+تاپِل‌های جدید سی‌شارپ، یک قند نحوی (syntactic sugar) برای استفاده از ساختارهای عمومی System.ValueTuple<…> هستند. اما به لطف جادوی کامپایلر، عناصر تاپل می‌توانند نام‌گذاری شوند:
+
+```C#
+
+var tuple = (name:"Bob", age:23);
+Console.WriteLine (tuple.name);     // Bob
+Console.WriteLine (tuple.age);      // 23
+```
+با تاپِل‌ها، توابع می‌توانند چندین مقدار را بدون نیاز به پارامترهای out یا سربار نوع اضافی برگردانند:
+
+```C#
+
+static (int row, int column) GetFilePosition() => (3, 10);
+static void Main()
+{
+  var pos = GetFilePosition();
+  Console.WriteLine (pos.row);      // 3
+  Console.WriteLine (pos.column);   // 10
+}
+```
+تاپِل‌ها به طور ضمنی از الگوی تفکیک ساختار پشتیبانی می‌کنند، بنابراین می‌توانید به راحتی آن‌ها را به متغیرهای فردی تفکیک کنید:
+
+```C#
+
+static void Main()
+{
+ (int row, int column) = GetFilePosition();   // Creates 2 local variables
+  Console.WriteLine (row);      // 3 
+  Console.WriteLine (column);   // 10
+}
+```
+### عبارات throw
+
+پیش از سی‌شارپ ۷، throw همیشه یک دستور بود. اکنون می‌تواند به عنوان یک عبارت در توابع با بدنه عبارت نیز ظاهر شود:
+
+```C#
+
+public string Foo() => throw new NotImplementedException();
+```
+یک عبارت throw می‌تواند در یک عبارت شرطی سه‌تایی نیز ظاهر شود:
+
+```C#
+
+string Capitalize (string value) =>
+  value == null ? throw new ArgumentException ("value") :
+  value == "" ? "" :
+  char.ToUpper (value[0]) + value.Substring (1);
+```
+
