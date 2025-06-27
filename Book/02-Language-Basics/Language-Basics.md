@@ -219,3 +219,92 @@ int x = 3;   /* This is a comment that
                 spans two lines */
 ```
 نظرات می‌توانند شامل تگ‌های مستندسازی XML باشند، که ما در "مستندسازی XML" در صفحه ۲۷۲ توضیح می‌دهیم.
+
+## مبانی Types
+
+یک Type، طرح کلی (blueprint) برای یک value را تعریف می‌کند. در این مثال، ما از دو Literals از نوع int با مقادیر ۱۲ و ۳۰ استفاده می‌کنیم. همچنین یک variable از نوع int با نام x اعلان می‌کنیم:
+
+```C#
+
+int x = 12 * 30;
+Console.WriteLine (x);
+```
+از آنجایی که بیشتر لیست‌های کد در این کتاب به Types از Namespace System نیاز دارند، از این پس "using System" را حذف خواهیم کرد، مگر اینکه مفهومی مرتبط با Namespaces را نشان دهیم.
+
+یک variable نشان‌دهنده یک مکان ذخیره‌سازی است که می‌تواند در طول زمان حاوی مقادیر مختلفی باشد. در مقابل، یک Constant همیشه همان value را نمایش می‌دهد (در ادامه بیشتر در مورد آن صحبت خواهیم کرد):
+
+```C#
+
+const int y = 360;
+```
+تمام Values در C#، Instances یک Type هستند. معنای یک value و مجموعه مقادیر ممکن که یک variable می‌تواند داشته باشد، توسط Type آن تعیین می‌شود.
+
+### نمونه‌های Predefined Type
+
+Predefined Types انواعی هستند که به طور خاص توسط Compiler پشتیبانی می‌شوند. Type int یک Predefined Type برای نمایش مجموعه اعداد صحیح است که در ۳۲ بیت حافظه جای می‌گیرند، از 
+2 
+31
+ 
+- تا 
+2 
+31
+ 
+-1، و Type پیش‌فرض برای Literals عددی در این محدوده است. می‌توانید با Instances از Type int توابعی مانند عملیات حسابی را به صورت زیر انجام دهید:
+
+```C#
+
+int x = 12 * 30;
+```
+یک Predefined Type دیگر C#، string است. Type string یک توالی از Characterها را نمایش می‌دهد، مانند ".NET" یا http://oreilly.com. می‌توانید با فراخوانی توابع روی Strings با آن‌ها کار کنید، به صورت زیر:
+
+```C#
+
+string message = "Hello world";
+string upperMessage = message.ToUpper();
+Console.WriteLine (upperMessage);               // HELLO WORLD
+int x = 2022;
+message = message + x.ToString();
+Console.WriteLine (message);                    // Hello world2022
+```
+در این مثال، ما x.ToString() را فراخوانی کردیم تا یک نمایش رشته‌ای از عدد صحیح x به دست آوریم. می‌توانید ToString() را روی یک variable از تقریباً هر Type فراخوانی کنید.
+
+Type Predefined bool دقیقاً دو value ممکن دارد: true و false. Type bool معمولاً با یک if statement برای شاخه‌بندی شرطی جریان اجرا استفاده می‌شود:
+
+```C#
+
+bool simpleVar = false;
+if (simpleVar)
+  Console.WriteLine ("This will not print");
+int x = 5000;
+bool lessThanAMile = x < 5280;
+if (lessThanAMile)
+  Console.WriteLine ("This will print");
+```
+### Custom Types
+
+در C#، Predefined Types (که به آن‌ها Built-in Types نیز گفته می‌شود) با یک C# Keyword شناخته می‌شوند. Namespace System در .NET حاوی بسیاری از Types مهم است که توسط C# Predefined نیستند (مثلاً DateTime).
+
+همانطور که می‌توانیم Methodهای خودمان را بنویسیم، می‌توانیم Types خودمان را نیز بنویسیم. در مثال بعدی، ما یک Custom Type به نام UnitConverter تعریف می‌کنیم—یک Class که به عنوان طرح کلی برای تبدیل واحدها عمل می‌کند:
+
+```C#
+
+UnitConverter feetToInchesConverter = new UnitConverter (12);
+UnitConverter milesToFeetConverter  = new UnitConverter (5280);
+Console.WriteLine (feetToInchesConverter.Convert(30));    // 360
+Console.WriteLine (feetToInchesConverter.Convert(100));   // 1200
+Console.WriteLine (feetToInchesConverter.Convert(
+                   milesToFeetConverter.Convert(1)));     // 63360
+public class UnitConverter
+{
+ int ratio;                              // Field
+ public UnitConverter (int unitRatio)    // Constructor
+ {
+ ratio = unitRatio;
+ } 
+public int Convert (int unit)           // Method
+{
+ return unit * ratio;
+ } 
+}
+```
+در این مثال، تعریف Class ما در همان فایل دستورات سطح بالای ما ظاهر می‌شود. این قانونی است—تا زمانی که دستورات سطح بالا ابتدا ظاهر شوند—و هنگام نوشتن برنامه‌های آزمایشی کوچک قابل قبول است. در برنامه‌های بزرگ‌تر، رویکرد استاندارد این است که تعریف Class را در یک فایل جداگانه مانند UnitConverter.cs قرار دهیم.
