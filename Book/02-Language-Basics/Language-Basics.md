@@ -661,6 +661,7 @@ C# همچنین از موارد زیر پشتیبانی می‌کند:
 
 می‌توانی یک نوع مقداری سفارشی را با استفاده از کلیدواژه‌ی struct تعریف کنی
 (به شکل زیر که در شکل ۲-۱ نمایش داده شده):
+![Conventions-UsedThis-Book](../../assets/image/02/Figure-2-1.png) 
 
 ```c#
 public struct Point { public int X; public int Y; }
