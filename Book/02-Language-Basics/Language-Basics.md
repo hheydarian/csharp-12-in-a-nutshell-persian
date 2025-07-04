@@ -692,7 +692,9 @@ Console.WriteLine(p1.X);   // 9
 Console.WriteLine(p2.X);   // 7
 ```
 📌 شکل ۲-۲ نشان می‌دهد که p1 و p2 فضای ذخیره‌سازی مستقلی دارند.
+
 ![Conventions-UsedThis-Book](../../assets/image/02/Figure-2-2.png) 
+
 📌 یعنی هر کدام در حافظه جداگانه نگهداری می‌شوند و تغییر یکی روی دیگری اثری ندارد.
 
 ### نوع‌های ارجاعی (Reference Types)
@@ -711,7 +713,9 @@ Console.WriteLine(p2.X);   // 7
 public class Point { public int X, Y; }
 ```
 📌 شکل ۲-۳. نمونه‌ای از نوع ارجاعی در حافظه
+
 ![Conventions-UsedThis-Book](../../assets/image/02/Figure-2-3.png) 
+
 زمانی که یک متغیر از نوع ارجاعی را به متغیر دیگری اختصاص می‌دهیم،
 فقط ارجاع کپی می‌شود، نه خود شیء.
 
@@ -735,5 +739,8 @@ Console.WriteLine(p1.X);   // 9
 Console.WriteLine(p2.X);   // 9
 ```
 📌 شکل ۲-۴ نشان می‌دهد که p1 و p2 دو ارجاع هستند که به یک شیء مشترک اشاره می‌کنند.
+
 ![Conventions-UsedThis-Book](../../assets/image/02/Figure-2-4.png) 
+
+
 📌 در نتیجه تغییر یکی، روی دیگری هم تأثیر دارد.
