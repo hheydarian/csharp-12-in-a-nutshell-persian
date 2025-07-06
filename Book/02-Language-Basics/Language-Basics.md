@@ -791,3 +791,46 @@ struct A { byte b; long l; }
 می‌توانید این رفتار را با اعمال Attribute StructLayout نادیده بگیرید (به "Mapping a Struct to Unmanaged Memory" در صفحه ۹۹۷ مراجعه کنید).
 
 Reference Types نیاز به تخصیص‌های جداگانه حافظه برای Reference و Object دارند. Object به اندازه Fields خود به علاوه سربار اداری اضافی، بایت مصرف می‌کند. سربار دقیقاً به طور ذاتی برای پیاده‌سازی .NET runtime خصوصی است، اما حداقل، این سربار ۸ بایت است، که برای ذخیره یک کلید به Type Object و همچنین اطلاعات موقت مانند وضعیت Lock آن برای Multithreading و یک پرچم برای نشان دادن اینکه آیا از حرکت توسط Garbage Collector ثابت شده است، استفاده می‌شود. هر Reference به یک Object به ۴ یا ۸ بایت اضافی نیاز دارد، بسته به اینکه .NET runtime روی پلتفرم ۳۲ یا ۶۴ بیتی در حال اجرا باشد.
+
+### Predefined Type Taxonomy
+
+Predefined Types در C# به شرح زیر هستند:
+
+* Value Types
+
+     * Numeric
+
+           Signed integer (sbyte, short, int, long)
+
+           Unsigned integer (byte, ushort, uint, ulong)
+
+           Real number (float, double, decimal)
+
+    * Logical (bool)
+
+    * Character (char)
+
+* Reference Types
+
+    * String (string)
+
+    * Object (object)
+
+Predefined Types در C# در واقع Alias برای .NET Types در Namespace System هستند. تنها یک تفاوت Syntactic بین این دو دستور وجود دارد:
+
+```C#
+
+int i = 5;
+System.Int32 i = 5;
+```
+مجموعه Predefined Value Types به استثنای decimal به عنوان Primitive Types در CLR شناخته می‌شوند. Primitive Types به این دلیل نام‌گذاری شده‌اند که مستقیماً از طریق Instructions در کد Compile شده پشتیبانی می‌شوند، و این معمولاً به پشتیبانی مستقیم در Processor زیربنایی ترجمه می‌شود؛ برای مثال:
+
+```C#
+
+                   // Underlying hexadecimal representation
+int i = 7;         // 0x7
+bool b = true;     // 0x1
+char c = 'A';      // 0x41
+float f = 0.5f;    // uses IEEE floating-point encoding
+```
+Types System.IntPtr و System.UIntPtr نیز Primitive هستند (به Chapter 24 مراجعه کنید).
