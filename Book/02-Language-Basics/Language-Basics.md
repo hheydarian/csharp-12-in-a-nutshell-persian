@@ -834,3 +834,10 @@ char c = 'A';      // 0x41
 float f = 0.5f;    // uses IEEE floating-point encoding
 ```
 Types System.IntPtr و System.UIntPtr نیز Primitive هستند (به Chapter 24 مراجعه کنید).
+
+Numeric Types
+
+C# دارای Predefined Numeric Types است که در Table 2-1 نشان داده شده‌اند.
+
+Table 2-1. Predefined numeric types in C#
+
