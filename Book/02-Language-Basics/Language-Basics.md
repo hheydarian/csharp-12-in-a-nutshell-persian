@@ -842,3 +842,60 @@ C# دارای Predefined Numeric Types است که در Table 2-1 نشان دا�
 Table 2-1. Predefined numeric types in C#
 
 ![Conventions-UsedThis-Book](../../assets/image/02/Table-2-1.png) 
+
+از بین Integral Types، int و long، First-class Citizens محسوب می‌شوند و مورد توجه C# و Runtime هستند. سایر Integral Types معمولاً برای Interoperability یا زمانی که کارایی فضا (space efficiency) در اولویت است، استفاده می‌شوند. Native-sized Integer Types یعنی nint و nuint، بیشتر در کار با Pointers مفید هستند، بنابراین این‌ها را در یک Chapter بعدی توضیح خواهیم داد (به "Native-Sized Integers" در صفحه ۲۶۶ مراجعه کنید).
+
+
+از بین Real Number Types، float و double را Floating-Point Types2 می‌نامند و معمولاً برای محاسبات علمی و گرافیکی استفاده می‌شوند. Type decimal معمولاً برای محاسبات مالی به کار می‌رود، که در آن‌ها محاسبات با دقت Base-10 و دقت بالا مورد نیاز است.
+
+.NET این لیست را با چندین Specialized Numeric Type تکمیل می‌کند، از جمله Int128 و UInt128 برای ۱۲۸-bit Signed و Unsigned Integers، BigInteger برای Integers با اندازه‌های دلخواه بزرگ، و Half برای ۱۶-bit Floating Point Numbers. Half عمدتاً برای Interoperability با Processors کارت گرافیک در نظر گرفته شده است و در بیشتر CPUs پشتیبانی Native ندارد، که float و double را به گزینه‌های بهتری برای استفاده عمومی تبدیل می‌کند.
+
+### Numeric Literals
+
+Literals از نوع Integral می‌توانند از Decimal یا Hexadecimal Notation استفاده کنند؛ Hexadecimal با پیشوند 0x نشان داده می‌شود. برای مثال:
+
+```C#
+
+int x = 127;
+long y = 0x7F;
+```
+می‌توانید یک Underscore را در هر کجای یک Numeric Literal قرار دهید تا خواناتر شود:
+
+```C#
+
+int million = 1_000_000;
+```
+می‌توانید اعداد را به صورت Binary با پیشوند 0b مشخص کنید:
+
+```C#
+
+var b = 0b1010_1011_1100_1101_1110_1111;
+Real Literals می‌توانند از Decimal و/یا Exponential Notation استفاده کنند:
+```
+```C#
+
+double d = 1.5;
+double million = 1E06;
+```
+### Numeric Literal Type Inference
+
+
+به طور پیش‌فرض، Compiler یک Numeric Literal را به صورت double یا یک Integral Type استنباط می‌کند:
+
+* اگر Literal شامل یک Decimal Point یا نماد Exponential (E) باشد، یک double است.
+
+* در غیر این صورت، Type Literal اولین Type در این لیست است که می‌تواند Value Literal را در خود جای دهد: int, uint, long, و ulong.
+
+برای مثال:
+
+ از نظر فنی، decimal نیز یک Floating-Point Type است، اگرچه در Specification زبان C# به این نام از آن یاد نمی‌شود.
+
+
+```C#
+
+Console.WriteLine (        1.0.GetType());  // Double  (double)
+Console.WriteLine (       1E06.GetType());  // Double  (double)
+Console.WriteLine (          1.GetType());  // Int32   (int)
+Console.WriteLine ( 0xF0000000.GetType());  // UInt32  (uint)
+Console.WriteLine (0x100000000.GetType());  // Int64   (long)
+```
