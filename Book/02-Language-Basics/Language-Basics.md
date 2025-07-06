@@ -841,3 +841,4 @@ C# دارای Predefined Numeric Types است که در Table 2-1 نشان دا�
 
 Table 2-1. Predefined numeric types in C#
 
+![Conventions-UsedThis-Book](../../assets/image/02/Table-2-1.png) 
