@@ -938,45 +938,45 @@ decimal d = -1.23M;     // Will not compile without the M suffix.
 
 Integral Type Conversions زمانی Implicit هستند که Type مقصد بتواند هر Value ممکن از Type منبع را نمایش دهد. در غیر این صورت، یک Explicit Conversion مورد نیاز است؛ برای مثال:
 
-C# Language Basics
-Numeric Types | 49
-
-C#
+```C#
 
 int x = 12345;       // int is a 32-bit integer
 long y = x;          // Implicit conversion to 64-bit integral type
 short z = (short)x;  // Explicit conversion to 16-bit integral type
-تبدیل بین Floating-Point Types
+```
+### تبدیل بین Floating-Point Types
 
 یک float می‌تواند به طور Implicit به یک double تبدیل شود، با توجه به اینکه یک double می‌تواند هر Value ممکن از یک float را نمایش دهد. تبدیل معکوس باید Explicit باشد.
 
-تبدیل بین Floating-Point و Integral Types
+### تبدیل بین Floating-Point و Integral Types
 
 تمام Integral Types می‌توانند به طور Implicit به تمام Floating-Point Types تبدیل شوند:
 
-C#
+```C#
 
 int i = 1;
 float f = i;
+```
 تبدیل معکوس باید Explicit باشد:
 
-C#
-
+```C#
 int i2 = (int)f;
+```
 هنگامی که از یک Floating-Point Number به یک Integral Type Cast می‌کنید، هر بخش کسری Truncated می‌شود؛ هیچ Rounding انجام نمی‌شود. Static Class System.Convert متدهایی را فراهم می‌کند که هنگام تبدیل بین انواع Numeric مختلف Rounding را انجام می‌دهند (به Chapter 6 مراجعه کنید).
 
 تبدیل Implicit یک Integral Type بزرگ به یک Floating-Point Type، Magnitude را حفظ می‌کند اما گاهی اوقات می‌تواند Precision را از دست بدهد. این به این دلیل است که Floating-Point Types همیشه Magnitude بیشتری نسبت به Integral Types دارند اما می‌توانند Precision کمتری داشته باشند. بازنویسی مثال ما با یک عدد بزرگ‌تر این را نشان می‌دهد:
 
-C#
+```C#
 
 int i1 = 100000001;
 float f = i1;          // Magnitude preserved, precision lost
 int i2 = (int)f;       // 100000000
-تبدیل‌های Decimal
+```
+### تبدیل‌های Decimal
 
 تمام Integral Types می‌توانند به طور Implicit به Type decimal تبدیل شوند، با توجه به اینکه یک decimal می‌تواند هر C# Integral-Type Value ممکن را نمایش دهد. تمام Numeric Conversions دیگر به و از یک Type decimal باید Explicit باشند، زیرا آن‌ها امکان خارج از محدوده بودن Value یا از دست رفتن Precision را معرفی می‌کنند.
 
-Arithmetic Operators
+## Arithmetic Operators
 
 Arithmetic Operators (+, -, *, /, %) برای تمام Numeric Types به جز Integral Types 8 و 16 بیتی تعریف شده‌اند:
 
@@ -990,69 +990,71 @@ Arithmetic Operators (+, -, *, /, %) برای تمام Numeric Types به جز I
 
 % Remainder after division
 
-50 | Chapter 2: C# Language Basics
-
-Increment و Decrement Operators
+## Increment و Decrement Operators
 
 Increment و Decrement Operators (به ترتیب ++، --) Numeric Types را به اندازه ۱ واحد افزایش و کاهش می‌دهند. Operator می‌تواند هم بعد و هم قبل از Variable قرار گیرد، بسته به اینکه Value آن را قبل یا بعد از Increment/Decrement می‌خواهید؛ برای مثال:
 
-C#
+```C#
 
 int x = 0, y = 0;
 Console.WriteLine (x++);   // Outputs 0; x is now 1
 Console.WriteLine (++y);   // Outputs 1; y is now 1
-عملیات تخصصی بر روی Integral Types
+```
+## عملیات تخصصی بر روی Integral Types
 
 Integral Types عبارتند از int، uint، long، ulong، short، ushort، byte و sbyte.
 
-Division
+### Division
 
 عملیات Division بر روی Integral Types همیشه Remainder را حذف می‌کنند (به سمت صفر Round می‌کنند). تقسیم بر یک Variable که Value آن صفر است، یک Runtime Error (DivideByZeroException) ایجاد می‌کند:
 
-C#
+```C#
 
 int a = 2 / 3;      // 0
 int b = 0;
 int c = 5 / b;      // throws DivideByZeroException
+```
 تقسیم بر Literal یا Constant 0 یک Compile-Time Error ایجاد می‌کند.
 
-Overflow
+### Overflow
 
 در Runtime، عملیات Arithmetic بر روی Integral Types می‌توانند Overflow کنند. به طور پیش‌فرض، این اتفاق به طور Silent رخ می‌دهد—هیچ Exceptionی پرتاب نمی‌شود، و نتیجه رفتار "wraparound" را نشان می‌دهد، گویی که محاسبه بر روی یک Integer Type بزرگ‌تر انجام شده و Bitهای Significant اضافی دور ریخته شده‌اند. برای مثال، کاهش حداقل Value ممکن int منجر به حداکثر Value ممکن int می‌شود:
 
-C#
+``` C#
 
 int a = int.MinValue;
 a--;
 Console.WriteLine (a == int.MaxValue); // True
-Overflow Check Operators
+```
+### Overflow Check Operators
+
 
 Operator checked به Runtime دستور می‌دهد که به جای Overflow Silent، یک OverflowException ایجاد کند، زمانی که یک Integral-Type Expression یا Statement از محدودیت‌های Arithmetic آن Type فراتر رود. Operator checked بر Expressions با ++، --، +، - (Binary و Unary)، *، /، و Explicit Conversion Operators بین Integral Types تأثیر می‌گذارد. بررسی Overflow هزینه Performance کمی دارد.
 
 Operator checked بر Types double و float (که به Values "Infinite" خاص Overflow می‌کنند، همانطور که به زودی خواهید دید) و بر Type decimal (که همیشه checked است) تأثیری ندارد.
 
-C# Language Basics
-Numeric Types | 51
 
 می‌توانید checked را هم در اطراف یک Expression و هم در اطراف یک Statement Block استفاده کنید:
 
-C#
+```C#
 
 int a = 1000000;
 int b = 1000000;
 int c = checked (a * b);      // Checks just the expression.
-checked
-{
-}
-  ...
+checked                           // Checks all expressions
+{                                      // in statement block
+ ...                                
   c = a * b;
   ...
-                      // Checks all expressions
-                            // in statement block.
+}
+```
+                      
+                           .
 می‌توانید بررسی Arithmetic Overflow را به طور پیش‌فرض برای تمام Expressions در یک برنامه با انتخاب گزینه "checked" در سطح Project (در Visual Studio، به Advanced Build Settings بروید) فعال کنید. اگر سپس نیاز به غیرفعال کردن بررسی Overflow فقط برای Expressions یا Statements خاصی دارید، می‌توانید این کار را با Operator unchecked انجام دهید. برای مثال، کد زیر Exception پرتاب نخواهد کرد—حتی اگر گزینه "checked" Project انتخاب شده باشد:
 
-C#
+```C#
 
 int x = int.MaxValue;
 int y = unchecked (x + 1);
 unchecked { int z = x + 1; }
+```
