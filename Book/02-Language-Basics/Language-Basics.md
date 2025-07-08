@@ -899,3 +899,9 @@ Console.WriteLine (          1.GetType());  // Int32   (int)
 Console.WriteLine ( 0xF0000000.GetType());  // UInt32  (uint)
 Console.WriteLine (0x100000000.GetType());  // Int64   (long)
 ```
+
+Numeric Suffixes
+
+Numeric Suffixes به طور صریح Type یک Literal را تعریف می‌کنند. Suffixes می‌توانند حروف کوچک یا بزرگ باشند، و به شرح زیر هستند:
+
+![Conventions-UsedThis-Book](../../assets/image/02/Table-2-2.png) 
