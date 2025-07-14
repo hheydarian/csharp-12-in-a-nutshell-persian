@@ -1091,3 +1091,82 @@ Bitwise Operators
 
 ### Bitwise Operators 
 C# از Bitwise Operators زیر پشتیبانی می‌کند:
+
+![Conventions-UsedThis-Book](../../assets/image/02/Table-2-3.png) 
+
+عملگر shift-right (>>) هنگام کار با signed integers، high-order bit را تکرار می‌کند، در حالی که عملگر unsigned shift-right (>>>) این کار را نمی‌کند.
+
+عملیات bitwise اضافی از طریق یک class به نام BitOperations در namespace System.Numerics در دسترس هستند (برای جزئیات بیشتر به "BitOperations" در صفحه ۳۴۰ مراجعه کنید).
+
+### ۸  و ۱۶-Bit Integral Types
+
+Integral Types هشت و شانزده بیتی عبارتند از byte, sbyte, short, و ushort. این types فاقد arithmetic operators خود هستند، بنابراین C# به صورت implicitly آن‌ها را در صورت نیاز به types بزرگتر تبدیل می‌کند. این می‌تواند هنگام تلاش برای انتساب نتیجه به یک integral type کوچک، منجر به compile-time error شود:
+
+```C#
+
+short x = 1, y = 1;
+short z = x + y;          // Compile-time error
+```
+در این حالت، x و y به صورت implicitly به int تبدیل می‌شوند تا عملیات addition انجام شود. این بدان معناست که نتیجه نیز یک int است، که نمی‌تواند به صورت implicitly به short cast شود (زیرا می‌تواند باعث از دست رفتن data شود). برای اینکه این کد compile شود، باید یک explicit cast اضافه کنید:
+
+```C#
+
+short z = (short) (x + y);   // OK
+```
+### Special Float و Double Values
+
+برخلاف integral types، floating-point types دارای values هستند که برخی عملیات با آن‌ها به صورت ویژه رفتار می‌کنند. این special values عبارتند از NaN (Not a Number)، +∞، −∞ و −0. Classهای float و double دارای constants برای NaN، +∞ و −∞، و همچنین values دیگر (MaxValue, MinValue, و Epsilon) هستند؛ برای مثال:
+
+```C#
+
+Console.WriteLine (double.NegativeInfinity);   // -Infinity
+```
+Constants که special values را برای double و float نشان می‌دهند، به شرح زیر هستند:
+
+![Conventions-UsedThis-Book](../../assets/image/02/Table-2-4.png) 
+
+تقسیم یک عدد ناصفر بر صفر، منجر به یک value بی‌نهایت می‌شود:
+
+```C#
+
+Console.WriteLine ( 1.0 /  0.0);                  //  Infinity
+Console.WriteLine (−1.0 /  0.0);                  // -Infinity
+Console.WriteLine ( 1.0 / −0.0);                  // -Infinity
+Console.WriteLine (−1.0 / −0.0);                  //  Infinity
+```
+تقسیم صفر بر صفر، یا تفریق بی‌نهایت از بی‌نهایت، منجر به یک NaN می‌شود:
+
+```C#
+
+Console.WriteLine ( 0.0 /  0.0);                  //  NaN
+Console.WriteLine ((1.0 /  0.0) − (1.0 / 0.0));   //  NaN
+C# Language Basics
+```
+
+هنگام استفاده از ==، یک NaN value هرگز با value دیگری برابر نیست، حتی یک NaN value دیگر:
+
+```C#
+
+Console.WriteLine (0.0 / 0.0 == double.NaN);    // False
+```
+برای آزمایش اینکه آیا یک value برابر با NaN است، باید از متد float.IsNaN یا double.IsNaN استفاده کنید:
+
+```C#
+
+Console.WriteLine (double.IsNaN (0.0 / 0.0));   // True
+```
+با این حال، هنگام استفاده از object.Equals، دو NaN value برابر هستند:
+
+```C#
+
+Console.WriteLine (object.Equals (0.0 / 0.0, double.NaN));   // True
+```
+NaNها گاهی اوقات برای نمایش special values مفید هستند. در Windows Presentation Foundation (WPF)، double.NaN یک اندازه‌گیری را نشان می‌دهد که value آن "خودکار" است. راه دیگری برای نمایش چنین valueای با یک nullable type (Chapter 4) است؛ راه دیگر با یک custom struct است که یک numeric type را wrap می‌کند و یک field اضافی اضافه می‌کند (Chapter 3).
+
+float و double از specification IEEE 754 format types پیروی می‌کنند که به صورت natively توسط تقریباً تمام processors پشتیبانی می‌شود. اطلاعات دقیق در مورد رفتار این types را می‌توانید در http://www.ieee.org بیابید.
+
+### double در مقابل decimal
+
+double برای محاسبات علمی (مانند محاسبه spatial coordinates) مفید است. decimal برای محاسبات مالی و valuesی مفید است که تولید می‌شوند، نه نتیجه اندازه‌گیری‌های دنیای واقعی. در اینجا خلاصه‌ای از تفاوت‌ها آورده شده است.
+
+![Conventions-UsedThis-Book](../../assets/image/02/Table-2-5.png) 
