@@ -1078,3 +1078,16 @@ int x = int.MaxValue;
 int y = unchecked (x + 1);
 unchecked { int z = x + 1; }
 ```
+### بررسی Overflow برای Constant Expressions
+
+صرف‌نظر از تنظیمات "checked" در Project، Expressions که در Compile Time ارزیابی می‌شوند، همیشه Overflow-checked هستند—مگر اینکه از Operator unchecked استفاده کنید:
+
+```C#
+
+int x = int.MaxValue + 1;               // Compile-time error
+int y = unchecked (int.MaxValue + 1);   // No errors
+Bitwise Operators
+```
+
+### Bitwise Operators 
+C# از Bitwise Operators زیر پشتیبانی می‌کند:
