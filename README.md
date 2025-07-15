@@ -77,7 +77,7 @@
 | :---- | :-------------------------- | :----------------------- | :-------- | :--------------------------------------------------------------------------------------------- |
 | 00    | Preface                     | مقدمه                    | ✅         | [Book/00-Preface](Book/00-Preface/Preface.md)                                                 |
 | 01    | Introduction                | معرفی C#                | ✅         | [Book/01-Introduction](Book/01-Introduction/Introduction.md)                                  |
-| 02    | Language Basics             | اصول اولیه زبان         | ❌         | [Book/02-Language_Basics](Book/02-Language-Basics/Language-Basics.md)                         |
+| 02    | Language Basics             | اصول اولیه زبان         | 🟡         | [Book/02-Language_Basics](Book/02-Language-Basics/Language-Basics.md)                         |
 | 03    | Creating Types in C#        | ایجاد انواع در C#        | ❌         | [Book/03-Creating_Types_in_C#](Book/03-Creating-Types-in-C#/Creating-Types-in-C#.md)          |
 | 04    | Advanced C#                 | سی‌شارپ پیشرفته         | ❌         | [Book/04-Advanced_C#]()                                                                       |
 | ...   | (فصل‌های آینده را اضافه کنید) |                         |            |                                                                                               |
