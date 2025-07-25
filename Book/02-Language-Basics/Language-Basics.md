@@ -1273,3 +1273,39 @@ return !windy & (rainy | sunny);
 تفاوت این است که آن‌ها short-circuit نمی‌کنند. به همین دلیل، به ندرت به جای conditional operators استفاده می‌شوند.
 
 برخلاف C و C++، operators & و | هنگامی که بر bool expressions اعمال می‌شوند، مقایسات Boolean (غیر short-circuiting) را انجام می‌دهند. Operators & و | عملیات bitwise را فقط هنگامی که بر اعداد اعمال می‌شوند، انجام می‌دهند.
+
+## Conditional operator (Ternary operator)
+
+Conditional operator (که بیشتر به آن Ternary operator گفته می‌شود، زیرا تنها operatorی است که سه operand می‌گیرد) به شکل q ? a : b; است؛ بنابراین، اگر condition q true باشد، a evaluated می‌شود؛ در غیر این صورت b evaluated می‌شود:
+
+```C#
+
+static int Max (int a, int b)
+{
+  return (a > b) ? a : b;
+}
+```
+Conditional operator به ویژه در Language-Integrated Query (LINQ) expressions (Chapter 8) مفید است.
+
+## Strings و Characters
+
+char type در C# (که System.Char type را alias می‌کند) یک Unicode character را نمایش می‌دهد و ۲ byte (UTF-16) فضا اشغال می‌کند. یک char literal در داخل single quotes مشخص می‌شود:
+
+```C#
+
+char c = 'A';       // Simple character
+```
+Escape sequences charactersی را بیان می‌کنند که نمی‌توانند به صورت literally بیان یا تفسیر شوند. یک escape sequence شامل یک backslash است که به دنبال آن یک character با معنای خاص می‌آید؛ برای مثال:
+
+```C#
+
+char newLine = '\n';
+char backSlash = '\\';
+```
+Table 2-2 escape sequence characters را نشان می‌دهد.
+
+<div align="center">
+    
+![Conventions-UsedThis-Book](../../assets/image/02/Table-2-6.png) <br>
+![Conventions-UsedThis-Book](../../assets/image/02/Table-2-6-1.png) 
+</div>
