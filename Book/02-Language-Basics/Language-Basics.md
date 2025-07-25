@@ -1309,3 +1309,204 @@ Table 2-2 escape sequence characters را نشان می‌دهد.
 ![Conventions-UsedThis-Book](../../assets/image/02/Table-2-6.png) <br>
 ![Conventions-UsedThis-Book](../../assets/image/02/Table-2-6-1.png) 
 </div>
+
+escape sequence \u (یا \x) به شما اجازه می‌دهد تا هر Unicode character را از طریق four-digit hexadecimal code آن مشخص کنید:
+
+```C#
+
+char copyrightSymbol = '\u00A9';
+char omegaSymbol     = '\u03A9';
+char newLine         = '\u000A';
+```
+## Char Conversions
+
+یک implicit conversion از یک char به یک numeric type برای numeric typesی کار می‌کند که می‌توانند یک unsigned short را در خود جای دهند. برای سایر numeric types، یک explicit conversion مورد نیاز است.
+
+## String Type
+
+string type در C# (که System.String type را alias می‌کند و در Chapter 6 به تفصیل پوشش داده شده است) یک immutable (unmodifiable) sequence از Unicode characters را نمایش می‌دهد. یک string literal در داخل double quotes مشخص می‌شود:
+
+```C#
+
+string a = "Heat";
+```
+string یک reference type است تا یک value type. با این حال، equality operators آن از value-type semantics پیروی می‌کنند:
+
+```C#
+
+string a = "test";
+string b = "test";
+Console.Write (a == b);  // True
+```
+escape sequences که برای char literals معتبر هستند، در داخل strings نیز کار می‌کنند:
+
+```C#
+
+string a = "Here's a tab:\t";
+```
+هزینه این کار این است که هر زمان که به یک literal backslash نیاز دارید، باید آن را دو بار بنویسید:
+
+```C#
+
+string a1 = "\\\\server\\fileshare\\helloworld.cs";
+```
+برای جلوگیری از این مشکل، C# verbatim string literals را مجاز می‌داند. یک verbatim string literal با @ پیشوند می‌گیرد و از escape sequences پشتیبانی نمی‌کند. verbatim string زیر با مورد قبلی یکسان است:
+
+```C#
+
+string a2 = @"\\server\fileshare\helloworld.cs";
+```
+یک verbatim string literal می‌تواند چندین خط را نیز شامل شود:
+
+```C#
+
+string escaped  = "First Line\r\nSecond Line";
+string verbatim = @"First Line
+ Second Line";
+// True if your text editor uses CR-LF line separators:
+Console.WriteLine (escaped == verbatim);
+```
+می‌توانید double-quote character را در یک verbatim literal با نوشتن آن دو بار وارد کنید:
+
+```C#
+
+string xml = @"<customer id=""123""></customer>";
+```
+## Raw string literals (C# 11)
+
+Wrapping یک string در سه یا بیشتر quote characters (""") یک raw string literal ایجاد می‌کند. Raw string literals می‌توانند تقریباً هر character sequenceای را بدون escaping یا doubling up شامل شوند:
+
+```C#
+
+ string raw = """<file path="c:\temp\test.txt"></file>""";
+```
+Raw string literals نمایش JSON, XML, و HTML literals، و همچنین regular expressions و source code را آسان می‌کنند. اگر نیاز دارید سه (یا بیشتر) quote characters را در خود string وارد کنید، می‌توانید این کار را با wrapping string در چهار (یا بیشتر) quote characters انجام دهید:
+
+```C#
+
+string raw = """"The """ sequence denotes raw string literals."""";
+Multiline raw string literals تابع قوانین ویژه‌ای هستند. می‌توانیم string "Line 1\r\nLine 2" را به صورت زیر نمایش دهیم:
+```
+```C#
+
+string multiLineRaw = """
+  Line 1
+  Line 2
+""";
+```
+توجه داشته باشید که opening و closing quotes باید در خطوط جداگانه با string content باشند. علاوه بر این:
+
++ Whitespace پس از opening """ (در همان خط) نادیده گرفته می‌شود.
+
++ Whitespace قبل از closing """ (در همان خط) به عنوان common indentation در نظر گرفته می‌شود و از هر خط در string حذف می‌شود. این به شما اجازه می‌دهد تا indentation را برای خوانایی source-code وارد کنید بدون اینکه آن indentation بخشی از string شود.
+
+در اینجا یک مثال دیگر برای نشان دادن قوانین multiline raw string literal آورده شده است:
+
+```C#
+
+if (true)
+  Console.WriteLine ("""
+    {
+      "Name" : "Joe"
+    }
+    """);
+Output به شرح زیر است:
+
+{
+  "Name" : "Joe"
+}
+```
+
+Compiler یک error ایجاد خواهد کرد اگر هر خط در یک multiline raw string literal با common indentation مشخص شده توسط closing quotes پیشوند نداشته باشد.
+
+Raw string literals می‌توانند interpolated شوند، تابع قوانین ویژه‌ای که در "String interpolation" در صفحه ۶۰ توضیح داده شده‌اند.
+
+### String concatenation
+
+Operator + دو string را concatenate می‌کند:
+
+```C#
+
+string s = "a" + "b";
+```
+یکی از operands ممکن است یک nonstring value باشد، در این صورت ToString روی آن value فراخوانی می‌شود:
+
+```C#
+
+string s = "a" + 5;  // a5
+```
+استفاده مکرر از operator + برای ساخت یک string ناکارآمد است: یک راه حل بهتر استفاده از System.Text.StringBuilder type است (که در Chapter 6 توضیح داده شده است).
+
+### String interpolation
+
+یک string که با character $ پیشوند می‌گیرد، interpolated string نامیده می‌شود. Interpolated strings می‌توانند expressions محصور شده در braces را شامل شوند:
+
+```C#
+
+int x = 4;
+Console.Write ($"A square has {x} sides");  // Prints: A square has 4 sides
+```
+هر valid C# expression از هر typeی می‌تواند در داخل braces ظاهر شود، و C# expression را با فراخوانی ToString method آن یا معادل آن به یک string تبدیل خواهد کرد. می‌توانید formatting را با appending expression با یک colon و یک format string تغییر دهید (format strings در "String.Format and composite format strings" در صفحه ۲۹۶ توضیح داده شده‌اند):
+
+```C#
+
+string s = $"255 in hex is {byte.MaxValue:X2}";  // X2 = 2-digit hexadecimal
+// Evaluates to "255 in hex is FF"
+```
+اگر نیاز به استفاده از colon برای هدف دیگری دارید (مانند ternary conditional operator، که بعداً آن را پوشش خواهیم داد)، باید کل expression را در parentheses wrap کنید:
+
+```C#
+
+bool b = true;
+Console.WriteLine ($"The answer in binary is {(b ? 1 : 0)}");
+```
+از C# 10، interpolated strings می‌توانند constants باشند، تا زمانی که interpolated values constants باشند:
+
+```C#
+
+const string greeting = "Hello";
+const string message = $"{greeting}, world";
+```
+از C# 11، interpolated strings مجاز به شامل شدن در چندین خط هستند (چه standard و چه verbatim):
+
+```C#
+
+string s = $"this interpolation spans {1 +
+1} lines";
+```
+
+Raw string literals (از C# 11) نیز می‌توانند interpolated شوند:
+
+```C#
+
+string s = $"""The date and time is {DateTime.Now}""";
+```
+برای وارد کردن یک brace literal در یک interpolated string:
+
++ با standard و verbatim string literals، brace character مورد نظر را تکرار کنید.
+
++ با raw string literals، interpolation sequence را با تکرار $ prefix تغییر دهید.
+
+استفاده از دو (یا بیشتر) character $ در یک raw string literal prefix interpolation sequence را از یک brace به دو (یا بیشتر) braces تغییر می‌دهد:
+
+```C#
+
+Console.WriteLine ($$"""{ "TimeStamp": "{{DateTime.Now}}" }""");
+// Output: { "TimeStamp": "01/01/2024 12:13:25 PM" }
+```
+این قابلیت copy-and-paste کردن text به یک raw string literal را بدون نیاز به تغییر string حفظ می‌کند.
+
+### String comparisons
+
+برای انجام equality comparisons با strings، می‌توانید از operator == (یا یکی از string’s Equals methods) استفاده کنید. برای order comparison، باید از string’s CompareTo method استفاده کنید؛ operators < و > پشتیبانی نمی‌شوند. ما equality و order comparison را با جزئیات در "Comparing Strings" در صفحه ۲۹۷ توضیح می‌دهیم.
+
+## UTF-8 Strings
+
+از C# 11، می‌توانید از u8 suffix برای ایجاد string literals encoded شده در UTF-8 به جای UTF-16 استفاده کنید. این ویژگی برای scenarios پیشرفته مانند low-level handling JSON text در performance hotspots در نظر گرفته شده است:
+
+```C#
+
+ReadOnlySpan<byte> utf8 = "ab→cd"u8;  // Arrow symbol consumes 3 bytes
+Console.WriteLine (utf8.Length);      // 7
+```
+underlying type ReadOnlySpan<T> است، که در Chapter 23 آن را پوشش می‌دهیم. می‌توانید این را با فراخوانی ToArray() method به یک array تبدیل کنید.
