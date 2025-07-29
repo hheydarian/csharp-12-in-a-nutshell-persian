@@ -1806,3 +1806,91 @@ Array bounds checking برای type safety ضروری است و debugging را �
 
 
 به طور کلی، performance hit ناشی از bounds checking جزئی است، و Just-In-Time (JIT) compiler می‌تواند optimizations را انجام دهد، مانند تعیین از قبل اینکه آیا تمام indexes قبل از ورود به یک loop ایمن خواهند بود یا خیر، در نتیجه از بررسی در هر iteration جلوگیری می‌کند. علاوه بر این، C# code "unsafe" را فراهم می‌کند که می‌تواند به طور explicitly bounds checking را دور بزند (به "Unsafe Code and Pointers" در صفحه ۲۶۳ مراجعه کنید).
+## Variables و Parameters
+
+یک variable نشان‌دهنده یک مکان ذخیره‌سازی است که یک value قابل تغییر دارد. یک variable می‌تواند یک local variable، parameter (value، ref، یا out، یا in)، field (instance یا static)، یا array element باشد.
+
+### The Stack و The Heap
+
+Stack و heap مکان‌هایی هستند که variables در آن‌ها قرار می‌گیرند. هر کدام semantics طول عمر بسیار متفاوتی دارند.
+
+#### Stack
+
+Stack یک block of memory برای ذخیره local variables و parameters است. Stack به صورت منطقی با ورود و خروج یک method یا function رشد و کوچک می‌شود. Method زیر را در نظر بگیرید (برای جلوگیری از حواس‌پرتی، بررسی input argument نادیده گرفته شده است):
+
+```C#
+
+static int Factorial (int x)
+{
+  if (x == 0) return 1;
+  return x * Factorial (x-1);
+}
+```
+این method recursive است، به این معنی که خودش را فراخوانی می‌کند. هر بار که method وارد می‌شود، یک int جدید در stack اختصاص داده می‌شود، و هر بار که method خارج می‌شود، int deallocated می‌شود.
+
+#### Heap
+
+Heap حافظه‌ای است که objects (یعنی reference-type instances) در آن قرار می‌گیرند. هر زمان که یک object جدید ایجاد می‌شود، در heap اختصاص داده می‌شود، و یک reference به آن object برگردانده می‌شود. در طول اجرای یک برنامه، heap با ایجاد objects جدید شروع به پر شدن می‌کند. Runtime دارای یک garbage collector است که به صورت دوره‌ای objects را از heap deallocate می‌کند، بنابراین برنامه شما با کمبود حافظه مواجه نمی‌شود. یک object به محض اینکه توسط چیزی که خود "زنده" است referenced نشود، واجد شرایط deallocation است.
+
+در مثال زیر، ما با ایجاد یک StringBuilder object که توسط variable ref1 ارجاع شده است شروع می‌کنیم و سپس محتوای آن را می‌نویسیم. آن StringBuilder object بلافاصله واجد شرایط garbage collection است زیرا چیزی متعاقباً از آن استفاده نمی‌کند.
+
+
+سپس، یک StringBuilder دیگر ایجاد می‌کنیم که توسط variable ref2 ارجاع شده و آن reference را به ref3 کپی می‌کنیم. حتی اگر ref2 پس از آن نقطه استفاده نشود، ref3 همان StringBuilder object را زنده نگه می‌دارد—اطمینان حاصل می‌کند که تا زمانی که ما استفاده از ref3 را تمام نکرده‌ایم، واجد شرایط collection نشود:
+
+```C#
+
+using System;
+using System.Text;
+StringBuilder ref1 = new StringBuilder ("object1");
+Console.WriteLine (ref1);
+// The StringBuilder referenced by ref1 is now eligible for GC.
+StringBuilder ref2 = new StringBuilder ("object2");
+StringBuilder ref3 = ref2;
+// The StringBuilder referenced by ref2 is NOT yet eligible for GC.
+Console.WriteLine (ref3);      // object2
+```
+Value-type instances (و object references) در هر کجا که variable اعلان شده است، زندگی می‌کنند. اگر instance به عنوان یک field در یک class type، یا به عنوان یک array element اعلان شده باشد، آن instance در heap زندگی می‌کند.
+
+شما نمی‌توانید objects را به طور explicitly در C# حذف کنید، همانطور که در C++ می‌توانید. یک object بدون reference در نهایت توسط garbage collector جمع‌آوری می‌شود.
+
+Heap همچنین static fields را ذخیره می‌کند. برخلاف objects که در heap اختصاص داده می‌شوند (و می‌توانند garbage-collected شوند)، اینها تا پایان process زنده می‌مانند.
+
+### Definite Assignment
+
+C# یک definite assignment policy را اعمال می‌کند. در عمل، این بدان معناست که خارج از یک unsafe یا interop context، نمی‌توانید به طور تصادفی به uninitialized memory دسترسی پیدا کنید. Definite assignment سه پیامد دارد:
+
++ Local variables باید قبل از خوانده شدن، یک value به آن‌ها اختصاص داده شود.
+
++ Function arguments باید هنگام فراخوانی یک method ارائه شوند (مگر اینکه به عنوان optional علامت‌گذاری شده باشند؛ به "Optional parameters" در صفحه ۷۴ مراجعه کنید).
+
++ تمام variables دیگر (مانند fields و array elements) به طور خودکار توسط runtime مقداردهی اولیه می‌شوند.
+
+برای مثال، کد زیر منجر به یک compile-time error می‌شود:
+
+```C#
+
+int x;
+Console.WriteLine (x);        // Compile-time error
+```
+Fields و array elements به طور خودکار با default values برای type خود مقداردهی اولیه می‌شوند. کد زیر 0 را output می‌کند زیرا array elements به طور implicitly به default values خود اختصاص داده می‌شوند:
+
+```C#
+
+int[] ints = new int[2];
+Console.WriteLine (ints[0]);    // 0
+```
+کد زیر 0 را output می‌کند، زیرا fields به طور implicitly یک default value به آن‌ها اختصاص داده می‌شود (چه instance و چه static):
+
+```C#
+
+Console.WriteLine (Test.X);   // 0
+class Test { public static int X; }   // field
+```
+### Default Values
+
+تمام type instances دارای یک default value هستند. Default value برای predefined types نتیجه bitwise zeroing memory است:
+
+<div align="center">
+    
+![Conventions-UsedThis-Book](../../assets/image/02/Table-2-7.png) <br>
+</div>
