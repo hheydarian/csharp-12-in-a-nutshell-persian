@@ -1894,3 +1894,124 @@ class Test { public static int X; }   // field
     
 ![Conventions-UsedThis-Book](../../assets/image/02/Table-2-7.png) <br>
 </div>
+می‌توانید default value برای هر type را از طریق keyword default به دست آورید:
+
+```C#
+
+Console.WriteLine (default (decimal));   // 0
+```
+می‌توانید به صورت optionally type را حذف کنید، زمانی که قابل استنباط باشد:
+
+```C#
+
+decimal d = default;
+```
+Default value در یک custom value type (یعنی struct) همان default value برای هر field تعریف شده توسط custom type است.
+
+### Parameters
+
+یک method ممکن است دارای یک sequence از parameters باشد. Parameters مجموعه‌ای از arguments را تعریف می‌کنند که باید برای آن method فراهم شوند. در مثال زیر، method Foo یک single parameter به نام p، از type int دارد:
+
+```C#
+
+Foo (8);                        // 8 is an argument
+static void Foo (int p) {...}   // p is a parameter
+```
+می‌توانید نحوه پاس دادن parameters را با modifiers ref, in, و out کنترل کنید:
+<div align="center">
+    
+![Conventions-UsedThis-Book](../../assets/image/02/Table-2-8.png) <br>
+</div>
+
+#### Passing arguments by value
+
+به طور پیش‌فرض، arguments در C# با value pass می‌شوند، که تاکنون رایج‌ترین حالت است. این بدان معناست که هنگام pass شدن به method، یک copy از value ایجاد می‌شود:
+
+```C#
+
+int x = 8;
+Foo (x);                    // Make a copy of x
+Console.WriteLine (x);      // x will still be 8
+static void Foo (int p)
+{
+  p = p + 1;                // Increment p by 1
+  Console.WriteLine (p);    // Write p to screen
+}
+```
+اختصاص دادن یک new value به p، محتویات x را تغییر نمی‌دهد، زیرا p و x در مکان‌های memory متفاوتی قرار دارند.
+
+Passing یک reference-type argument با value، reference را copy می‌کند اما object را copy نمی‌کند. در مثال زیر، Foo همان StringBuilder objectی را که ما instantiate کردیم (sb) می‌بیند اما یک independent reference به آن دارد. به عبارت دیگر، sb و fooSB variables جداگانه‌ای هستند که به همان StringBuilder object reference می‌کنند:
+
+```C#
+
+StringBuilder sb = new StringBuilder();
+Foo (sb);
+Console.WriteLine (sb.ToString());    // test
+static void Foo (StringBuilder fooSB)
+{
+  fooSB.Append ("test");
+  fooSB = null;
+}
+```
+از آنجایی که fooSB یک copy از یک reference است، setting آن به null باعث null شدن sb نمی‌شود. (اگرچه، اگر fooSB با modifier ref اعلان و فراخوانی شده بود، sb null می‌شد.)
+
+#### The ref modifier
+
+برای pass کردن با reference، C# parameter modifier ref را فراهم می‌کند. در مثال زیر، p و x به همان مکان‌های memory اشاره می‌کنند:
+
+```C#
+
+int x = 8;
+Foo (ref  x);              // Ask Foo to deal directly with x
+Console.WriteLine (x);     // x is now 9
+static void Foo (ref int p)
+{
+  p = p + 1;               // Increment p by 1
+  Console.WriteLine (p);   // Write p to screen
+}
+```
+
+اکنون اختصاص دادن یک new value به p محتویات x را تغییر می‌دهد. توجه کنید که چگونه modifier ref هم هنگام نوشتن و هم هنگام فراخوانی method مورد نیاز است.4 این موضوع را بسیار واضح می‌کند که چه اتفاقی می‌افتد.
+
+Modifier ref در پیاده‌سازی یک swap method ضروری است (در "Generics" در صفحه ۱۵۹، نشان می‌دهیم که چگونه یک swap method بنویسیم که با هر typeی کار کند):
+
+```C#
+
+string x = "Penn";
+string y = "Teller";
+Swap (ref x, ref y);
+Console.WriteLine (x);   // Teller
+Console.WriteLine (y);   // Penn
+static void Swap (ref string a, ref string b)
+{
+  string temp = a;
+  a = b;
+  b = temp;
+}
+```
+#### The out modifier
+
+یک parameter را می‌توان با reference یا با value pass کرد، صرف‌نظر از اینکه parameter type یک reference type باشد یا یک value type.
+
+یک out argument مانند یک ref argument است، با این تفاوت که:
+
++ نیازی نیست قبل از ورود به function به آن assign شود.
+
++ باید قبل از خروج از function به آن assign شود.
+
+Modifier out معمولاً برای دریافت چندین return value از یک method استفاده می‌شود؛ برای مثال:
+
+```C#
+
+string a, b;
+Split ("Stevie Ray Vaughn", out a, out b);
+Console.WriteLine (a);                      // Stevie Ray
+Console.WriteLine (b);                      // Vaughn
+void Split (string name, out string firstNames, out string lastName)
+{
+  int i = name.LastIndexOf (' ');
+  firstNames = name.Substring (0, i);
+  lastName = name.Substring (i + 1);
+}
+```
+مانند یک ref parameter، یک out parameter با reference pass می‌شود.
