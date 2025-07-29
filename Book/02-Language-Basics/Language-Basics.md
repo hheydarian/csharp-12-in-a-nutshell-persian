@@ -2015,3 +2015,204 @@ void Split (string name, out string firstNames, out string lastName)
 }
 ```
 مانند یک ref parameter، یک out parameter با reference pass می‌شود.
+
+#### Out variables و discards
+
+می‌توانید variables را به صورت on the fly هنگام فراخوانی methods با out parameters اعلان کنید. می‌توانیم دو خط اول مثال قبلی خود را با این جایگزین کنیم:
+
+```C#
+
+Split ("Stevie Ray Vaughan", out string a, out string b);
+```
+هنگام فراخوانی methods با چندین out parameters، گاهی اوقات علاقه‌ای به دریافت values از تمام parameters ندارید. در چنین مواردی، می‌توانید آنهایی که علاقه‌ای به آن‌ها ندارید را با استفاده از یک underscore "discard" کنید:
+
+```C#
+
+Split ("Stevie Ray Vaughan", out string a, out _);   // Discard 2nd param
+Console.WriteLine (a);
+```
+در این حالت، compiler underscore را به عنوان یک special symbol، به نام discard، در نظر می‌گیرد. می‌توانید چندین discard را در یک فراخوانی واحد وارد کنید. با فرض اینکه SomeBigMethod با هفت out parameters تعریف شده است، می‌توانیم همه به جز چهارمی را نادیده بگیریم، به صورت زیر:
+
+```C#
+
+SomeBigMethod (out _, out _, out _, out int x, out _, out _, out _);
+```
+برای backward compatibility، این language feature در صورتی که یک real underscore variable در scope باشد، تأثیری نخواهد داشت:
+
+```C#
+
+string _;
+Split ("Stevie Ray Vaughan", out string a, out _);
+Console.WriteLine (_);     // Vaughan
+```
+#### Implications of passing by reference
+
+هنگامی که یک argument را با reference pass می‌کنید، storage location یک existing variable را alias می‌کنید به جای اینکه یک new storage location ایجاد کنید. در مثال زیر، variables x و y به همان instance اشاره می‌کنند:
+
+```C#
+
+class Test
+{
+  static int x;
+  static void Main() { Foo (out x); }
+  static void Foo (out int y)
+  {
+    Console.WriteLine (x);                // x is 0
+    y = 1;                                // Mutate y
+    Console.WriteLine (x);                // x is 1
+  }
+}
+```
+#### The in modifier
+
+یک in parameter مشابه یک ref parameter است با این تفاوت که value argument نمی‌تواند توسط method تغییر یابد (انجام این کار یک compile-time error ایجاد می‌کند). این modifier هنگامی که یک large value type به method pass می‌شود بسیار مفید است زیرا به compiler اجازه می‌دهد تا از overhead کپی کردن argument قبل از passing آن جلوگیری کند در حالی که original value را از تغییر محافظت می‌کند.
+
+
+Overloading صرفاً بر اساس حضور in مجاز است:
+
+```C#
+
+void Foo (   SomeBigStruct a) { ... }
+void Foo (in SomeBigStruct a) { ... }
+```
+برای فراخوانی second overload، caller باید از modifier in استفاده کند:
+
+```C#
+
+SomeBigStruct x = ...;
+Foo (x);      // Calls the first overload
+Foo (in x);   // Calls the second overload
+```
+هنگامی که ابهامی وجود ندارد:
+
+```C#
+
+void Bar (in SomeBigStruct a) { ... }
+```
+استفاده از modifier in برای caller اختیاری است:
+
+```C#
+
+Bar (x);     // OK (calls the 'in' overload)
+Bar (in x);  // OK (calls the 'in' overload)
+```
+برای اینکه این مثال معنی‌دار باشد، SomeBigStruct به عنوان یک struct تعریف می‌شود (به "Structs" در صفحه ۱۴۲ مراجعه کنید).
+
+#### The params modifier
+
+Modifier params، اگر به آخرین parameter یک method اعمال شود، به method اجازه می‌دهد تا هر تعداد arguments از یک type خاص را بپذیرد. Parameter type باید به عنوان یک (single-dimensional) array اعلان شود، همانطور که در مثال زیر نشان داده شده است:
+
+```C#
+
+int total = Sum (1, 2, 3, 4);
+Console.WriteLine (total);              // 10
+// The call to Sum above is equivalent to:
+int total2 = Sum (new int[] { 1, 2, 3, 4 });
+int Sum (params int[] ints)
+{
+  int sum = 0;
+  for (int i = 0; i < ints.Length; i++)
+    sum += ints [i];                       // Increase sum by ints[i]
+  return sum;
+}
+```
+اگر zero arguments در موقعیت params وجود داشته باشد، یک zero-length array ایجاد می‌شود. شما همچنین می‌توانید یک params argument را به عنوان یک ordinary array ارائه دهید. خط اول در مثال ما از نظر semantically با این یکسان است:
+
+```C#
+
+int total = Sum (new int[] { 1, 2, 3, 4 } );
+```
+
+#### Optional parameters
+
+Methods, constructors, و indexers (Chapter 3) می‌توانند optional parameters را اعلان کنند. یک parameter optional است اگر یک default value را در اعلان خود مشخص کند:
+
+```C#
+
+void Foo (int x = 23) { Console.WriteLine (x); }
+```
+می‌توانید optional parameters را هنگام فراخوانی method حذف کنید:
+
+```C#
+
+Foo();     // 23
+```
+Default argument 23 در واقع به optional parameter x pass می‌شود—compiler value 23 را در compiled code در سمت calling bake می‌کند. فراخوانی قبلی Foo از نظر semantically با این یکسان است:
+
+```C#
+
+Foo (23);
+```
+زیرا compiler به سادگی default value یک optional parameter را در هر کجا که استفاده می‌شود جایگزین می‌کند.
+
+اضافه کردن یک optional parameter به یک public method که از یک assembly دیگر فراخوانی می‌شود، نیاز به recompilation هر دو assemblies دارد—درست همانطور که گویی parameter اجباری بود.
+
+Default value یک optional parameter باید توسط یک constant expression، یک parameterless constructor از یک value type، یا یک default expression مشخص شود. Optional parameters نمی‌توانند با ref یا out علامت‌گذاری شوند.
+
+Mandatory parameters باید قبل از optional parameters در هر دو method declaration و method call (استثنا با params arguments است، که همیشه آخرین می‌آیند) قرار گیرند. در مثال زیر، explicit value 1 به x pass می‌شود، و default value 0 به y pass می‌شود:
+
+```C#
+
+Foo (1);    // 1, 0
+void Foo (int x = 0, int y = 0) { Console.WriteLine (x + ", " + y); }
+```
+می‌توانید عکس آن را انجام دهید (یک default value به x و یک explicit value به y pass کنید) با ترکیب optional parameters با named arguments.
+
+#### Named arguments
+
+به جای شناسایی یک argument بر اساس موقعیت، می‌توانید یک argument را با نام شناسایی کنید:
+
+```C#
+
+Foo (x:1, y:2);  // 1, 2
+void Foo (int x, int y) { Console.WriteLine (x + ", " + y); }
+```
+Named arguments می‌توانند به هر ترتیبی ظاهر شوند. فراخوانی‌های زیر به Foo از نظر semantically یکسان هستند:
+
+```C#
+
+Foo (x:1, y:2);
+Foo (y:2, x:1);
+```
+یک تفاوت ظریف این است که argument expressions به ترتیبی که در calling site ظاهر می‌شوند، evaluated می‌شوند.
+
+به طور کلی، این فقط در interdependent side-effecting expressions مانند زیر تفاوت ایجاد می‌کند که 0, 1 را می‌نویسد:
+
+```C#
+
+int a = 0;
+Foo (y: ++a, x: --a);  // ++a is evaluated first
+```
+البته، شما تقریباً به طور قطع از نوشتن چنین codeی در عمل اجتناب خواهید کرد!
+
+می‌توانید named و positional arguments را با هم ترکیب کنید:
+
+```C#
+
+Foo (1, y:2);
+```
+با این حال، یک محدودیت وجود دارد: positional arguments باید قبل از named arguments بیایند مگر اینکه در موقعیت صحیح استفاده شوند. بنابراین، می‌توانید Foo را اینگونه فراخوانی کنید:
+
+```C#
+
+Foo (x:1, 2);         // OK. Arguments in the declared positions
+```
+اما نه اینگونه:
+
+```C#
+
+Foo (y:2, 1);         // Compile-time error. y isn't in the first position
+```
+Named arguments به ویژه در ترکیب با optional parameters مفید هستند. برای مثال، method زیر را در نظر بگیرید:
+
+```C#
+
+void Bar (int a = 0, int b = 0, int c = 0, int d = 0) { ... }
+```
+می‌توانید این را فقط با ارائه یک value برای d فراخوانی کنید، به صورت زیر:
+
+```C#
+
+Bar (d:3);
+```
+این به ویژه هنگام فراخوانی COM APIs مفید است، که در Chapter 24 به تفصیل در مورد آنها بحث می‌کنیم.
