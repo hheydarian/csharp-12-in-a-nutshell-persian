@@ -1701,3 +1701,108 @@ int[,] matrix = new int[,]
   {6,7,8}
  };
 ```
+
+#### Jagged arrays
+
+Jagged arrays با استفاده از square brackets متوالی برای نمایش هر dimension اعلان می‌شوند. در اینجا مثالی از اعلان یک jagged two-dimensional array آورده شده است که outermost dimension آن ۳ است:
+
+```C#
+
+int[][] matrix = new int[3][];
+```
+جالب اینجاست که این new int[3][] است و نه new int[][3].
+اریک لیپرت (Eric Lippert) مقاله فوق‌العاده‌ای در مورد دلیل این موضوع نوشته است.
+
+Inner dimensions در اعلان مشخص نمی‌شوند زیرا، برخلاف یک rectangular array، هر inner array می‌تواند طول دلخواهی داشته باشد. هر inner array به طور implicitly به null مقداردهی اولیه می‌شود تا یک empty array. شما باید هر inner array را به صورت دستی ایجاد کنید:
+
+```C#
+
+for (int i = 0; i < matrix.Length; i++)
+{
+  matrix[i] = new int[3];                    // Create inner array
+  for (int j = 0; j < matrix[i].Length; j++)
+    matrix[i][j] = i * 3 + j;
+}
+```
+می‌توانید یک jagged array را با explicit values مقداردهی اولیه کنید. کد زیر یک array مشابه مثال قبلی با یک element اضافی در انتها ایجاد می‌کند:
+
+```C#
+
+int[][] matrix = new int[][]
+{
+  new int[] {0,1,2},
+  new int[] {3,4,5},
+  new int[] {6,7,8,9}
+};
+```
+### Simplified Array Initialization Expressions
+
+دو روش برای کوتاه‌تر کردن array initialization expressions وجود دارد. اولین روش حذف operator new و type qualifications است:
+
+```C#
+
+char[] vowels = {'a','e','i','o','u'};
+int[,] rectangularMatrix =
+{
+  {0,1,2},
+  {3,4,5},
+  {6,7,8}
+};
+int[][] jaggedMatrix =
+{
+  new int[] {0,1,2},
+  new int[] {3,4,5},
+  new int[] {6,7,8,9}
+};
+```
+(از C# 12، می‌توانید به جای braces با single-dimensional arrays از square brackets استفاده کنید.)
+
+رویکرد دوم استفاده از keyword var است که به compiler دستور می‌دهد تا یک local variable را به طور implicitly type کند. در اینجا مثال‌های ساده‌ای آورده شده است:
+
+```C#
+
+var i = 3;           // i is implicitly of type int
+var s = "sausage";   // s is implicitly of type string
+```
+همین اصل را می‌توان در مورد arrays نیز اعمال کرد، با این تفاوت که می‌توان آن را یک مرحله فراتر برد. با حذف type qualifier پس از keyword new، compiler array type را استنباط می‌کند:
+
+```C#
+
+var vowels = new[] {'a','e','i','o','u'};   // Compiler infers char[]
+```
+در اینجا نحوه اعمال این بر روی multidimensional arrays آمده است:
+
+```C#
+
+var rectMatrix = new[,]        // rectMatrix is implicitly of type int[,]
+{
+  {0,1,2},
+  {3,4,5},
+  {6,7,8}
+};
+var jaggedMat = new int[][]    // jaggedMat is implicitly of type int[][]
+{
+  new[] {0,1,2},
+  new[] {3,4,5},
+  new[] {6,7,8,9}
+};
+```
+برای اینکه این کار کند، تمام elements باید به طور implicitly به یک single type قابل تبدیل باشند (و حداقل یکی از elements باید از آن type باشد، و باید دقیقاً یک best type وجود داشته باشد)، همانطور که در مثال زیر:
+
+```C#
+
+var x = new[] {1,10000000000};   // all convertible to long
+```
+### Bounds Checking
+
+تمام array indexing توسط runtime bounds checked می‌شوند. اگر از یک invalid index استفاده کنید، یک IndexOutOfRangeException پرتاب می‌شود:
+
+```C#
+
+int[] arr = new int[3];
+arr[3] = 1;               // IndexOutOfRangeException thrown
+```
+Array bounds checking برای type safety ضروری است و debugging را ساده می‌کند.
+
+
+به طور کلی، performance hit ناشی از bounds checking جزئی است، و Just-In-Time (JIT) compiler می‌تواند optimizations را انجام دهد، مانند تعیین از قبل اینکه آیا تمام indexes قبل از ورود به یک loop ایمن خواهند بود یا خیر، در نتیجه از بررسی در هر iteration جلوگیری می‌کند. علاوه بر این، C# code "unsafe" را فراهم می‌کند که می‌تواند به طور explicitly bounds checking را دور بزند (به "Unsafe Code and Pointers" در صفحه ۲۶۳ مراجعه کنید).
