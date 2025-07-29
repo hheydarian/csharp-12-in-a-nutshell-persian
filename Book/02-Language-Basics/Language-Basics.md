@@ -1510,3 +1510,194 @@ ReadOnlySpan<byte> utf8 = "ab→cd"u8;  // Arrow symbol consumes 3 bytes
 Console.WriteLine (utf8.Length);      // 7
 ```
 underlying type ReadOnlySpan<T> است، که در Chapter 23 آن را پوشش می‌دهیم. می‌توانید این را با فراخوانی ToArray() method به یک array تبدیل کنید.
+
+## Arrays
+
+یک array، تعداد ثابتی از variables (که elements نامیده می‌شوند) از یک type خاص را نمایش می‌دهد. Elements در یک array همیشه در یک contiguous block of memory ذخیره می‌شوند که دسترسی بسیار کارآمدی را فراهم می‌کند.
+
+یک array با square brackets پس از element type مشخص می‌شود:
+
+```C#
+
+char[] vowels = new char[5];    // Declare an array of 5 characters
+```
+Square brackets همچنین array را index می‌کنند و به یک element خاص بر اساس موقعیت دسترسی پیدا می‌کنند:
+
+```C#
+
+vowels[0] = 'a';
+vowels[1] = 'e';
+vowels[2] = 'i';
+vowels[3] = 'o';
+vowels[4] = 'u';
+Console.WriteLine (vowels[1]);      // e
+```
+این "e" را چاپ می‌کند زیرا array indexes از ۰ شروع می‌شوند. می‌توانید از یک for loop statement برای iterate کردن از طریق هر element در array استفاده کنید. for loop در این مثال integer i را از ۰ تا ۴ cycle می‌کند:
+
+```C#
+
+for (int i = 0; i < vowels.Length; i++)
+ Console.Write (vowels[i]);            // aeiou
+```
+Length property یک array، تعداد elements در array را برمی‌گرداند. پس از ایجاد یک array، نمی‌توانید طول آن را تغییر دهید. System.Collection namespace و subnamespaces، ساختارهای داده‌ای سطح بالاتر، مانند dynamically sized arrays و dictionaries را فراهم می‌کنند.
+
+یک array initialization expression به شما امکان می‌دهد یک array را در یک مرحله اعلان و پر کنید:
+
+```C#
+
+char[] vowels = new char[] {'a','e','i','o','u'};
+```
+یا به سادگی:
+
+```C#
+
+char[] vowels = {'a','e','i','o','u'};
+```
+از C# 12، می‌توانید به جای curly braces از square brackets استفاده کنید:
+
+```C#
+
+char[] vowels = ['a','e','i','o','u'];
+```
+این یک collection expression نامیده می‌شود و مزیت کار کردن هنگام فراخوانی methods را نیز دارد:
+
+C#
+
+```
+Foo (['a','e','i','o','u']);
+void Foo (char[] letters) { ... }
+```
+Collection expressions با سایر collection types مانند lists و sets نیز کار می‌کنند—به "Collection Initializers and Collection Expressions" در صفحه ۲۰۵ مراجعه کنید.
+
+تمام arrays از System.Array class ارث می‌برند و خدمات مشترک را برای تمام arrays فراهم می‌کنند. این members شامل methodsی برای دریافت و تنظیم elements صرف‌نظر از array type هستند. ما آن‌ها را در "The Array Class" در صفحه ۳۷۷ توضیح می‌دهیم.
+
+### Default Element Initialization
+
+ایجاد یک array همیشه elements را با default values پیش‌تنظیم می‌کند. Default value برای یک type نتیجه bitwise zeroing memory است. برای مثال، ایجاد یک array از integers را در نظر بگیرید. از آنجایی که int یک value type است، این ۱۰۰۰ integers را در یک contiguous block of memory اختصاص می‌دهد. Default value برای هر element 0 خواهد بود:
+
+```C#
+
+int[] a = new int[1000];
+Console.Write (a[123]);            // 0
+```
+#### Value types در مقابل Reference types
+
+اینکه آیا element type یک array یک value type است یا یک reference type، پیامدهای performance مهمی دارد. هنگامی که element type یک value type است، هر element value به عنوان بخشی از array اختصاص داده می‌شود، همانطور که در اینجا نشان داده شده است:
+
+```C#
+
+Point[] a = new Point[1000];
+int x = a[500].X;                  // 0
+public struct Point { public int X, Y; }
+```
+اگر Point یک class بود، ایجاد array صرفاً ۱۰۰۰ null references را اختصاص می‌داد:
+
+```C#
+
+Point[] a = new Point[1000];
+int x = a[500].X;                  // Runtime error, NullReferenceException
+public class Point { public int X, Y; }
+```
+برای جلوگیری از این error، باید به طور explicitly ۱۰۰۰ Points را پس از instantiating array instantiate کنیم:
+
+```C#
+
+Point[] a = new Point[1000];
+for (int i = 0; i < a.Length; i++) // Iterate i from 0 to 999
+  a[i] = new Point();             // Set array element i with new point
+```
+خود array همیشه یک reference type object است، صرف‌نظر از element type. برای مثال، موارد زیر قانونی است:
+
+```C#
+
+int[] a = null;
+```
+### Indices و Ranges
+
+Indices و ranges (معرفی شده در C# 8) کار با elements یا بخش‌هایی از یک array را ساده می‌کنند.
+
+Indices
+
+Indices و ranges همچنین با CLR types Span و ReadOnlySpan کار می‌کنند (به Chapter 23 مراجعه کنید).
+
+همچنین می‌توانید types خود را با indices و ranges کار کنید، با تعریف یک indexer از type Index یا Range (به "Indexers" در صفحه ۱۱۸ مراجعه کنید).
+
+Indices به شما امکان می‌دهند تا elements را نسبت به انتهای یک array، با operator ^ ارجاع دهید. ^1 به آخرین element، ^2 به element ماقبل آخر، و غیره اشاره دارد:
+
+```C#
+
+char[] vowels = new char[] {'a','e','i','o','u'};
+char lastElement  = vowels [^1];   // 'u'
+char secondToLast = vowels [^2];   // 'o'
+```
+(^0 برابر با طول array است، بنابراین vowels[^0] یک error ایجاد می‌کند.)
+
+
+C# indices را با کمک Index type پیاده‌سازی می‌کند، بنابراین می‌توانید موارد زیر را نیز انجام دهید:
+
+```C#
+
+Index first = 0;
+Index last = ^1;
+char firstElement = vowels [first];   // 'a'
+char lastElement = vowels [last];     // 'u'
+```
+### Ranges
+
+Ranges به شما امکان می‌دهند تا یک array را با استفاده از operator .. "slice" کنید:
+
+```C#
+
+char[] firstTwo =  vowels [..2];    // 'a', 'e'
+char[] lastThree = vowels [2..];    // 'i', 'o', 'u'
+char[] middleOne = vowels [2..3];   // 'i'
+```
+عدد دوم در range exclusive است، بنابراین ..2 elements قبل از vowels[2] را برمی‌گرداند.
+
+می‌توانید از نماد ^ در ranges نیز استفاده کنید. موارد زیر دو character آخر را برمی‌گرداند:
+
+C#
+
+```
+char[] lastTwo = vowels [^2..];     // 'o', 'u'
+```
+C# ranges را با کمک Range type پیاده‌سازی می‌کند، بنابراین می‌توانید موارد زیر را نیز انجام دهید:
+
+```C#
+
+Range firstTwoRange = 0..2;
+char[] firstTwo = vowels [firstTwoRange];   // 'a', 'e'
+```
+### Multidimensional Arrays
+
+Multidimensional arrays در دو نوع ارائه می‌شوند: rectangular و jagged. Rectangular arrays یک n-dimensional block of memory را نمایش می‌دهند، و jagged arrays arrays از arrays هستند.
+
+### Rectangular arrays
+
+Rectangular arrays با استفاده از commas برای جداسازی هر dimension اعلان می‌شوند. موارد زیر یک rectangular two-dimensional array را اعلان می‌کند که dimensions آن ۳ در ۳ است:
+
+```C#
+
+int[,] matrix = new int[3,3];
+```
+GetLength method یک array، طول یک dimension مشخص را برمی‌گرداند (شروع از ۰):
+
+
+```C#
+
+for (int i = 0; i < matrix.GetLength(0); i++)
+  for (int j = 0; j < matrix.GetLength(1); j++)
+    matrix[i,j] = i * 3 + j;
+```
+می‌توانید یک rectangular array را با explicit values مقداردهی کنید. کد زیر یک array مشابه مثال قبلی ایجاد می‌کند:
+
+
+```C#
+
+int[,] matrix = new int[,]
+ {
+  {0,1,2},
+  {3,4,5},
+  {6,7,8}
+ };
+```
