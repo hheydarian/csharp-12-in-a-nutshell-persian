@@ -52,44 +52,65 @@
 
 
 <ul dir="rtl">
-  <li><b>00 - Preface:</b> مقدمه (ترجمه شده ✅)</li>
-  <li><b>01 - #Coding Standards and Principles in C:</b> استاندارد ها و اصول کدنویسی در سی شارپ ( ترجمه شده ✅)</li>
-  <li><b>02 - Code Review – Process and Importance:</b> بررسی کد - فرانید و اهمیت (ترجمه شده ✅)</li>
-  <li><b>03 - Classes, Objects, and Data Structures:</b> کلاس ها، اشیا و ساختار داده (در حال ترجمه  🟡)</li>
-  <li><b>04 - Writing Clean Functions:</b> نوشتن توابع تمیز ( ترجمه شده ✅)</li>
-  <li><b>05 - Exception Handling:</b> رسیدگی به خطاها (ترجمه نشده ❌)</li>
-  <li><b>06 - Unit Testing:</b> تست واحد (ترجمه نشده ❌)</li>
-  <li><b>07 - End-to-End System Testing:</b> تست پایان به پایان سیستم (ترجمه نشده ❌)</li>
-  <li><b>08 - Threading and Concurrency:</b> رشته ها و همزمانی (ترجمه نشده ❌)</li>
-  <li><b>09 - Designing and Developing APIs:</b> طراحی و توسعه API ها (ترجمه نشده ❌)</li>
-  <li><b>10 - Securing APIs with API Keys and Azure Key Vault:</b> ایمن سازی API ها با API Keys و Azure Key (ترجمه نشده ❌)</li>
-  <li><b>11 - Addressing Cross-Cutting Concerns:</b> آدرس دهی به نقاط حساس (ترجمه نشده ❌)</li>
-  <li><b>12 - Using Tools to Improve Code Quality:</b> استفاده از ابزارها برای بهبود کیفیت کد (ترجمه نشده ❌)</li>
-  <li><b>13 - Refactoring C# Code – Identifying Code Smells:</b> ریفکتور در سی شارپ - شناسایی کدها (ترجمه نشده ❌)</li>
-  <li><b>14 - Refactoring C# Code – Implementing Design Patterns:</b> ریفکتور در سی شارپ - پیاده سازی الگوهای طراحی (ترجمه نشده ❌)</li>
+  <li><b>00 - Preface:</b> مقدمه ( ترجمه شده ✅)</li>
+  <li><b>01 - Introducing C# and .NET:</b> معرفی سی‌شارپ و دات‌نت ( ترجمه شده ✅)</li>
+  <li><b>02 - C# Language Basics:</b> مبانی زبان سی‌شارپ (در حال ترجمه 🟡)</li>
+  <li><b>03 - Creating Types in C#:</b> ساخت انواع در سی‌شارپ (ترجمه نشده ❌)</li>
+  <li><b>04 - Advanced C#:</b> سی‌شارپ پیشرفته (ترجمه نشده ❌)</li>
+  <li><b>05 - .NET Overview:</b> نمای کلی دات‌نت (ترجمه نشده ❌)</li>
+  <li><b>06 - .NET Fundamentals:</b> مبانی دات‌نت (ترجمه نشده ❌)</li>
+  <li><b>07 - Collections:</b> مجموعه‌ها (ترجمه نشده ❌)</li>
+  <li><b>08 - LINQ Queries:</b> کوئری‌های LINQ (ترجمه نشده ❌)</li>
+  <li><b>09 - LINQ Operators:</b> عملگرهای LINQ (ترجمه نشده ❌)</li>
+  <li><b>10 - LINQ to XML:</b> LINQ به XML (ترجمه نشده ❌)</li>
+  <li><b>11 - Other XML and JSON:</b> دیگر فرمت‌های XML و JSON (ترجمه نشده ❌)</li>
+  <li><b>12 - Disposal and Garbage Collection:</b> حذف منابع و جمع‌آوری زباله (ترجمه نشده ❌)</li>
+  <li><b>13 - Diagnostics:</b> عیب‌یابی (ترجمه نشده ❌)</li>
+  <li><b>14 - Concurrency and Asynchrony:</b> همزمانی و برنامه‌نویسی ناهمگام (ترجمه نشده ❌)</li>
+  <li><b>15 - Streams and IO:</b> جریان‌ها و ورودی/خروجی (ترجمه نشده ❌)</li>
+  <li><b>16 - Networking:</b> شبکه‌سازی (ترجمه نشده ❌)</li>
+  <li><b>17 - Assemblies:</b> اسمبلی‌ها (ترجمه نشده ❌)</li>
+  <li><b>18 - Reflection and Metadata:</b> بازتاب و فراداده (ترجمه نشده ❌)</li>
+  <li><b>19 - Dynamic Programming:</b> برنامه‌نویسی داینامیک (ترجمه نشده ❌)</li>
+  <li><b>20 - Cryptography:</b> رمزنگاری (ترجمه نشده ❌)</li>
+  <li><b>21 - Advanced Threading:</b> رشته‌بندی پیشرفته (ترجمه نشده ❌)</li>
+  <li><b>22 - Parallel Programming:</b> برنامه‌نویسی موازی (ترجمه نشده ❌)</li>
+  <li><b>23 - Span&lt;T&gt; and Memory&lt;T&gt;:</b> Span<T> و Memory<T> (ترجمه نشده ❌)</li>
+  <li><b>24 - Native and COM Interoperability:</b> ارتباط با کد بومی و COM (ترجمه نشده ❌)</li>
+  <li><b>25 - Regular Expressions:</b> عبارات باقاعده (ترجمه نشده ❌)</li>
 </ul>
-<br>
+
 
 ---
 ## 🔗 فصل‌های کتاب (با لینک)
-
-| شماره | نام فصل (انگلیسی)                                  | نام فصل (فارسی)                               | وضعیت | لینک                                                                                                                       |
-|:------|:---------------------------------------------------|:----------------------------------------------|:------|:---------------------------------------------------------------------------------------------------------------------------|
-| 00    | Preface                                            | مقدمه                                         | ✅     | [Preface](Book/00/Preface.md)                                                                                   |
-| 01    | Coding Standards and Principles in C#              | استاندارد ها و اصول کدنویسی در سی شارپ        | ✅     | [Coding-Standards-and-Principles-in-C#](Book/01/Coding-Standards-and-Principles-in-C%23.md)                      |
-| 02    | Code Review – Process and Importance               | بررسی کد - فرانید و اهمیت                     | ✅     | [Code-Review-Process-and-Importance](Book/02/Code-Review-Process-and-Importance.md)                             |
-| 03    | Classes, Objects, and Data Structures              | کلاس ها، اشیا و ساختار داده                   | 🟡     | [Classes-Objects-and-Data](Book/03/Classes-Objects-and-Data.md)                                                 |
-| 04    | Writing Clean Functions                            | نوشتن توابع تمیز                              | ✅     | [Writing-Clean-Functions](Book/04/Writing-Clean-Functions.md)                                                   |
-| 05    | Exception Handling                                 | رسیدگی به خطاها                               | ❌     | [Book/05/Exception-Handling.md](Book/05/Exception-Handling.md)                                                             |
-| 06    | Unit Testing                                       | تست واحد                                      | ❌     | [Book/06/Unit-Testing.md](Book/06/Unit-Testing.md)                                                                         |
-| 07    | End-to-End System Testing                          | تست پایان به پایان سیستم                      | ❌     | [Book/07/End-to-End-System-Testing.md](Book/07/End-to-End-System-Testing.md)                                               |
-| 08    | Threading and Concurrency                          | رشته ها و همزمانی                             | ❌     | [Book/08/Threading-and-Concurrency.md](Book/08/Threading-and-Concurrency.md)                                               |
-| 09    | Designing and Developing APIs                      | طراحی و توسعه API ها                          | ❌     | [Book/09/Designing-and-Developing-APIs.md](Book/09/Designing-and-Developing-APIs.md)                                       |
-| 10    | Securing APIs with API Keys and Azure Key Vault    | ایمن سازی API ها با API Keys و Azure Key      | ❌     | [Book/10/Securing-APIs-with-API-Keys-and-Azure-Key-Vault.md](Book/10/Securing-APIs-with-API-Keys-and-Azure-Key-Vault.md)   |
-| 11    | Addressing Cross-Cutting Concerns                  | آدرس دهی به نقاط حساس                         | ❌     | [Book/11/Addressing-Cross-Cutting-Concerns.md](Book/11/Addressing-Cross-Cutting-Concerns.md)                               |
-| 12    | Using Tools to Improve Code Quality                | استفاده از ابزارها برای بهبود کیفیت کد        | ❌     | [Book/12/Using-Tools-to-Improve-Code-Quality.md](Book/12/Using-Tools-to-Improve-Code-Quality.md)                           |
-| 13    | Refactoring C# Code – Identifying Code Smells      | ریفکتور در سی شارپ - شناسایی کدها             | ❌     | [Book/13/Refactoring-C#-Code-Identifying-Code-Smells.md](Book/13/Refactoring-C#-Code-Identifying-Code-Smells.md)           |
-| 14    | Refactoring C# Code – Implementing Design Patterns | ریفکتور در سی شارپ - پیاده سازی الگوهای طراحی | ❌     | [Book/14/Refactoring-C#-Code-Implementing-Design-Patterns.md](Book/14/Refactoring-C#-Code-Implementing-Design-Patterns.md) |
+| شماره | نام فصل (انگلیسی)                         | نام فصل (فارسی)                            | وضعیت | لینک                                               |
+|-------|-------------------------------------------|---------------------------------------------|--------|----------------------------------------------------|
+| 00    | Preface                                   | مقدمه                                      | ✅     | [Preface](Book/00/Preface.md)                     |
+| 01    | Introducing C# and .NET                   | معرفی سی‌شارپ و دات‌نت                      | ✅    | [Introducing-C#-and-.NET](Book/01/Introducing-C%23-and-.NET.md) |
+| 02    | C# Language Basics                        | مبانی زبان سی‌شارپ                          | 🟡     | [C#-Language-Basics](Book/02/C%23-Language-Basics.md)           |
+| 03    | Creating Types in C#                      | ساخت انواع در سی‌شارپ                       | ❌     | [Creating-Types-in-C#](Book/03/Creating-Types-in-C%23.md)       |
+| 04    | Advanced C#                               | سی‌شارپ پیشرفته                            | ❌     | [Advanced-C#](Book/04/Advanced-C%23.md)                         |
+| 05    | .NET Overview                             | نمای کلی دات‌نت                             | ❌     | [.NET-Overview](Book/05/.NET-Overview.md)                       |
+| 06    | .NET Fundamentals                         | مبانی دات‌نت                                | ❌     | [.NET-Fundamentals](Book/06/.NET-Fundamentals.md)               |
+| 07    | Collections                               | مجموعه‌ها                                   | ❌     | [Collections](Book/07/Collections.md)                           |
+| 08    | LINQ Queries                              | کوئری‌های LINQ                              | ❌     | [LINQ-Queries](Book/08/LINQ-Queries.md)                         |
+| 09    | LINQ Operators                            | عملگرهای LINQ                               | ❌     | [LINQ-Operators](Book/09/LINQ-Operators.md)                     |
+| 10    | LINQ to XML                               | LINQ به XML                                 | ❌     | [LINQ-to-XML](Book/10/LINQ-to-XML.md)                           |
+| 11    | Other XML and JSON                        | دیگر فرمت‌های XML و JSON                    | ❌     | [Other-XML-and-JSON](Book/11/Other-XML-and-JSON.md)             |
+| 12    | Disposal and Garbage Collection           | حذف منابع و جمع‌آوری زباله                  | ❌     | [Disposal-and-Garbage-Collection](Book/12/Disposal-and-Garbage-Collection.md) |
+| 13    | Diagnostics                               | عیب‌یابی                                     | ❌     | [Diagnostics](Book/13/Diagnostics.md)                           |
+| 14    | Concurrency and Asynchrony               | همزمانی و برنامه‌نویسی ناهمگام             | ❌     | [Concurrency-and-Asynchrony](Book/14/Concurrency-and-Asynchrony.md) |
+| 15    | Streams and IO                            | جریان‌ها و ورودی/خروجی                      | ❌     | [Streams-and-IO](Book/15/Streams-and-IO.md)                     |
+| 16    | Networking                                | شبکه‌سازی                                   | ❌     | [Networking](Book/16/Networking.md)                             |
+| 17    | Assemblies                                | اسمبلی‌ها                                   | ❌     | [Assemblies](Book/17/Assemblies.md)                             |
+| 18    | Reflection and Metadata                   | بازتاب و فراداده                            | ❌     | [Reflection-and-Metadata](Book/18/Reflection-and-Metadata.md)   |
+| 19    | Dynamic Programming                       | برنامه‌نویسی داینامیک                       | ❌     | [Dynamic-Programming](Book/19/Dynamic-Programming.md)           |
+| 20    | Cryptography                              | رمزنگاری                                    | ❌     | [Cryptography](Book/20/Cryptography.md)                         |
+| 21    | Advanced Threading                        | رشته‌بندی پیشرفته                           | ❌     | [Advanced-Threading](Book/21/Advanced-Threading.md)             |
+| 22    | Parallel Programming                      | برنامه‌نویسی موازی                          | ❌     | [Parallel-Programming](Book/22/Parallel-Programming.md)         |
+| 23    | Span<T> and Memory<T>                     | Span<T> و Memory<T>                          | ❌     | [SpanT-and-MemoryT](Book/23/SpanT-and-MemoryT.md)               |
+| 24    | Native and COM Interoperability           | ارتباط با کد بومی و COM                     | ❌     | [Native-and-COM-Interoperability](Book/24/Native-and-COM-Interoperability.md) |
+| 25    | Regular Expressions                       | عبارات باقاعده                              | ❌     | [Regular-Expressions](Book/25/Regular-Expressions.md)           |
 
 🛑 قبل از شروع ترجمه یا تغییرات بزرگ، لطفاً یه [Issue](https://github.com/hheydarian/clean-code-in-csharp-persian/issues) باز کن یا با [hamdhydryan12@gmail.com](mailto:hamdhydryan12@gmail.com) در ارتباط باش.
 
