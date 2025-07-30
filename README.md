@@ -11,20 +11,12 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/hheydarian/csharp-12-in-a-nutshell-persian/stargazers">
-    <img alt="Stars" src="https://img.shields.io/github/stars/hheydarian/csharp-12-in-a-nutshell-persian?style=flat&logo=github&logoColor=gold&label=Stars&color=FFD700" />
-  </a>
-  <a href="https://github.com/hheydarian/csharp-12-in-a-nutshell-persian/network/members">
-    <img alt="Forks" src="https://img.shields.io/github/forks/hheydarian/csharp-12-in-a-nutshell-persian?style=flat&logo=code-fork&label=Forks&color=61dafb" />
-  </a>
-  <a href="https://github.com/hheydarian/csharp-12-in-a-nutshell-persian/issues">
-    <img alt="Issues" src="https://img.shields.io/github/issues/hheydarian/csharp-12-in-a-nutshell-persian?style=flat&logo=github&logoColor=red&label=Issues&color=ff6961" />
-  </a>
-  <a href="https://github.com/hheydarian/csharp-12-in-a-nutshell-persian/commits/main">
-    <img alt="Last Commit" src="https://img.shields.io/github/last-commit/hheydarian/csharp-12-in-a-nutshell-persian?style=flat&logo=git&logoColor=white&label=Last%20Commit&color=9acd32" />
-  </a>
+  <img src="https://img.shields.io/github/stars/hheydarian/csharp-12-in-a-nutshell-persian?style=social" alt="GitHub stars">
+  <img src="https://img.shields.io/github/forks/hheydarian/csharp-12-in-a-nutshell-persian?color=blueviolet" alt="GitHub forks">
+  <img src="https://img.shields.io/github/issues/hheydarian/csharp-12-in-a-nutshell-persian?color=ff69b4" alt="GitHub issues">
+  <img src="https://img.shields.io/github/issues-pr/hheydarian/csharp-12-in-a-nutshell-persian?color=orange" alt="GitHub pull requests">
+  <img src="https://img.shields.io/github/last-commit/hheydarian/csharp-12-in-a-nutshell-persian?color=9cf" alt="Last Commit">
 </p>
-
 
 
 ---
