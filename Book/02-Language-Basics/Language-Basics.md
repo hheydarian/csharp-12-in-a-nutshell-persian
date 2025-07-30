@@ -2461,5 +2461,8 @@ Table 2-3. C# operators (categories in order of precedence)
 <div align="center">
     
 ![Conventions-UsedThis-Book](../../assets/image/02/Table-2-9.png) <br>
-![Conventions-UsedThis-Book](../../assets/image/02/Table-2-10.png) <br>
+![Conventions-UsedThis-Book](../../assets/image/02/Table-2-10-1.png) <br>
+![Conventions-UsedThis-Book](../../assets/image/02/Table-2-10-2.png) <br>
+![Conventions-UsedThis-Book](../../assets/image/02/Table-2-10-3.png) <br>
+![Conventions-UsedThis-Book](../../assets/image/02/Table-2-10-4.png) <br>
 </div>
