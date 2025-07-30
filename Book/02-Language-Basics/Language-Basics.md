@@ -2216,3 +2216,107 @@ void Bar (int a = 0, int b = 0, int c = 0, int d = 0) { ... }
 Bar (d:3);
 ```
 این به ویژه هنگام فراخوانی COM APIs مفید است، که در Chapter 24 به تفصیل در مورد آنها بحث می‌کنیم.
+
+### Ref Locals
+
+یکی از ویژگی‌های نسبتاً ناشناخته C# این است که می‌توانید یک local variable تعریف کنید که به یک element در یک array یا field در یک object reference می‌دهد (از C# 7):
+
+```C#
+
+int[] numbers = { 0, 1, 2, 3, 4 };
+ref int numRef = ref numbers [2];
+```
+در این مثال، numRef یک reference به numbers[2] است. هنگامی که numRef را تغییر می‌دهیم، array element را تغییر می‌دهیم:
+
+```C#
+
+numRef *= 10;
+Console.WriteLine (numRef);        // 20
+Console.WriteLine (numbers [2]);   // 20
+```
+Target برای یک ref local باید یک array element، field، یا local variable باشد؛ نمی‌تواند یک property (Chapter 3) باشد. Ref locals برای scenarios micro-optimization تخصصی در نظر گرفته شده‌اند و معمولاً در ترکیب با ref returns استفاده می‌شوند.
+
+### Ref Returns
+
+Types Span و ReadOnlySpan که در Chapter 23 آن‌ها را توضیح می‌دهیم، از ref returns برای پیاده‌سازی یک indexer با کارایی بسیار بالا استفاده می‌کنند. خارج از چنین scenarios، ref returns معمولاً استفاده نمی‌شوند، و می‌توانید آن‌ها را یک feature micro-optimization در نظر بگیرید.
+
+می‌توانید یک ref local را از یک method return کنید. این را ref return می‌نامند:
+
+```C#
+
+class Program
+{
+  static string x = "Old Value";
+  static ref string GetX() => ref x;    // This method returns a ref
+  static void Main()
+  {
+    ref string xRef = ref GetX();       // Assign result to a ref local
+    xRef = "New Value";
+    Console.WriteLine (x);              // New Value
+  }
+}
+```
+اگر modifier ref را در سمت calling حذف کنید، به returning یک ordinary value بازمی‌گردد:
+
+```C#
+
+string localX = GetX();  // Legal: localX is an ordinary non-ref variable.
+```
+همچنین می‌توانید از ref returns هنگام تعریف یک property یا indexer استفاده کنید:
+
+```C#
+
+static ref string Prop => ref x;
+```
+چنین propertyای به طور implicitly writable است، با وجود اینکه هیچ set accessorی وجود ندارد:
+
+```C#
+
+Prop = "New Value";
+```
+می‌توانید از چنین تغییری با استفاده از ref readonly جلوگیری کنید:
+
+```C#
+
+static ref readonly string Prop => ref x;
+```
+Modifier ref readonly از تغییر جلوگیری می‌کند در حالی که همچنان performance gain returning by reference را فعال می‌کند. Gain در این مورد بسیار کوچک خواهد بود، زیرا x از type string (یک reference type) است: مهم نیست string چقدر طولانی باشد، تنها ناکارآمدی که می‌توانید امیدوار باشید از آن جلوگیری کنید، copying یک 32- یا 64-bit reference واحد است. Gains واقعی می‌توانند با custom value types رخ دهند (به "Structs" در صفحه ۱۴۲ مراجعه کنید)، اما فقط در صورتی که struct به عنوان readonly علامت‌گذاری شده باشد (در غیر این صورت، compiler یک defensive copy را انجام خواهد داد).
+
+تلاش برای تعریف یک explicit set accessor در یک ref return property یا indexer غیرقانونی است.
+
+
+### var—Implicitly Typed Local Variables
+
+اغلب اتفاق می‌افتد که یک variable را در یک مرحله اعلان و مقداردهی اولیه می‌کنید. اگر compiler قادر به استنباط type از initialization expression باشد، می‌توانید از keyword var به جای type declaration استفاده کنید؛ برای مثال:
+
+```C#
+
+var x = "hello";
+var y = new System.Text.StringBuilder();
+var z = (float)Math.PI;
+```
+این دقیقاً معادل موارد زیر است:
+
+```C#
+
+string x = "hello";
+System.Text.StringBuilder y = new System.Text.StringBuilder();
+float z = (float)Math.PI;
+```
+به دلیل این direct equivalence، implicitly typed variables statically typed هستند. برای مثال، موارد زیر یک compile-time error ایجاد می‌کند:
+
+```C#
+
+var x = 5;
+x = "hello";    // Compile-time error; x is of type int
+```
+var می‌تواند خوانایی code را کاهش دهد، زمانی که نمی‌توانید type را صرفاً با نگاه کردن به variable declaration استنباط کنید. برای مثال:
+
+```C#
+
+Random r = new Random();
+var x = r.Next();
+```
+Type x چیست؟
+
+در "Anonymous Types" در صفحه ۲۲۰، سناریویی را توضیح خواهیم داد که در آن استفاده از var اجباری است.
