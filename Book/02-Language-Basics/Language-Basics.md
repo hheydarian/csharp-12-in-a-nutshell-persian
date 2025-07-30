@@ -2466,3 +2466,412 @@ Table 2-3. C# operators (categories in order of precedence)
 ![Conventions-UsedThis-Book](../../assets/image/02/Table-2-10-3.png) <br>
 ![Conventions-UsedThis-Book](../../assets/image/02/Table-2-10-4.png) <br>
 </div>
+
+## Null Operators (عملگرهای Null)
+C# سه عملگر را برای سهولت کار با nullها فراهم می‌کند: null-coalescing operator, null-coalescing assignment operator, و null-conditional operator.
+
+
+### Null-Coalescing Operator (عملگر همبسته‌ساز Null)
+عملگر ?? همان null-coalescing operator است. این عملگر می‌گوید: "اگر operand سمت چپ non-null است، آن را به من بده؛ در غیر این صورت، یک value دیگر به من بده." برای مثال:
+
+```C#
+
+string s1 = null;
+string s2 = s1 ?? "nothing";   // s2 به "nothing" ارزیابی می‌شود
+```
+اگر lefthand expression non-null باشد، righthand expression هرگز evaluated نمی‌شود.
+
+Null-coalescing operator با nullable value types نیز کار می‌کند (به "Nullable Value Types" در صفحه ۲۱۰ مراجعه کنید).
+
+### Null-Coalescing Assignment Operator (عملگر انتساب همبسته‌ساز Null)
+عملگر ??= (معرفی شده در C# 8) همان null-coalescing assignment operator است. این عملگر می‌گوید: "اگر operand سمت چپ null است، right operand را به left operand assign کن." موارد زیر را در نظر بگیرید:
+
+```C#
+
+myVariable ??= someDefault;
+```
+این معادل با موارد زیر است:
+
+```C#
+
+if (myVariable == null) myVariable = someDefault;
+```
+Operator ??= به ویژه در پیاده‌سازی lazily calculated properties مفید است. ما این موضوع را بعداً در "Calculated Fields and Lazy Evaluation" در صفحه ۲۳۳ پوشش خواهیم داد.
+
+### Null-Conditional Operator (عملگر شرطی Null)
+عملگر ?. همان null-conditional یا "Elvis" operator است (نامگذاری شده پس از Elvis emoticon). این عملگر به شما اجازه می‌دهد تا methods را فراخوانی کرده و به members دسترسی پیدا کنید، دقیقاً مانند standard dot operator، با این تفاوت که اگر operand در سمت چپ null باشد، expression به جای پرتاب NullReferenceException به null ارزیابی می‌شود:
+
+```C#
+
+System.Text.StringBuilder sb = null;
+string s = sb?.ToString();  // خطایی رخ نمی‌دهد؛ s به null ارزیابی می‌شود
+```
+خط آخر معادل با موارد زیر است:
+
+```C#
+
+string s = (sb == null ? null : sb.ToString());
+```
+Null-conditional expressions با indexers نیز کار می‌کنند:
+
+```C#
+
+string[] words = null;
+string word = words?[1];   // word is null
+```
+هنگام برخورد با null، Elvis operator بقیه expression را short-circuits می‌کند. در مثال زیر، s به null ارزیابی می‌شود، حتی با وجود standard dot operator بین ToString() و ToUpper():
+
+```C#
+
+System.Text.StringBuilder sb = null;
+string s = sb?.ToString().ToUpper();   // s به null ارزیابی می‌شود بدون خطا
+```
+
+استفاده مکرر از Elvis تنها در صورتی ضروری است که operand بلافاصله سمت چپ آن ممکن است null باشد. عبارت زیر نسبت به x که null است و x.y که null است مقاوم است:
+
+
+x?.y?.z
+این معادل موارد زیر است (با این تفاوت که x.y فقط یک بار evaluated می‌شود):
+
+```C#
+
+x == null ? null 
+          : (x.y == null ? null : x.y.z)
+```
+Final expression باید قادر به پذیرش null باشد. موارد زیر غیرقانونی است:
+
+```C#
+
+System.Text.StringBuilder sb = null;
+int length = sb?.ToString().Length;   // غیرقانونی: int نمی‌تواند null باشد
+```
+ما می‌توانیم این مشکل را با استفاده از nullable value types برطرف کنیم (به "Nullable Value Types" در صفحه ۲۱۰ مراجعه کنید). اگر از قبل با nullable value types آشنا هستید، در اینجا یک پیش‌نمایش آورده شده است:
+
+```C#
+
+int? length = sb?.ToString().Length;   // OK: int? می‌تواند null باشد
+```
+همچنین می‌توانید از null-conditional operator برای فراخوانی یک void method استفاده کنید:
+
+```C#
+
+someObject?.SomeVoidMethod();
+```
+اگر someObject null باشد، این به یک "no-operation" تبدیل می‌شود به جای پرتاب NullReferenceException.
+
+می‌توانید از null-conditional operator با type members رایج که در Chapter 3 توضیح می‌دهیم، از جمله methods, fields, properties, و indexers استفاده کنید. همچنین به خوبی با null-coalescing operator ترکیب می‌شود:
+
+```C#
+
+System.Text.StringBuilder sb = null;
+string s = sb?.ToString() ?? "nothing";   // s به "nothing" ارزیابی می‌شود
+```
+## Statements (عبارات)
+Functions شامل statementsی هستند که به صورت متوالی و به ترتیبی که در متن ظاهر می‌شوند، اجرا می‌گردند. یک statement block مجموعه‌ای از statements است که بین braces (توکن‌های {}) قرار می‌گیرد.
+
+### Declaration Statements (عبارات اعلامی)
+یک variable declaration یک variable جدید را معرفی می‌کند، که به صورت optionally با یک expression مقداردهی اولیه می‌شود. می‌توانید چندین variable از یک type را در یک لیست جدا شده با comma اعلان کنید:
+
+```C#
+
+string someWord = "rosebud";
+int someNumber = 42;
+bool rich = true, famous = false;
+```
+یک constant declaration مانند یک variable declaration است با این تفاوت که پس از اعلان نمی‌توان آن را تغییر داد، و مقداردهی اولیه باید همراه با اعلان انجام شود (به "Constants" در صفحه ۱۰۴ مراجعه کنید):
+
+```C#
+
+const double c = 2.99792458E08;
+c += 10;                        // Compile-time Error
+```
+
+#### Local variables (متغیرهای محلی)
+Scope یک local variable یا local constant در سراسر current block گسترش می‌یابد. نمی‌توانید یک local variable دیگر با همان نام را در current block یا در هر nested blockی اعلان کنید:
+
+```C#
+
+int x;
+{
+  int y;
+  int x;            // Error - x already defined
+}
+{
+  int y;            // OK - y not in scope
+}
+Console.Write (y);  // Error - y is out of scope
+```
+Scope یک variable در هر دو جهت در سراسر code block آن گسترش می‌یابد. این بدان معناست که اگر ما اعلان اولیه x را در این مثال به انتهای method منتقل کنیم، همان error را دریافت خواهیم کرد. این در تضاد با C++ است و تا حدودی عجیب است، با توجه به اینکه ارجاع به یک variable یا constant قبل از اعلان آن قانونی نیست.
+
+### Expression Statements (عبارات بیانی)
+Expression statements expressionsی هستند که همچنین statements معتبری محسوب می‌شوند. یک expression statement باید یا state را تغییر دهد یا چیزی را فراخوانی کند که ممکن است state را تغییر دهد. Changing state اساساً به معنای تغییر یک variable است. در ادامه expression statements ممکن آورده شده‌اند:
+
++ Assignment expressions (شامل increment و decrement expressions)
+
++ Method call expressions (هم void و هم nonvoid)
+
++ Object instantiation expressions
+
+در اینجا چند مثال آورده شده است:
+
+```C#
+
+// Declare variables with declaration statements:
+string s;
+int x, y;
+System.Text.StringBuilder sb;
+
+// Expression statements
+x = 1 + 2;                 // Assignment expression
+x++;                       // Increment expression
+y = Math.Max (x, 5);       // Assignment expression
+Console.WriteLine (y);     // Method call expression
+sb = new StringBuilder();  // Assignment expression
+new StringBuilder();       // Object instantiation expression
+```
+هنگامی که یک constructor یا یک method را فراخوانی می‌کنید که یک value را return می‌کند، مجبور به استفاده از نتیجه نیستید. با این حال، مگر اینکه constructor یا method state را تغییر دهد، statement کاملاً بی‌فایده است:
+
+```C#
+
+new StringBuilder();     // Legal, but useless
+new string ('c', 3);     // Legal, but useless
+x.Equals (y);            // Legal, but useless
+```
+### Selection Statements (عبارات انتخابی)
+C# دارای مکانیزم‌های زیر برای کنترل شرطی جریان اجرای برنامه است:
+
++ Selection statements (if, switch)
+
++ Conditional operator (?:)
+
++ Loop statements (while, do-while, for, foreach)
+
+این بخش دو ساختار ساده‌تر را پوشش می‌دهد: if statement و switch statement.
+
+#### The if statement (عبارت if)
+یک if statement یک statement را اجرا می‌کند اگر یک bool expression true باشد:
+
+```C#
+
+if (5 < 2 * 3)
+ Console.WriteLine ("true");       // true
+```
+Statement می‌تواند یک code block باشد:
+
+```C#
+
+if (5 < 2 * 3)
+{
+  Console.WriteLine ("true");
+  Console.WriteLine ("Let’s move on!");
+}
+```
+#### The else clause (بند else)
+یک if statement می‌تواند به صورت optionally شامل یک else clause باشد:
+
+```C#
+
+if (2 + 2 == 5)
+ Console.WriteLine ("Does not compute");
+else
+ Console.WriteLine ("False");        // False
+```
+درون یک else clause، می‌توانید یک if statement دیگر را nest کنید:
+
+```C#
+
+if (2 + 2 == 5)
+Console.WriteLine ("Does not compute");
+else
+if (2 + 2 == 4)
+Console.WriteLine ("Computes");    // Computes
+```
+
+### تغییر جریان اجرا با Braces (آکولادها)
+یک else clause همیشه به if statement بلافاصله قبل از خود در statement block اعمال می‌شود:
+
+```C#
+
+if (true)
+  if (false)
+    Console.WriteLine();
+  else
+    Console.WriteLine ("executes");
+```
+این از نظر معنایی (semantically) دقیقاً معادل با موارد زیر است:
+
+```C#
+
+if (true)
+{
+  if (false)
+    Console.WriteLine();
+  else
+    Console.WriteLine ("executes");
+}
+```
+می‌توانیم با جابجایی braces، جریان اجرا را تغییر دهیم:
+
+```C#
+
+if (true)
+{
+  if (false)
+    Console.WriteLine();
+}
+else
+  Console.WriteLine ("does not execute");
+```
+با braces، شما به صراحت قصد (intention) خود را بیان می‌کنید. این می‌تواند خوانایی nested if statements را بهبود بخشد—حتی زمانی که compiler آن را الزامی نمی‌داند. یک استثنای قابل توجه در مورد الگوی زیر است:
+
+```C#
+
+void TellMeWhatICanDo (int age)
+{
+  if (age >= 35)
+    Console.WriteLine ("You can be president!");
+  else if (age >= 21)
+    Console.WriteLine ("You can drink!");
+  else if (age >= 18)
+    Console.WriteLine ("You can vote!");
+  else
+    Console.WriteLine ("You can wait!");
+}
+```
+در اینجا، if و else statements را به گونه‌ای چیده‌ایم که ساختار "elseif" سایر زبان‌ها (و C#’s #elif preprocessor directive) را تقلید کند. auto-formatting Visual Studio این الگو را تشخیص داده و indentation را حفظ می‌کند. با این حال، از نظر معنایی، هر if statement که به دنبال یک else statement می‌آید، از نظر کارکردی (functionally) درون else clause تو در تو (nested) قرار گرفته است.
+
+
+#### The switch statement (عبارت switch)
+switch statements به شما امکان می‌دهند اجرای برنامه را بر اساس مجموعه‌ای از possible values که یک variable ممکن است داشته باشد، شاخه بندی (branch) کنید. switch statements می‌توانند منجر به code تمیزتری نسبت به چندین if statement شوند، زیرا switch statements فقط یک بار نیاز به ارزیابی یک expression دارند:
+
+```C#
+
+void ShowCard (int cardNumber)
+{
+  switch (cardNumber)
+  {
+    case 13:
+      Console.WriteLine ("King");
+      break;
+    case 12:
+      Console.WriteLine ("Queen");
+      break;
+    case 11:
+      Console.WriteLine ("Jack");
+      break;
+    case -1:                         // Joker is -1
+      goto case 12;                  // In this game joker counts as queen
+    default:                         // Executes for any other cardNumber
+      Console.WriteLine (cardNumber);
+      break;
+  }
+}
+```
+این مثال رایج‌ترین سناریو را نشان می‌دهد، که سوئیچ کردن (switching) بر روی constants است. هنگامی که یک constant را مشخص می‌کنید، محدود به built-in numeric types و types bool, char, string, و enum هستید.
+
+در انتهای هر case clause، باید به صراحت مشخص کنید که اجرای بعدی به کجا باید برود، با نوعی از jump statement (مگر اینکه code شما به یک infinite loop ختم شود). در اینجا گزینه‌ها آمده‌اند:
+
++ break (به انتهای switch statement پرش می‌کند)
+
++ goto case x (به یک case clause دیگر پرش می‌کند)
+
++ goto default (به default clause پرش می‌کند)
+
++ هر jump statement دیگری—یعنی return, throw, continue, یا goto label
+
+هنگامی که بیش از یک value باید همان code را اجرا کند، می‌توانید common cases را به صورت متوالی لیست کنید:
+
+```C#
+
+switch (cardNumber)
+{
+  case 13:
+  case 12:
+  case 11:
+    Console.WriteLine ("Face card");
+    break;
+  default:
+    Console.WriteLine ("Plain card");
+    break;
+}
+```
+این ویژگی یک switch statement می‌تواند در تولید code تمیزتر نسبت به چندین if-else statements بسیار مهم باشد.
+
+#### Switching on types (سوئیچ کردن بر روی انواع)
+Switching on a type یک حالت خاص از switching on a pattern است.
+
+تعدادی از patterns دیگر در نسخه‌های اخیر C# معرفی شده‌اند؛ برای بحث کامل به "Patterns" در صفحه ۲۳۸ مراجعه کنید.
+
+همچنین می‌توانید بر روی types سوئیچ کنید (از C# 7):
+
+```C#
+
+TellMeTheType (12);
+TellMeTheType ("hello");
+TellMeTheType (true);
+
+void TellMeTheType (object x)   // object اجازه هر typeی را می‌دهد.
+{
+  switch (x)
+  {
+    case int i:
+      Console.WriteLine ("It's an int!");
+      Console.WriteLine ($"The square of {i} is {i * i}");
+      break;
+    case string s:
+      Console.WriteLine ("It's a string");
+      Console.WriteLine ($"The length of {s} is {s.Length}");
+      break;
+    case DateTime:
+      Console.WriteLine ("It's a DateTime");
+      break;
+    default:
+      Console.WriteLine ("I don't know what x is");
+      break;
+  }
+}
+```
+(object type اجازه یک variable از هر type را می‌دهد؛ ما این را به طور کامل در "Inheritance" در صفحه ۱۲۶ و "The object Type" در صفحه ۱۳۸ بحث می‌کنیم.)
+
+هر case clause یک type را برای مطابقت مشخص می‌کند، و یک variable را برای assign کردن typed value در صورت موفقیت match (متغیر "pattern"). برخلاف constants، هیچ محدودیتی در مورد typesی که می‌توانید استفاده کنید وجود ندارد.
+
+می‌توانید یک case را با keyword when پیش‌بینی (predicate) کنید:
+
+```C#
+
+switch (x)
+{
+  case bool b when b == true:
+    Console.WriteLine ("True!");
+    break;
+  case bool b:
+     // Fires only when b is true
+    Console.WriteLine ("False!");
+    break;
+}
+```
+ترتیب case clauses می‌تواند هنگام switching on type مهم باشد (برخلاف switching on constants). این مثال اگر دو case را معکوس می‌کردیم، نتیجه متفاوتی می‌داد (در واقع، حتی compile هم نمی‌شد، زیرا compiler تشخیص می‌داد که second case قابل دسترسی نیست). یک استثنا در این قانون default clause است، که همیشه در آخر اجرا می‌شود، صرف نظر از جایی که ظاهر می‌شود.
+
+می‌توانید چندین case clause را روی هم پشته (stack) کنید. Console.WriteLine در کد زیر برای هر floating-point type بزرگتر از ۱۰۰۰ اجرا خواهد شد:
+
+```C#
+
+switch (x)
+{
+  case float f when f > 1000:
+  case double d when d > 1000:
+  case decimal m when m > 1000:
+    Console.WriteLine ("We can refer to x here but not f or d or m");
+    break;
+}
+```
+در این مثال، compiler به ما اجازه می‌دهد pattern variables f, d, و m را فقط در when clauses مصرف کنیم. هنگامی که Console.WriteLine را فراخوانی می‌کنیم، مشخص نیست که کدام یک از آن سه variable مقداردهی خواهد شد، بنابراین compiler همه آنها را از scope خارج می‌کند.
+
+می‌توانید constants و patterns را در یک switch statement ترکیب و تطبیق دهید. و همچنین می‌توانید بر روی null value سوئیچ کنید:
+
+```C#
+
+case null:
+  Console.WriteLine ("Nothing here");
+  break;
+```
