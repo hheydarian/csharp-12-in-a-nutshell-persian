@@ -1510,3 +1510,956 @@ ReadOnlySpan<byte> utf8 = "ab→cd"u8;  // Arrow symbol consumes 3 bytes
 Console.WriteLine (utf8.Length);      // 7
 ```
 underlying type ReadOnlySpan<T> است، که در Chapter 23 آن را پوشش می‌دهیم. می‌توانید این را با فراخوانی ToArray() method به یک array تبدیل کنید.
+
+## Arrays
+
+یک array، تعداد ثابتی از variables (که elements نامیده می‌شوند) از یک type خاص را نمایش می‌دهد. Elements در یک array همیشه در یک contiguous block of memory ذخیره می‌شوند که دسترسی بسیار کارآمدی را فراهم می‌کند.
+
+یک array با square brackets پس از element type مشخص می‌شود:
+
+```C#
+
+char[] vowels = new char[5];    // Declare an array of 5 characters
+```
+Square brackets همچنین array را index می‌کنند و به یک element خاص بر اساس موقعیت دسترسی پیدا می‌کنند:
+
+```C#
+
+vowels[0] = 'a';
+vowels[1] = 'e';
+vowels[2] = 'i';
+vowels[3] = 'o';
+vowels[4] = 'u';
+Console.WriteLine (vowels[1]);      // e
+```
+این "e" را چاپ می‌کند زیرا array indexes از ۰ شروع می‌شوند. می‌توانید از یک for loop statement برای iterate کردن از طریق هر element در array استفاده کنید. for loop در این مثال integer i را از ۰ تا ۴ cycle می‌کند:
+
+```C#
+
+for (int i = 0; i < vowels.Length; i++)
+ Console.Write (vowels[i]);            // aeiou
+```
+Length property یک array، تعداد elements در array را برمی‌گرداند. پس از ایجاد یک array، نمی‌توانید طول آن را تغییر دهید. System.Collection namespace و subnamespaces، ساختارهای داده‌ای سطح بالاتر، مانند dynamically sized arrays و dictionaries را فراهم می‌کنند.
+
+یک array initialization expression به شما امکان می‌دهد یک array را در یک مرحله اعلان و پر کنید:
+
+```C#
+
+char[] vowels = new char[] {'a','e','i','o','u'};
+```
+یا به سادگی:
+
+```C#
+
+char[] vowels = {'a','e','i','o','u'};
+```
+از C# 12، می‌توانید به جای curly braces از square brackets استفاده کنید:
+
+```C#
+
+char[] vowels = ['a','e','i','o','u'];
+```
+این یک collection expression نامیده می‌شود و مزیت کار کردن هنگام فراخوانی methods را نیز دارد:
+
+C#
+
+```
+Foo (['a','e','i','o','u']);
+void Foo (char[] letters) { ... }
+```
+Collection expressions با سایر collection types مانند lists و sets نیز کار می‌کنند—به "Collection Initializers and Collection Expressions" در صفحه ۲۰۵ مراجعه کنید.
+
+تمام arrays از System.Array class ارث می‌برند و خدمات مشترک را برای تمام arrays فراهم می‌کنند. این members شامل methodsی برای دریافت و تنظیم elements صرف‌نظر از array type هستند. ما آن‌ها را در "The Array Class" در صفحه ۳۷۷ توضیح می‌دهیم.
+
+### Default Element Initialization
+
+ایجاد یک array همیشه elements را با default values پیش‌تنظیم می‌کند. Default value برای یک type نتیجه bitwise zeroing memory است. برای مثال، ایجاد یک array از integers را در نظر بگیرید. از آنجایی که int یک value type است، این ۱۰۰۰ integers را در یک contiguous block of memory اختصاص می‌دهد. Default value برای هر element 0 خواهد بود:
+
+```C#
+
+int[] a = new int[1000];
+Console.Write (a[123]);            // 0
+```
+#### Value types در مقابل Reference types
+
+اینکه آیا element type یک array یک value type است یا یک reference type، پیامدهای performance مهمی دارد. هنگامی که element type یک value type است، هر element value به عنوان بخشی از array اختصاص داده می‌شود، همانطور که در اینجا نشان داده شده است:
+
+```C#
+
+Point[] a = new Point[1000];
+int x = a[500].X;                  // 0
+public struct Point { public int X, Y; }
+```
+اگر Point یک class بود، ایجاد array صرفاً ۱۰۰۰ null references را اختصاص می‌داد:
+
+```C#
+
+Point[] a = new Point[1000];
+int x = a[500].X;                  // Runtime error, NullReferenceException
+public class Point { public int X, Y; }
+```
+برای جلوگیری از این error، باید به طور explicitly ۱۰۰۰ Points را پس از instantiating array instantiate کنیم:
+
+```C#
+
+Point[] a = new Point[1000];
+for (int i = 0; i < a.Length; i++) // Iterate i from 0 to 999
+  a[i] = new Point();             // Set array element i with new point
+```
+خود array همیشه یک reference type object است، صرف‌نظر از element type. برای مثال، موارد زیر قانونی است:
+
+```C#
+
+int[] a = null;
+```
+### Indices و Ranges
+
+Indices و ranges (معرفی شده در C# 8) کار با elements یا بخش‌هایی از یک array را ساده می‌کنند.
+
+Indices
+
+Indices و ranges همچنین با CLR types Span و ReadOnlySpan کار می‌کنند (به Chapter 23 مراجعه کنید).
+
+همچنین می‌توانید types خود را با indices و ranges کار کنید، با تعریف یک indexer از type Index یا Range (به "Indexers" در صفحه ۱۱۸ مراجعه کنید).
+
+Indices به شما امکان می‌دهند تا elements را نسبت به انتهای یک array، با operator ^ ارجاع دهید. ^1 به آخرین element، ^2 به element ماقبل آخر، و غیره اشاره دارد:
+
+```C#
+
+char[] vowels = new char[] {'a','e','i','o','u'};
+char lastElement  = vowels [^1];   // 'u'
+char secondToLast = vowels [^2];   // 'o'
+```
+(^0 برابر با طول array است، بنابراین vowels[^0] یک error ایجاد می‌کند.)
+
+
+C# indices را با کمک Index type پیاده‌سازی می‌کند، بنابراین می‌توانید موارد زیر را نیز انجام دهید:
+
+```C#
+
+Index first = 0;
+Index last = ^1;
+char firstElement = vowels [first];   // 'a'
+char lastElement = vowels [last];     // 'u'
+```
+### Ranges
+
+Ranges به شما امکان می‌دهند تا یک array را با استفاده از operator .. "slice" کنید:
+
+```C#
+
+char[] firstTwo =  vowels [..2];    // 'a', 'e'
+char[] lastThree = vowels [2..];    // 'i', 'o', 'u'
+char[] middleOne = vowels [2..3];   // 'i'
+```
+عدد دوم در range exclusive است، بنابراین ..2 elements قبل از vowels[2] را برمی‌گرداند.
+
+می‌توانید از نماد ^ در ranges نیز استفاده کنید. موارد زیر دو character آخر را برمی‌گرداند:
+
+C#
+
+```
+char[] lastTwo = vowels [^2..];     // 'o', 'u'
+```
+C# ranges را با کمک Range type پیاده‌سازی می‌کند، بنابراین می‌توانید موارد زیر را نیز انجام دهید:
+
+```C#
+
+Range firstTwoRange = 0..2;
+char[] firstTwo = vowels [firstTwoRange];   // 'a', 'e'
+```
+### Multidimensional Arrays
+
+Multidimensional arrays در دو نوع ارائه می‌شوند: rectangular و jagged. Rectangular arrays یک n-dimensional block of memory را نمایش می‌دهند، و jagged arrays arrays از arrays هستند.
+
+### Rectangular arrays
+
+Rectangular arrays با استفاده از commas برای جداسازی هر dimension اعلان می‌شوند. موارد زیر یک rectangular two-dimensional array را اعلان می‌کند که dimensions آن ۳ در ۳ است:
+
+```C#
+
+int[,] matrix = new int[3,3];
+```
+GetLength method یک array، طول یک dimension مشخص را برمی‌گرداند (شروع از ۰):
+
+
+```C#
+
+for (int i = 0; i < matrix.GetLength(0); i++)
+  for (int j = 0; j < matrix.GetLength(1); j++)
+    matrix[i,j] = i * 3 + j;
+```
+می‌توانید یک rectangular array را با explicit values مقداردهی کنید. کد زیر یک array مشابه مثال قبلی ایجاد می‌کند:
+
+
+```C#
+
+int[,] matrix = new int[,]
+ {
+  {0,1,2},
+  {3,4,5},
+  {6,7,8}
+ };
+```
+
+#### Jagged arrays
+
+Jagged arrays با استفاده از square brackets متوالی برای نمایش هر dimension اعلان می‌شوند. در اینجا مثالی از اعلان یک jagged two-dimensional array آورده شده است که outermost dimension آن ۳ است:
+
+```C#
+
+int[][] matrix = new int[3][];
+```
+جالب اینجاست که این new int[3][] است و نه new int[][3].
+اریک لیپرت (Eric Lippert) مقاله فوق‌العاده‌ای در مورد دلیل این موضوع نوشته است.
+
+Inner dimensions در اعلان مشخص نمی‌شوند زیرا، برخلاف یک rectangular array، هر inner array می‌تواند طول دلخواهی داشته باشد. هر inner array به طور implicitly به null مقداردهی اولیه می‌شود تا یک empty array. شما باید هر inner array را به صورت دستی ایجاد کنید:
+
+```C#
+
+for (int i = 0; i < matrix.Length; i++)
+{
+  matrix[i] = new int[3];                    // Create inner array
+  for (int j = 0; j < matrix[i].Length; j++)
+    matrix[i][j] = i * 3 + j;
+}
+```
+می‌توانید یک jagged array را با explicit values مقداردهی اولیه کنید. کد زیر یک array مشابه مثال قبلی با یک element اضافی در انتها ایجاد می‌کند:
+
+```C#
+
+int[][] matrix = new int[][]
+{
+  new int[] {0,1,2},
+  new int[] {3,4,5},
+  new int[] {6,7,8,9}
+};
+```
+### Simplified Array Initialization Expressions
+
+دو روش برای کوتاه‌تر کردن array initialization expressions وجود دارد. اولین روش حذف operator new و type qualifications است:
+
+```C#
+
+char[] vowels = {'a','e','i','o','u'};
+int[,] rectangularMatrix =
+{
+  {0,1,2},
+  {3,4,5},
+  {6,7,8}
+};
+int[][] jaggedMatrix =
+{
+  new int[] {0,1,2},
+  new int[] {3,4,5},
+  new int[] {6,7,8,9}
+};
+```
+(از C# 12، می‌توانید به جای braces با single-dimensional arrays از square brackets استفاده کنید.)
+
+رویکرد دوم استفاده از keyword var است که به compiler دستور می‌دهد تا یک local variable را به طور implicitly type کند. در اینجا مثال‌های ساده‌ای آورده شده است:
+
+```C#
+
+var i = 3;           // i is implicitly of type int
+var s = "sausage";   // s is implicitly of type string
+```
+همین اصل را می‌توان در مورد arrays نیز اعمال کرد، با این تفاوت که می‌توان آن را یک مرحله فراتر برد. با حذف type qualifier پس از keyword new، compiler array type را استنباط می‌کند:
+
+```C#
+
+var vowels = new[] {'a','e','i','o','u'};   // Compiler infers char[]
+```
+در اینجا نحوه اعمال این بر روی multidimensional arrays آمده است:
+
+```C#
+
+var rectMatrix = new[,]        // rectMatrix is implicitly of type int[,]
+{
+  {0,1,2},
+  {3,4,5},
+  {6,7,8}
+};
+var jaggedMat = new int[][]    // jaggedMat is implicitly of type int[][]
+{
+  new[] {0,1,2},
+  new[] {3,4,5},
+  new[] {6,7,8,9}
+};
+```
+برای اینکه این کار کند، تمام elements باید به طور implicitly به یک single type قابل تبدیل باشند (و حداقل یکی از elements باید از آن type باشد، و باید دقیقاً یک best type وجود داشته باشد)، همانطور که در مثال زیر:
+
+```C#
+
+var x = new[] {1,10000000000};   // all convertible to long
+```
+### Bounds Checking
+
+تمام array indexing توسط runtime bounds checked می‌شوند. اگر از یک invalid index استفاده کنید، یک IndexOutOfRangeException پرتاب می‌شود:
+
+```C#
+
+int[] arr = new int[3];
+arr[3] = 1;               // IndexOutOfRangeException thrown
+```
+Array bounds checking برای type safety ضروری است و debugging را ساده می‌کند.
+
+
+به طور کلی، performance hit ناشی از bounds checking جزئی است، و Just-In-Time (JIT) compiler می‌تواند optimizations را انجام دهد، مانند تعیین از قبل اینکه آیا تمام indexes قبل از ورود به یک loop ایمن خواهند بود یا خیر، در نتیجه از بررسی در هر iteration جلوگیری می‌کند. علاوه بر این، C# code "unsafe" را فراهم می‌کند که می‌تواند به طور explicitly bounds checking را دور بزند (به "Unsafe Code and Pointers" در صفحه ۲۶۳ مراجعه کنید).
+## Variables و Parameters
+
+یک variable نشان‌دهنده یک مکان ذخیره‌سازی است که یک value قابل تغییر دارد. یک variable می‌تواند یک local variable، parameter (value، ref، یا out، یا in)، field (instance یا static)، یا array element باشد.
+
+### The Stack و The Heap
+
+Stack و heap مکان‌هایی هستند که variables در آن‌ها قرار می‌گیرند. هر کدام semantics طول عمر بسیار متفاوتی دارند.
+
+#### Stack
+
+Stack یک block of memory برای ذخیره local variables و parameters است. Stack به صورت منطقی با ورود و خروج یک method یا function رشد و کوچک می‌شود. Method زیر را در نظر بگیرید (برای جلوگیری از حواس‌پرتی، بررسی input argument نادیده گرفته شده است):
+
+```C#
+
+static int Factorial (int x)
+{
+  if (x == 0) return 1;
+  return x * Factorial (x-1);
+}
+```
+این method recursive است، به این معنی که خودش را فراخوانی می‌کند. هر بار که method وارد می‌شود، یک int جدید در stack اختصاص داده می‌شود، و هر بار که method خارج می‌شود، int deallocated می‌شود.
+
+#### Heap
+
+Heap حافظه‌ای است که objects (یعنی reference-type instances) در آن قرار می‌گیرند. هر زمان که یک object جدید ایجاد می‌شود، در heap اختصاص داده می‌شود، و یک reference به آن object برگردانده می‌شود. در طول اجرای یک برنامه، heap با ایجاد objects جدید شروع به پر شدن می‌کند. Runtime دارای یک garbage collector است که به صورت دوره‌ای objects را از heap deallocate می‌کند، بنابراین برنامه شما با کمبود حافظه مواجه نمی‌شود. یک object به محض اینکه توسط چیزی که خود "زنده" است referenced نشود، واجد شرایط deallocation است.
+
+در مثال زیر، ما با ایجاد یک StringBuilder object که توسط variable ref1 ارجاع شده است شروع می‌کنیم و سپس محتوای آن را می‌نویسیم. آن StringBuilder object بلافاصله واجد شرایط garbage collection است زیرا چیزی متعاقباً از آن استفاده نمی‌کند.
+
+
+سپس، یک StringBuilder دیگر ایجاد می‌کنیم که توسط variable ref2 ارجاع شده و آن reference را به ref3 کپی می‌کنیم. حتی اگر ref2 پس از آن نقطه استفاده نشود، ref3 همان StringBuilder object را زنده نگه می‌دارد—اطمینان حاصل می‌کند که تا زمانی که ما استفاده از ref3 را تمام نکرده‌ایم، واجد شرایط collection نشود:
+
+```C#
+
+using System;
+using System.Text;
+StringBuilder ref1 = new StringBuilder ("object1");
+Console.WriteLine (ref1);
+// The StringBuilder referenced by ref1 is now eligible for GC.
+StringBuilder ref2 = new StringBuilder ("object2");
+StringBuilder ref3 = ref2;
+// The StringBuilder referenced by ref2 is NOT yet eligible for GC.
+Console.WriteLine (ref3);      // object2
+```
+Value-type instances (و object references) در هر کجا که variable اعلان شده است، زندگی می‌کنند. اگر instance به عنوان یک field در یک class type، یا به عنوان یک array element اعلان شده باشد، آن instance در heap زندگی می‌کند.
+
+شما نمی‌توانید objects را به طور explicitly در C# حذف کنید، همانطور که در C++ می‌توانید. یک object بدون reference در نهایت توسط garbage collector جمع‌آوری می‌شود.
+
+Heap همچنین static fields را ذخیره می‌کند. برخلاف objects که در heap اختصاص داده می‌شوند (و می‌توانند garbage-collected شوند)، اینها تا پایان process زنده می‌مانند.
+
+### Definite Assignment
+
+C# یک definite assignment policy را اعمال می‌کند. در عمل، این بدان معناست که خارج از یک unsafe یا interop context، نمی‌توانید به طور تصادفی به uninitialized memory دسترسی پیدا کنید. Definite assignment سه پیامد دارد:
+
++ Local variables باید قبل از خوانده شدن، یک value به آن‌ها اختصاص داده شود.
+
++ Function arguments باید هنگام فراخوانی یک method ارائه شوند (مگر اینکه به عنوان optional علامت‌گذاری شده باشند؛ به "Optional parameters" در صفحه ۷۴ مراجعه کنید).
+
++ تمام variables دیگر (مانند fields و array elements) به طور خودکار توسط runtime مقداردهی اولیه می‌شوند.
+
+برای مثال، کد زیر منجر به یک compile-time error می‌شود:
+
+```C#
+
+int x;
+Console.WriteLine (x);        // Compile-time error
+```
+Fields و array elements به طور خودکار با default values برای type خود مقداردهی اولیه می‌شوند. کد زیر 0 را output می‌کند زیرا array elements به طور implicitly به default values خود اختصاص داده می‌شوند:
+
+```C#
+
+int[] ints = new int[2];
+Console.WriteLine (ints[0]);    // 0
+```
+کد زیر 0 را output می‌کند، زیرا fields به طور implicitly یک default value به آن‌ها اختصاص داده می‌شود (چه instance و چه static):
+
+```C#
+
+Console.WriteLine (Test.X);   // 0
+class Test { public static int X; }   // field
+```
+### Default Values
+
+تمام type instances دارای یک default value هستند. Default value برای predefined types نتیجه bitwise zeroing memory است:
+
+<div align="center">
+    
+![Conventions-UsedThis-Book](../../assets/image/02/Table-2-7.png) <br>
+</div>
+می‌توانید default value برای هر type را از طریق keyword default به دست آورید:
+
+```C#
+
+Console.WriteLine (default (decimal));   // 0
+```
+می‌توانید به صورت optionally type را حذف کنید، زمانی که قابل استنباط باشد:
+
+```C#
+
+decimal d = default;
+```
+Default value در یک custom value type (یعنی struct) همان default value برای هر field تعریف شده توسط custom type است.
+
+### Parameters
+
+یک method ممکن است دارای یک sequence از parameters باشد. Parameters مجموعه‌ای از arguments را تعریف می‌کنند که باید برای آن method فراهم شوند. در مثال زیر، method Foo یک single parameter به نام p، از type int دارد:
+
+```C#
+
+Foo (8);                        // 8 is an argument
+static void Foo (int p) {...}   // p is a parameter
+```
+می‌توانید نحوه پاس دادن parameters را با modifiers ref, in, و out کنترل کنید:
+<div align="center">
+    
+![Conventions-UsedThis-Book](../../assets/image/02/Table-2-8.png) <br>
+</div>
+
+#### Passing arguments by value
+
+به طور پیش‌فرض، arguments در C# با value pass می‌شوند، که تاکنون رایج‌ترین حالت است. این بدان معناست که هنگام pass شدن به method، یک copy از value ایجاد می‌شود:
+
+```C#
+
+int x = 8;
+Foo (x);                    // Make a copy of x
+Console.WriteLine (x);      // x will still be 8
+static void Foo (int p)
+{
+  p = p + 1;                // Increment p by 1
+  Console.WriteLine (p);    // Write p to screen
+}
+```
+اختصاص دادن یک new value به p، محتویات x را تغییر نمی‌دهد، زیرا p و x در مکان‌های memory متفاوتی قرار دارند.
+
+Passing یک reference-type argument با value، reference را copy می‌کند اما object را copy نمی‌کند. در مثال زیر، Foo همان StringBuilder objectی را که ما instantiate کردیم (sb) می‌بیند اما یک independent reference به آن دارد. به عبارت دیگر، sb و fooSB variables جداگانه‌ای هستند که به همان StringBuilder object reference می‌کنند:
+
+```C#
+
+StringBuilder sb = new StringBuilder();
+Foo (sb);
+Console.WriteLine (sb.ToString());    // test
+static void Foo (StringBuilder fooSB)
+{
+  fooSB.Append ("test");
+  fooSB = null;
+}
+```
+از آنجایی که fooSB یک copy از یک reference است، setting آن به null باعث null شدن sb نمی‌شود. (اگرچه، اگر fooSB با modifier ref اعلان و فراخوانی شده بود، sb null می‌شد.)
+
+#### The ref modifier
+
+برای pass کردن با reference، C# parameter modifier ref را فراهم می‌کند. در مثال زیر، p و x به همان مکان‌های memory اشاره می‌کنند:
+
+```C#
+
+int x = 8;
+Foo (ref  x);              // Ask Foo to deal directly with x
+Console.WriteLine (x);     // x is now 9
+static void Foo (ref int p)
+{
+  p = p + 1;               // Increment p by 1
+  Console.WriteLine (p);   // Write p to screen
+}
+```
+
+اکنون اختصاص دادن یک new value به p محتویات x را تغییر می‌دهد. توجه کنید که چگونه modifier ref هم هنگام نوشتن و هم هنگام فراخوانی method مورد نیاز است.4 این موضوع را بسیار واضح می‌کند که چه اتفاقی می‌افتد.
+
+Modifier ref در پیاده‌سازی یک swap method ضروری است (در "Generics" در صفحه ۱۵۹، نشان می‌دهیم که چگونه یک swap method بنویسیم که با هر typeی کار کند):
+
+```C#
+
+string x = "Penn";
+string y = "Teller";
+Swap (ref x, ref y);
+Console.WriteLine (x);   // Teller
+Console.WriteLine (y);   // Penn
+static void Swap (ref string a, ref string b)
+{
+  string temp = a;
+  a = b;
+  b = temp;
+}
+```
+#### The out modifier
+
+یک parameter را می‌توان با reference یا با value pass کرد، صرف‌نظر از اینکه parameter type یک reference type باشد یا یک value type.
+
+یک out argument مانند یک ref argument است، با این تفاوت که:
+
++ نیازی نیست قبل از ورود به function به آن assign شود.
+
++ باید قبل از خروج از function به آن assign شود.
+
+Modifier out معمولاً برای دریافت چندین return value از یک method استفاده می‌شود؛ برای مثال:
+
+```C#
+
+string a, b;
+Split ("Stevie Ray Vaughn", out a, out b);
+Console.WriteLine (a);                      // Stevie Ray
+Console.WriteLine (b);                      // Vaughn
+void Split (string name, out string firstNames, out string lastName)
+{
+  int i = name.LastIndexOf (' ');
+  firstNames = name.Substring (0, i);
+  lastName = name.Substring (i + 1);
+}
+```
+مانند یک ref parameter، یک out parameter با reference pass می‌شود.
+
+#### Out variables و discards
+
+می‌توانید variables را به صورت on the fly هنگام فراخوانی methods با out parameters اعلان کنید. می‌توانیم دو خط اول مثال قبلی خود را با این جایگزین کنیم:
+
+```C#
+
+Split ("Stevie Ray Vaughan", out string a, out string b);
+```
+هنگام فراخوانی methods با چندین out parameters، گاهی اوقات علاقه‌ای به دریافت values از تمام parameters ندارید. در چنین مواردی، می‌توانید آنهایی که علاقه‌ای به آن‌ها ندارید را با استفاده از یک underscore "discard" کنید:
+
+```C#
+
+Split ("Stevie Ray Vaughan", out string a, out _);   // Discard 2nd param
+Console.WriteLine (a);
+```
+در این حالت، compiler underscore را به عنوان یک special symbol، به نام discard، در نظر می‌گیرد. می‌توانید چندین discard را در یک فراخوانی واحد وارد کنید. با فرض اینکه SomeBigMethod با هفت out parameters تعریف شده است، می‌توانیم همه به جز چهارمی را نادیده بگیریم، به صورت زیر:
+
+```C#
+
+SomeBigMethod (out _, out _, out _, out int x, out _, out _, out _);
+```
+برای backward compatibility، این language feature در صورتی که یک real underscore variable در scope باشد، تأثیری نخواهد داشت:
+
+```C#
+
+string _;
+Split ("Stevie Ray Vaughan", out string a, out _);
+Console.WriteLine (_);     // Vaughan
+```
+#### Implications of passing by reference
+
+هنگامی که یک argument را با reference pass می‌کنید، storage location یک existing variable را alias می‌کنید به جای اینکه یک new storage location ایجاد کنید. در مثال زیر، variables x و y به همان instance اشاره می‌کنند:
+
+```C#
+
+class Test
+{
+  static int x;
+  static void Main() { Foo (out x); }
+  static void Foo (out int y)
+  {
+    Console.WriteLine (x);                // x is 0
+    y = 1;                                // Mutate y
+    Console.WriteLine (x);                // x is 1
+  }
+}
+```
+#### The in modifier
+
+یک in parameter مشابه یک ref parameter است با این تفاوت که value argument نمی‌تواند توسط method تغییر یابد (انجام این کار یک compile-time error ایجاد می‌کند). این modifier هنگامی که یک large value type به method pass می‌شود بسیار مفید است زیرا به compiler اجازه می‌دهد تا از overhead کپی کردن argument قبل از passing آن جلوگیری کند در حالی که original value را از تغییر محافظت می‌کند.
+
+
+Overloading صرفاً بر اساس حضور in مجاز است:
+
+```C#
+
+void Foo (   SomeBigStruct a) { ... }
+void Foo (in SomeBigStruct a) { ... }
+```
+برای فراخوانی second overload، caller باید از modifier in استفاده کند:
+
+```C#
+
+SomeBigStruct x = ...;
+Foo (x);      // Calls the first overload
+Foo (in x);   // Calls the second overload
+```
+هنگامی که ابهامی وجود ندارد:
+
+```C#
+
+void Bar (in SomeBigStruct a) { ... }
+```
+استفاده از modifier in برای caller اختیاری است:
+
+```C#
+
+Bar (x);     // OK (calls the 'in' overload)
+Bar (in x);  // OK (calls the 'in' overload)
+```
+برای اینکه این مثال معنی‌دار باشد، SomeBigStruct به عنوان یک struct تعریف می‌شود (به "Structs" در صفحه ۱۴۲ مراجعه کنید).
+
+#### The params modifier
+
+Modifier params، اگر به آخرین parameter یک method اعمال شود، به method اجازه می‌دهد تا هر تعداد arguments از یک type خاص را بپذیرد. Parameter type باید به عنوان یک (single-dimensional) array اعلان شود، همانطور که در مثال زیر نشان داده شده است:
+
+```C#
+
+int total = Sum (1, 2, 3, 4);
+Console.WriteLine (total);              // 10
+// The call to Sum above is equivalent to:
+int total2 = Sum (new int[] { 1, 2, 3, 4 });
+int Sum (params int[] ints)
+{
+  int sum = 0;
+  for (int i = 0; i < ints.Length; i++)
+    sum += ints [i];                       // Increase sum by ints[i]
+  return sum;
+}
+```
+اگر zero arguments در موقعیت params وجود داشته باشد، یک zero-length array ایجاد می‌شود. شما همچنین می‌توانید یک params argument را به عنوان یک ordinary array ارائه دهید. خط اول در مثال ما از نظر semantically با این یکسان است:
+
+```C#
+
+int total = Sum (new int[] { 1, 2, 3, 4 } );
+```
+
+#### Optional parameters
+
+Methods, constructors, و indexers (Chapter 3) می‌توانند optional parameters را اعلان کنند. یک parameter optional است اگر یک default value را در اعلان خود مشخص کند:
+
+```C#
+
+void Foo (int x = 23) { Console.WriteLine (x); }
+```
+می‌توانید optional parameters را هنگام فراخوانی method حذف کنید:
+
+```C#
+
+Foo();     // 23
+```
+Default argument 23 در واقع به optional parameter x pass می‌شود—compiler value 23 را در compiled code در سمت calling bake می‌کند. فراخوانی قبلی Foo از نظر semantically با این یکسان است:
+
+```C#
+
+Foo (23);
+```
+زیرا compiler به سادگی default value یک optional parameter را در هر کجا که استفاده می‌شود جایگزین می‌کند.
+
+اضافه کردن یک optional parameter به یک public method که از یک assembly دیگر فراخوانی می‌شود، نیاز به recompilation هر دو assemblies دارد—درست همانطور که گویی parameter اجباری بود.
+
+Default value یک optional parameter باید توسط یک constant expression، یک parameterless constructor از یک value type، یا یک default expression مشخص شود. Optional parameters نمی‌توانند با ref یا out علامت‌گذاری شوند.
+
+Mandatory parameters باید قبل از optional parameters در هر دو method declaration و method call (استثنا با params arguments است، که همیشه آخرین می‌آیند) قرار گیرند. در مثال زیر، explicit value 1 به x pass می‌شود، و default value 0 به y pass می‌شود:
+
+```C#
+
+Foo (1);    // 1, 0
+void Foo (int x = 0, int y = 0) { Console.WriteLine (x + ", " + y); }
+```
+می‌توانید عکس آن را انجام دهید (یک default value به x و یک explicit value به y pass کنید) با ترکیب optional parameters با named arguments.
+
+#### Named arguments
+
+به جای شناسایی یک argument بر اساس موقعیت، می‌توانید یک argument را با نام شناسایی کنید:
+
+```C#
+
+Foo (x:1, y:2);  // 1, 2
+void Foo (int x, int y) { Console.WriteLine (x + ", " + y); }
+```
+Named arguments می‌توانند به هر ترتیبی ظاهر شوند. فراخوانی‌های زیر به Foo از نظر semantically یکسان هستند:
+
+```C#
+
+Foo (x:1, y:2);
+Foo (y:2, x:1);
+```
+یک تفاوت ظریف این است که argument expressions به ترتیبی که در calling site ظاهر می‌شوند، evaluated می‌شوند.
+
+به طور کلی، این فقط در interdependent side-effecting expressions مانند زیر تفاوت ایجاد می‌کند که 0, 1 را می‌نویسد:
+
+```C#
+
+int a = 0;
+Foo (y: ++a, x: --a);  // ++a is evaluated first
+```
+البته، شما تقریباً به طور قطع از نوشتن چنین codeی در عمل اجتناب خواهید کرد!
+
+می‌توانید named و positional arguments را با هم ترکیب کنید:
+
+```C#
+
+Foo (1, y:2);
+```
+با این حال، یک محدودیت وجود دارد: positional arguments باید قبل از named arguments بیایند مگر اینکه در موقعیت صحیح استفاده شوند. بنابراین، می‌توانید Foo را اینگونه فراخوانی کنید:
+
+```C#
+
+Foo (x:1, 2);         // OK. Arguments in the declared positions
+```
+اما نه اینگونه:
+
+```C#
+
+Foo (y:2, 1);         // Compile-time error. y isn't in the first position
+```
+Named arguments به ویژه در ترکیب با optional parameters مفید هستند. برای مثال، method زیر را در نظر بگیرید:
+
+```C#
+
+void Bar (int a = 0, int b = 0, int c = 0, int d = 0) { ... }
+```
+می‌توانید این را فقط با ارائه یک value برای d فراخوانی کنید، به صورت زیر:
+
+```C#
+
+Bar (d:3);
+```
+این به ویژه هنگام فراخوانی COM APIs مفید است، که در Chapter 24 به تفصیل در مورد آنها بحث می‌کنیم.
+
+### Ref Locals
+
+یکی از ویژگی‌های نسبتاً ناشناخته C# این است که می‌توانید یک local variable تعریف کنید که به یک element در یک array یا field در یک object reference می‌دهد (از C# 7):
+
+```C#
+
+int[] numbers = { 0, 1, 2, 3, 4 };
+ref int numRef = ref numbers [2];
+```
+در این مثال، numRef یک reference به numbers[2] است. هنگامی که numRef را تغییر می‌دهیم، array element را تغییر می‌دهیم:
+
+```C#
+
+numRef *= 10;
+Console.WriteLine (numRef);        // 20
+Console.WriteLine (numbers [2]);   // 20
+```
+Target برای یک ref local باید یک array element، field، یا local variable باشد؛ نمی‌تواند یک property (Chapter 3) باشد. Ref locals برای scenarios micro-optimization تخصصی در نظر گرفته شده‌اند و معمولاً در ترکیب با ref returns استفاده می‌شوند.
+
+### Ref Returns
+
+Types Span و ReadOnlySpan که در Chapter 23 آن‌ها را توضیح می‌دهیم، از ref returns برای پیاده‌سازی یک indexer با کارایی بسیار بالا استفاده می‌کنند. خارج از چنین scenarios، ref returns معمولاً استفاده نمی‌شوند، و می‌توانید آن‌ها را یک feature micro-optimization در نظر بگیرید.
+
+می‌توانید یک ref local را از یک method return کنید. این را ref return می‌نامند:
+
+```C#
+
+class Program
+{
+  static string x = "Old Value";
+  static ref string GetX() => ref x;    // This method returns a ref
+  static void Main()
+  {
+    ref string xRef = ref GetX();       // Assign result to a ref local
+    xRef = "New Value";
+    Console.WriteLine (x);              // New Value
+  }
+}
+```
+اگر modifier ref را در سمت calling حذف کنید، به returning یک ordinary value بازمی‌گردد:
+
+```C#
+
+string localX = GetX();  // Legal: localX is an ordinary non-ref variable.
+```
+همچنین می‌توانید از ref returns هنگام تعریف یک property یا indexer استفاده کنید:
+
+```C#
+
+static ref string Prop => ref x;
+```
+چنین propertyای به طور implicitly writable است، با وجود اینکه هیچ set accessorی وجود ندارد:
+
+```C#
+
+Prop = "New Value";
+```
+می‌توانید از چنین تغییری با استفاده از ref readonly جلوگیری کنید:
+
+```C#
+
+static ref readonly string Prop => ref x;
+```
+Modifier ref readonly از تغییر جلوگیری می‌کند در حالی که همچنان performance gain returning by reference را فعال می‌کند. Gain در این مورد بسیار کوچک خواهد بود، زیرا x از type string (یک reference type) است: مهم نیست string چقدر طولانی باشد، تنها ناکارآمدی که می‌توانید امیدوار باشید از آن جلوگیری کنید، copying یک 32- یا 64-bit reference واحد است. Gains واقعی می‌توانند با custom value types رخ دهند (به "Structs" در صفحه ۱۴۲ مراجعه کنید)، اما فقط در صورتی که struct به عنوان readonly علامت‌گذاری شده باشد (در غیر این صورت، compiler یک defensive copy را انجام خواهد داد).
+
+تلاش برای تعریف یک explicit set accessor در یک ref return property یا indexer غیرقانونی است.
+
+
+### var—Implicitly Typed Local Variables
+
+اغلب اتفاق می‌افتد که یک variable را در یک مرحله اعلان و مقداردهی اولیه می‌کنید. اگر compiler قادر به استنباط type از initialization expression باشد، می‌توانید از keyword var به جای type declaration استفاده کنید؛ برای مثال:
+
+```C#
+
+var x = "hello";
+var y = new System.Text.StringBuilder();
+var z = (float)Math.PI;
+```
+این دقیقاً معادل موارد زیر است:
+
+```C#
+
+string x = "hello";
+System.Text.StringBuilder y = new System.Text.StringBuilder();
+float z = (float)Math.PI;
+```
+به دلیل این direct equivalence، implicitly typed variables statically typed هستند. برای مثال، موارد زیر یک compile-time error ایجاد می‌کند:
+
+```C#
+
+var x = 5;
+x = "hello";    // Compile-time error; x is of type int
+```
+var می‌تواند خوانایی code را کاهش دهد، زمانی که نمی‌توانید type را صرفاً با نگاه کردن به variable declaration استنباط کنید. برای مثال:
+
+```C#
+
+Random r = new Random();
+var x = r.Next();
+```
+Type x چیست؟
+
+در "Anonymous Types" در صفحه ۲۲۰، سناریویی را توضیح خواهیم داد که در آن استفاده از var اجباری است.
+### Target-Typed new Expressions
+
+راه دیگری برای کاهش تکرار lexical، استفاده از target-typed new expressions است (از C# 9):
+
+```C#
+
+System.Text.StringBuilder sb1 = new();
+System.Text.StringBuilder sb2 = new ("Test");
+```
+این دقیقاً معادل موارد زیر است:
+
+```C#
+
+System.Text.StringBuilder sb1 = new System.Text.StringBuilder();
+System.Text.StringBuilder sb2 = new System.Text.StringBuilder ("Test");
+```
+اصل این است که می‌توانید new را بدون مشخص کردن type name فراخوانی کنید، اگر compiler بتواند آن را به طور غیرمبهم استنباط کند. Target-typed new expressions به ویژه زمانی مفید هستند که اعلان variable و مقداردهی اولیه در قسمت‌های مختلف code شما باشند. یک مثال رایج زمانی است که می‌خواهید یک field را در یک constructor مقداردهی اولیه کنید:
+
+```C#
+
+class Foo
+{
+ System.Text.StringBuilder sb;
+  public Foo (string initialValue)
+  {
+    sb = new (initialValue);
+  }
+}
+```
+Target-typed new expressions در سناریوی زیر نیز مفید هستند:
+
+```C#
+
+MyMethod (new ("test"));
+void MyMethod (System.Text.StringBuilder sb) { ... }
+```
+## Expressions و Operators
+
+یک expression اساساً یک value را نشان می‌دهد. ساده‌ترین انواع expressions، constants و variables هستند. Expressions را می‌توان با استفاده از operators تغییر داد و ترکیب کرد. یک operator یک یا چند input operand را می‌گیرد تا یک new expression را output کند.
+
+در اینجا مثالی از یک constant expression آورده شده است:
+
+
+12
+می‌توانیم از operator * برای ترکیب دو operand (literal expressions 12 و 30) به صورت زیر استفاده کنیم:
+
+
+12 * 30
+می‌توانیم expressions پیچیده بسازیم زیرا یک operand می‌تواند خود یک expression باشد، مانند operand (12 * 30) در مثال زیر:
+
+
+1 + (12 * 30)
+Operators در C# را می‌توان به سه دسته unary, binary, یا ternary تقسیم کرد، بسته به تعداد operands که با آنها کار می‌کنند (یک، دو، یا سه). Binary operators همیشه از infix notation استفاده می‌کنند که در آن operator بین دو operand قرار می‌گیرد.
+
+### Primary Expressions
+
+Primary expressions شامل expressionsی هستند که از operatorsی تشکیل شده‌اند که ذاتاً بخشی از ساختار اصلی زبان هستند. در اینجا یک مثال آورده شده است:
+
+
+Math.Log (1)
+این expression از دو primary expression تشکیل شده است. Expression اول یک member lookup را انجام می‌دهد (با operator .)، و expression دوم یک method call را انجام می‌دهد (با operator ()).
+
+### Void Expressions
+
+یک void expression یک expression است که value ندارد، مانند این:
+
+```C#
+
+Console.WriteLine (1)
+```
+از آنجایی که value ندارد، نمی‌توانید از یک void expression به عنوان operand برای ساخت expressions پیچیده‌تر استفاده کنید:
+
+```C#
+
+1 + Console.WriteLine (1)      // Compile-time error
+```
+
+### Assignment Expressions
+
+یک assignment expression از operator = برای انتساب نتیجه یک expression دیگر به یک variable استفاده می‌کند؛ برای مثال:
+
+
+x = x * 5
+یک assignment expression یک void expression نیست—یک value از هر آنچه که assigned شده است دارد، و بنابراین می‌تواند در یک expression دیگر گنجانده شود. در مثال زیر، expression 2 را به x و 10 را به y assign می‌کند:
+
+
+y = 5 * (x = 2)
+می‌توانید از این سبک expression برای مقداردهی اولیه چندین value استفاده کنید:
+
+
+a = b = c = d = 0
+Compound assignment operators میانبرهای syntactic هستند که assignment را با یک operator دیگر ترکیب می‌کنند:
+
+x *= 2    // equivalent to x = x * 2
+x <<= 1   // equivalent to x = x << 1
+(یک استثنای ظریف برای این قانون در مورد events است، که در Chapter 4 توضیح می‌دهیم: operators += و -= در اینجا به طور ویژه رفتار می‌شوند و به add و remove accessors event نگاشت می‌شوند.)
+### اولویت و ارتباط عملگرها (Operator Precedence and Associativity)
+وقتی یک عبارت شامل چندین عملگر باشد، اولویت (precedence) و ارتباط (associativity) ترتیب ارزیابی آن‌ها را مشخص می‌کنند. عملگرهایی با اولویت بالاتر قبل از عملگرهای با اولویت پایین‌تر اجرا می‌شوند. اگر عملگرها اولویت یکسانی داشته باشند، ارتباط عملگر ترتیب ارزیابی را تعیین می‌کند.
+
+#### اولویت (Precedence)
+عبارت زیر:
+
+
+1 + 2 * 3
+به شکل زیر ارزیابی می‌شود، زیرا * اولویت بالاتری نسبت به + دارد:
+
+
+1 + (2 * 3)
+عملگرهای با ارتباط چپ‌به‌راست (Left-associative operators)
+عملگرهای دوتایی (به جز عملگرهای انتساب، lambda و null-coalescing) از نوع left-associative هستند؛ به عبارت دیگر، آن‌ها از چپ به راست ارزیابی می‌شوند. برای مثال، عبارت زیر:
+
+
+8 / 4 / 2
+به شکل زیر ارزیابی می‌شود:
+
+
+( 8 / 4 ) / 2    // 1
+
+
+می‌توانید برای تغییر ترتیب واقعی ارزیابی، پرانتز اضافه کنید:
+
+
+8 / ( 4 / 2 )    // 4
+#### عملگرهای با ارتباط راست‌به‌چپ (Right-associative operators)
+عملگرهای انتساب و همچنین عملگرهای lambda, null-coalescing و conditional از نوع right-associative هستند؛ به عبارت دیگر، آن‌ها از راست به چپ ارزیابی می‌شوند. Right associativity اجازه می‌دهد تا انتساب‌های چندگانه مانند زیر compile شوند:
+
+C#
+
+x = y = 3;
+این ابتدا 3 را به y اختصاص می‌دهد و سپس نتیجه آن عبارت (3) را به x اختصاص می‌دهد.
+
+### جدول عملگرها (Operator Table)
+Table 2-3 عملگرهای C# را به ترتیب اولویت فهرست می‌کند. عملگرهای در یک دسته‌بندی، اولویت یکسانی دارند.
+
+عملگرهای user-overloadable را در "Operator Overloading" در صفحه ۲۵۶ توضیح می‌دهیم.
+
+Table 2-3. C# operators (categories in order of precedence)
+
+<div align="center">
+    
+![Conventions-UsedThis-Book](../../assets/image/02/Table-2-9.png) <br>
+![Conventions-UsedThis-Book](../../assets/image/02/Table-2-10.png) <br>
+</div>
