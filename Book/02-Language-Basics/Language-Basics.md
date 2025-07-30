@@ -2320,3 +2320,99 @@ var x = r.Next();
 Type x چیست؟
 
 در "Anonymous Types" در صفحه ۲۲۰، سناریویی را توضیح خواهیم داد که در آن استفاده از var اجباری است.
+### Target-Typed new Expressions
+
+راه دیگری برای کاهش تکرار lexical، استفاده از target-typed new expressions است (از C# 9):
+
+```C#
+
+System.Text.StringBuilder sb1 = new();
+System.Text.StringBuilder sb2 = new ("Test");
+```
+این دقیقاً معادل موارد زیر است:
+
+```C#
+
+System.Text.StringBuilder sb1 = new System.Text.StringBuilder();
+System.Text.StringBuilder sb2 = new System.Text.StringBuilder ("Test");
+```
+اصل این است که می‌توانید new را بدون مشخص کردن type name فراخوانی کنید، اگر compiler بتواند آن را به طور غیرمبهم استنباط کند. Target-typed new expressions به ویژه زمانی مفید هستند که اعلان variable و مقداردهی اولیه در قسمت‌های مختلف code شما باشند. یک مثال رایج زمانی است که می‌خواهید یک field را در یک constructor مقداردهی اولیه کنید:
+
+```C#
+
+class Foo
+{
+ System.Text.StringBuilder sb;
+  public Foo (string initialValue)
+  {
+    sb = new (initialValue);
+  }
+}
+```
+Target-typed new expressions در سناریوی زیر نیز مفید هستند:
+
+```C#
+
+MyMethod (new ("test"));
+void MyMethod (System.Text.StringBuilder sb) { ... }
+```
+## Expressions و Operators
+
+یک expression اساساً یک value را نشان می‌دهد. ساده‌ترین انواع expressions، constants و variables هستند. Expressions را می‌توان با استفاده از operators تغییر داد و ترکیب کرد. یک operator یک یا چند input operand را می‌گیرد تا یک new expression را output کند.
+
+در اینجا مثالی از یک constant expression آورده شده است:
+
+
+12
+می‌توانیم از operator * برای ترکیب دو operand (literal expressions 12 و 30) به صورت زیر استفاده کنیم:
+
+
+12 * 30
+می‌توانیم expressions پیچیده بسازیم زیرا یک operand می‌تواند خود یک expression باشد، مانند operand (12 * 30) در مثال زیر:
+
+
+1 + (12 * 30)
+Operators در C# را می‌توان به سه دسته unary, binary, یا ternary تقسیم کرد، بسته به تعداد operands که با آنها کار می‌کنند (یک، دو، یا سه). Binary operators همیشه از infix notation استفاده می‌کنند که در آن operator بین دو operand قرار می‌گیرد.
+
+### Primary Expressions
+
+Primary expressions شامل expressionsی هستند که از operatorsی تشکیل شده‌اند که ذاتاً بخشی از ساختار اصلی زبان هستند. در اینجا یک مثال آورده شده است:
+
+
+Math.Log (1)
+این expression از دو primary expression تشکیل شده است. Expression اول یک member lookup را انجام می‌دهد (با operator .)، و expression دوم یک method call را انجام می‌دهد (با operator ()).
+
+### Void Expressions
+
+یک void expression یک expression است که value ندارد، مانند این:
+
+```C#
+
+Console.WriteLine (1)
+```
+از آنجایی که value ندارد، نمی‌توانید از یک void expression به عنوان operand برای ساخت expressions پیچیده‌تر استفاده کنید:
+
+```C#
+
+1 + Console.WriteLine (1)      // Compile-time error
+```
+
+### Assignment Expressions
+
+یک assignment expression از operator = برای انتساب نتیجه یک expression دیگر به یک variable استفاده می‌کند؛ برای مثال:
+
+
+x = x * 5
+یک assignment expression یک void expression نیست—یک value از هر آنچه که assigned شده است دارد، و بنابراین می‌تواند در یک expression دیگر گنجانده شود. در مثال زیر، expression 2 را به x و 10 را به y assign می‌کند:
+
+
+y = 5 * (x = 2)
+می‌توانید از این سبک expression برای مقداردهی اولیه چندین value استفاده کنید:
+
+
+a = b = c = d = 0
+Compound assignment operators میانبرهای syntactic هستند که assignment را با یک operator دیگر ترکیب می‌کنند:
+
+x *= 2    // equivalent to x = x * 2
+x <<= 1   // equivalent to x = x << 1
+(یک استثنای ظریف برای این قانون در مورد events است، که در Chapter 4 توضیح می‌دهیم: operators += و -= در اینجا به طور ویژه رفتار می‌شوند و به add و remove accessors event نگاشت می‌شوند.)
