@@ -2416,3 +2416,50 @@ Compound assignment operators میانبرهای syntactic هستند که assig
 x *= 2    // equivalent to x = x * 2
 x <<= 1   // equivalent to x = x << 1
 (یک استثنای ظریف برای این قانون در مورد events است، که در Chapter 4 توضیح می‌دهیم: operators += و -= در اینجا به طور ویژه رفتار می‌شوند و به add و remove accessors event نگاشت می‌شوند.)
+### اولویت و ارتباط عملگرها (Operator Precedence and Associativity)
+وقتی یک عبارت شامل چندین عملگر باشد، اولویت (precedence) و ارتباط (associativity) ترتیب ارزیابی آن‌ها را مشخص می‌کنند. عملگرهایی با اولویت بالاتر قبل از عملگرهای با اولویت پایین‌تر اجرا می‌شوند. اگر عملگرها اولویت یکسانی داشته باشند، ارتباط عملگر ترتیب ارزیابی را تعیین می‌کند.
+
+#### اولویت (Precedence)
+عبارت زیر:
+
+
+1 + 2 * 3
+به شکل زیر ارزیابی می‌شود، زیرا * اولویت بالاتری نسبت به + دارد:
+
+
+1 + (2 * 3)
+عملگرهای با ارتباط چپ‌به‌راست (Left-associative operators)
+عملگرهای دوتایی (به جز عملگرهای انتساب، lambda و null-coalescing) از نوع left-associative هستند؛ به عبارت دیگر، آن‌ها از چپ به راست ارزیابی می‌شوند. برای مثال، عبارت زیر:
+
+
+8 / 4 / 2
+به شکل زیر ارزیابی می‌شود:
+
+
+( 8 / 4 ) / 2    // 1
+
+
+می‌توانید برای تغییر ترتیب واقعی ارزیابی، پرانتز اضافه کنید:
+
+
+8 / ( 4 / 2 )    // 4
+#### عملگرهای با ارتباط راست‌به‌چپ (Right-associative operators)
+عملگرهای انتساب و همچنین عملگرهای lambda, null-coalescing و conditional از نوع right-associative هستند؛ به عبارت دیگر، آن‌ها از راست به چپ ارزیابی می‌شوند. Right associativity اجازه می‌دهد تا انتساب‌های چندگانه مانند زیر compile شوند:
+
+C#
+
+x = y = 3;
+این ابتدا 3 را به y اختصاص می‌دهد و سپس نتیجه آن عبارت (3) را به x اختصاص می‌دهد.
+
+### جدول عملگرها (Operator Table)
+Table 2-3 عملگرهای C# را به ترتیب اولویت فهرست می‌کند. عملگرهای در یک دسته‌بندی، اولویت یکسانی دارند.
+
+عملگرهای user-overloadable را در "Operator Overloading" در صفحه ۲۵۶ توضیح می‌دهیم.
+
+Table 2-3. C# operators (categories in order of precedence)
+
+<div align="center">
+    
+![Conventions-UsedThis-Book](../../assets/image/02/Table-2-9.png) <br>
+![Conventions-UsedThis-Book](../../assets/image/02/Table-2-10.png) <br>
+</div>
