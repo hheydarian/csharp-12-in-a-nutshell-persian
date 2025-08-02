@@ -2234,13 +2234,13 @@ numRef *= 10;
 Console.WriteLine (numRef);        // 20
 Console.WriteLine (numbers [2]);   // 20
 ```
-Target برای یک ref local باید یک array element، field، یا local variable باشد؛ نمی‌تواند یک property (Chapter 3) باشد. Ref locals برای scenarios micro-optimization تخصصی در نظر گرفته شده‌اند و معمولاً در ترکیب با ref returns استفاده می‌شوند.
+Target برای یکباید یک array element، field، یا local variable باشد؛ نمی‌تواند یک property (Chapter 3) باشد. Ref locals برای scenarios micro-optimization تخصصی در نظر گرفته شده‌اند و معمولاً در ترکیب با ref returns استفاده می‌شوند.
 
 ### Ref Returns
 
 Types Span و ReadOnlySpan که در Chapter 23 آن‌ها را توضیح می‌دهیم، از ref returns برای پیاده‌سازی یک indexer با کارایی بسیار بالا استفاده می‌کنند. خارج از چنین scenarios، ref returns معمولاً استفاده نمی‌شوند، و می‌توانید آن‌ها را یک feature micro-optimization در نظر بگیرید.
 
-می‌توانید یک ref local را از یک method return کنید. این را ref return می‌نامند:
+می‌توانید یکرا از یک method return کنید. این را ref return می‌نامند:
 
 ```C#
 
@@ -2875,179 +2875,218 @@ case null:
   Console.WriteLine ("Nothing here");
   break;
 ```
-
-### Ref Locals (متغیرهای محلی ارجاعی)
-یکی از ویژگی‌های نسبتاً تخصصی C# این است که می‌توانید یک متغیر محلی (local variable) تعریف کنید که به یک عنصر (element) در یک آرایه یا فیلد (field) در یک شیء ارجاع می‌دهد (از C# 7 به بعد):
-
-```C#
-
-int[] numbers = { 0, 1, 2, 3, 4 };
-ref int numRef = ref numbers [2];
-```
-در این مثال، numRef یک ارجاع به numbers[2] است. وقتی numRef را تغییر می‌دهیم، در واقع عنصر آرایه را تغییر داده‌ایم:
+### عبارات سوئیچ (Switch expressions)
+از C# 8 به بعد، شما می‌توانید از switch در قالب یک عبارت استفاده کنید. با فرض اینکه cardNumber از نوع int است، مثال زیر کاربرد آن را نشان می‌دهد:
 
 ```C#
 
-numRef *= 10;
-Console.WriteLine (numRef);        // 20
-Console.WriteLine (numbers [2]);   // 20
-```
-هدف (target) برای یک ref local باید یک عنصر آرایه (array element)، فیلد (field) یا متغیر محلی (local variable) باشد؛ نمی‌تواند یک ویژگی (property) باشد (در فصل ۳). Ref locals برای سناریوهای تخصصی micro-optimization طراحی شده‌اند و معمولاً در ترکیب با ref returns استفاده می‌شوند.
-
-
-### Ref Returns (بازگشت‌های ارجاعی)
-انواع Span و ReadOnlySpan که در فصل ۲۳ توضیح می‌دهیم، از ref returns برای پیاده‌سازی یک indexer بسیار کارآمد استفاده می‌کنند. خارج از چنین سناریوهایی، ref returns معمولاً استفاده نمی‌شوند و می‌توانید آن‌ها را یک ویژگی micro-optimization در نظر بگیرید.
-
-می‌توانید یک ref local را از یک متد بازگردانید. به این عمل ref return گفته می‌شود:
-
-```C#
-
-class Program
+string cardName = cardNumber switch
 {
-  static string x = "Old Value";
-  static ref string GetX() => ref x;    // این متد یک ref را بازمی‌گرداند
-  static void Main()
-  {
-    ref string xRef = ref GetX();       // نتیجه را به یک ref local اختصاص می‌دهد
-    xRef = "New Value";
-    Console.WriteLine (x);              // New Value
-  }
+  13 => "King",
+  12 => "Queen",
+  11 => "Jack",
+  _ => "Pip card"   // معادل 'default'
+};
+```
+توجه کنید که کلمه کلیدی switch پس از نام متغیر ظاهر می‌شود و case clauses (بندهای مورد) عبارت هستند (که با کاما خاتمه می‌یابند) نه دستور. عبارات سوئیچ فشرده‌تر از معادل‌های switch statement خود هستند و می‌توانید از آن‌ها در پرس‌وجوهای LINQ (فصل ۸) استفاده کنید.
+
+اگر عبارت پیش‌فرض (_) را حذف کنید و سوئیچ نتواند تطابقی پیدا کند، یک استثنا پرتاب می‌شود.
+
+
+شما همچنین می‌توانید روی چندین مقدار سوئیچ کنید (الگوی تاپل):
+
+```C#
+
+int cardNumber = 12;
+string suite = "spades";
+string cardName = (cardNumber, suite) switch
+{
+  (13, "spades") => "King of spades",
+  (13, "clubs") => "King of clubs",
+  ...
+};
+```
+گزینه‌های بسیار بیشتری از طریق استفاده از الگوها ممکن است (به "Patterns" در صفحه ۲۳۸ مراجعه کنید).
+
+### دستورات تکرار (Iteration Statements)
+C# یک دنباله از دستورات را با استفاده از دستورات while، do-while، for و foreach به صورت مکرر اجرا می‌کند.
+
+#### حلقه‌های while و do-while
+حلقه‌های while به صورت مکرر بدنه کد را تا زمانی که یک عبارت bool درست باشد، اجرا می‌کنند. این عبارت قبل از اجرای بدنه حلقه تست می‌شود. برای مثال، کد زیر "012" را می‌نویسد:
+
+```C#
+
+int i = 0;
+while (i < 3)
+{
+  Console.Write (i);
+  i++;
 }
 ```
-اگر اصلاح‌کننده ref را در سمت فراخوانی حذف کنید، به بازگرداندن یک مقدار عادی (ordinary value) برمی‌گردد:
+حلقه‌های do-while از نظر عملکردی تنها در این مورد با حلقه‌های while تفاوت دارند که عبارت را بعد از اجرای بلوک دستور تست می‌کنند (که تضمین می‌کند بلوک حداقل یک بار اجرا می‌شود). در اینجا مثال قبلی با حلقه do-while بازنویسی شده است:
 
 ```C#
 
-string localX = GetX();  // قانونی: localX یک متغیر عادی و غیرارجاعی است.
-```
-همچنین می‌توانید هنگام تعریف یک ویژگی (property) یا indexer از ref returns استفاده کنید:
-
-```C#
-
-static ref string Prop => ref x;
-```
-چنین ویژگیای به طور ضمنی قابل نوشتن (implicitly writable) است، با وجود اینکه هیچ set accessorی ندارد:
-
-```C#
-
-Prop = "New Value";
-```
-می‌توانید با استفاده از ref readonly از چنین تغییری جلوگیری کنید:
-
-```C#
-
-static ref readonly string Prop => ref x;
-```
-اصلاح‌کننده (modifier) ref readonly از تغییر جلوگیری می‌کند و در عین حال افزایش کارایی (performance gain) حاصل از بازگشت با ارجاع (returning by reference) را فراهم می‌سازد. افزایش کارایی در این حالت بسیار ناچیز خواهد بود، زیرا x از نوع string است (یک reference type): مهم نیست که رشته چقدر طولانی باشد، تنها ناکارآمدی که می‌توانید از آن اجتناب کنید، کپی کردن یک ارجاع ۳۲ یا ۶۴ بیتی است. افزایش کارایی واقعی می‌تواند با انواع مقادیر سفارشی (custom value types) رخ دهد (به "Structs" در صفحه ۱۴۲ مراجعه کنید)، اما فقط در صورتی که struct با readonly علامت‌گذاری شده باشد (در غیر این صورت، کامپایلر یک کپی دفاعی (defensive copy) انجام خواهد داد).
-
-تلاش برای تعریف یک set accessor صریح بر روی یک ویژگی یا indexer که ref return دارد، غیرقانونی است.
-
-
-### var—Implicitly Typed Local Variables (متغیرهای محلی با نوع ضمنی)
-اغلب پیش می‌آید که یک متغیر را در یک مرحله اعلان و مقداردهی اولیه می‌کنید. اگر کامپایلر (compiler) قادر به استنباط نوع (infer the type) از عبارت مقداردهی اولیه باشد، می‌توانید از کلمه کلیدی var به جای اعلان نوع استفاده کنید؛ برای مثال:
-
-```C#
-
-var x = "hello";
-var y = new System.Text.StringBuilder();
-var z = (float)Math.PI;
-```
-این دقیقاً معادل با موارد زیر است:
-
-```C#
-
-string x = "hello";
-System.Text.StringBuilder y = new System.Text.StringBuilder();
-float z = (float)Math.PI;
-```
-به دلیل این معادل‌سازی مستقیم (direct equivalence)، متغیرهای با نوع ضمنی (implicitly typed variables) به صورت استاتیکی تایپ (statically typed) می‌شوند. برای مثال، کد زیر یک خطای زمان کامپایل (compile-time error) ایجاد می‌کند:
-
-```C#
-
-var x = 5;
-x = "hello";    // خطای زمان کامپایل؛ x از نوع int است
-```
-var می‌تواند خوانایی کد را کاهش دهد، به خصوص زمانی که نتوانید نوع را فقط با نگاه کردن به اعلان متغیر استنباط کنید. برای مثال:
-
-```C#
-
-Random r = new Random();
-var x = r.Next();
-```
-نوع x چیست؟
-
-در "Anonymous Types" در صفحه ۲۲۰، سناریویی را توضیح خواهیم داد که در آن استفاده از var اجباری است.
-
-### عبارات new با نوع هدف (Target-Typed new Expressions)
-یکی دیگر از روش‌ها برای کاهش تکرار در کد، استفاده از target-typed new expressions است که از C# 9 معرفی شده‌اند. این ویژگی به شما اجازه می‌دهد تا نام نوع را پس از کلمه‌ی کلیدی new حذف کنید، به شرطی که کامپایلر بتواند آن را به صورت غیرمبهم (unambiguously) استنباط کند.
-
-برای مثال، کد زیر:
-
-```C#
-
-System.Text.StringBuilder sb1 = new();
-System.Text.StringBuilder sb2 = new ("Test");
-```
-دقیقاً معادل کد زیر است:
-
-```C#
-
-System.Text.StringBuilder sb1 = new System.Text.StringBuilder();
-System.Text.StringBuilder sb2 = new System.Text.StringBuilder ("Test");
-```
-این قابلیت به ویژه زمانی مفید است که اعلان متغیر و مقداردهی اولیه آن در بخش‌های مختلفی از کد شما قرار دارند. یک نمونه رایج، مقداردهی اولیه یک فیلد (field) در یک سازنده (constructor) است:
-
-```C#
-
-class Foo
+int i = 0;
+do
 {
-  System.Text.StringBuilder sb;
-  public Foo (string initialValue)
-  {
-    sb = new (initialValue);
-  }
+  Console.WriteLine (i);
+  i++;
+}
+while (i < 3);
+```
+#### حلقه‌های for
+حلقه‌های for مانند حلقه‌های while هستند با بندهای خاصی برای مقداردهی اولیه و تکرار یک متغیر حلقه. یک حلقه for شامل سه بند به صورت زیر است:
+
+```C#
+
+for (initialization-clause; condition-clause; iteration-clause)
+  statement-or-statement-block
+```
+
+در اینجا هر بند چه کاری انجام می‌دهد:
+
+بند مقداردهی اولیه (Initialization clause): قبل از شروع حلقه اجرا می‌شود؛ برای مقداردهی اولیه یک یا چند متغیر تکرار استفاده می‌شود.
+
+بند شرط (Condition clause): عبارت boolی که تا زمانی که درست باشد، بدنه را اجرا می‌کند.
+
+بند تکرار (Iteration clause): پس از هر تکرار بلوک دستور اجرا می‌شود؛ معمولاً برای به‌روزرسانی متغیر تکرار استفاده می‌گردد.
+
+برای مثال، کد زیر اعداد 0 تا 2 را چاپ می‌کند:
+
+```C#
+
+for (int i = 0; i < 3; i++)
+  Console.WriteLine (i);
+```
+کد زیر ۱۰ عدد اول فیبوناچی را چاپ می‌کند (که در آن هر عدد مجموع دو عدد قبلی است):
+
+```C#
+
+for (int i = 0, prevFib = 1, curFib = 1; i < 10; i++)
+{
+  Console.WriteLine (prevFib);
+  int newFib = prevFib + curFib;
+  prevFib = curFib; curFib = newFib;
 }
 ```
-این قابلیت در سناریوهای دیگری مانند فراخوانی متدها نیز مفید است:
+هر یک از سه بخش دستور for را می‌توان حذف کرد. شما می‌توانید یک حلقه بی‌نهایت مانند زیر پیاده‌سازی کنید (البته while(true) را می‌توان به جای آن استفاده کرد):
 
 ```C#
 
-MyMethod (new ("test"));
-void MyMethod (System.Text.StringBuilder sb) { ... }
+for (;;)
+  Console.WriteLine ("interrupt me");
 ```
-## عبارات و عملگرها (Expressions and Operators)
-یک عبارت (expression) اساساً یک مقدار (value) را نشان می‌دهد. ساده‌ترین انواع عبارت‌ها، ثابت‌ها و متغیرها هستند. این عبارت‌ها را می‌توان با استفاده از عملگرها (operators) تغییر داد و ترکیب کرد. یک عملگر یک یا چند عملوند (operand) ورودی می‌گیرد و یک عبارت جدید تولید می‌کند.
-
-### عبارات اصلی (Primary Expressions)
-این عبارت‌ها از عملگرهای ذاتی زبان تشکیل شده‌اند. برای مثال، در Math.Log(1)، ابتدا عملگر . یک member lookup را انجام می‌دهد و سپس عملگر () یک method call را انجام می‌دهد.
-
-### عبارات تهی (Void Expressions)
-یک void expression عبارتی است که هیچ مقداری ندارد، مانند Console.WriteLine(1). از آنجایی که این عبارت مقداری ندارد، نمی‌توانید از آن به عنوان عملوند برای ساخت عبارت‌های پیچیده‌تر استفاده کنید.
-
-### عبارات انتساب (Assignment Expressions) 
-این عبارت‌ها از عملگر = برای انتساب مقدار یک عبارت به یک متغیر استفاده می‌کنند. یک عبارت انتساب خود دارای مقدار است، بنابراین می‌تواند در عبارت‌های دیگر نیز استفاده شود. برای مثال:
+#### حلقه‌های foreach
+دستور foreach روی هر عنصر در یک شیء قابل شمارش (enumerable object) تکرار می‌کند. بیشتر انواع .NET که یک مجموعه یا لیست از عناصر را نشان می‌دهند، قابل شمارش هستند. برای مثال، هم یک آرایه و هم یک رشته قابل شمارش هستند. در اینجا مثالی از شمارش روی کاراکترهای یک رشته، از اولین کاراکتر تا آخرین آن آمده است:
 
 ```C#
 
-y = 5 * (x = 2)
+foreach (char c in "beer")   // c متغیر تکرار است
+  Console.WriteLine (c);
 ```
-همچنین، عملگرهای انتساب ترکیبی (compound assignment operators) مانند x *= 2 یک میانبر نحوی برای x = x * 2 هستند.
+خروجی به این صورت است:
 
-### اولویت و ارتباط عملگر (Operator Precedence and Associativity)
-وقتی یک عبارت شامل چندین عملگر باشد، اولویت (precedence) و ارتباط (associativity) ترتیب ارزیابی آن‌ها را تعیین می‌کنند.
+b
+e
+e
+r
+ما اشیاء قابل شمارش را در "Enumeration and Iterators" در صفحه ۲۰۳ تعریف می‌کنیم.
 
-#### اولویت
-عملگرهای با اولویت بالاتر، قبل از عملگرهای با اولویت پایین‌تر اجرا می‌شوند. برای مثال، در عبارت 1 + 2 * 3، ابتدا 2 * 3 ارزیابی می‌شود، زیرا عملگر * اولویت بالاتری نسبت به + دارد.
 
-#### ارتباط چپ‌به‌راست (Left-associative)
-اکثر عملگرهای باینری از چپ به راست ارزیابی می‌شوند. به عنوان مثال، 8 / 4 / 2 به صورت (8 / 4) / 2 محاسبه می‌شود که نتیجه آن ۱ است. می‌توانید با استفاده از پرانتز، ترتیب را تغییر دهید: 8 / (4 / 2) که نتیجه آن ۴ است.
+### دستورات پرش (Jump Statements)
+دستورات پرش در C# عبارتند از break, continue, goto, return, و throw.
 
-#### ارتباط راست‌به‌چپ (Right-associative)
-عملگرهای انتساب، lambda، null-coalescing و conditional از راست به چپ ارزیابی می‌شوند. این ویژگی امکان انتساب‌های چندگانه مانند x = y = 3 را فراهم می‌کند.
+دستورات پرش از قوانین قابلیت اطمینان دستورات try پیروی می‌کنند (به "try Statements and Exceptions" در صفحه ۱۹۵ مراجعه کنید). این بدان معناست که:
 
-جدول ۲-۳ (که در متن به آن اشاره شده) عملگرهای C# را به ترتیب اولویت فهرست می‌کند.
++ یک پرش از یک بلوک try همیشه بلوک finally مربوط به try را قبل از رسیدن به هدف پرش اجرا می‌کند.
 
-<div align="center">
-    
-![Conventions-UsedThis-Book](../../assets/image/02/Table-2-11.jpeg) <br>
-</div>
++ یک پرش نمی‌تواند از داخل به خارج یک بلوک finally انجام شود (مگر از طریق throw).
+
+#### دستور break
+دستور break اجرای بدنه یک تکرار یا دستور سوئیچ را به پایان می‌رساند:
+
+```C#
+
+int x = 0;
+while (true)
+{
+  if (x++ > 5)
+    break;      // از حلقه خارج می‌شود
+}
+
+// اجرا بعد از break در اینجا ادامه می‌یابد
+...
+```
+### دستور continue
+دستور continue از دستورات باقی‌مانده در یک حلقه صرف‌نظر می‌کند و یک شروع زودهنگام بر روی تکرار بعدی دارد. حلقه زیر اعداد زوج را رد می‌کند:
+
+```C#
+
+for (int i = 0; i < 10; i++)
+{
+  if ((i % 2) == 0)       // اگر i زوج باشد،
+    continue;             // با تکرار بعدی ادامه می‌دهد
+  Console.Write (i + " ");
+}
+```
+خروجی: 1 3 5 7 9
+
+### دستور goto
+دستور goto اجرا را به یک برچسب دیگر در یک بلوک دستور منتقل می‌کند. فرم آن به صورت زیر است:
+
+```C#
+
+goto statement-label;
+```
+یا، زمانی که در یک دستور سوئیچ استفاده می‌شود:
+
+```C#
+
+goto case case-constant;    // (فقط با constants کار می‌کند، نه patterns)
+```
+
+یک برچسب (label) یک جایگزین در یک بلوک کد است که قبل از یک دستور قرار می‌گیرد، و با یک پسوند دو نقطه مشخص می‌شود. کد زیر اعداد ۱ تا ۵ را تکرار می‌کند، که تقلیدی از یک حلقه for است:
+
+```C#
+
+int i = 1;
+startLoop:
+if (i <= 5)
+{
+  Console.Write (i + " ");
+  i++;
+  goto startLoop;
+}
+```
+خروجی: 1 2 3 4 5
+
+goto case case-constant اجرا را به یک case دیگر در یک بلوک switch منتقل می‌کند (به "The switch statement" در صفحه ۸۸ مراجعه کنید).
+
+#### دستور return
+دستور return از متد خارج می‌شود و اگر متد nonvoid باشد، باید یک عبارت از نوع بازگشتی متد را برگرداند:
+
+```C#
+
+decimal AsPercentage (decimal d)
+{
+  decimal p = d * 100m;
+  return p;             // با مقدار به متد فراخواننده برمی‌گردد
+}
+```
+یک دستور return می‌تواند در هر جایی در یک متد (به جز در یک بلوک finally) ظاهر شود، و می‌تواند بیش از یک بار استفاده شود.
+
+#### دستور throw
+دستور throw یک استثنا را پرتاب می‌کند تا نشان دهد خطایی رخ داده است (به "try Statements and Exceptions" در صفحه ۱۹۵ مراجعه کنید):
+
+```C#
+
+if (w == null)
+  throw new ArgumentNullException (...);
+```
+### دستورات متفرقه (Miscellaneous Statements)
+دستور using: یک نحو زیبا برای فراخوانی Dispose بر روی اشیایی که IDisposable را پیاده‌سازی می‌کنند، در یک بلوک finally فراهم می‌کند (به "try Statements and Exceptions" در صفحه ۱۹۵ و "IDisposable, Dispose, and Close" در صفحه ۵۸۱ مراجعه کنید).
+
+C# کلمه کلیدی using را برای داشتن معانی مستقل در زمینه‌های مختلف overload می‌کند. به طور خاص، دستورالعمل using با دستور using متفاوت است.
+
+دستور lock: یک میانبر برای فراخوانی متدهای Enter و Exit از کلاس Monitor است (به فصل‌های ۱۴ و ۲۳ مراجعه کنید).
