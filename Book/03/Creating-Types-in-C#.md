@@ -388,5 +388,125 @@ public class Class1
 }
 ```
 
+### پادسازنده‌ها (Deconstructors)
+یک پادسازنده (که با نام "متد پادسازنده" نیز خوانده میشود) کارکردی درست برعکس یک سازنده دارد :
+درحالی که یک سازنده به گونه‌ای همگانی یک سری از ارزش‌ها را (به عنوان پارامتر) می‌گیرد و به فیلدها می‌سپارد، یک پادسازنده کار برعکس را انجام می دهد و فیلدها را به  یک سری از متغیر ها میسپارد.
+
+یک متد پادسازنده باید `Deconstruct` نامیده شود و باید یک یا چند پارامتر `out` داشته باشد، مانند نمونه زیر : 
+
+```Cs
+class Rectangle{
+     public readonly float Width, Height;
+    
+    public Rectangle (float width, float height)
+    {
+        Width = width;
+        Height = height;
+    }
+    
+    
+    public void Deconstruct (out float width, out float height)
+    
+    {
+    
+    width = Width;
+    
+    height = Height;
+    
+    }
+}
+
+```
+
+دستور ویژه زیر ، پادسازنده را فراخوانی میکند:
+```Cs
+var rect = new Rectangle (3, 4);
+(float width, float height) = rect; // پادسازی
+Console.WriteLine (width + " " + height); // 3 4
+```
+
+سطر دوم، فراخوانی پادسازی است، . این سطر ، دو متغیر بومی را می‌سازد و سپس متد `Deconstruct` را فراخوانی میکند. 
+فراخوانی پادسازی ما به نمونه‌ی زیر هم ارز است : 
+```Cs
+float width , height;
+rect.Deconstruct(out width , out height);
+```
+یا :
+```Cs
+(var width, var height) = rect;
+```
+
+یا به سادگی به این گونه :
+```Cs
+var (width, height) = rect;
+```
+
+اگر به یک یا چند متغیر بی‌میل هستید ، می توانید از نماد دورریز(`_`) سی شارپ بهره ببرید : 
+```Cs
+var (_ , height) = rect;
+```
+
+این کار، به درستی نیت شما را نسبت به شناسایی یک متغیر که هرگز از آن بهره نمی برید  را نشان میدهد.
+
+اگر متغیرهایی که در آن ها پادسازی می کنید از پیش شناسایی شده اند، می توانید گونه‌ها را به کلی نادیده بگیرید : 
+
+```Cs
+float width, height;
+(width, height) = rect;
+```
+
+این کار، واگذاری پادسازی (**deconstructing assignment**) نامیده می‌شود. شما می‌توانید از یک واگذاری پادسازی برای ساده‌تر کردن سازنده‌ی کلاس خود بهره ببرید:
+
+```Cs
+public Rectangle (float width, float height) =>
+ (Width, Height) = (width, height);
+```
+
+شما می‌توانید با پربارسازی متد `Deconstruct،` گزینه‌های گوناگونی برای پادسازی به فراخواننده پیشکش کنید.
+
+متد `Deconstruct` می‌تواند یک متد گسترشی (**extension method**) باشد. این کار یک ترفند کارآمد است اگر می‌خواهید گونه‌هایی را پادسازی کنید که شما نویسنده‌ی آن‌ها نبوده‌اید.
+
+از **سی‌شارپ 10**، می‌توانید متغیرهای از پیش موجود و متغیرهای نو را زمانی که پادسازی می‌کنید، با هم درآمیزید:
+
+```Cs
+double x1 = 0;
+(x1, double y2) = rect;
+```
 
 
+### آغازگرهای شیء (Object Initializers)
+
+برای ساده‌ترک ردنآغازگری شیء، هر فیلد یا ویژگی(`property`) دسترسی پذیر یک شیء میتوانید از راه یک **آغازگر شیء** ، درست  پس از ساخت ، مقداردهی شود. برای نمونه ، کلاس زیر را در نظر بگیرید : 
+
+```Cs
+public class Bunny
+{
+    public string Name;
+    public bool LikesCarrots, LikesHumans;
+    public Bunny () {}
+    public Bunny (string n) => Name = n;
+}
+```
+
+با بهره‌گیری از آغازگرهای شیء، میتوانید نمونه های کلاس `Bunny` را به این گونه پدید آورید : 
+
+```Cs
+// به یاد داشته باشید که سازنده‌های بدون پارامتر می‌توانند پرانتزهای خالی را نادیده بگیرند
+Bunny b1 = new Bunny { Name="Bo", LikesCarrots=true, LikesHumans=false };
+Bunny b2 = new Bunny ("Bo") { LikesCarrots=true, LikesHumans=false };
+```
+
+کد برای ساخت `b1` و `b2` با کد زیر هم‌ارز است:
+```Cs
+Bunny temp1 = new Bunny();
+temp1.Name = "Bo";
+temp1.LikesCarrots = true;
+temp1.LikesHumans = false;
+Bunny b1 = temp1;
+
+Bunny temp2 = new Bunny ("Bo");
+temp2.LikesCarrots = true;
+temp2.LikesHumans = false;
+Bunny b2 = temp2;
+```
+متغیرهای موقت برای این هستند که اگر در زمان آغازگری، یک کژکاری (`exception`) رخ دهد، شما یک شیء نیمه‌آغازگری‌شده نداشته باشید.
