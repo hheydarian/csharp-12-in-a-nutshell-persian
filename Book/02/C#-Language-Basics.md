@@ -2875,3 +2875,105 @@ case null:
   Console.WriteLine ("Nothing here");
   break;
 ```
+
+### Ref Locals (متغیرهای محلی ارجاعی)
+یکی از ویژگی‌های نسبتاً تخصصی C# این است که می‌توانید یک متغیر محلی (local variable) تعریف کنید که به یک عنصر (element) در یک آرایه یا فیلد (field) در یک شیء ارجاع می‌دهد (از C# 7 به بعد):
+
+```C#
+
+int[] numbers = { 0, 1, 2, 3, 4 };
+ref int numRef = ref numbers [2];
+```
+در این مثال، numRef یک ارجاع به numbers[2] است. وقتی numRef را تغییر می‌دهیم، در واقع عنصر آرایه را تغییر داده‌ایم:
+
+```C#
+
+numRef *= 10;
+Console.WriteLine (numRef);        // 20
+Console.WriteLine (numbers [2]);   // 20
+```
+هدف (target) برای یک ref local باید یک عنصر آرایه (array element)، فیلد (field) یا متغیر محلی (local variable) باشد؛ نمی‌تواند یک ویژگی (property) باشد (در فصل ۳). Ref locals برای سناریوهای تخصصی micro-optimization طراحی شده‌اند و معمولاً در ترکیب با ref returns استفاده می‌شوند.
+
+
+### Ref Returns (بازگشت‌های ارجاعی)
+انواع Span و ReadOnlySpan که در فصل ۲۳ توضیح می‌دهیم، از ref returns برای پیاده‌سازی یک indexer بسیار کارآمد استفاده می‌کنند. خارج از چنین سناریوهایی، ref returns معمولاً استفاده نمی‌شوند و می‌توانید آن‌ها را یک ویژگی micro-optimization در نظر بگیرید.
+
+می‌توانید یک ref local را از یک متد بازگردانید. به این عمل ref return گفته می‌شود:
+
+```C#
+
+class Program
+{
+  static string x = "Old Value";
+  static ref string GetX() => ref x;    // این متد یک ref را بازمی‌گرداند
+  static void Main()
+  {
+    ref string xRef = ref GetX();       // نتیجه را به یک ref local اختصاص می‌دهد
+    xRef = "New Value";
+    Console.WriteLine (x);              // New Value
+  }
+}
+```
+اگر اصلاح‌کننده ref را در سمت فراخوانی حذف کنید، به بازگرداندن یک مقدار عادی (ordinary value) برمی‌گردد:
+
+```C#
+
+string localX = GetX();  // قانونی: localX یک متغیر عادی و غیرارجاعی است.
+```
+همچنین می‌توانید هنگام تعریف یک ویژگی (property) یا indexer از ref returns استفاده کنید:
+
+```C#
+
+static ref string Prop => ref x;
+```
+چنین ویژگیای به طور ضمنی قابل نوشتن (implicitly writable) است، با وجود اینکه هیچ set accessorی ندارد:
+
+```C#
+
+Prop = "New Value";
+```
+می‌توانید با استفاده از ref readonly از چنین تغییری جلوگیری کنید:
+
+```C#
+
+static ref readonly string Prop => ref x;
+```
+اصلاح‌کننده (modifier) ref readonly از تغییر جلوگیری می‌کند و در عین حال افزایش کارایی (performance gain) حاصل از بازگشت با ارجاع (returning by reference) را فراهم می‌سازد. افزایش کارایی در این حالت بسیار ناچیز خواهد بود، زیرا x از نوع string است (یک reference type): مهم نیست که رشته چقدر طولانی باشد، تنها ناکارآمدی که می‌توانید از آن اجتناب کنید، کپی کردن یک ارجاع ۳۲ یا ۶۴ بیتی است. افزایش کارایی واقعی می‌تواند با انواع مقادیر سفارشی (custom value types) رخ دهد (به "Structs" در صفحه ۱۴۲ مراجعه کنید)، اما فقط در صورتی که struct با readonly علامت‌گذاری شده باشد (در غیر این صورت، کامپایلر یک کپی دفاعی (defensive copy) انجام خواهد داد).
+
+تلاش برای تعریف یک set accessor صریح بر روی یک ویژگی یا indexer که ref return دارد، غیرقانونی است.
+
+
+### var—Implicitly Typed Local Variables (متغیرهای محلی با نوع ضمنی)
+اغلب پیش می‌آید که یک متغیر را در یک مرحله اعلان و مقداردهی اولیه می‌کنید. اگر کامپایلر (compiler) قادر به استنباط نوع (infer the type) از عبارت مقداردهی اولیه باشد، می‌توانید از کلمه کلیدی var به جای اعلان نوع استفاده کنید؛ برای مثال:
+
+```C#
+
+var x = "hello";
+var y = new System.Text.StringBuilder();
+var z = (float)Math.PI;
+```
+این دقیقاً معادل با موارد زیر است:
+
+```C#
+
+string x = "hello";
+System.Text.StringBuilder y = new System.Text.StringBuilder();
+float z = (float)Math.PI;
+```
+به دلیل این معادل‌سازی مستقیم (direct equivalence)، متغیرهای با نوع ضمنی (implicitly typed variables) به صورت استاتیکی تایپ (statically typed) می‌شوند. برای مثال، کد زیر یک خطای زمان کامپایل (compile-time error) ایجاد می‌کند:
+
+```C#
+
+var x = 5;
+x = "hello";    // خطای زمان کامپایل؛ x از نوع int است
+```
+var می‌تواند خوانایی کد را کاهش دهد، به خصوص زمانی که نتوانید نوع را فقط با نگاه کردن به اعلان متغیر استنباط کنید. برای مثال:
+
+```C#
+
+Random r = new Random();
+var x = r.Next();
+```
+نوع x چیست؟
+
+در "Anonymous Types" در صفحه ۲۲۰، سناریویی را توضیح خواهیم داد که در آن استفاده از var اجباری است.
