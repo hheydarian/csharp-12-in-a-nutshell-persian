@@ -3049,5 +3049,5 @@ y = 5 * (x = 2)
 
 <div align="center">
     
-![Conventions-UsedThis-Book](../../assets/image/02/Table-2-11.png) <br>
+![Conventions-UsedThis-Book](../../assets/image/02/Table-2-11.jpeg) <br>
 </div>
