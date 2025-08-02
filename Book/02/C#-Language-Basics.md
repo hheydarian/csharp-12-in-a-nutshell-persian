@@ -2234,13 +2234,13 @@ numRef *= 10;
 Console.WriteLine (numRef);        // 20
 Console.WriteLine (numbers [2]);   // 20
 ```
-Target برای یک ref local باید یک array element، field، یا local variable باشد؛ نمی‌تواند یک property (Chapter 3) باشد. Ref locals برای scenarios micro-optimization تخصصی در نظر گرفته شده‌اند و معمولاً در ترکیب با ref returns استفاده می‌شوند.
+Target برای یکباید یک array element، field، یا local variable باشد؛ نمی‌تواند یک property (Chapter 3) باشد. Ref locals برای scenarios micro-optimization تخصصی در نظر گرفته شده‌اند و معمولاً در ترکیب با ref returns استفاده می‌شوند.
 
 ### Ref Returns
 
 Types Span و ReadOnlySpan که در Chapter 23 آن‌ها را توضیح می‌دهیم، از ref returns برای پیاده‌سازی یک indexer با کارایی بسیار بالا استفاده می‌کنند. خارج از چنین scenarios، ref returns معمولاً استفاده نمی‌شوند، و می‌توانید آن‌ها را یک feature micro-optimization در نظر بگیرید.
 
-می‌توانید یک ref local را از یک method return کنید. این را ref return می‌نامند:
+می‌توانید یکرا از یک method return کنید. این را ref return می‌نامند:
 
 ```C#
 
@@ -2874,4 +2874,561 @@ switch (x)
 case null:
   Console.WriteLine ("Nothing here");
   break;
+```
+### عبارات سوئیچ (Switch expressions)
+از C# 8 به بعد، شما می‌توانید از switch در قالب یک عبارت استفاده کنید. با فرض اینکه cardNumber از نوع int است، مثال زیر کاربرد آن را نشان می‌دهد:
+
+```C#
+
+string cardName = cardNumber switch
+{
+  13 => "King",
+  12 => "Queen",
+  11 => "Jack",
+  _ => "Pip card"   // معادل 'default'
+};
+```
+توجه کنید که کلمه کلیدی switch پس از نام متغیر ظاهر می‌شود و case clauses (بندهای مورد) عبارت هستند (که با کاما خاتمه می‌یابند) نه دستور. عبارات سوئیچ فشرده‌تر از معادل‌های switch statement خود هستند و می‌توانید از آن‌ها در پرس‌وجوهای LINQ (فصل ۸) استفاده کنید.
+
+اگر عبارت پیش‌فرض (_) را حذف کنید و سوئیچ نتواند تطابقی پیدا کند، یک استثنا پرتاب می‌شود.
+
+
+شما همچنین می‌توانید روی چندین مقدار سوئیچ کنید (الگوی تاپل):
+
+```C#
+
+int cardNumber = 12;
+string suite = "spades";
+string cardName = (cardNumber, suite) switch
+{
+  (13, "spades") => "King of spades",
+  (13, "clubs") => "King of clubs",
+  ...
+};
+```
+گزینه‌های بسیار بیشتری از طریق استفاده از الگوها ممکن است (به "Patterns" در صفحه ۲۳۸ مراجعه کنید).
+
+### دستورات تکرار (Iteration Statements)
+C# یک دنباله از دستورات را با استفاده از دستورات while، do-while، for و foreach به صورت مکرر اجرا می‌کند.
+
+#### حلقه‌های while و do-while
+حلقه‌های while به صورت مکرر بدنه کد را تا زمانی که یک عبارت bool درست باشد، اجرا می‌کنند. این عبارت قبل از اجرای بدنه حلقه تست می‌شود. برای مثال، کد زیر "012" را می‌نویسد:
+
+```C#
+
+int i = 0;
+while (i < 3)
+{
+  Console.Write (i);
+  i++;
+}
+```
+حلقه‌های do-while از نظر عملکردی تنها در این مورد با حلقه‌های while تفاوت دارند که عبارت را بعد از اجرای بلوک دستور تست می‌کنند (که تضمین می‌کند بلوک حداقل یک بار اجرا می‌شود). در اینجا مثال قبلی با حلقه do-while بازنویسی شده است:
+
+```C#
+
+int i = 0;
+do
+{
+  Console.WriteLine (i);
+  i++;
+}
+while (i < 3);
+```
+#### حلقه‌های for
+حلقه‌های for مانند حلقه‌های while هستند با بندهای خاصی برای مقداردهی اولیه و تکرار یک متغیر حلقه. یک حلقه for شامل سه بند به صورت زیر است:
+
+```C#
+
+for (initialization-clause; condition-clause; iteration-clause)
+  statement-or-statement-block
+```
+
+در اینجا هر بند چه کاری انجام می‌دهد:
+
+بند مقداردهی اولیه (Initialization clause): قبل از شروع حلقه اجرا می‌شود؛ برای مقداردهی اولیه یک یا چند متغیر تکرار استفاده می‌شود.
+
+بند شرط (Condition clause): عبارت boolی که تا زمانی که درست باشد، بدنه را اجرا می‌کند.
+
+بند تکرار (Iteration clause): پس از هر تکرار بلوک دستور اجرا می‌شود؛ معمولاً برای به‌روزرسانی متغیر تکرار استفاده می‌گردد.
+
+برای مثال، کد زیر اعداد 0 تا 2 را چاپ می‌کند:
+
+```C#
+
+for (int i = 0; i < 3; i++)
+  Console.WriteLine (i);
+```
+کد زیر ۱۰ عدد اول فیبوناچی را چاپ می‌کند (که در آن هر عدد مجموع دو عدد قبلی است):
+
+```C#
+
+for (int i = 0, prevFib = 1, curFib = 1; i < 10; i++)
+{
+  Console.WriteLine (prevFib);
+  int newFib = prevFib + curFib;
+  prevFib = curFib; curFib = newFib;
+}
+```
+هر یک از سه بخش دستور for را می‌توان حذف کرد. شما می‌توانید یک حلقه بی‌نهایت مانند زیر پیاده‌سازی کنید (البته while(true) را می‌توان به جای آن استفاده کرد):
+
+```C#
+
+for (;;)
+  Console.WriteLine ("interrupt me");
+```
+#### حلقه‌های foreach
+دستور foreach روی هر عنصر در یک شیء قابل شمارش (enumerable object) تکرار می‌کند. بیشتر انواع .NET که یک مجموعه یا لیست از عناصر را نشان می‌دهند، قابل شمارش هستند. برای مثال، هم یک آرایه و هم یک رشته قابل شمارش هستند. در اینجا مثالی از شمارش روی کاراکترهای یک رشته، از اولین کاراکتر تا آخرین آن آمده است:
+
+```C#
+
+foreach (char c in "beer")   // c متغیر تکرار است
+  Console.WriteLine (c);
+```
+خروجی به این صورت است:
+
+b
+e
+e
+r
+ما اشیاء قابل شمارش را در "Enumeration and Iterators" در صفحه ۲۰۳ تعریف می‌کنیم.
+
+
+### دستورات پرش (Jump Statements)
+دستورات پرش در C# عبارتند از break, continue, goto, return, و throw.
+
+دستورات پرش از قوانین قابلیت اطمینان دستورات try پیروی می‌کنند (به "try Statements and Exceptions" در صفحه ۱۹۵ مراجعه کنید). این بدان معناست که:
+
++ یک پرش از یک بلوک try همیشه بلوک finally مربوط به try را قبل از رسیدن به هدف پرش اجرا می‌کند.
+
++ یک پرش نمی‌تواند از داخل به خارج یک بلوک finally انجام شود (مگر از طریق throw).
+
+#### دستور break
+دستور break اجرای بدنه یک تکرار یا دستور سوئیچ را به پایان می‌رساند:
+
+```C#
+
+int x = 0;
+while (true)
+{
+  if (x++ > 5)
+    break;      // از حلقه خارج می‌شود
+}
+
+// اجرا بعد از break در اینجا ادامه می‌یابد
+...
+```
+### دستور continue
+دستور continue از دستورات باقی‌مانده در یک حلقه صرف‌نظر می‌کند و یک شروع زودهنگام بر روی تکرار بعدی دارد. حلقه زیر اعداد زوج را رد می‌کند:
+
+```C#
+
+for (int i = 0; i < 10; i++)
+{
+  if ((i % 2) == 0)       // اگر i زوج باشد،
+    continue;             // با تکرار بعدی ادامه می‌دهد
+  Console.Write (i + " ");
+}
+```
+خروجی: 1 3 5 7 9
+
+### دستور goto
+دستور goto اجرا را به یک برچسب دیگر در یک بلوک دستور منتقل می‌کند. فرم آن به صورت زیر است:
+
+```C#
+
+goto statement-label;
+```
+یا، زمانی که در یک دستور سوئیچ استفاده می‌شود:
+
+```C#
+
+goto case case-constant;    // (فقط با constants کار می‌کند، نه patterns)
+```
+
+یک برچسب (label) یک جایگزین در یک بلوک کد است که قبل از یک دستور قرار می‌گیرد، و با یک پسوند دو نقطه مشخص می‌شود. کد زیر اعداد ۱ تا ۵ را تکرار می‌کند، که تقلیدی از یک حلقه for است:
+
+```C#
+
+int i = 1;
+startLoop:
+if (i <= 5)
+{
+  Console.Write (i + " ");
+  i++;
+  goto startLoop;
+}
+```
+خروجی: 1 2 3 4 5
+
+goto case case-constant اجرا را به یک case دیگر در یک بلوک switch منتقل می‌کند (به "The switch statement" در صفحه ۸۸ مراجعه کنید).
+
+#### دستور return
+دستور return از متد خارج می‌شود و اگر متد nonvoid باشد، باید یک عبارت از نوع بازگشتی متد را برگرداند:
+
+```C#
+
+decimal AsPercentage (decimal d)
+{
+  decimal p = d * 100m;
+  return p;             // با مقدار به متد فراخواننده برمی‌گردد
+}
+```
+یک دستور return می‌تواند در هر جایی در یک متد (به جز در یک بلوک finally) ظاهر شود، و می‌تواند بیش از یک بار استفاده شود.
+
+#### دستور throw
+دستور throw یک استثنا را پرتاب می‌کند تا نشان دهد خطایی رخ داده است (به "try Statements and Exceptions" در صفحه ۱۹۵ مراجعه کنید):
+
+```C#
+
+if (w == null)
+  throw new ArgumentNullException (...);
+```
+### دستورات متفرقه (Miscellaneous Statements)
+دستور using: یک نحو زیبا برای فراخوانی Dispose بر روی اشیایی که IDisposable را پیاده‌سازی می‌کنند، در یک بلوک finally فراهم می‌کند (به "try Statements and Exceptions" در صفحه ۱۹۵ و "IDisposable, Dispose, and Close" در صفحه ۵۸۱ مراجعه کنید).
+
+C# کلمه کلیدی using را برای داشتن معانی مستقل در زمینه‌های مختلف overload می‌کند. به طور خاص، دستورالعمل using با دستور using متفاوت است.
+
+دستور lock: یک میانبر برای فراخوانی متدهای Enter و Exit از کلاس Monitor است (به فصل‌های ۱۴ و ۲۳ مراجعه کنید).
+
+## فضاهای نام (Namespaces)
+یک فضای نام (namespace) یک دامنه برای نام‌گذاری انواع (type names) است. انواع معمولاً در فضاهای نام سلسله‌مراتبی سازماندهی می‌شوند، که پیدا کردن آن‌ها را آسان‌تر کرده و از تداخل نام‌ها جلوگیری می‌کند. برای مثال، نوع RSA که رمزگذاری کلید عمومی را مدیریت می‌کند، در فضای نام زیر تعریف شده است:
+```
+System.Security.Cryptography
+```
+فضای نام بخش جدایی‌ناپذیری از نام یک نوع را تشکیل می‌دهد. کد زیر متد Create از RSA را فراخوانی می‌کند:
+
+```C#
+
+System.Security.Cryptography.RSA rsa =
+ System.Security.Cryptography.RSA.Create();
+```
+فضاهای نام مستقل از Assemblies هستند، که فایل‌های dll. به عنوان واحدهای استقرار (deployment) عمل می‌کنند (در فصل ۱۷ توضیح داده شده‌اند). فضاهای نام همچنین هیچ تأثیری بر قابلیت مشاهده اعضا (member visibility)—public، internal، private و غیره—ندارند.
+
+کلمه کلیدی namespace یک فضای نام را برای انواع درون آن بلوک تعریف می‌کند:
+
+```C#
+
+namespace Outer.Middle.Inner
+{
+  class Class1 {}
+  class Class2 {}
+}
+```
+نقطه‌ها در فضای نام نشان‌دهنده یک سلسله‌مراتب از فضاهای نام تو در تو هستند. کد زیر از نظر معنایی با مثال قبلی یکسان است:
+
+```C#
+
+namespace Outer
+{
+  namespace Middle
+  {
+    namespace Inner
+    {
+      class Class1 {}
+      class Class2 {}
+    }
+  }
+}
+```
+می‌توانید به یک نوع با نام کاملاً واجد شرایط (fully qualified name) آن ارجاع دهید، که شامل تمام فضاهای نام از بیرونی‌ترین تا درونی‌ترین است. برای مثال، می‌توانستیم به Class1 در مثال قبلی به صورت Outer.Middle.Inner.Class1 ارجاع دهیم.
+
+انواعی که در هیچ فضای نامی تعریف نشده‌اند، گفته می‌شود که در فضای نام سراسری (global namespace) قرار دارند. فضای نام سراسری همچنین شامل فضاهای نام سطح بالا (top-level namespaces)، مانند Outer در مثال ما است.
+
+
+### فضاهای نام محدود به فایل (File-Scoped Namespaces)
+اغلب می‌خواهید تمام انواع در یک فایل در یک فضای نام تعریف شوند:
+
+```C#
+
+namespace MyNamespace
+{
+  class Class1 {}
+  class Class2 {}
+}
+```
+از C# 10 به بعد، می‌توانید این کار را با یک فضای نام محدود به فایل انجام دهید:
+
+```C#
+
+namespace MyNamespace;  // اعمال می‌شود به هر چیزی که در فایل بعد از آن می‌آید.
+class Class1 {}         // داخل MyNamespace
+class Class2 {}         // داخل MyNamespace
+```
+فضاهای نام محدود به فایل از شلوغی کم می‌کنند و یک سطح غیرضروری از تورفتگی را از بین می‌برند.
+
+### دستور using (The using Directive)
+دستور using یک فضای نام را وارد (import) می‌کند و به شما اجازه می‌دهد بدون نام‌های کاملاً واجد شرایط به انواع ارجاع دهید. کد زیر فضای نام Outer.Middle.Inner مثال قبلی را وارد می‌کند:
+
+```C#
+
+using Outer.Middle.Inner;
+Class1 c;    // نیازی به نام کاملاً واجد شرایط نیست
+```
+تعریف نام‌های نوع یکسان در فضاهای نام مختلف قانونی (و اغلب مطلوب) است. با این حال، معمولاً این کار را تنها در صورتی انجام می‌دهید که بعید باشد یک مصرف‌کننده بخواهد هر دو فضای نام را به طور همزمان وارد کند. یک مثال خوب کلاس TextBox است که هم در System.Windows.Controls (WPF) و هم در System.Windows.Forms (Windows Forms) تعریف شده است.
+
+یک دستور using می‌تواند درون یک فضای نام تو در تو قرار گیرد تا دامنه (scope) دستور را محدود کند.
+
+### دستور global using
+از C# 10 به بعد، اگر پیشوند global را به یک دستور using اضافه کنید، آن دستور در تمام فایل‌های پروژه یا واحد کامپایل اعمال خواهد شد:
+
+```C#
+
+global using System;
+global using System.Collection.Generic;
+```
+این به شما امکان می‌دهد واردات رایج را متمرکز کنید و از تکرار دستورات یکسان در هر فایل جلوگیری کنید.
+
+دستورات global using باید قبل از دستورات غیرسراسری بیایند و نمی‌توانند درون اعلان‌های فضای نام ظاهر شوند. دستور global را می‌توان با using static نیز استفاده کرد.
+
+
+#### Implicit global usings
+از .NET 6، فایل‌های پروژه امکان استفاده از implicit global using directives را فراهم می‌کنند. اگر عنصر ImplicitUsings در فایل پروژه بر روی true تنظیم شود (که مقدار پیش‌فرض برای پروژه‌های جدید است)، فضاهای نام زیر به طور خودکار وارد می‌شوند:
+
+```System
+
+System.Collections.Generic
+
+System.IO
+
+System.Linq
+
+System.Net.Http
+
+System.Threading
+
+System.Threading.Tasks
+```
+
+فضاهای نام اضافی بر اساس SDK پروژه (Web, Windows Forms, WPF و غیره) وارد می‌شوند.
+
+#### using static
+دستور using static به جای یک فضای نام، یک نوع (type) را وارد می‌کند. سپس تمام اعضای static آن نوع وارد شده می‌توانند بدون نیاز به ذکر نام نوع استفاده شوند. در مثال زیر، ما متد static WriteLine از کلاس Console را بدون نیاز به ارجاع به نوع آن فراخوانی می‌کنیم:
+
+```C#
+
+using static System.Console;
+WriteLine ("Hello");
+```
+دستور using static تمام اعضای static قابل دسترسی یک نوع را وارد می‌کند، شامل فیلدها (fields)، ویژگی‌ها (properties) و انواع تو در تو (nested types) (فصل ۳). شما همچنین می‌توانید این دستور را بر روی انواع enum (فصل ۳) اعمال کنید، که در این صورت اعضای آن‌ها وارد می‌شوند. بنابراین، اگر نوع enum زیر را وارد کنیم:
+
+```C#
+
+using static System.Windows.Visibility;
+```
+می‌توانیم به جای Visibility.Hidden از Hidden استفاده کنیم:
+
+```C#
+
+var textBox = new TextBox { Visibility = Hidden };   // سبک XAML
+```
+اگر بین چندین واردات static ابهامی ایجاد شود، کامپایلر C# به اندازه‌ای هوشمند نیست که نوع صحیح را از متن استنباط کند و یک خطا تولید خواهد کرد.
+### قوانین در یک فضای نام (Rules Within a Namespace)
+#### محدوده‌بندی نام (Name scoping)
+نام‌هایی که در فضاهای نام بیرونی‌تر تعریف شده‌اند، می‌توانند بدون واجد شرایط بودن (unqualified) در فضاهای نام درونی‌تر استفاده شوند. در این مثال، Class1 در داخل Inner نیازی به واجد شرایط بودن ندارد:
+
+```C#
+
+namespace Outer
+{
+  class Class1 {}
+  namespace Inner
+  {
+    class Class2 : Class1  {}
+  }
+}
+```
+اگر می‌خواهید به یک نوع در یک شاخه متفاوت از سلسله‌مراتب فضای نام خود ارجاع دهید، می‌توانید از یک نام با شرایط جزئی (partially qualified name) استفاده کنید. در مثال زیر، ما SalesReport را بر اساس Common.ReportBase قرار می‌دهیم:
+
+```C#
+
+namespace MyTradingCompany
+{
+  namespace Common
+  {
+    class ReportBase {}
+  }
+  namespace ManagementReporting
+  {
+    class SalesReport : Common.ReportBase  {}
+  }
+}
+```
+#### پنهان‌سازی نام (Name hiding)
+اگر یک نام نوع مشابه در یک فضای نام درونی و بیرونی ظاهر شود، نام درونی اولویت دارد. برای ارجاع به نوع در فضای نام بیرونی، باید نام آن را واجد شرایط کنید:
+
+```C#
+
+namespace Outer
+{
+  class Foo { }
+  namespace Inner
+  {
+    class Foo { }
+    class Test
+    {
+      Foo f1;         // = Outer.Inner.Foo
+      Outer.Foo f2;   // = Outer.Foo
+    }
+  }
+}
+```
+تمام نام‌های نوع در زمان کامپایل به نام‌های کاملاً واجد شرایط تبدیل می‌شوند. کد زبان میانی (Intermediate Language - IL) حاوی نام‌های غیرواجد شرایط یا با شرایط جزئی نیست.
+
+#### فضاهای نام تکراری (Repeated namespaces)
+می‌توانید یک اعلان فضای نام را تکرار کنید، به شرطی که نام‌های نوع درون فضاهای نام با هم تداخل نداشته باشند:
+
+```C#
+
+namespace Outer.Middle.Inner
+{
+  class Class1 {}
+}
+namespace Outer.Middle.Inner
+{
+  class Class2 {}
+}
+```
+حتی می‌توانیم مثال را به دو فایل منبع تقسیم کنیم به طوری که بتوانیم هر کلاس را در یک assembly متفاوت کامپایل کنیم.
+
+فایل منبع ۱:
+
+C#
+
+namespace Outer.Middle.Inner
+{
+  class Class1 {}
+}
+فایل منبع ۲:
+
+C#
+
+namespace Outer.Middle.Inner
+{
+  class Class2 {}
+}
+#### دستورات using تو در تو (Nested using directives)
+می‌توانید یک دستور using را درون یک فضای نام قرار دهید. این به شما امکان می‌دهد تا دامنه (scope) دستور using را در یک اعلان فضای نام محدود کنید. در مثال زیر، Class1 در یک محدوده قابل مشاهده است اما در دیگری خیر:
+
+```C#
+
+namespace N1
+{
+  class Class1 {}
+}
+namespace N2
+{
+  using N1;
+  class Class2 : Class1 {}
+}
+namespace N2
+{
+  class Class3 : Class1 {}   // خطای زمان کامپایل
+}
+```
+### نام مستعار برای انواع و فضاهای نام (Aliasing Types and Namespaces)
+وارد کردن یک فضای نام می‌تواند منجر به تداخل نام نوع (type-name collision) شود. به جای وارد کردن کل فضای نام، می‌توانید فقط انواع خاصی را که نیاز دارید وارد کنید و به هر نوع یک نام مستعار (alias) بدهید:
+
+```C#
+
+using PropertyInfo2 = System.Reflection.PropertyInfo;
+class Program { PropertyInfo2 p; }
+```
+یک فضای نام کامل نیز می‌تواند به صورت زیر نام مستعار داشته باشد:
+
+```C#
+
+using R = System.Reflection;
+class Program { R.PropertyInfo p; }
+```
+#### نام مستعار برای هر نوع (Alias any type) (C# 12)
+از C# 12 به بعد، دستور using می‌تواند برای هر نوعی، از جمله آرایه‌ها، نام مستعار ایجاد کند:
+
+```C#
+
+using NumberList = double[];
+NumberList numbers = { 2.5, 3.5 };
+```
+همچنین می‌توانید برای تاپل‌ها نیز نام مستعار ایجاد کنید (ما این موضوع را در "Aliasing Tuples (C# 12)" در صفحه ۲۲۵ پوشش می‌دهیم).
+
+### ویژگی‌های پیشرفته فضای نام (Advanced Namespace Features)
+#### Extern
+نام‌های مستعار Extern به برنامه شما اجازه می‌دهند تا به دو نوع با نام کاملاً واجد شرایط یکسان ارجاع دهد (یعنی نام فضای نام و نام نوع یکسان هستند). این یک سناریوی غیرمعمول است و تنها زمانی رخ می‌دهد که دو نوع از assemblyهای متفاوت آمده باشند.
+
+مثال:
+
+کتابخانه ۱، کامپایل شده به Widgets1.dll:
+
+```C#
+
+namespace Widgets
+{
+  public class Widget {}
+}
+```
+کتابخانه ۲، کامپایل شده به Widgets2.dll:
+
+```C#
+
+namespace Widgets
+{
+  public class Widget {}
+}
+```
+برنامه، که به Widgets1.dll و Widgets2.dll ارجاع می‌دهد:
+
+```C#
+
+using Widgets;
+Widget w = new Widget(); // ابهام دارد
+```
+برنامه نمی‌تواند کامپایل شود زیرا Widget مبهم است. نام‌های مستعار Extern می‌توانند این ابهام را حل کنند. ابتدا باید فایل .csproj برنامه را اصلاح کرده و یک نام مستعار منحصر به فرد به هر ارجاع اختصاص دهید.
+
+سپس باید از دستور extern alias استفاده کنید:
+
+```C#
+
+extern alias W1;
+extern alias W2;
+W1.Widgets.Widget w1 = new W1.Widgets.Widget();
+W2.Widgets.Widget w2 = new W2.Widgets.Widget();
+```
+#### واجد شرایط کردن نام مستعار فضای نام (Namespace alias qualifiers)
+همانطور که قبلاً اشاره کردیم، نام‌ها در فضاهای نام درونی، نام‌ها در فضاهای نام بیرونی را پنهان می‌کنند. با این حال، گاهی اوقات حتی استفاده از یک نام نوع کاملاً واجد شرایط نیز تداخل را حل نمی‌کند.
+
+برای حل چنین تداخلاتی، می‌توان نام یک فضای نام را نسبت به یکی از موارد زیر واجد شرایط کرد:
+
+فضای نام سراسری (global namespace) — ریشه همه فضاهای نام (با کلمه کلیدی global مشخص می‌شود).
+
+مجموعه نام‌های مستعار extern.
+
+توکن :: واجد شرایط کردن نام مستعار فضای نام را انجام می‌دهد. در این مثال، ما با استفاده از فضای نام سراسری واجد شرایط می‌کنیم:
+
+```C#
+
+namespace N
+{
+  class A
+  {
+    static void Main()
+    {
+      System.Console.WriteLine (new A.B());          // ارجاع به کلاس تو در توی B
+      System.Console.WriteLine (new global::A.B());   // ارجاع به کلاس B در فضای نام A
+    }
+    public class B {}
+  }
+}
+namespace A
+{
+  class B {}
+}
+```
+در اینجا یک مثال از واجد شرایط کردن با یک نام مستعار آورده شده است (اقتباس شده از مثال "Extern"):
+
+```C#
+
+extern alias W1;
+extern alias W2;
+W1::Widgets.Widget w1 = new W1::Widgets.Widget();
+W2::Widgets.Widget w2 = new W2::Widgets.Widget();
 ```
