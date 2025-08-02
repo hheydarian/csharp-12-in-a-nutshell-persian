@@ -3223,3 +3223,212 @@ using static System.Windows.Visibility;
 var textBox = new TextBox { Visibility = Hidden };   // سبک XAML
 ```
 اگر بین چندین واردات static ابهامی ایجاد شود، کامپایلر C# به اندازه‌ای هوشمند نیست که نوع صحیح را از متن استنباط کند و یک خطا تولید خواهد کرد.
+### قوانین در یک فضای نام (Rules Within a Namespace)
+#### محدوده‌بندی نام (Name scoping)
+نام‌هایی که در فضاهای نام بیرونی‌تر تعریف شده‌اند، می‌توانند بدون واجد شرایط بودن (unqualified) در فضاهای نام درونی‌تر استفاده شوند. در این مثال، Class1 در داخل Inner نیازی به واجد شرایط بودن ندارد:
+
+```C#
+
+namespace Outer
+{
+  class Class1 {}
+  namespace Inner
+  {
+    class Class2 : Class1  {}
+  }
+}
+```
+اگر می‌خواهید به یک نوع در یک شاخه متفاوت از سلسله‌مراتب فضای نام خود ارجاع دهید، می‌توانید از یک نام با شرایط جزئی (partially qualified name) استفاده کنید. در مثال زیر، ما SalesReport را بر اساس Common.ReportBase قرار می‌دهیم:
+
+```C#
+
+namespace MyTradingCompany
+{
+  namespace Common
+  {
+    class ReportBase {}
+  }
+  namespace ManagementReporting
+  {
+    class SalesReport : Common.ReportBase  {}
+  }
+}
+```
+#### پنهان‌سازی نام (Name hiding)
+اگر یک نام نوع مشابه در یک فضای نام درونی و بیرونی ظاهر شود، نام درونی اولویت دارد. برای ارجاع به نوع در فضای نام بیرونی، باید نام آن را واجد شرایط کنید:
+
+```C#
+
+namespace Outer
+{
+  class Foo { }
+  namespace Inner
+  {
+    class Foo { }
+    class Test
+    {
+      Foo f1;         // = Outer.Inner.Foo
+      Outer.Foo f2;   // = Outer.Foo
+    }
+  }
+}
+```
+تمام نام‌های نوع در زمان کامپایل به نام‌های کاملاً واجد شرایط تبدیل می‌شوند. کد زبان میانی (Intermediate Language - IL) حاوی نام‌های غیرواجد شرایط یا با شرایط جزئی نیست.
+
+#### فضاهای نام تکراری (Repeated namespaces)
+می‌توانید یک اعلان فضای نام را تکرار کنید، به شرطی که نام‌های نوع درون فضاهای نام با هم تداخل نداشته باشند:
+
+```C#
+
+namespace Outer.Middle.Inner
+{
+  class Class1 {}
+}
+namespace Outer.Middle.Inner
+{
+  class Class2 {}
+}
+```
+حتی می‌توانیم مثال را به دو فایل منبع تقسیم کنیم به طوری که بتوانیم هر کلاس را در یک assembly متفاوت کامپایل کنیم.
+
+فایل منبع ۱:
+
+C#
+
+namespace Outer.Middle.Inner
+{
+  class Class1 {}
+}
+فایل منبع ۲:
+
+C#
+
+namespace Outer.Middle.Inner
+{
+  class Class2 {}
+}
+#### دستورات using تو در تو (Nested using directives)
+می‌توانید یک دستور using را درون یک فضای نام قرار دهید. این به شما امکان می‌دهد تا دامنه (scope) دستور using را در یک اعلان فضای نام محدود کنید. در مثال زیر، Class1 در یک محدوده قابل مشاهده است اما در دیگری خیر:
+
+```C#
+
+namespace N1
+{
+  class Class1 {}
+}
+namespace N2
+{
+  using N1;
+  class Class2 : Class1 {}
+}
+namespace N2
+{
+  class Class3 : Class1 {}   // خطای زمان کامپایل
+}
+```
+### نام مستعار برای انواع و فضاهای نام (Aliasing Types and Namespaces)
+وارد کردن یک فضای نام می‌تواند منجر به تداخل نام نوع (type-name collision) شود. به جای وارد کردن کل فضای نام، می‌توانید فقط انواع خاصی را که نیاز دارید وارد کنید و به هر نوع یک نام مستعار (alias) بدهید:
+
+```C#
+
+using PropertyInfo2 = System.Reflection.PropertyInfo;
+class Program { PropertyInfo2 p; }
+```
+یک فضای نام کامل نیز می‌تواند به صورت زیر نام مستعار داشته باشد:
+
+```C#
+
+using R = System.Reflection;
+class Program { R.PropertyInfo p; }
+```
+#### نام مستعار برای هر نوع (Alias any type) (C# 12)
+از C# 12 به بعد، دستور using می‌تواند برای هر نوعی، از جمله آرایه‌ها، نام مستعار ایجاد کند:
+
+```C#
+
+using NumberList = double[];
+NumberList numbers = { 2.5, 3.5 };
+```
+همچنین می‌توانید برای تاپل‌ها نیز نام مستعار ایجاد کنید (ما این موضوع را در "Aliasing Tuples (C# 12)" در صفحه ۲۲۵ پوشش می‌دهیم).
+
+### ویژگی‌های پیشرفته فضای نام (Advanced Namespace Features)
+#### Extern
+نام‌های مستعار Extern به برنامه شما اجازه می‌دهند تا به دو نوع با نام کاملاً واجد شرایط یکسان ارجاع دهد (یعنی نام فضای نام و نام نوع یکسان هستند). این یک سناریوی غیرمعمول است و تنها زمانی رخ می‌دهد که دو نوع از assemblyهای متفاوت آمده باشند.
+
+مثال:
+
+کتابخانه ۱، کامپایل شده به Widgets1.dll:
+
+```C#
+
+namespace Widgets
+{
+  public class Widget {}
+}
+```
+کتابخانه ۲، کامپایل شده به Widgets2.dll:
+
+```C#
+
+namespace Widgets
+{
+  public class Widget {}
+}
+```
+برنامه، که به Widgets1.dll و Widgets2.dll ارجاع می‌دهد:
+
+```C#
+
+using Widgets;
+Widget w = new Widget(); // ابهام دارد
+```
+برنامه نمی‌تواند کامپایل شود زیرا Widget مبهم است. نام‌های مستعار Extern می‌توانند این ابهام را حل کنند. ابتدا باید فایل .csproj برنامه را اصلاح کرده و یک نام مستعار منحصر به فرد به هر ارجاع اختصاص دهید.
+
+سپس باید از دستور extern alias استفاده کنید:
+
+```C#
+
+extern alias W1;
+extern alias W2;
+W1.Widgets.Widget w1 = new W1.Widgets.Widget();
+W2.Widgets.Widget w2 = new W2.Widgets.Widget();
+```
+#### واجد شرایط کردن نام مستعار فضای نام (Namespace alias qualifiers)
+همانطور که قبلاً اشاره کردیم، نام‌ها در فضاهای نام درونی، نام‌ها در فضاهای نام بیرونی را پنهان می‌کنند. با این حال، گاهی اوقات حتی استفاده از یک نام نوع کاملاً واجد شرایط نیز تداخل را حل نمی‌کند.
+
+برای حل چنین تداخلاتی، می‌توان نام یک فضای نام را نسبت به یکی از موارد زیر واجد شرایط کرد:
+
+فضای نام سراسری (global namespace) — ریشه همه فضاهای نام (با کلمه کلیدی global مشخص می‌شود).
+
+مجموعه نام‌های مستعار extern.
+
+توکن :: واجد شرایط کردن نام مستعار فضای نام را انجام می‌دهد. در این مثال، ما با استفاده از فضای نام سراسری واجد شرایط می‌کنیم:
+
+```C#
+
+namespace N
+{
+  class A
+  {
+    static void Main()
+    {
+      System.Console.WriteLine (new A.B());          // ارجاع به کلاس تو در توی B
+      System.Console.WriteLine (new global::A.B());   // ارجاع به کلاس B در فضای نام A
+    }
+    public class B {}
+  }
+}
+namespace A
+{
+  class B {}
+}
+```
+در اینجا یک مثال از واجد شرایط کردن با یک نام مستعار آورده شده است (اقتباس شده از مثال "Extern"):
+
+```C#
+
+extern alias W1;
+extern alias W2;
+W1::Widgets.Widget w1 = new W1::Widgets.Widget();
+W2::Widgets.Widget w2 = new W2::Widgets.Widget();
+```
