@@ -1,8 +1,7 @@
 # فصل سوم : ایجاد انواع نوع داده در سی شارپ
 
-<div align="left">
-    ![Conventions-UsedThis-Book](.\assets\image\03\ImageStartChapter3.png)
-</div>
+![Conventions-UsedThis-Book](assets/image/03/ImageStartChapter3.png)
+
 
 در این فصل ما به سمت بررسی کردن انواع  داده و  اعضای نوع میپردازیم 
 
