@@ -438,5 +438,6 @@ public class Broadcaster
 
 <div align="center">
     
-![Conventions-UsedThis-Book](../../assets/image/04/Table-2-1jpeg.png) 
+![Conventions-UsedThis-Book](../../assets/image/04/Table-2-1.jpeg) 
 </div>
+
