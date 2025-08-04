@@ -261,3 +261,177 @@ public static void Transform (T[] values, Func transformer)
 تنها سناریوهای عملی که توسط این دلیگیت‌ها پوشش داده نمی‌شوند، پارامترهای ref/out و اشاره‌گر هستند.
 
 هنگامی که C# برای اولین بار معرفی شد، دلیگیت‌های Func و Action وجود نداشتند (زیرا جنریک‌ها وجود نداشتند). به همین دلیل تاریخی است که بسیاری از بخش‌های .NET به جای Func و Action از انواع دلیگیت‌های سفارشی استفاده می‌کنند.
+
+### دلیگیت‌ها در برابر اینترفیس‌ها (Delegates Versus Interfaces)
+مشکلی که می‌توانید با یک دلیگیت حل کنید، با یک اینترفیس نیز قابل حل است. برای مثال، می‌توانیم مثال قبلی خود را با یک اینترفیس به نام ITransformer به جای دلیگیت بازنویسی کنیم:
+
+```C#
+
+int[] values = { 1, 2, 3 };
+Util.TransformAll (values, new Squarer());
+foreach (int i in values)
+  Console.WriteLine (i);
+
+public interface ITransformer
+{
+  int Transform (int x);
+}
+
+public class Util
+{
+  public static void TransformAll (int[] values, ITransformer t)
+  {
+    for (int i = 0; i < values.Length; i++)
+      values[i] = t.Transform (values[i]);
+  }
+}
+
+class Squarer : ITransformer
+{
+  public int Transform (int x) => x * x;
+}
+```
+طراحی با دلیگیت ممکن است انتخاب بهتری نسبت به طراحی با اینترفیس باشد اگر یک یا چند مورد از شرایط زیر درست باشد:
+
++ اینترفیس فقط یک متد را تعریف می‌کند.
+
++ قابلیت چندپخشی (multicast) مورد نیاز باشد.
+
++ subscriber نیاز داشته باشد اینترفیس را چندین بار پیاده‌سازی کند.
+
+در مثال ITransformer، ما نیازی به چندپخشی نداریم، اما اینترفیس فقط یک متد را تعریف می‌کند. علاوه بر این، ممکن است subscriber ما نیاز داشته باشد ITransformer را چندین بار پیاده‌سازی کند تا تبدیل‌های مختلفی مانند مربع یا مکعب را پشتیبانی کند. با اینترفیس‌ها، مجبوریم برای هر تبدیل یک نوع (type) جداگانه بنویسیم، زیرا یک کلاس فقط می‌تواند یک بار ITransformer را پیاده‌سازی کند. این کار نسبتاً دست و پا گیر است:
+
+```C#
+
+int[] values = { 1, 2, 3 };
+Util.TransformAll (values, new Cuber());
+foreach (int i in values)
+  Console.WriteLine (i);
+
+class Squarer : ITransformer
+{
+  public int Transform (int x) => x * x;
+}
+class Cuber : ITransformer
+{
+  public int Transform (int x) => x * x * x;
+}
+```
+### سازگاری دلیگیت (Delegate Compatibility)
+#### سازگاری نوع (Type compatibility)
+انواع دلیگیت‌ها حتی اگر امضای آن‌ها یکسان باشد، با یکدیگر ناسازگار هستند:
+
+```C#
+
+D1 d1 = Method1;
+D2 d2 = d1;                           // خطای زمان کامپایل
+
+void Method1() { }
+delegate void D1();
+delegate void D2();
+```
+با این حال، کد زیر مجاز است:
+```D2 d2 = new D2 (d1);
+```
+
+نمونه‌های دلیگیت زمانی برابر در نظر گرفته می‌شوند که متدهای هدف یکسانی داشته باشند:
+
+```C#
+
+D d1 = Method1;
+D d2 = Method1;
+Console.WriteLine (d1 == d2);         // True
+
+void Method1() { }
+delegate void D();
+```
+دلیگیت‌های چندپخشی نیز اگر به متدهای یکسان و به همان ترتیب ارجاع دهند، برابر در نظر گرفته می‌شوند.
+
+#### سازگاری پارامتر (Parameter compatibility)
+وقتی یک متد را فراخوانی می‌کنید، می‌توانید آرگومان‌هایی با انواع خاص‌تر از پارامترهای آن متد ارائه دهید. این رفتار عادی چندریختی (polymorphic) است. به همین دلیل، یک دلیگیت می‌تواند انواع پارامتر خاص‌تری نسبت به متد هدف خود داشته باشد. به این ویژگی Contravariance گفته می‌شود. در اینجا یک مثال آورده شده است:
+
+```C#
+
+StringAction sa = new StringAction (ActOnObject);
+sa ("hello"); // خروجی: hello
+
+void ActOnObject (object o) => Console.WriteLine (o);
+delegate void StringAction (string s);
+```
+یک دلیگیت به سادگی متدی را به نیابت از شخص دیگری فراخوانی می‌کند. در این حالت، StringAction با یک آرگومان از نوع string فراخوانی می‌شود. وقتی آرگومان به متد هدف ارسال می‌شود، به صورت ضمنی به object تبدیل می‌شود.
+
+الگوی استاندارد رویداد به شما کمک می‌کند از طریق استفاده از کلاس پایه مشترک EventArgs از contravariance بهره ببرید. برای مثال، می‌توانید یک متد واحد داشته باشید که توسط دو دلیگیت مختلف فراخوانی می‌شود، یکی MouseEventArgs و دیگری KeyEventArgs را ارسال می‌کند.
+
+#### سازگاری نوع بازگشتی (Return type compatibility)
+اگر یک متد را فراخوانی کنید، ممکن است نوعی را دریافت کنید که خاص‌تر از آن چیزی باشد که درخواست کرده‌اید. این نیز رفتار عادی چندریختی است. به همین دلیل، متد هدف یک دلیگیت ممکن است نوعی خاص‌تر از آنچه دلیگیت توضیح می‌دهد، برگرداند. به این ویژگی Covariance گفته می‌شود:
+
+```C#
+
+ObjectRetriever o = new ObjectRetriever (RetrieveString);
+object result = o();
+Console.WriteLine (result);      // خروجی: hello
+
+string RetrieveString() => "hello";
+delegate object ObjectRetriever();
+```
+ObjectRetriever انتظار دارد یک object برگردانده شود، اما یک زیرکلاس از object نیز کارساز است: انواع بازگشتی دلیگیت covariant هستند.
+
+#### واریانس پارامتر نوع دلیگیت جنریک (Generic delegate type parameter variance)
+در فصل ۳، دیدیم که چگونه اینترفیس‌های جنریک از پارامترهای نوع covariant و contravariant پشتیبانی می‌کنند. همین قابلیت برای دلیگیت‌ها نیز وجود دارد.
+
+اگر یک نوع دلیگیت جنریک تعریف می‌کنید، بهتر است:
+
++ یک پارامتر نوعی را که فقط در مقدار بازگشتی استفاده می‌شود، به عنوان covariant (out) علامت‌گذاری کنید.
+
++ هر پارامتر نوعی را که فقط در پارامترها استفاده می‌شود، به عنوان contravariant (in) علامت‌گذاری کنید.
+
+انجام این کار به تبدیل‌ها اجازه می‌دهد تا به طور طبیعی با رعایت روابط وراثت بین انواع کار کنند.
+
+دلیگیت زیر (تعریف‌شده در فضای نام System) دارای TResult از نوع covariant است:
+
+```C#
+
+delegate TResult Func();
+```
+این امر امکان‌پذیر است:
+```
+Func x = ...;
+Func y = x;
+```
+
+دلیگیت زیر (تعریف‌شده در فضای نام System) دارای T از نوع contravariant است:
+
+```C#
+
+delegate void Action (T arg);
+```
+این امر امکان‌پذیر است:
+```
+Action x = ...;
+Action y = x;
+```
+
+### رویدادها (Events)
+وقتی از دلیگیت‌ها استفاده می‌کنید، معمولاً دو نقش جدید پدیدار می‌شود: پخش‌کننده (broadcaster) و مشترک (subscriber).
+
+پخش‌کننده نوعی است که یک فیلد دلیگیت دارد. پخش‌کننده با فراخوانی دلیگیت، زمان پخش (broadcast) را تعیین می‌کند.
+
+مشترکین گیرندگان متد هدف هستند. یک مشترک با فراخوانی += و -= روی دلیگیت پخش‌کننده، تصمیم می‌گیرد چه زمانی به گوش دادن (listening) شروع یا پایان دهد. یک مشترک از وجود سایر مشترکین خبر ندارد و در کار آن‌ها دخالتی نمی‌کند.
+
+رویدادها (Events) یک ویژگی زبانی هستند که این الگو را رسمی می‌کنند. یک رویداد ساختاری است که فقط زیرمجموعه‌ای از ویژگی‌های دلیگیت را که برای مدل پخش‌کننده/مشترک لازم است، آشکار می‌کند. هدف اصلی رویدادها این است که از تداخل مشترکین با یکدیگر جلوگیری کنند.
+
+ساده‌ترین راه برای اعلان یک رویداد، قرار دادن کلمه کلیدی event قبل از یک عضو دلیگیت است:
+
+```C#
+
+// Delegate definition
+public delegate void PriceChangedHandler (decimal oldPrice,
+                                         decimal newPrice);
+
+public class Broadcaster
+{
+  // Event declaration
+  public event PriceChangedHandler PriceChanged;
+}
+```
+کد درون نوع Broadcaster دسترسی کامل به PriceChanged دارد و می‌تواند با آن به عنوان یک دلیگیت رفتار کند. اما کدی که در خارج از Broadcaster قرار دارد، تنها می‌تواند عملیات += و -= را روی رویداد PriceChanged انجام دهد.
