@@ -790,3 +790,269 @@ public void set_CurrentPrice (decimal value) {...}
 
 یک دسترسی‌ساز `init` مانند یک دسترسی‌ساز `set` پردازش می‌شود، اما با یک پرچم افزوده که در فرا داده‌های modreq دسترسی‌ساز set کدگذاری شده است.
 دسترسی‌سازهای ویژگی غیرمجازی (`nonvirtual`) و ساده، از راه گردآورنده‌ی `JIT (Just-In-Time) `درون‌خطی (`inlined`) می‌شوند، که هر دگرسانی کارایی میان دسترسی به یک ویژگی و یک فیلد را از بین می‌برد. درون‌خطی‌سازی (`Inlining`) یک بهینه‌سازی است که در آن یک فراخوانی متد با بدنه‌ی آن متد جایگزین می‌شود.
+
+
+### ایندکسرها (Indexers)
+
+ایندکسرها (Indexers) ساختاری نوشتاری (syntax) سر راست را برای دسترسی به اندام‌ها (elements) در یک کلاس (class) یا ساختار(struct) فراهم میکنند که یک فهرست (list) یا واژه‌نامه(dictionary) از ارزش‌ها را کپسوله سازی می کنند.
+ ایندکسرها مانند ویژگی‌ها هستند، اما از راه یک آرگومان اندیس (`index argument`) به جای یک نام ویژگی، به آن‌ها دسترسی پیدا می‌شود. کلاس `string` یک ایندکسر دارد که به شما پروانه می‌دهد به هر یک از ارزش‌های `char` آن از راه یک اندیس `int` دسترسی یابید:
+ ```Cs
+ string s = "hello";
+Console.WriteLine (s[0]); // 'h'
+Console.WriteLine (s[3]); // 'l'
+```
+
+ساختار نوشتاری برای بهره‌کیری از ایندکسرها ، ماننده  بهره‌گیری از آرایه‌ها است، با این دگرسانی که آرگومان(های) اندیس می‌تواند از هر گونه‌ای باشد.
+
+ایندکسرها همان پالایشگرهایی (modifiers) را دارند که ویژگی‌ها دارند و می‌توانند به گونه‌ای با پرسشگر (null-conditionally) فراخوانی شوند، با افزودن یک علامت پرسش پیش از براکت مربع:
+
+```Cs
+string s = null;
+Console.WriteLine (s?[0]); // چیزی نمی‌نویسد؛ کژکاری (error) ندارد.
+```
+
+#### پیاده‌سازی یک ایندکسر (Implementing an indexer)
+
+برای نوشتن یک ایندکسر، یک ویژگی با نام `this` شناسایی کنید و آرگومان‌ها را در براکت‌های مربع بگذارید:
+```Cs
+class Sentence
+{
+    string[] words = "The quick brown fox".Split();
+ 
+    public string this [int wordNum] // indexer
+ 
+    {
+ 
+        get { return words [wordNum]; }
+ 
+        set { words [wordNum] = value; }
+ 
+    }
+}
+
+```
+
+این هم چگونگی بهره‌گیری از این ایندکسر:
+```Cs
+Sentence s = new Sentence();
+Console.WriteLine (s[3]); // fox
+s[3] = "kangaroo";
+Console.WriteLine (s[3]); // kangaroo
+```
+
+یک گونه می‌تواند چندین ایندکسر را شناسایی کند که هر یک پارامترهایی از گونه‌های دگرسان دارند. یک ایندکسر همچنین می‌تواند بیش از یک پارامتر داشته باشد:
+
+```Cs
+public string this [int arg1, string arg2]
+{
+    get { ... } set { ... }
+}
+
+```
+
+اگر دسترسی ساز `set` را نادیده بگیرید ، یک ایندکسر خواندنی-تنها می شود و می توانید از ساختار نوشتاری بیان-پیکر(expression-bodied syntax) برای کوتاه‌تر کردن شناسایی آن بهره ببرید:
+
+```Cs
+public string this [int wordNum] => words [wordNum];
+```
+
+#### پیاده‌سازی ایندکسر CLR (CLR indexer implementation)
+
+ایندکسر ها به گونه‌ی درونی به متدهایی با نام های `get Item` و `set Item` به گونه‌ی زیر گردآوری می شوند:
+
+```Cs
+public string get_Item (int wordNum) {...}
+public void set_Item (int wordNum, string value) {...}
+```
+
+#### بهره‌گیری از اندیس‌ها و بازه‌ها با ایندکسرها (Using indices and ranges with indexers)
+
+شما میتوانید با شناسایی یک ایندکسر با یک گونه‌ی پارامتری از `Index` یا `Range` از اندیس ها و بازه ها در کلاس های خود پشتیبانی کنید.
+ما میتوانیم نمونه‌ی پیشین خود را با افزودن این ایندکسرها به کلاس `Sentence` گسترش بدیم:
+```Cs
+public string this [Index index] => words [index];
+public string[] this [Range range] => words [range];
+```
+این کار ، نمونه‌ی زیر پروانه می دهد:
+```Cs
+Sentence s = new Sentence();
+Console.WriteLine (s [^1]); // fox 
+string[] firstTwoWords = s [..2]; // (The, quick)
+
+```
+> **پی نوشت مترجم**
+> شاید کمی این بخش گیج کننده باشد یک نمونه خوب برای بهتر فهمیدن این ایندکسر ها :
+> ```Cs
+> public class MyDictionary
+> {
+>     private Dictionary<string, string> internalData = new Dictionary<string, string>();
+> 
+>     public string this[string key]
+>     {
+>         get { return internalData[key]; }
+>         set { internalData[key] = value; }
+>     }
+> }
+> ```
+> و به این صورت میتوانیم از آن استفاده کنیم :
+> ```Cs
+> var myDict = new MyDictionary();
+> myDict["سی شارپ"] = "یک زبان برنامه‌نویسی است";
+> Console.WriteLine(myDict["سی شارپ"]);
+> ```
+> در اصل ایندکسر ها یک ابزار قدرتمند و قوی هستند که به ما این اجازه رو میدهند که یک کلاس یا > ساختار را مانند  یک آرایه یا واژه‌نامه(دیکشنری) با آن رفتار کنیم
+>  به جای فراخوانی یک متد یا ویژگی برای دسترسی به اندام‌های درونی، می‌توانیم از نگارش [] بهره بگیریم.
+
+
+### سازنده‌های اصلی (Primary Constructors) (C# 12)
+
+از سی شارپ 12 ، شما میتوانید یک فهرست پارامتری را درست پس از شناسایی کلاس (یا ساختار) بگذارید:
+```Cs
+class Person (string firstName, string lastName)
+{
+    public void Print() => Console.WriteLine (firstName + " " + lastName);
+}
+```
+
+این کار به گردآورنده (compiler) دستور می‌دهد  تا به گونه‌ی خودکار یک سازنده‌ی اصلی(primary constructor) را با بهره گیری از پارامترهای سازنده اصلی (`lastName` و `firstName`) بسازد تا ما بتوانیم کلاس خود را به گونه‌ی زیر نمونه سازی کنیم :
+```Cs
+Person p = new Person ("Alice", "Jones");
+p.Print(); // Alice Jones
+```
+
+سازنده‌های اصلی برای نمونه سازی (prototyping) و دیگر سناریو های ساده سودمند هستند.
+راه جایگزین این بود که فیلدها را شناسایی کرده و یک سازنده را به گونه‌ی آشکار بنویسیم :
+```Cs
+class Person // (بدون سازنده‌های اصلی)
+{
+    string firstName, lastName; // شناسایی فیلد
+    public Person (string firstName, string lastName) // سازنده
+    {
+        this.firstName = firstName; // سپردن فیلد
+        this.lastName = lastName; // سپردن فیلد
+    }
+    public void Print() => Console.WriteLine (firstName + " " + lastName);
+}
+```
+
+سازنده‌ای که سیش ارپ می سازد ، اصلی خوانده میشود ، چرا که هر سازنده‌ی دیگری که شما به گونه‌ی آشکار بنویسید، باید آن را فراخوانی کند : 
+```Cs
+class Person (string firstName, string lastName)
+{
+    public Person (string firstName, string lastName, int age)
+    : this (firstName, lastName) // باید سازنده‌ی اصلی را فراخوانی کند
+    {
+        // ...
+    }
+}
+
+```
+این کار تضمین می کند که پارامتر های سازنده اصلی همیشه پر می شوند.
+
+> سی‌شارپ همچنین از رکوردها (**records**) پشتیبانی می‌کند. رکوردها نیز از سازنده‌های اصلی پشتیبانی می‌کنند؛ با این همه، گردآورنده یک گام افزوده با رکوردها برمی‌دارد و (به گونه‌ی پیش‌فرض) یک ویژگی **تنها-آغازگر** (**init-only**) همگانی برای هر پارامتر سازنده‌ی اصلی پدید می‌آورد. اگر این رفتار، دلخواه است، بهتر است به جای آن از رکوردها بهره ببرید.
+
+سازنده های اصلی به دلیل محدودیت های زیر ، برای سناریو های ساده مناسب تر هستن :
+
+- شما نمی توانید کد آغازگری افزوده به یک سازنده‌ی اصلی بیفزایید.
+
+- اگرچه نشان دادن یک پارامتر سازنده‌ی اصلی به عنوان یک ویژگی همگانی ساده است، شما نمی‌توانید  به آسانی کارکرد (logic) پایش را در آن بگنجانید، مگر این که ویژگی خواندنی-تنها باشد.
+ 
+
+سازنده های اصلی جایگزین سازنده‌ی بدون پارامتر پیش‌فرض می شوند که سی شارپ در غیر این صورت پدید می آورد.
+
+#### معنی‌شناسی سازنده‌ی اصلی (Primary constructor semantics)
+برای درک این سازنده های اصلی چگونه کار میکنند ، ببنید که یک سازنده‌ی معمولی چگونه رفتار میکند :
+```Cs
+class Person
+{
+    public Person (string firstName, string lastName)
+    {
+        // ... do something with firstName, lastName
+    }
+}
+```
+
+زمانی که کد درون این سازنده به پایان میرسد ، پارامترهای `lastName` , `firstName` از دامنه(scope) بیرون می روند و نمی توان به آن‌ها دسترسی پیدا کرد. 
+در برابر ، پارامتر های یک سازنده‌ی اصلی از دامنه بیرون نمی‌روند و می توان از هر جایی در کلاس، در سراسر زندگی شیء به آن‌ها دسترسی یافت.
+
+- پارامتر های سازنده‌ی اصلی، سازه های ویژه‌ی سی شارپ هستند، نه فیلدها، گرچه گردآورنده (Compiler) در پس پرده، فیلدهای پنهانی را پدید می آورد تا ارزش های آن‌ها را در صورت نیاز ، نگه دارد.
+
+### سازنده‌های اصلی و آغازگرهای فیلد/ویژگی (Primary constructors and field/property initializers)
+
+دسترسی پذیری پارامترهای سازنده‌ی اصلی به آغازگرهای فیلد و ویژگی نیز گسترده می‌یاد. در نمونه‌ی زیر، ما از آغازگرهای فیلد و ویژگی بهره می بریم تا `firstName` را به یک فیلد همگانی و `lastName` را به یک ویژگی همگانی بسپاریم : 
+```Cs
+class Person (string firstName, string lastName)
+{
+    public readonly string FirstName = firstName; // فیلد
+    public string LastName { get; } = lastName; // ویژگی
+}
+```
+
+### پوشاندن پارامترهای سازنده‌ی اصلی (Masking primary constructor parameters)
+
+فیلدها(یا ویژگی ها) می توانند نام پارامترهای سازنده‌ی اصلی را دوباره به کار ببرند:
+```Cs
+class Person (string firstName, string lastName)
+{
+    readonly string firstName = firstName;
+    readonly string lastName = lastName;
+    public void Print() => Console.WriteLine (firstName + " " + lastName);
+}
+```
+در این سناریو، فیلد یا ویژگی برتری دارد و پارامتر سازنده‌ی اصلی را می پوشاند، مگر در سمت راست آغازگرهای فیلد و ویژگی.
+
+- درست مانند پارامترهای معمولی، پارامترهای سازنده‌ی اصلی نیز نوشتنی هستند. پوشاندن آن‌ها با یک فیلد خواندنی-تنهای همنام (همانند نمونه‌ی ما) به گونه‌ای کارآمد از دگرگونی آن‌ها در آینده پاسداری می‌کند.
+
+### پایش پارامترهای سازنده‌ی اصلی (Validating primary constructor parameters)
+گاهی اوقات سودمند است که در  آغازگرهای (Initializer آغازگر) فیلد، یک حسابگری(computation) را انجام دهیم : 
+```Cs
+new Person ("Alice", "Jones").Print(); // Alice Jones
+class Person (string firstName, string lastName)
+{
+    public readonly string FullName = firstName + " " + lastName;
+    public void Print() => Console.WriteLine (FullName);
+}
+```
+در نمونه‌ی بعدی ، ما یک نسخه بزرگ-حرف(حروف بزرگ) از lastName را به یک فیلد همنام میسپاریم(و ارزش پیشین را می پوشانیم):
+```cs
+new Person ("Alice", "Jones").Print(); // Alice JONES
+class Person (string firstName, string lastName)
+{
+    readonly string lastName = lastName.ToUpper();
+    public void Print() => Console.WriteLine (firstName + " " + lastName);
+}
+```
+
+در آینده خواهیم گفت که چگونه کژکاری‌ها(Exception) را پرتاب کنیم.
+این هم یک پیش نمونه برای نشان دادن این که چگونه می توان از این کار با سازنده‌های اصلی بهره بدر تا `lastName` را در زامن ساخت، پایش کنیم و مطمئن شویم که `null` نیست :
+```Cs
+new Person ("Alice", null); // throws ArgumentNullException
+class Person (string firstName, string lastName)
+{
+    readonly string lastName = (lastName == null)
+    ? throw new ArgumentNullException ("lastName")
+    : lastName;
+}
+
+```
+
+> (به یاد داشته باشید که کد درون یک آغازگر فیلد یا ویژگی زمانی اجرا می‌شود که شیء ساخته می‌شود، نه زمانی که به فیلد یا ویژگی دسترسی می‌یابند.)
+
+
+در نمونه‌ی بعدی، ما یک پارامتر سازنده‌ی اصلی را به عنوان یک ویژگی خواندنی/نوشتنی نشان می‌دهیم:
+```Cs
+class Person (string firstName, string lastName)
+{
+    public string LastName { get; set; } = lastName;
+}
+```
+
+افزودن پایش به این نمونه سرراست نیست، چرا که شما باید در دو جا آن را پایش کنید : 
+در یک دسترسی‌ساز `set` ویژگی (که به گونه‌ی دستی پیاده سازی شده است) و در آغازگر ویژگی در این هنگام، بهتر است از میان‌بر سازنده‌های اصلی بگذریم و یک سازنده و فیلدهای پشتیبان را به گونه‌ی آشکار شناسایی کنیم.
+
+
+
+
+
+
+
