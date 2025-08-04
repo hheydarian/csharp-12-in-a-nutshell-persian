@@ -3293,7 +3293,7 @@ namespace Outer.Middle.Inner
 
 فایل منبع ۱:
 
-C#
+```C#
 
 namespace Outer.Middle.Inner
 {
@@ -3307,6 +3307,7 @@ namespace Outer.Middle.Inner
 {
   class Class2 {}
 }
+```
 #### دستورات using تو در تو (Nested using directives)
 می‌توانید یک دستور using را درون یک فضای نام قرار دهید. این به شما امکان می‌دهد تا دامنه (scope) دستور using را در یک اعلان فضای نام محدود کنید. در مثال زیر، Class1 در یک محدوده قابل مشاهده است اما در دیگری خیر:
 

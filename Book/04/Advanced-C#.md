@@ -435,3 +435,8 @@ public class Broadcaster
 }
 ```
 کد درون نوع Broadcaster دسترسی کامل به PriceChanged دارد و می‌تواند با آن به عنوان یک دلیگیت رفتار کند. اما کدی که در خارج از Broadcaster قرار دارد، تنها می‌تواند عملیات += و -= را روی رویداد PriceChanged انجام دهد.
+
+<div align="center">
+    
+![Conventions-UsedThis-Book](../../assets/image/04/Table-2-1jpeg.png) 
+</div>
