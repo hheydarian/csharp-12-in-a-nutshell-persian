@@ -33,7 +33,7 @@ class YourClassName{
 ```Cs
 class Octopus{
     string name;
-    public int age = 10;ب
+    public int age = 10;
 }
 ```
 
