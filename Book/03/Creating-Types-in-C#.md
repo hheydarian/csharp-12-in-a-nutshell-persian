@@ -1241,5 +1241,49 @@ string name = nameof (StringBuilder.Length);
 nameof (StringBuilder) + "." + nameof (StringBuilder.Length);
 ```
 
+## ارث‌بری (Inheritance)
+
+یک کلاس می تواند از کلاس دیگری ارث‌بری کند تا کلاس اصلی را گسترش(extend) یا سفارشسی سازی(customize) کند.
+ارث بری از یک کلاس به شما پروانه می دهد تا کارکرد (functionality ) آن کلاس را دوباره به کار ببرید.
+به ای اینکه آن را از پایه بسازید.
+یک کلاس می تواند تنها از یک کلاس ارث‌بری کند، اما خودش می تواند از سوی چندین کلاس ‌ارثبری شود.
+بدون گونه یک **سلسله مراتب کلاس (class hierarchy)** را پدید می‌آورد.
+در این نمونه ، ما با شناسایی یک کلاس به نام `Asset` آغاز میکنیم : 
+```Cs
+public class Asset{
+    public string Name;
+}
+```
+سپس، کلاس هایی به نام `Stock` و `House` را شناسایی می کنیم که از `Asset` ارث‌بری خواهند کرد.
+`Stock` و `House` هر آنچه در `Asset` دارد را به دست می آورند.
+به همراه هر عضو (member) افزوده‌ای که خود شناسایی میکنند:
+```Cs
+public class Stock : Asset // از Asset ارث‌بری می‌کند
+{
+    public long SharesOwned;
+}
+public class House : Asset // از Asset ارث‌بری می‌کند
+{
+    public decimal Mortgage;
+}
+```
+این هم چگونگی بهره‌گیری از این کلاس‌ها :
+```Cs
+Stock msft = new Stock { Name="MSFT",
+SharesOwned=1000 };
+Console.WriteLine (msft.Name); // MSFT
+Console.WriteLine (msft.SharesOwned); // 1000
+
+House mansion = new House { Name="Mansion",
+ Mortgage=250000 };
+Console.WriteLine (mansion.Name); // Mansion
+Console.WriteLine (mansion.Mortgage); // 250000
+```
+
+کلاس‌های مشتق‌شده (derived classes)، `Stock` و `House،` فیلد `Name` را از کلاس پایه (base class)، `Asset`، ارث‌بری می‌کنند.
+یک کلاس مشتق‌شده، زیرکلاس (`subclass`) نیز خوانده می‌شود.
+یک کلاس پایه، بالاکلاس (`superclass`) نیز خوانده می‌شود.
+
+
 
 

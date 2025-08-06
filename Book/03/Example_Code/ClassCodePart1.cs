@@ -163,7 +163,7 @@ using System.Linq;
             Console.WriteLine($"First Name (field): {p1.FirstName}");
             Console.WriteLine($"Last Name (property): {p1.LastNameProperty}");
 
-            Person p2 = new Person("Hamed", "Csharp", 5);
+            Person p2 = new Person("Hamed", "Csharp", 20);
 
             Console.WriteLine("\n--- Deconstructors Examples ---");
             Point point = new Point(10, 20);
