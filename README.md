@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/hheydarian/csharp-12-in-a-nutshell-persian">
-    <img src="assets/image/Cover.jpg" alt="C# 12 in a Nutshell Book Cover" width="300"/>
+    <img src="assets/image/Cover.jpg" alt="C# 12 in a Nutshell Book Cover" width="400"/>
   </a>
 </p>
 
