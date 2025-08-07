@@ -1476,4 +1476,240 @@ public class House : Asset
 }
 ```
 به گونه‌ی پیش‌فرض، `Liability` (مسئولیت) یک `Asset` برابر با `0` است. یک `Stock` نیازی به ویژه‌سازی این رفتار ندارد. با این همه، `House` ویژگی `Liability` را برای بازگرداندن ارزش `Mortgage` ویژه‌سازی می‌کند:
+```Cs
+House mansion = new House { Name="McMansion", Mortgage=250000 };
+Asset a = mansion;
+Console.WriteLine (mansion.Liability); // 250000
+Console.WriteLine (a.Liability); // 250000
+```
+
+امضاها (signatures)، گونه‌های بازگشتی (return types)، و دسترسی‌پذیری متدهای مجازی و بازنویسی‌شده باید همسان باشند. یک متد بازنویسی‌شده می‌تواند پیاده‌سازی کلاس پایه‌ی خود را از راه کلیدواژه‌ی `base` فراخوانی کند.
+
+> فراخوانی متدهای مجازی از یک سازنده به گونه‌ی بالقوه پرخطر است، زیرا نویسندگان زیرکلاس‌ها 
+> زمانی که متد را بازنویسی می‌کنند، به احتمال زیاد نمی‌دانند که با یک شیء نیمه‌آغازگری‌شده 
+> (partially initialized) کار می‌کنند. به سخن دیگر، متد بازنویسی‌کننده ممکن است به متدها یا 
+> ویژگی‌هایی دسترسی پیدا کند که به فیلدهایی وابسته هستند که هنوز از سوی سازنده آغازگری نشده‌اند.
+
+**پی نوشت مترجم :**
+> درک بهتر میتونید به این کد ها نگاه کنید :
+> ```Cs
+> // کلاس پایه‌ Enemy
+> public class Enemy
+> {
+>    public string Name { get; set; }
+>
+>    // متد Attack را به صورت مجازی تعریف می‌کنیم
+>    public virtual void Attack()
+>    {
+>        Console.WriteLine($"{Name} is attacking with a generic method.");
+>    }
+> }
+>
+>// زیرکلاس SwordEnemy
+>public class SwordEnemy : Enemy
+>{
+>    // این زیرکلاس، متد Attack را بازنویسی می‌کند
+>    public override void Attack()
+>    {
+>        Console.WriteLine($"{Name} is swinging a sword!");
+>    }
+>}
+>
+>// زیرکلاس MageEnemy
+>public class MageEnemy : Enemy
+>{
+>    // این زیرکلاس نیز متد Attack را بازنویسی می‌کند
+>    public override void Attack()
+>    {
+>        Console.WriteLine($"{Name} is casting a fireball spell!");
+>    }
+>}
+> ```
+> و استفاده : 
+>```Cs
+> Enemy[] enemies = new Enemy[3];
+> enemies[0] = new Enemy { Name = "Goblin" };
+>enemies[1] = new SwordEnemy { Name = "Knight" };
+>enemies[2] = new MageEnemy { Name = "Sorcerer" };
+>
+>foreach (Enemy enemy in enemies)
+>{
+>    enemy.Attack(); // اینجا چندریختی رخ می‌دهد.
+>}
+>```
+> خروجی : 
+> ```
+>Goblin is attacking with a generic method.
+>Knight is swinging a sword!
+>Sorcerer is casting a fireball spell!
+>```
+
+
+### گونه‌های بازگشتی هم‌ورد (Covariant return types)
+از سی شارپ 9 شما میتوانید یک متد (یا `get accessor` ویژگی) را بازنویسی کنید،
+به گونه‌ای که یک گونه‌ی مشتق شده‌تر(زیرکلاس) را بازگرداند. برای نمونه : 
+```Cs
+public class Asset
+{
+    public string Name;
+    public virtual Asset Clone() => new Asset { Name = Name };
+}
+
+public class House : Asset
+{
+    public decimal Mortgage;
+    public override House Clone() => new House
+    { Name = Name, Mortgage = Mortgage };
+}
+```
+این کار پروانه‌داده‌شده است، زیرا قراردادی که `Clone` باید یک `Asset` را بازگرداند، نمی‌شکند: این متد یک `House` را بازمی‌گرداند، که یک `Asset` (و بیشتر) است.
+
+پیش از سی‌شارپ 9، شما ناچار بودید متدها را با گونه‌ی بازگشتی همسان بازنویسی کنید:
+```Cs
+public override Asset Clone() => new House { ... }
+```
+
+این هم کار را انجام می‌دهد، چرا که متد `Clone` بازنویسی‌شده به جای یک `Asset،` یک `House` را 
+نمونه‌سازی می‌کند. با این همه، برای رفتار با شیء بازگشتی به عنوان یک `House،` باید یک 
+پایین-نوع‌ریزی (downcast) را انجام دهید:
+
+```Cs
+House mansion1 = new House { Name="McMansion", Mortgage=250000 };
+House mansion2 = (House) mansion1.Clone();
+```
+
+### کلاس‌های انتزاعی و اعضای انتزاعی (Abstract Classes and Abstract Members)
+یک کلاسی که به عنوان `abstract` اعلام شده باشد، هرگز نمی‌تواند نمونه‌سازی شود. در عوض، تنها زیرکلاس‌های بتنی (concrete subclasses) آن می‌توانند نمونه‌سازی شوند.
+
+کلاس‌های انتزاعی می‌توانند اعضای انتزاعی را شناسایی کنند. اعضای انتزاعی مانند اعضای مجازی 
+هستند، با این تفاوت که یک پیاده‌سازی پیش‌فرض را فراهم نمی‌کنند. آن پیاده‌سازی باید از سوی 
+زیرکلاس فراهم شود، مگر این که خود زیرکلاس نیز به عنوان `abstract` اعلام شده باشد:
+```Cs
+public abstract class Asset
+{
+    // به پیاده‌سازی تهی بنگرید
+    public abstract decimal NetValue { get; }
+}
+
+public class Stock : Asset
+{
+    public long SharesOwned;
+    public decimal CurrentPrice;
+
+    // مانند یک متد مجازی بازنویسی کنید.
+    public override decimal NetValue => CurrentPrice * SharesOwned;
+}
+```
+
+### پنهان‌سازی اعضای ارث‌برده‌شده (Hiding Inherited Members)
+یک کلاس پایه و یک زیرکلاس می‌توانند اعضای همسان را شناسایی کنند. برای نمونه:
+
+```Cs
+public class A { public int Counter = 1; }
+public class B : A { public int Counter = 2; }
+
+```
+گفته می‌شود که فیلد `Counter` در کلاس `B`، فیلد `Counter` در کلاس `A` را پنهان می‌کند. 
+معمولاً، این کار به گونه‌ی تصادفی رخ می‌دهد، هنگامی که یک عضو به گونه‌ی اصلی افزوده می‌شود 
+پس از آن که یک عضو همسان به گونه‌ی فرعی افزوده شده بود. به همین دلیل، گردآورنده یک هشدار 
+پدید می‌آورد و سپس ابهام را به گونه‌ی زیر حل می‌کند:
+
+- ارجاع‌ها به A (در زمان گردآوری) به A.Counter پیوند می‌یابند.
+
+- ارجاع‌ها به B (در زمان گردآوری) به B.Counter پیوند می‌یابند.
+
+گاهی اوقات، شما می‌خواهید عمداً یک عضو را پنهان کنید، که در این صورت می‌توانید پالایشگر 
+`new` را به عضو در زیرکلاس به کار ببرید. پالایشگر `new` کاری جز فرونشاندن هشدار گردآورنده که 
+در غیر این صورت پدید می‌آمد، انجام نمی‌دهد:
+```Cs
+public class A { public int Counter = 1; }
+public class B : A { public new int Counter = 2; }
+```
+
+پالایشگر `new` قصد شما را به گردآورنده — و به دیگر برنامه‌نویسان — می‌رساند که عضو کپی‌شده 
+یک اشتباه نیست.
+
+> سی‌شارپ کلیدواژه‌ی `new` را به گونه‌ای سنگین بارگذاری می‌کند که در زمینه‌های گوناگون، معانی 
+> مستقل دارد. به گونه‌ی ویژه، عملگر `new` از پالایشگر عضو `new` جدا است.
+
+
+#### new در برابر override
+سلسله‌مراتب کلاس زیر را در نظر بگیرید:
+```Cs
+public class BaseClass
+{
+    public virtual void Foo() { Console.WriteLine ("BaseClass.Foo"); }
+}
+
+public class Overrider : BaseClass
+{
+    public override void Foo() { Console.WriteLine ("Overrider.Foo"); }
+}
+
+public class Hider : BaseClass
+{
+    public new void Foo() { Console.WriteLine ("Hider.Foo"); }
+}
+```
+
+اختلاف در رفتار بین `Overrider` و `Hider` در کد زیر شنان داده شده است : 
+```Cs
+Overrider over = new Overrider();
+BaseClass b1 = over;
+over.Foo(); // Overrider.Foo
+b1.Foo(); // Overrider.Foo
+
+Hider h = new Hider();
+BaseClass b2 = h;
+h.Foo(); // Hider.Foo
+b2.Foo(); // BaseClass.Foo
+```
+
+### مهر و موم کردن توابع و کلاس‌ها (Sealing Functions and Classes)
+
+یک عضو تابع بازنویسی‌شده می‌تواند پیاده‌سازی خود را با کلیدواژه‌ی `sealed` مهر و موم کند تا 
+از بازنویسی آن از سوی زیرکلاس‌های بعدی پیشگیری کند. در نمونه‌ی پیشین ما از عضو تابع مجازی، 
+می‌توانستیم پیاده‌سازی `Liability` از `House` را مهر و موم کنیم و بدین گونه از بازنویسی 
+`Liability` از سوی کلاسی که از `House` مشتق می‌شود، پیشگیری کنیم:
+
+
+```Cs
+public sealed override decimal Liability { get { return Mortgage; } }
+```
+
+شما همچنین می‌توانید پالایشگر `sealed` را به خود کلاس به کار ببرید تا از زیرکلاس‌سازی 
+پیشگیری کنید. مهر و موم کردن یک کلاس رایج‌تر از مهر و موم کردن یک عضو تابع است.
+
+گرچه می‌توانید یک عضو تابع را در برابر بازنویسی مهر و موم کنید، نمی‌توانید یک عضو را در 
+برابر پنهان شدن مهر و موم کنید.
+
+
+### کلیدواژه‌ی base
+
+کلیدواژه‌ی `base` مانند کلیدواژه‌ی `this` است. دو هدف اساسی دارد:
+
+- دسترسی به یک عضو تابع بازنویسی‌شده از زیرکلاس
+
+- فراخوانی یک سازنده‌ی کلاس پایه
+
+در این نمونه، `House` از کلیدواژه‌ی `base` برای دسترسی به پیاده‌سازی `Liability` از `Asset` 
+بهره می‌برد:
+
+```Cs
+public class House : Asset
+{
+    // ...
+    public override decimal Liability => base.Liability + Mortgage;
+}
+```
+
+با کلیدواژه‌ی `base،` ما به ویژگی `Liability` از `Asset` به گونه‌ی غیرمجازی دسترسی پیدا 
+می‌کنیم. این بدان معناست که ما همیشه به نسخه‌ی `Asset` از این ویژگی دسترسی پیدا خواهیم کرد — 
+بی‌توجه به گونه‌ی واقعی نمونه در زمان اجرا.
+
+
+همین رویکرد اگر `Liability` پنهان (hidden) شده باشد تا این که بازنویسی شده باشد نیز کار 
+می‌کند. (شما همچنین می‌توانید با نوع‌ریزی به کلاس پایه پیش از فراخوانی تابع، به اعضای پنهان 
+دسترسی پیدا کنید.)
+
 
