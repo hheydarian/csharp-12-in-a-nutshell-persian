@@ -1450,3 +1450,30 @@ else
     s = new Stock(); // s در دامنه است
 Console.WriteLine (s.SharesOwned); // همچنان در دامنه است
 ```
+
+### اعضای تابع مجازی (Virtual Function Members)
+یک تابع که به عنوان `virtual` نشان‌گذاری شده باشد، می‌تواند از سوی زیرکلاس‌هایی که می‌خواهند یک پیاده‌سازی (implementation) ویژه‌شده (specialized) را فراهم کنند، بازنویسی (override) شود. متدها، ویژگی‌ها (properties)، ایندکسرها (indexers)، و رویدادها (events) همگی می‌توانند مجازی (virtual) اعلام شوند:
+```Cs
+public class Asset
+{
+    public string Name;
+    public virtual decimal Liability => 0; // ویژگی بیان-پیکر (Expression-bodied property)
+}
+```
+> ( `Liability => 0` یک میان‌بر برای `{ get { return 0; } }` است. )
+
+یک زیرکلاس، یک متد مجازی را با به کار بردن پالایشگر `override` بازنویسی می‌کند:
+```Cs
+public class Stock : Asset
+{
+    public long SharesOwned;
+}
+
+public class House : Asset
+{
+    public decimal Mortgage;
+    public override decimal Liability => Mortgage;
+}
+```
+به گونه‌ی پیش‌فرض، `Liability` (مسئولیت) یک `Asset` برابر با `0` است. یک `Stock` نیازی به ویژه‌سازی این رفتار ندارد. با این همه، `House` ویژگی `Liability` را برای بازگرداندن ارزش `Mortgage` ویژه‌سازی می‌کند:
+
