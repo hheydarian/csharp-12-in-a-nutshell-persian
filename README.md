@@ -84,6 +84,8 @@
 
 ---
 ## 🔗 فصل‌های کتاب (با لینک)
+<div align="center">
+  
 | شماره | نام فصل (انگلیسی)                         | نام فصل (فارسی)                            | وضعیت | لینک                                               |
 |-------|-------------------------------------------|---------------------------------------------|--------|----------------------------------------------------|
 | 00    | Preface                                   | مقدمه                                      | ✅     | [Preface](Book/00/Preface.md)                     |
@@ -112,6 +114,8 @@
 | 23    | Span<T> and Memory<T>                     | Span<T> و Memory<T>                          | ❌     | [SpanT-and-MemoryT](Book/23/SpanT-and-MemoryT.md)               |
 | 24    | Native and COM Interoperability           | ارتباط با کد بومی و COM                     | ❌     | [Native-and-COM-Interoperability](Book/24/Native-and-COM-Interoperability.md) |
 | 25    | Regular Expressions                       | عبارات باقاعده                              | ❌     | [Regular-Expressions](Book/25/Regular-Expressions.md)           |
+
+</div>
 
 🛑 قبل از شروع ترجمه یا تغییرات بزرگ، لطفاً یه [Issue](https://github.com/hheydarian/clean-code-in-csharp-persian/issues) باز کن یا با [hamdhydryan12@gmail.com](mailto:hamdhydryan12@gmail.com) در ارتباط باش.
 
