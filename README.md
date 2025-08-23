@@ -59,9 +59,9 @@
   <li><b>03 - Creating Types in C#:</b> ساخت انواع در سی‌شارپ (در حال ترجمه 🟡)</li>
   <li><b>04 - Advanced C#:</b> سی‌شارپ پیشرفته ( ترجمه شده ✅)</li>
   <li><b>05 - .NET Overview:</b> نمای کلی دات‌نت ( ترجمه شده ✅)</li>
-  <li><b>06 - .NET Fundamentals:</b> مبانی دات‌نت (در حال ترجمه 🟡)</li>
+  <li><b>06 - .NET Fundamentals:</b> مبانی دات‌نت ( ترجمه شده ✅)</li>
   <li><b>07 - Collections:</b> مجموعه‌ها (در حال ترجمه 🟡)</li>
-  <li><b>08 - LINQ Queries:</b> کوئری‌های LINQ (ترجمه نشده ❌)</li>
+  <li><b>08 - LINQ Queries:</b> کوئری‌های LINQ (در حال ترجمه 🟡)</li>
   <li><b>09 - LINQ Operators:</b> عملگرهای LINQ (ترجمه نشده ❌)</li>
   <li><b>10 - LINQ to XML:</b> LINQ به XML (ترجمه نشده ❌)</li>
   <li><b>11 - Other XML and JSON:</b> دیگر فرمت‌های XML و JSON (ترجمه نشده ❌)</li>
@@ -94,9 +94,9 @@
 | 03    | Creating Types in C#                      | ساخت انواع در سی‌شارپ                       | 🟡     | [Creating-Types-in-C#](Book/03/Creating-Types-in-C%23.md)       |
 | 04    | Advanced C#                               | سی‌شارپ پیشرفته                            | ✅     | [Advanced-C#](Book/04/Advanced-C%23.md)                         |
 | 05    | .NET Overview                             | نمای کلی دات‌نت                             | ✅     | [.NET-Overview](Book/05/.NET-Overview.md)                       |
-| 06    | .NET Fundamentals                         | مبانی دات‌نت                                | 🟡     | [.NET-Fundamentals](Book/06/.NET-Fundamentals.md)               |
+| 06    | .NET Fundamentals                         | مبانی دات‌نت                                | ✅     | [.NET-Fundamentals](Book/06/.NET-Fundamentals.md)               |
 | 07    | Collections                               | مجموعه‌ها                                   | 🟡     | [Collections](Book/07/Collections.md)                           |
-| 08    | LINQ Queries                              | کوئری‌های LINQ                              | ❌     | [LINQ-Queries](Book/08/LINQ-Queries.md)                         |
+| 08    | LINQ Queries                              | کوئری‌های LINQ                              | 🟡     | [LINQ-Queries](Book/08/LINQ-Queries.md)                         |
 | 09    | LINQ Operators                            | عملگرهای LINQ                               | ❌     | [LINQ-Operators](Book/09/LINQ-Operators.md)                     |
 | 10    | LINQ to XML                               | LINQ به XML                                 | ❌     | [LINQ-to-XML](Book/10/LINQ-to-XML.md)                           |
 | 11    | Other XML and JSON                        | دیگر فرمت‌های XML و JSON                    | ❌     | [Other-XML-and-JSON](Book/11/Other-XML-and-JSON.md)             |
