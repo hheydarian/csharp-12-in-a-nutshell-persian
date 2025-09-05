@@ -62,7 +62,7 @@
   <li><b>06 - .NET Fundamentals:</b> مبانی دات‌نت ( ترجمه شده ✅)</li>
   <li><b>07 - Collections:</b> مجموعه‌ها ( ترجمه شده ✅)</li>
   <li><b>08 - LINQ Queries:</b> کوئری‌های LINQ (ترجمه شده ✅)</li>
-  <li><b>09 - LINQ Operators:</b> عملگرهای LINQ (در حال ترجمه 🟡)</li>
+  <li><b>09 - LINQ Operators:</b> عملگرهای LINQ (ترجمه شده ✅)</li>
   <li><b>10 - LINQ to XML:</b> LINQ به XML (در حال ترجمه 🟡)</li>
   <li><b>11 - Other XML and JSON:</b> دیگر فرمت‌های XML و JSON (ترجمه نشده ❌)</li>
   <li><b>12 - Disposal and Garbage Collection:</b> حذف منابع و جمع‌آوری زباله (ترجمه نشده ❌)</li>
@@ -97,7 +97,7 @@
 | 06    | .NET Fundamentals                         | مبانی دات‌نت                                | ✅     | [.NET-Fundamentals](Book/06/.NET-Fundamentals.md)               |
 | 07    | Collections                               | مجموعه‌ها                                   | ✅     | [Collections](Book/07/Collections.md)                           |
 | 08    | LINQ Queries                              | کوئری‌های LINQ                              | ✅     | [LINQ-Queries](Book/08/LINQ-Queries.md)                         |
-| 09    | LINQ Operators                            | عملگرهای LINQ                               | 🟡     | [LINQ-Operators](Book/09/LINQ-Operators.md)                     |
+| 09    | LINQ Operators                            | عملگرهای LINQ                               | ✅     | [LINQ-Operators](Book/09/LINQ-Operators.md)                     |
 | 10    | LINQ to XML                               | LINQ به XML                                 | 🟡     | [LINQ-to-XML](Book/10/LINQ-to-XML.md)                           |
 | 11    | Other XML and JSON                        | دیگر فرمت‌های XML و JSON                    | ❌     | [Other-XML-and-JSON](Book/11/Other-XML-and-JSON.md)             |
 | 12    | Disposal and Garbage Collection           | حذف منابع و جمع‌آوری زباله                  | ❌     | [Disposal-and-Garbage-Collection](Book/12/Disposal-and-Garbage-Collection.md) |
