@@ -1602,3 +1602,40 @@ var node = JsonNode.Parse(@"{ ""Color"": ""Red"" }");
 var color = node["Color"];
 color.ReplaceWith("Blue");
 ```
+
+### ساخت DOM برای JsonNode به صورت برنامه‌نویسی 🏗️
+
+**JsonArray** و **JsonObject** سازندگانی دارند که از **object initialization syntax** پشتیبانی می‌کنند، و این امکان را می‌دهند که کل DOM یک **JsonNode** را در یک عبارت بسازید:
+
+```csharp
+var node = new JsonArray
+{
+    new JsonObject {
+        ["Name"] = "Tracy",
+        ["Age"] = 30,
+        ["Friends"] = new JsonArray("Lisa", "Joe")
+    },
+    new JsonObject {
+        ["Name"] = "Jordyn",
+        ["Age"] = 25,
+        ["Friends"] = new JsonArray("Tracy", "Li")
+    }
+};
+```
+
+نتیجه این ساختار، JSON زیر خواهد بود:
+
+```json
+[
+  {
+    "Name": "Tracy",
+    "Age": 30,
+    "Friends": ["Lisa", "Joe"]
+  },
+  {
+    "Name": "Jordyn",
+    "Age": 25,
+    "Friends": ["Tracy", "Li"]
+  }
+]
+```
