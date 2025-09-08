@@ -64,7 +64,7 @@
   <li><b>08 - LINQ Queries:</b> کوئری‌های LINQ (ترجمه شده ✅)</li>
   <li><b>09 - LINQ Operators:</b> عملگرهای LINQ (ترجمه شده ✅)</li>
   <li><b>10 - LINQ to XML:</b> LINQ به XML (ترجمه شده ✅)</li>
-  <li><b>11 - Other XML and JSON:</b> دیگر فرمت‌های XML و JSON (در حال ترجمه 🟡)</li>
+  <li><b>11 - Other XML and JSON:</b> دیگر فرمت‌های XML و JSON (ترجمه شده ✅)</li>
   <li><b>12 - Disposal and Garbage Collection:</b> حذف منابع و جمع‌آوری زباله (در حال ترجمه 🟡)</li>
   <li><b>13 - Diagnostics:</b> عیب‌یابی (ترجمه نشده ❌)</li>
   <li><b>14 - Concurrency and Asynchrony:</b> همزمانی و برنامه‌نویسی ناهمگام (ترجمه نشده ❌)</li>
@@ -99,7 +99,7 @@
 | 08    | LINQ Queries                              | کوئری‌های LINQ                              | ✅     | [LINQ-Queries](Book/08/LINQ-Queries.md)                         |
 | 09    | LINQ Operators                            | عملگرهای LINQ                               | ✅     | [LINQ-Operators](Book/09/LINQ-Operators.md)                     |
 | 10    | LINQ to XML                               | LINQ به XML                                 | ✅     | [LINQ-to-XML](Book/10/LINQ-to-XML.md)                           |
-| 11    | Other XML and JSON                        | دیگر فرمت‌های XML و JSON                    | 🟡     | [Other-XML-and-JSON](Book/11/Other-XML-and-JSON.md)             |
+| 11    | Other XML and JSON                        | دیگر فرمت‌های XML و JSON                    | ✅     | [Other-XML-and-JSON](Book/11/Other-XML-and-JSON.md)             |
 | 12    | Disposal and Garbage Collection           | حذف منابع و جمع‌آوری زباله                  | 🟡     | [Disposal-and-Garbage-Collection](Book/12/Disposal-and-Garbage-Collection.md) |
 | 13    | Diagnostics                               | عیب‌یابی                                     | ❌     | [Diagnostics](Book/13/Diagnostics.md)                           |
 | 14    | Concurrency and Asynchrony               | همزمانی و برنامه‌نویسی ناهمگام             | ❌     | [Concurrency-and-Asynchrony](Book/14/Concurrency-and-Asynchrony.md) |
