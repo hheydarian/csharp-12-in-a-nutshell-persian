@@ -2441,3 +2441,287 @@ var task = someWinRTobject.FooAsync().AsTask(cancelToken, progress);
 ```
 
 این روش به شما امکان می‌دهد تا از **رابط‌های COM پیچیده** صرف‌نظر کنید و به سادگی از **.NET API** برای لغو و گزارش پیشرفت استفاده نمایید.
+
+### الگوی غیرهمزمان مبتنی بر Task (Task-Based Asynchronous Pattern – TAP) ⚡
+
+در .NET صدها متد غیرهمزمان وجود دارد که **Task** یا **Task<TResult>** برمی‌گردانند و می‌توانید روی آن‌ها **await** کنید (بیشتر مربوط به عملیات I/O). بیشتر این متدها حداقل تا حدی از الگویی به نام **Task-Based Asynchronous Pattern (TAP)** پیروی می‌کنند که یک **ساختار منطقی و استاندارد** برای کار با Taskها ارائه می‌دهد. یک متد TAP معمولاً ویژگی‌های زیر را دارد:
+
+* برمی‌گرداند یک **Task یا Task<TResult> فعال (hot)**
+* نام آن با پسوند **Async** ختم می‌شود (به جز موارد خاص مثل task combinatorها)
+* در صورت پشتیبانی از لغو یا گزارش پیشرفت، **overload**هایی می‌پذیرد که **cancellation token** و/یا **IProgress<T>** را دریافت می‌کنند
+* سریع به فراخواننده بازمی‌گردد (فقط یک فاز همزمان کوتاه دارد)
+* اگر عملیات I/O محور باشد، یک Thread را درگیر نمی‌کند
+
+همان‌طور که دیدیم، نوشتن متدهای TAP با **async/await** در C# بسیار ساده است.
+
+---
+
+### ترکیب‌کننده‌های Task (Task Combinators) 🔗
+
+یکی از مزایای داشتن یک پروتکل یکنواخت برای متدهای غیرهمزمان این است که می‌توان **task combinator** نوشت و استفاده کرد—یعنی توابعی که چند Task را با هم ترکیب می‌کنند، بدون توجه به اینکه هر Task دقیقاً چه کاری انجام می‌دهد.
+
+CLR دو ترکیب‌کننده Task ارائه می‌دهد: **Task.WhenAny** و **Task.WhenAll**. برای توضیح آن‌ها، فرض می‌کنیم متدهای زیر تعریف شده‌اند:
+
+```csharp
+async Task<int> Delay1() { await Task.Delay(1000); return 1; }
+async Task<int> Delay2() { await Task.Delay(2000); return 2; }
+async Task<int> Delay3() { await Task.Delay(3000); return 3; }
+```
+
+---
+
+#### Task.WhenAny 🏁
+
+**Task.WhenAny** یک Task برمی‌گرداند که وقتی **هر یک از Taskها کامل شد**، تمام می‌شود. مثال زیر پس از ۱ ثانیه تکمیل می‌شود:
+
+```csharp
+Task<int> winningTask = await Task.WhenAny(Delay1(), Delay2(), Delay3());
+Console.WriteLine("Done");
+Console.WriteLine(winningTask.Result);   // 1
+```
+
+بهتر است **winningTask** را نیز await کنیم تا هرگونه Exception بدون AggregateException بازنشانی شود:
+
+```csharp
+Console.WriteLine(await winningTask);   // 1
+```
+
+می‌توان این را در یک خط هم نوشت:
+
+```csharp
+int answer = await await Task.WhenAny(Delay1(), Delay2(), Delay3());
+```
+
+**کاربرد:** اعمال **Timeout** یا لغو روی عملیاتی که پشتیبانی نمی‌کنند:
+
+```csharp
+Task<string> task = SomeAsyncFunc();
+Task winner = await Task.WhenAny(task, Task.Delay(5000));
+if (winner != task) throw new TimeoutException();
+string result = await task;   // بازکردن نتیجه و پرتاب مجدد
+```
+
+---
+
+#### Task.WhenAll 📦
+
+**Task.WhenAll** یک Task برمی‌گرداند که وقتی **تمام Taskها تکمیل شدند**، تمام می‌شود. مثال زیر پس از ۳ ثانیه تکمیل می‌شود و الگوی **fork/join** را نشان می‌دهد:
+
+```csharp
+await Task.WhenAll(Delay1(), Delay2(), Delay3());
+```
+
+تفاوت با await کردن Taskها یکی‌یکی این است که اگر task1 با خطا مواجه شود، دیگر task2 و task3 اجرا نمی‌شوند و Exceptionهای آن‌ها نادیده گرفته می‌شوند. اما **Task.WhenAll** منتظر می‌ماند تا همه Taskها تکمیل شوند و اگر چند خطا رخ دهد، همه Exceptionها در **AggregateException** ترکیب می‌شوند.
+
+استفاده از Task<TResult> با WhenAll نتیجه‌ای از نوع **Task\<TResult\[]>** برمی‌گرداند:
+
+```csharp
+Task<int> task1 = Task.Run(() => 1);
+Task<int> task2 = Task.Run(() => 2);
+int[] results = await Task.WhenAll(task1, task2);   // {1, 2}
+```
+
+**مثال عملی:** دانلود چند URI به صورت موازی و جمع طول کل محتوا:
+
+```csharp
+async Task<int> GetTotalSize(string[] uris)
+{
+    IEnumerable<Task<int>> downloadTasks = uris.Select(async uri =>
+        (await new WebClient().DownloadDataTaskAsync(uri)).Length);
+    int[] contentLengths = await Task.WhenAll(downloadTasks);
+    return contentLengths.Sum();
+}
+```
+
+---
+
+### ترکیب‌کننده‌های سفارشی 🛠️
+
+می‌توان ترکیب‌کننده Task خود را نوشت، مثلاً برای await کردن یک Task با **Timeout**:
+
+```csharp
+async static Task<TResult> WithTimeout<TResult>(this Task<TResult> task, TimeSpan timeout)
+{
+    var cancelSource = new CancellationTokenSource();
+    var delay = Task.Delay(timeout, cancelSource.Token);
+    Task winner = await Task.WhenAny(task, delay).ConfigureAwait(false);
+    if (winner == task)
+        cancelSource.Cancel();
+    else
+        throw new TimeoutException();
+    return await task.ConfigureAwait(false);   // بازکردن نتیجه و پرتاب مجدد
+}
+```
+
+همچنین می‌توان Task را با **CancellationToken** ترک کرد:
+
+```csharp
+static Task<TResult> WithCancellation<TResult>(this Task<TResult> task, CancellationToken cancelToken)
+{
+    var tcs = new TaskCompletionSource<TResult>();
+    var reg = cancelToken.Register(() => tcs.TrySetCanceled());
+    task.ContinueWith(ant => 
+    {
+        reg.Dispose();
+        if (ant.IsCanceled)
+            tcs.TrySetCanceled();
+        else if (ant.IsFaulted)
+            tcs.TrySetException(ant.Exception.InnerExceptions);
+        else
+            tcs.TrySetResult(ant.Result);
+    });
+    return tcs.Task;
+}
+```
+
+**مزیت:** پیچیدگی مربوط به concurrency از منطق اصلی برنامه جدا می‌شود و در متدهای قابل استفاده مجدد نگهداری می‌شود.
+
+---
+
+#### TaskCompletionSource و کنترل خطا
+
+می‌توان ترکیب‌کننده‌ای نوشت که شبیه **WhenAll** عمل کند، اما اگر هر Task خطا دهد، Task حاصل فوراً خطا کند:
+
+```csharp
+async Task<TResult[]> WhenAllOrError<TResult>(params Task<TResult>[] tasks)
+{
+    var killJoy = new TaskCompletionSource<TResult[]>();
+    foreach (var task in tasks)
+        task.ContinueWith(ant =>
+        {
+            if (ant.IsCanceled) 
+                killJoy.TrySetCanceled();
+            else if (ant.IsFaulted)
+                killJoy.TrySetException(ant.Exception.InnerExceptions);
+        });
+    return await await Task.WhenAny(killJoy.Task, Task.WhenAll(tasks))
+                           .ConfigureAwait(false);
+}
+```
+
+---
+
+### قفل غیرهمزمان (Asynchronous Locking) 🔒
+
+در بخش **Asynchronous semaphores and locks** (صفحه 906) توضیح داده‌ایم که چگونه می‌توان با **SemaphoreSlim** قفل یا محدودیت همزمانی را به صورت غیرهمزمان اعمال کرد.
+### الگوهای قدیمی غیرهمزمان (Obsolete Patterns) ⏳
+
+قبل از ظهور **Task** و **async/await**، در .NET روش‌های دیگری برای برنامه‌نویسی غیرهمزمان وجود داشت که امروزه به ندرت مورد نیاز هستند. دو الگوی مهم عبارت‌اند از **APM** و **EAP**.
+
+---
+
+## ۱. الگوی برنامه‌نویسی غیرهمزمان (Asynchronous Programming Model – APM) 🏛️
+
+APM قدیمی‌ترین الگو است و بر اساس **زوج متدهای Begin*/End*\*\* و **IAsyncResult** کار می‌کند.
+
+مثال با کلاس `Stream` در **System.IO**:
+
+* نسخه همزمان:
+
+```csharp
+public int Read(byte[] buffer, int offset, int size);
+```
+
+* نسخه غیرهمزمان مبتنی بر Task:
+
+```csharp
+public Task<int> ReadAsync(byte[] buffer, int offset, int size);
+```
+
+* نسخه APM:
+
+```csharp
+public IAsyncResult BeginRead(byte[] buffer, int offset, int size,
+                              AsyncCallback callback, object state);
+public int EndRead(IAsyncResult asyncResult);
+```
+
+**نحوه کار:**
+
+1. فراخوانی `BeginRead` عملیات را شروع می‌کند و یک **IAsyncResult** برمی‌گرداند که مانند یک **توکن** عمل می‌کند.
+2. وقتی عملیات تکمیل شد یا خطا داد، **AsyncCallback** فراخوانی می‌شود.
+3. در callback، `EndRead` صدا زده می‌شود تا مقدار بازگشتی و Exception در صورت وجود ارائه شود.
+
+**پیچیدگی:** استفاده از APM دشوار و پیاده‌سازی آن حتی سخت‌تر است.
+
+**راه حل مدرن:** استفاده از **Task.Factory.FromAsync** برای تبدیل زوج متد APM به Task:
+
+```csharp
+Task<int> readChunk = Task<int>.Factory.FromAsync(
+    stream.BeginRead, stream.EndRead, buffer, 0, 1000, null);
+```
+
+---
+
+## ۲. الگوی غیرهمزمان مبتنی بر رویداد (Event-Based Asynchronous Pattern – EAP) 🎉
+
+EAP در سال ۲۰۰۵ معرفی شد تا جایگزینی ساده‌تر برای APM باشد، به ویژه در سناریوهای UI.
+
+**نمونه کلاس WebClient:**
+
+```csharp
+public byte[] DownloadData(Uri address);           // نسخه همزمان
+public void DownloadDataAsync(Uri address);        // نسخه غیرهمزمان
+public void DownloadDataAsync(Uri address, object userToken);
+public event DownloadDataCompletedEventHandler DownloadDataCompleted;
+public void CancelAsync(object userState);         // لغو عملیات
+public bool IsBusy { get; }                        // وضعیت در حال اجرا
+public event DownloadProgressChangedEventHandler DownloadProgressChanged;
+```
+
+**نحوه کار:**
+
+* متدهای `*Async` عملیات را شروع می‌کنند.
+* وقتی عملیات تکمیل شد، **رویداد `*Completed`** فراخوانی می‌شود و نتیجه، Exception یا وضعیت لغو را ارائه می‌دهد.
+* گزارش پیشرفت می‌تواند از طریق رویداد `DownloadProgressChanged` انجام شود.
+* اگر **SynchronizationContext** موجود باشد، رویدادها به صورت امن به thread UI ارسال می‌شوند.
+
+**مشکل:** پیاده‌سازی EAP نیازمند کد boilerplate زیادی است و الگو به سختی ترکیب‌پذیر است.
+
+---
+
+### ۳. BackgroundWorker 🛠️
+
+کلاس **BackgroundWorker** در **System.ComponentModel** یک پیاده‌سازی عمومی از EAP است که به برنامه‌های rich-client اجازه می‌دهد:
+
+* اجرای **worker thread** برای عملیات غیرهمزمان
+* گزارش درصد پیشرفت
+* اطلاع از اتمام عملیات یا خطا
+
+مثال:
+
+```csharp
+var worker = new BackgroundWorker { WorkerSupportsCancellation = true };
+
+worker.DoWork += (sender, args) => 
+{
+    if (args.Cancel) return;
+    Thread.Sleep(1000); 
+    args.Result = 123;
+};
+
+worker.RunWorkerCompleted += (sender, args) =>
+{
+    if (args.Cancelled)
+        Console.WriteLine("Cancelled");
+    else if (args.Error != null)
+        Console.WriteLine("Error: " + args.Error.Message);
+    else
+        Console.WriteLine("Result is: " + args.Result);
+};
+
+worker.RunWorkerAsync();   // شروع عملیات و capture synchronization context
+```
+
+**ویژگی‌ها:**
+
+* `DoWork` روی **worker thread** اجرا می‌شود.
+* `RunWorkerCompleted` روی **UI thread** اجرا می‌شود (اگر SynchronizationContext موجود باشد).
+* برای به‌روزرسانی UI در `DoWork` باید از `Dispatcher.BeginInvoke` استفاده شود.
+
+---
+
+📌 **جمع‌بندی:**
+
+* **APM و EAP** الگوهای قدیمی هستند و امروزه به ندرت مورد استفاده‌اند.
+* **TAP (Task + async/await)** جایگزین مدرن، ساده و انعطاف‌پذیر است و تقریبا همه متدهای جدید .NET از آن استفاده می‌کنند.
