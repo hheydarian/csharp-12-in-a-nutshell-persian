@@ -68,9 +68,9 @@
   <li><b>12 - Disposal and Garbage Collection:</b> حذف منابع و جمع‌آوری زباله (ترجمه شده ✅)</li>
   <li><b>13 - Diagnostics:</b> عیب‌یابی (ترجمه شده ✅)</li>
   <li><b>14 - Concurrency and Asynchrony:</b> همزمانی و برنامه‌نویسی ناهمگام (ترجمه شده ✅)</li>
-  <li><b>15 - Streams and IO:</b> جریان‌ها و ورودی/خروجی (در حال ترجمه 🟡)</li>
-  <li><b>16 - Networking:</b> شبکه‌سازی (ترجمه نشده ❌)</li>
-  <li><b>17 - Assemblies:</b> اسمبلی‌ها (ترجمه نشده ❌)</li>
+  <li><b>15 - Streams and IO:</b> جریان‌ها و ورودی/خروجی (ترجمه شده ✅)</li>
+  <li><b>16 - Networking:</b> شبکه‌سازی (در حال ترجمه 🟡)</li>
+  <li><b>17 - Assemblies:</b> اسمبلی‌ها (در حال ترجمه 🟡)</li>
   <li><b>18 - Reflection and Metadata:</b> بازتاب و فراداده (ترجمه نشده ❌)</li>
   <li><b>19 - Dynamic Programming:</b> برنامه‌نویسی داینامیک (ترجمه نشده ❌)</li>
   <li><b>20 - Cryptography:</b> رمزنگاری (ترجمه نشده ❌)</li>
@@ -103,9 +103,9 @@
 | 12    | Disposal and Garbage Collection           | حذف منابع و جمع‌آوری زباله                  | ✅     | [Disposal-and-Garbage-Collection](Book/12/Disposal-and-Garbage-Collection.md) |
 | 13    | Diagnostics                               | عیب‌یابی                                     | ✅     | [Diagnostics](Book/13/Diagnostics.md)                           |
 | 14    | Concurrency and Asynchrony               | همزمانی و برنامه‌نویسی ناهمگام             | ✅     | [Concurrency-and-Asynchrony](Book/14/Concurrency-and-Asynchrony.md) |
-| 15    | Streams and IO                            | جریان‌ها و ورودی/خروجی                      | 🟡     | [Streams-and-IO](Book/15/Streams-and-IO.md)                     |
-| 16    | Networking                                | شبکه‌سازی                                   | ❌     | [Networking](Book/16/Networking.md)                             |
-| 17    | Assemblies                                | اسمبلی‌ها                                   | ❌     | [Assemblies](Book/17/Assemblies.md)                             |
+| 15    | Streams and IO                            | جریان‌ها و ورودی/خروجی                      | ✅     | [Streams-and-IO](Book/15/Streams-and-IO.md)                     |
+| 16    | Networking                                | شبکه‌سازی                                   | 🟡     | [Networking](Book/16/Networking.md)                             |
+| 17    | Assemblies                                | اسمبلی‌ها                                   | 🟡     | [Assemblies](Book/17/Assemblies.md)                             |
 | 18    | Reflection and Metadata                   | بازتاب و فراداده                            | ❌     | [Reflection-and-Metadata](Book/18/Reflection-and-Metadata.md)   |
 | 19    | Dynamic Programming                       | برنامه‌نویسی داینامیک                       | ❌     | [Dynamic-Programming](Book/19/Dynamic-Programming.md)           |
 | 20    | Cryptography                              | رمزنگاری                                    | ❌     | [Cryptography](Book/20/Cryptography.md)                         |
