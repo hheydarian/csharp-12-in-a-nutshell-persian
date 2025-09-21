@@ -70,10 +70,10 @@
   <li><b>14 - Concurrency and Asynchrony:</b> همزمانی و برنامه‌نویسی ناهمگام (ترجمه شده ✅)</li>
   <li><b>15 - Streams and IO:</b> جریان‌ها و ورودی/خروجی (ترجمه شده ✅)</li>
   <li><b>16 - Networking:</b> شبکه‌سازی (ترجمه شده ✅)</li>
-  <li><b>17 - Assemblies:</b> اسمبلی‌ها (در حال ترجمه 🟡)</li>
-  <li><b>18 - Reflection and Metadata:</b> بازتاب و فراداده (ترجمه نشده ❌)</li>
-  <li><b>19 - Dynamic Programming:</b> برنامه‌نویسی داینامیک (ترجمه نشده ❌)</li>
-  <li><b>20 - Cryptography:</b> رمزنگاری (ترجمه نشده ❌)</li>
+  <li><b>17 - Assemblies:</b> اسمبلی‌ها (ترجمه شده ✅)</li>
+  <li><b>18 - Reflection and Metadata:</b> بازتاب و فراداده (در حال ترجمه 🟡)</li>
+  <li><b>19 - Dynamic Programming:</b> برنامه‌نویسی داینامیک (در حال ترجمه 🟡)</li>
+  <li><b>20 - Cryptography:</b> رمزنگاری در حال ترجمه 🟡)</li>
   <li><b>21 - Advanced Threading:</b> رشته‌بندی پیشرفته (ترجمه نشده ❌)</li>
   <li><b>22 - Parallel Programming:</b> برنامه‌نویسی موازی (ترجمه نشده ❌)</li>
   <li><b>23 - Span&lt;T&gt; and Memory&lt;T&gt;:</b> Span<T> و Memory<T> (ترجمه نشده ❌)</li>
@@ -105,10 +105,10 @@
 | 14    | Concurrency and Asynchrony               | همزمانی و برنامه‌نویسی ناهمگام             | ✅     | [Concurrency-and-Asynchrony](Book/14/Concurrency-and-Asynchrony.md) |
 | 15    | Streams and IO                            | جریان‌ها و ورودی/خروجی                      | ✅     | [Streams-and-IO](Book/15/Streams-and-IO.md)                     |
 | 16    | Networking                                | شبکه‌سازی                                   | ✅     | [Networking](Book/16/Networking.md)                             |
-| 17    | Assemblies                                | اسمبلی‌ها                                   | 🟡     | [Assemblies](Book/17/Assemblies.md)                             |
-| 18    | Reflection and Metadata                   | بازتاب و فراداده                            | ❌     | [Reflection-and-Metadata](Book/18/Reflection-and-Metadata.md)   |
-| 19    | Dynamic Programming                       | برنامه‌نویسی داینامیک                       | ❌     | [Dynamic-Programming](Book/19/Dynamic-Programming.md)           |
-| 20    | Cryptography                              | رمزنگاری                                    | ❌     | [Cryptography](Book/20/Cryptography.md)                         |
+| 17    | Assemblies                                | اسمبلی‌ها                                   | ✅     | [Assemblies](Book/17/Assemblies.md)                             |
+| 18    | Reflection and Metadata                   | بازتاب و فراداده                            | 🟡     | [Reflection-and-Metadata](Book/18/Reflection-and-Metadata.md)   |
+| 19    | Dynamic Programming                       | برنامه‌نویسی داینامیک                       | 🟡     | [Dynamic-Programming](Book/19/Dynamic-Programming.md)           |
+| 20    | Cryptography                              | رمزنگاری                                    | 🟡     | [Cryptography](Book/20/Cryptography.md)                         |
 | 21    | Advanced Threading                        | رشته‌بندی پیشرفته                           | ❌     | [Advanced-Threading](Book/21/Advanced-Threading.md)             |
 | 22    | Parallel Programming                      | برنامه‌نویسی موازی                          | ❌     | [Parallel-Programming](Book/22/Parallel-Programming.md)         |
 | 23    | Span<T> and Memory<T>                     | Span<T> و Memory<T>                          | ❌     | [SpanT-and-MemoryT](Book/23/SpanT-and-MemoryT.md)               |
