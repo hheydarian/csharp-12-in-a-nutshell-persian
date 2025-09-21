@@ -1041,3 +1041,92 @@ async Task Accept(TcpClient client)
 ![Conventions-UsedThis-Book](../../assets/image/16/Table-16-4.jpeg) 
 </div>
 
+## دریافت ایمیل POP3 با TCP 📧
+
+هر دستور و پاسخ در پروتکل **POP3** با یک خط جدید (**CR + LF**) پایان می‌یابد، به‌جز دستورات چندخطی مثل **LIST** و **RETR** که با یک نقطه (`.`) در یک خط جداگانه تمام می‌شوند.
+از آن‌جا که نمی‌توانیم از **StreamReader** با **NetworkStream** استفاده کنیم، ابتدا یک متد کمکی برای خواندن یک خط متن به‌صورت **بدون بافر (Nonbuffered)** می‌نویسیم:
+
+```csharp
+string ReadLine (Stream s)
+{
+    List<byte> lineBuffer = new List<byte>();
+    while (true)
+    {
+        int b = s.ReadByte();
+        if (b == 10 || b < 0) break;
+        if (b != 13) lineBuffer.Add((byte)b);
+    }
+    return Encoding.UTF8.GetString(lineBuffer.ToArray());
+}
+```
+
+---
+
+### متد کمکی برای ارسال دستور ✉️
+
+همچنین یک متد کمکی برای ارسال دستور نیاز داریم. چون همیشه انتظار داریم پاسخ با **+OK** شروع شود، می‌توانیم پاسخ را در همان لحظه بخوانیم و اعتبارسنجی کنیم:
+
+```csharp
+void SendCommand (Stream stream, string line)
+{
+    byte[] data = Encoding.UTF8.GetBytes(line + "\r\n");
+    stream.Write(data, 0, data.Length);
+    string response = ReadLine(stream);
+    if (!response.StartsWith("+OK"))
+        throw new Exception("POP Error: " + response);
+}
+```
+
+---
+
+### دریافت ایمیل‌ها از سرور 📬
+
+با داشتن این متدها، کار دریافت ایمیل ساده می‌شود. کافی است یک اتصال TCP روی پورت **۱۱۰** (پورت پیش‌فرض POP3) برقرار کنیم و با سرور گفتگو را آغاز کنیم. در این مثال، هر پیام ایمیل در یک فایل تصادفی با پسوند **.eml** ذخیره می‌شود و سپس از روی سرور حذف می‌گردد:
+
+```csharp
+using (TcpClient client = new TcpClient("mail.isp.com", 110))
+using (NetworkStream n = client.GetStream())
+{
+    ReadLine(n);                           // خواندن پیام خوش‌آمدگویی
+    SendCommand(n, "USER username");
+    SendCommand(n, "PASS password");
+    SendCommand(n, "LIST");                // دریافت شناسه‌های پیام‌ها
+
+    List<int> messageIDs = new List<int>();
+    while (true)
+    {
+        string line = ReadLine(n);         // مثلا: "1 1876"
+        if (line == ".") break;
+        messageIDs.Add(int.Parse(line.Split(' ')[0]));   // شناسه پیام
+    }
+
+    foreach (int id in messageIDs)         // دریافت هر پیام
+    {
+        SendCommand(n, "RETR " + id);
+        string randomFile = Guid.NewGuid().ToString() + ".eml";
+        using (StreamWriter writer = File.CreateText(randomFile))
+            while (true)
+            {
+                string line = ReadLine(n); // خواندن خط بعدی پیام
+                if (line == ".") break;    // نقطه = پایان پیام
+                if (line == "..") line = "."; // جایگزینی نقطه‌ی دوتایی
+                writer.WriteLine(line);    // نوشتن در فایل خروجی
+            }
+        SendCommand(n, "DELE " + id);      // حذف پیام از سرور
+    }
+
+    SendCommand(n, "QUIT");
+}
+```
+
+---
+
+### نکته 💡
+
+در **NuGet** کتابخانه‌های متن‌باز (**Open Source**) برای POP3 وجود دارد که قابلیت‌هایی مثل:
+
+* پشتیبانی از **Authentication**
+* برقراری ارتباط امن **TLS/SSL**
+* و پردازش پیام‌ها با **MIME Parsing**
+
+را در اختیار شما قرار می‌دهند. ✅
