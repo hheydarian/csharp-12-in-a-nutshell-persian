@@ -613,3 +613,146 @@ public class Duck : DynamicObject
 
 🔹 دلیل دیگر برای پیاده‌سازی **GetDynamicMemberNames** این است که **دیباگر Visual Studio** از این متد استفاده می‌کند تا نمایی از یک شیء پویا را نمایش دهد. 🖥️
 
+### ExpandoObject 🪄
+
+یک کاربرد ساده دیگر از **DynamicObject** می‌تواند این باشد که یک کلاس پویا بنویسیم که اشیاء را در یک **Dictionary** ذخیره و بازیابی کند (کلیدها از نوع string). اما این قابلیت از قبل توسط کلاس **ExpandoObject** فراهم شده است:
+
+```csharp
+dynamic x = new ExpandoObject();
+x.FavoriteColor = ConsoleColor.Green;
+x.FavoriteNumber = 7;
+
+Console.WriteLine (x.FavoriteColor);   // Green
+Console.WriteLine (x.FavoriteNumber);  // 7
+```
+
+🔑 در واقع، **ExpandoObject** اینترفیس **IDictionary\<string, object>** را پیاده‌سازی می‌کند. بنابراین می‌توانیم مثال بالا را این‌طور ادامه دهیم:
+
+```csharp
+var dict = (IDictionary<string,object>) x;
+Console.WriteLine (dict["FavoriteColor"]);   // Green
+Console.WriteLine (dict["FavoriteNumber"]);  // 7
+Console.WriteLine (dict.Count);              // 2
+```
+
+---
+
+### تعامل با زبان‌های پویا 🌍
+
+اگرچه C# از طریق کلمه کلیدی **dynamic** از **dynamic binding** پشتیبانی می‌کند، اما اجازه نمی‌دهد یک عبارت ذخیره‌شده به شکل رشته (string) را در زمان اجرا مستقیماً اجرا کنید:
+
+```csharp
+string expr = "2 * 3";
+// نمی‌توانیم expr را اجرا کنیم
+```
+
+علت این است که ترجمه‌ی یک رشته به یک **expression tree** نیازمند یک **lexical parser** و **semantic parser** است که در کامپایلر C# وجود دارند، اما به‌صورت سرویس در زمان اجرا در دسترس نیستند. در زمان اجرا، C# فقط یک **binder** فراهم می‌کند که به **DLR** می‌گوید چگونه یک expression tree از قبل ساخته‌شده را تفسیر کند.
+
+👨‍💻 در زبان‌های واقعاً پویا مثل **IronPython** و **IronRuby**، می‌توان رشته‌ها را به‌صورت مستقیم اجرا کرد. این موضوع برای کارهایی مثل **اسکریپت‌نویسی**، ساخت **سیستم‌های پیکربندی پویا**، و پیاده‌سازی **rules engine** بسیار مفید است. بنابراین، اگرچه می‌توانید بیشتر برنامه را در C# بنویسید، اما ممکن است برای برخی وظایف خاص، به استفاده از یک زبان پویا نیاز داشته باشید.
+
+همچنین گاهی ممکن است بخواهید از **API**ای استفاده کنید که در یک زبان پویا نوشته شده و معادل آن در **.NET** وجود ندارد.
+
+---
+
+### اجرای کد C# به شکل رشته با Roslyn 🧩
+
+پکیج **Microsoft.CodeAnalysis.CSharp.Scripting** (از مجموعه Roslyn) این قابلیت را فراهم می‌کند که یک رشته C# را اجرا کنید. البته این کار با **کامپایل** رشته به یک برنامه انجام می‌شود، بنابراین سربار عملکردی بیشتری نسبت به زبان‌هایی مثل Python دارد (مگر اینکه همان عبارت بارها تکراراً اجرا شود).
+
+---
+
+### مثال با IronPython 🐍
+
+در مثال زیر، از **IronPython** برای ارزیابی یک عبارت در زمان اجرا از درون C# استفاده می‌کنیم. می‌توان از این روش برای ساخت یک ماشین حساب ساده بهره برد.
+
+📌 برای اجرای این کد، باید پکیج‌های **DynamicLanguageRuntime** (توجه کنید با System.Dynamic.Runtime فرق دارد) و **IronPython** را نصب کنید.
+
+```csharp
+using System;
+using IronPython.Hosting;
+using Microsoft.Scripting;
+using Microsoft.Scripting.Hosting;
+
+int result = (int) Calculate ("2 * 3");
+Console.WriteLine (result);  // 6
+
+object Calculate (string expression)
+{
+  ScriptEngine engine = Python.CreateEngine();
+  return engine.Execute (expression);
+}
+```
+
+✅ توجه کنید: چون رشته به **Python** پاس داده می‌شود، عبارت بر اساس قوانین Python ارزیابی خواهد شد، نه C#.
+
+برای مثال، می‌توان از امکانات زبان Python مثل **لیست‌ها** استفاده کرد:
+
+```csharp
+var list = (IEnumerable) Calculate ("[1, 2, 3] + [4, 5]");
+foreach (int n in list) Console.Write (n);  // 12345
+```
+
+---
+
+### عبور وضعیت بین C# و اسکریپت 🔄
+
+برای انتقال متغیرها از C# به Python، مراحل بیشتری نیاز است. مثال زیر این موضوع را نشان می‌دهد و می‌تواند پایه‌ای برای یک **rules engine** باشد:
+
+```csharp
+// این رشته می‌تواند از یک فایل یا دیتابیس بیاید:
+string auditRule = "taxPaidLastYear / taxPaidThisYear > 2";
+
+ScriptEngine engine = Python.CreateEngine();    
+ScriptScope scope = engine.CreateScope();       
+
+scope.SetVariable ("taxPaidLastYear", 20000m);
+scope.SetVariable ("taxPaidThisYear", 8000m);
+
+ScriptSource source = engine.CreateScriptSourceFromString (
+                      auditRule, SourceCodeKind.Expression);
+
+bool auditRequired = (bool) source.Execute (scope);
+Console.WriteLine (auditRequired);   // True
+```
+
+📥 همچنین می‌توانید متغیرها را از اسکریپت به C# برگردانید:
+
+```csharp
+string code = "result = input * 3";
+
+ScriptEngine engine = Python.CreateEngine();
+ScriptScope scope = engine.CreateScope();
+scope.SetVariable ("input", 2);
+
+ScriptSource source = engine.CreateScriptSourceFromString (
+                      code, SourceCodeKind.SingleStatement);
+
+source.Execute (scope);
+
+Console.WriteLine (scope.GetVariable ("result"));   // 6
+```
+
+در این مثال دوم، از **SourceCodeKind.SingleStatement** به‌جای **Expression** استفاده کردیم تا به موتور بگوییم قصد اجرای یک **statement** را داریم.
+
+---
+
+### تبادل انواع بین C# و Python 🔗
+
+🔹 نوع‌ها به‌طور خودکار بین دنیای **.NET** و **Python** منتقل (marshal) می‌شوند.
+🔹 حتی می‌توانید اعضای یک شیء .NET را از سمت اسکریپت فراخوانی کنید:
+
+```csharp
+string code = @"sb.Append (""World"")";
+
+ScriptEngine engine = Python.CreateEngine();
+ScriptScope scope = engine.CreateScope();
+
+var sb = new StringBuilder ("Hello");
+scope.SetVariable ("sb", sb);
+
+ScriptSource source = engine.CreateScriptSourceFromString (
+                      code, SourceCodeKind.SingleStatement);
+
+source.Execute (scope);
+
+Console.WriteLine (sb.ToString());   // HelloWorld
+```
