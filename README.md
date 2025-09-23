@@ -45,7 +45,8 @@
 - 🔎 **بازبینی و اصلاح ترجمه‌های فعلی**
 - 💡 **پیشنهادات فنی یا ادبی برای بهبود متن**
 - 🎨 **مرتب‌سازی و فرمت‌دهی کدها برای خوانایی بیشتر**
--  🗨️ **اگر قصد داشتید از هوش مصنوعی استفاده کنید در ترجمه، می تونید این متن [پرامپت](assets/prompt.md ) رو بهش بدید.**
+- 🗨️ **اگر قصد داشتید از هوش مصنوعی استفاده کنید در ترجمه، می تونید این متن [پرامپت](assets/prompt.md ) رو بهش بدید.**
+- 🛑 **قبل از شروع ترجمه یا تغییرات بزرگ، لطفاً یه [Issue](https://github.com/hheydarian/clean-code-in-csharp-persian/issues) باز کن یا با [hamdhydryan12@gmail.com](mailto:hamdhydryan12@gmail.com) در ارتباط باش.**
 
 ---
 
@@ -73,12 +74,12 @@
   <li><b>17 - Assemblies:</b> اسمبلی‌ها (ترجمه شده ✅)</li>
   <li><b>18 - Reflection and Metadata:</b> بازتاب و فراداده (ترجمه شده ✅)</li>
   <li><b>19 - Dynamic Programming:</b> برنامه‌نویسی داینامیک (ترجمه شده ✅)</li>
-  <li><b>20 - Cryptography:</b> رمزنگاری در حال ترجمه 🟡)</li>
-  <li><b>21 - Advanced Threading:</b> رشته‌بندی پیشرفته (ترجمه نشده ❌)</li>
-  <li><b>22 - Parallel Programming:</b> برنامه‌نویسی موازی (ترجمه نشده ❌)</li>
-  <li><b>23 - Span&lt;T&gt; and Memory&lt;T&gt;:</b> Span<T> و Memory<T> (ترجمه نشده ❌)</li>
-  <li><b>24 - Native and COM Interoperability:</b> ارتباط با کد بومی و COM (ترجمه نشده ❌)</li>
-  <li><b>25 - Regular Expressions:</b> عبارات باقاعده (ترجمه نشده ❌)</li>
+  <li><b>20 - Cryptography:</b> رمزنگاری (در حال ترجمه 🟡)</li>
+  <li><b>21 - Advanced Threading:</b> رشته‌بندی پیشرفته (در حال ترجمه 🟡)</li>
+  <li><b>22 - Parallel Programming:</b> برنامه‌نویسی موازی (در حال ترجمه 🟡)</li>
+  <li><b>23 - Span&lt;T&gt; and Memory&lt;T&gt;:</b> Span<T> و Memory<T> (در حال ترجمه 🟡)</li>
+  <li><b>24 - Native and COM Interoperability:</b> ارتباط با کد بومی و COM (در حال ترجمه 🟡)</li>
+  <li><b>25 - Regular Expressions:</b> عبارات باقاعده (در حال ترجمه 🟡)</li>
 </ul>
 
 
@@ -107,17 +108,16 @@
 | 16    | Networking                                | شبکه‌سازی                                   | ✅     | [Networking](Book/16/Networking.md)                             |
 | 17    | Assemblies                                | اسمبلی‌ها                                   | ✅     | [Assemblies](Book/17/Assemblies.md)                             |
 | 18    | Reflection and Metadata                   | بازتاب و فراداده                            | ✅     | [Reflection-and-Metadata](Book/18/Reflection-and-Metadata.md)   |
-| 19    | Dynamic Programming                       | برنامه‌نویسی داینامیک                       | 🟡     | [Dynamic-Programming](Book/19/Dynamic-Programming.md)           |
+| 19    | Dynamic Programming                       | برنامه‌نویسی داینامیک                       | ✅     | [Dynamic-Programming](Book/19/Dynamic-Programming.md)           |
 | 20    | Cryptography                              | رمزنگاری                                    | 🟡     | [Cryptography](Book/20/Cryptography.md)                         |
-| 21    | Advanced Threading                        | رشته‌بندی پیشرفته                           | ❌     | [Advanced-Threading](Book/21/Advanced-Threading.md)             |
-| 22    | Parallel Programming                      | برنامه‌نویسی موازی                          | ❌     | [Parallel-Programming](Book/22/Parallel-Programming.md)         |
-| 23    | Span<T> and Memory<T>                     | Span<T> و Memory<T>                          | ❌     | [SpanT-and-MemoryT](Book/23/SpanT-and-MemoryT.md)               |
-| 24    | Native and COM Interoperability           | ارتباط با کد بومی و COM                     | ❌     | [Native-and-COM-Interoperability](Book/24/Native-and-COM-Interoperability.md) |
-| 25    | Regular Expressions                       | عبارات باقاعده                              | ❌     | [Regular-Expressions](Book/25/Regular-Expressions.md)           |
+| 21    | Advanced Threading                        | رشته‌بندی پیشرفته                           | 🟡     | [Advanced-Threading](Book/21/Advanced-Threading.md)             |
+| 22    | Parallel Programming                      | برنامه‌نویسی موازی                          | 🟡     | [Parallel-Programming](Book/22/Parallel-Programming.md)         |
+| 23    | Span<T> and Memory<T>                     | Span<T> و Memory<T>                          | 🟡     | [SpanT-and-MemoryT](Book/23/SpanT-and-MemoryT.md)               |
+| 24    | Native and COM Interoperability           | ارتباط با کد بومی و COM                     | 🟡     | [Native-and-COM-Interoperability](Book/24/Native-and-COM-Interoperability.md) |
+| 25    | Regular Expressions                       | عبارات باقاعده                              | 🟡     | [Regular-Expressions](Book/25/Regular-Expressions.md)           |
 
 </div>
 
-🛑 قبل از شروع ترجمه یا تغییرات بزرگ، لطفاً یه [Issue](https://github.com/hheydarian/clean-code-in-csharp-persian/issues) باز کن یا با [hamdhydryan12@gmail.com](mailto:hamdhydryan12@gmail.com) در ارتباط باش.
 
 ---
 ## 🧩 اصول ساختاری پروژه
