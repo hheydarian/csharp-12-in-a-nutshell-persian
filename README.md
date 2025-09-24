@@ -75,7 +75,7 @@
   <li><b>18 - Reflection and Metadata:</b> بازتاب و فراداده (ترجمه شده ✅)</li>
   <li><b>19 - Dynamic Programming:</b> برنامه‌نویسی داینامیک (ترجمه شده ✅)</li>
   <li><b>20 - Cryptography:</b> رمزنگاری (ترجمه شده ✅)</li>
-  <li><b>21 - Advanced Threading:</b> رشته‌بندی پیشرفته (در حال ترجمه 🟡)</li>
+  <li><b>21 - Advanced Threading:</b> رشته‌بندی پیشرفته (ترجمه شده ✅)</li>
   <li><b>22 - Parallel Programming:</b> برنامه‌نویسی موازی (در حال ترجمه 🟡)</li>
   <li><b>23 - Span&lt;T&gt; and Memory&lt;T&gt;:</b> Span<T> و Memory<T> (در حال ترجمه 🟡)</li>
   <li><b>24 - Native and COM Interoperability:</b> ارتباط با کد بومی و COM (در حال ترجمه 🟡)</li>
@@ -110,7 +110,7 @@
 | 18    | Reflection and Metadata                   | بازتاب و فراداده                            | ✅     | [Reflection-and-Metadata](Book/18/Reflection-and-Metadata.md)   |
 | 19    | Dynamic Programming                       | برنامه‌نویسی داینامیک                       | ✅     | [Dynamic-Programming](Book/19/Dynamic-Programming.md)           |
 | 20    | Cryptography                              | رمزنگاری                                    | ✅     | [Cryptography](Book/20/Cryptography.md)                         |
-| 21    | Advanced Threading                        | رشته‌بندی پیشرفته                           | 🟡     | [Advanced-Threading](Book/21/Advanced-Threading.md)             |
+| 21    | Advanced Threading                        | رشته‌بندی پیشرفته                           | ✅     | [Advanced-Threading](Book/21/Advanced-Threading.md)             |
 | 22    | Parallel Programming                      | برنامه‌نویسی موازی                          | 🟡     | [Parallel-Programming](Book/22/Parallel-Programming.md)         |
 | 23    | Span<T> and Memory<T>                     | Span<T> و Memory<T>                          | 🟡     | [SpanT-and-MemoryT](Book/23/SpanT-and-MemoryT.md)               |
 | 24    | Native and COM Interoperability           | ارتباط با کد بومی و COM                     | 🟡     | [Native-and-COM-Interoperability](Book/24/Native-and-COM-Interoperability.md) |
