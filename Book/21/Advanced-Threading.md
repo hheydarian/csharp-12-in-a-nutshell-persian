@@ -1705,3 +1705,232 @@ static ThreadLocal<int> _x = new ThreadLocal<int>(() => 3);
 
 ✅ نکته: **مقداردهی تنبل** است—delegate کارخانه فقط **در اولین دسترسی هر thread** اجرا می‌شود.
 
+### ThreadLocal<T> و فیلدهای Instance 🧵
+
+کلاس **ThreadLocal<T>** همچنین برای **فیلدهای instance** و **local variableهای capture شده** مفید است.
+برای مثال، فرض کنید می‌خواهیم در محیط **چند thread‌ای** اعداد تصادفی تولید کنیم. کلاس **Random** **thread-safe نیست**، بنابراین دو راه داریم:
+
+1. استفاده از **lock** هنگام استفاده از Random (که **Concurrency** را محدود می‌کند).
+2. تولید یک **شیء Random جداگانه برای هر thread**.
+
+با **ThreadLocal<T>**، گزینه دوم خیلی آسان می‌شود:
+
+```csharp
+var localRandom = new ThreadLocal<Random>(() => new Random());
+Console.WriteLine(localRandom.Value.Next());
+```
+
+🔹 نکته: تابع کارخانه ما برای ایجاد شیء **Random** کمی ساده است، چون سازنده بدون پارامتر Random از **ساعت سیستم** برای seed استفاده می‌کند. این ممکن است برای دو شیء Random که در حدود **۱۰ میلی‌ثانیه** از هم ایجاد شده‌اند، یکسان باشد.
+
+یک روش برای رفع این مشکل:
+
+```csharp
+var localRandom = new ThreadLocal<Random>
+(() => new Random(Guid.NewGuid().GetHashCode()));
+```
+
+این روش در **فصل ۲۲** در مثال **parallel spellchecking** (در بخش PLINQ صفحه ۹۳۵) استفاده شده است.
+
+---
+
+### GetData و SetData 📦
+
+روش سوم استفاده از دو متد در کلاس **Thread** است: **GetData** و **SetData**.
+
+* این متدها داده‌ها را در **slotهای مخصوص thread** ذخیره می‌کنند.
+* **Thread.GetData** داده را از **ذخیره‌سازی ایزوله thread** می‌خواند.
+* **Thread.SetData** داده را در آن می‌نویسد.
+* هر دو متد نیاز به یک **LocalDataStoreSlot** برای شناسایی slot دارند.
+
+می‌توانید از همان slot برای همه threadها استفاده کنید و هر thread همچنان **مقدار جداگانه‌ای** دریافت می‌کند. مثال:
+
+```csharp
+class Test
+{
+    // همان LocalDataStoreSlot می‌تواند برای همه threadها استفاده شود
+    LocalDataStoreSlot _secSlot = Thread.GetNamedDataSlot("securityLevel");
+
+    // این property برای هر thread مقدار جداگانه دارد
+    int SecurityLevel
+    {
+        get
+        {
+            object data = Thread.GetData(_secSlot);
+            return data == null ? 0 : (int)data; // null == مقداردهی نشده
+        }
+        set { Thread.SetData(_secSlot, value); }
+    }
+}
+```
+
+در این مثال، از **Thread.GetNamedDataSlot** استفاده کردیم که یک **slot نام‌گذاری‌شده** ایجاد می‌کند—این اجازه می‌دهد slot بین همه بخش‌های برنامه به اشتراک گذاشته شود.
+به طور جایگزین، می‌توانید با یک slot بدون نام، که با **Thread.AllocateDataSlot** ایجاد شده است، کنترل محدوده آن را خودتان داشته باشید:
+
+```csharp
+LocalDataStoreSlot _secSlot = Thread.AllocateDataSlot();
+```
+
+⚠️ نکته:
+
+* **Thread.FreeNamedDataSlot** یک slot نام‌گذاری‌شده را در همه threadها آزاد می‌کند، اما فقط وقتی که **تمام ارجاعات به آن LocalDataStoreSlot از محدوده خارج شده و garbage collected شده باشند**.
+* این تضمین می‌کند که threadها slotهای داده خود را از دست ندهند، تا زمانی که **ارجاع مناسب به LocalDataStoreSlot** را نگه داشته باشند.
+
+---
+
+### AsyncLocal<T> 🌐
+
+روش‌های پیشین **Thread-local storage** با **async functions** سازگار نیستند، چون بعد از **await**، اجرای کد می‌تواند روی یک thread دیگر ادامه پیدا کند.
+
+کلاس **AsyncLocal<T>** این مشکل را حل می‌کند و مقدار خود را **بعد از await حفظ می‌کند**:
+
+```csharp
+static AsyncLocal<string> _asyncLocalTest = new AsyncLocal<string>();
+
+async void Main()
+{
+    _asyncLocalTest.Value = "test";  
+    await Task.Delay(1000);  
+    // حتی اگر روی thread دیگری ادامه پیدا کنیم، درست کار می‌کند:
+    Console.WriteLine(_asyncLocalTest.Value);   // test
+}
+```
+
+**AsyncLocal<T>** همچنین می‌تواند عملیات شروع‌شده روی **threadهای جداگانه** را از هم جدا نگه دارد، چه توسط **Thread.Start** و چه **Task.Run**:
+
+```csharp
+static AsyncLocal<string> _asyncLocalTest = new AsyncLocal<string>();
+
+void Main()
+{
+    // Test را روی دو thread همزمان صدا بزن
+    new Thread(() => Test("one")).Start();
+    new Thread(() => Test("two")).Start();
+}
+
+async void Test(string value)
+{
+    _asyncLocalTest.Value = value;
+    await Task.Delay(1000);
+    Console.WriteLine(value + " " + _asyncLocalTest.Value);
+}
+// خروجی: 
+// one one
+// two two
+```
+
+یک نکته جالب درباره **AsyncLocal<T>**:
+
+* اگر یک شیء AsyncLocal<T> **قبلاً مقداری داشته باشد**، وقتی یک thread جدید شروع شود، thread جدید **آن مقدار را به ارث می‌برد**:
+
+```csharp
+static AsyncLocal<string> _asyncLocalTest = new AsyncLocal<string>();
+
+void Main()
+{
+    _asyncLocalTest.Value = "test";
+    new Thread(AnotherMethod).Start();
+}
+
+void AnotherMethod() => Console.WriteLine(_asyncLocalTest.Value);  // test
+```
+
+* با این حال، thread جدید **یک کپی از مقدار دریافت می‌کند**، بنابراین هر تغییری که روی آن انجام دهد، روی مقدار اصلی تأثیر نمی‌گذارد:
+
+```csharp
+static AsyncLocal<string> _asyncLocalTest = new AsyncLocal<string>();
+
+void Main()
+{
+    _asyncLocalTest.Value = "test";
+    var t = new Thread(AnotherMethod);
+    t.Start(); t.Join();
+    Console.WriteLine(_asyncLocalTest.Value);   // test
+}
+
+void AnotherMethod() => _asyncLocalTest.Value = "ha-ha!";
+```
+
+⚠️ توجه: thread جدید **یک کپی سطحی (shallow copy)** از مقدار دریافت می‌کند.
+
+* بنابراین اگر **Async<string>** را با **Async<StringBuilder>** یا **Async\<List<string>>** جایگزین کنید، thread جدید می‌تواند **StringBuilder را پاک کند یا آیتم‌ها را به List اضافه/حذف کند** و این روی مقدار اصلی تأثیر خواهد گذاشت.
+### Timers ⏱️
+
+اگر نیاز دارید یک **متد** به صورت **دوره‌ای و منظم** اجرا شود، ساده‌ترین راه استفاده از **timer** است.
+
+**Timerها** هم راحت و هم بهینه از نظر حافظه و منابع هستند، مخصوصاً در مقایسه با تکنیک‌های زیر:
+
+```csharp
+new Thread(delegate() {
+    while (enabled)
+    {
+        DoSomeAction();
+        Thread.Sleep(TimeSpan.FromHours(24));
+    }
+}).Start();
+```
+
+* این روش یک **thread** را دائماً مشغول نگه می‌دارد.
+* بدون کدنویسی اضافه، متد **DoSomeAction** هر روز در زمان متفاوتی اجرا می‌شود.
+* **Timers** این مشکلات را حل می‌کنند.
+
+---
+
+.NET پنج نوع **timer** ارائه می‌دهد:
+
+#### ۱. Timerهای چندthread‌ای عمومی:
+
+* **System.Threading.Timer**
+* **System.Timers.Timer**
+
+#### ۲. Timerهای تک‌thread‌ای ویژه:
+
+* **System.Windows.Forms.Timer** (برای Windows Forms)
+
+* **System.Windows.Threading.DispatcherTimer** (برای WPF)
+
+* Timerهای چندthread‌ای **قدرتمندتر، دقیق‌تر و انعطاف‌پذیرتر** هستند.
+
+* Timerهای تک‌thread‌ای برای **اجرای ساده** و به‌روزرسانی **کنترل‌های Windows Forms یا عناصر WPF** ایمن‌تر و راحت‌ترند.
+
+* از **.NET 6**، یک Timer جدید به نام **PeriodicTimer** اضافه شده که ابتدا به آن می‌پردازیم.
+
+---
+
+### PeriodicTimer 🔄
+
+**PeriodicTimer** در واقع یک timer سنتی نیست؛ بلکه **کلاسی برای ساده‌سازی حلقه‌های asynchronous** است.
+
+با ظهور **async و await**، معمولاً به timerهای سنتی نیاز نیست. به جای آن، الگوی زیر خوب کار می‌کند:
+
+```csharp
+StartPeriodicOperation();
+
+async void StartPeriodicOperation()
+{
+    while (true)
+    {
+        await Task.Delay(1000);
+        Console.WriteLine("Tick");   // انجام یک عملیات
+    }
+}
+```
+
+* اگر این کد را از **UI thread** فراخوانی کنید، مانند یک **timer تک‌thread‌ای** رفتار خواهد کرد، چون **await** همیشه روی همان **synchronization context** برمی‌گردد.
+* برای رفتار به صورت **multi-threaded timer** کافی است **.ConfigureAwait(false)** به await اضافه کنید.
+
+**PeriodicTimer** این الگو را ساده می‌کند:
+
+```csharp
+var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
+StartPeriodicOperation();
+
+// اختیاری: وقتی می‌خواهید حلقه را متوقف کنید، timer را dispose کنید.
+async void StartPeriodicOperation()
+{
+    while (await timer.WaitForNextTickAsync())
+        Console.WriteLine("Tick");    // انجام یک عملیات
+}
+```
+
+* همچنین می‌توان با **dispose کردن** نمونه **PeriodicTimer**، timer را متوقف کرد.
+* در این صورت **WaitForNextTickAsync** مقدار **false** برمی‌گرداند و حلقه پایان می‌یابد.
