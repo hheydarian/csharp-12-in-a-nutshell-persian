@@ -77,7 +77,7 @@
   <li><b>20 - Cryptography:</b> رمزنگاری (ترجمه شده ✅)</li>
   <li><b>21 - Advanced Threading:</b> رشته‌بندی پیشرفته (ترجمه شده ✅)</li>
   <li><b>22 - Parallel Programming:</b> برنامه‌نویسی موازی (ترجمه شده ✅)</li>
-  <li><b>23 - Span&lt;T&gt; and Memory&lt;T&gt;:</b> Span<T> و Memory<T> (در حال ترجمه 🟡)</li>
+  <li><b>23 - Span&lt;T&gt; and Memory&lt;T&gt;:</b> Span<T> و Memory<T> (ترجمه شده ✅)</li>
   <li><b>24 - Native and COM Interoperability:</b> ارتباط با کد بومی و COM (ترجمه شده ✅)</li>
   <li><b>25 - Regular Expressions:</b> عبارات باقاعده (در حال ترجمه 🟡)</li>
 </ul>
@@ -112,7 +112,7 @@
 | 20    | Cryptography                              | رمزنگاری                                    | ✅     | [Cryptography](Book/20/Cryptography.md)                         |
 | 21    | Advanced Threading                        | رشته‌بندی پیشرفته                           | ✅     | [Advanced-Threading](Book/21/Advanced-Threading.md)             |
 | 22    | Parallel Programming                      | برنامه‌نویسی موازی                          | ✅     | [Parallel-Programming](Book/22/Parallel-Programming.md)         |
-| 23    | Span<T> and Memory<T>                     | Span<T> و Memory<T>                          | 🟡     | [SpanT-and-MemoryT](Book/23/SpanT-and-MemoryT.md)               |
+| 23    | Span<T> and Memory<T>                     | Span<T> و Memory<T>                          | ✅     | [SpanT-and-MemoryT](Book/23/SpanT-and-MemoryT.md)               |
 | 24    | Native and COM Interoperability           | ارتباط با کد بومی و COM                     | ✅     | [Native-and-COM-Interoperability](Book/24/Native-and-COM-Interoperability.md) |
 | 25    | Regular Expressions                       | عبارات باقاعده                              | 🟡     | [Regular-Expressions](Book/25/Regular-Expressions.md)           |
 
