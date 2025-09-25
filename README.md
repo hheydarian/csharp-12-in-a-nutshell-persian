@@ -8,16 +8,14 @@
 
 <p align="center">
   مرجع کامل و کاربردی برای توسعه‌دهندگان سی‌شارپ و دات‌نت
-</p>
 
 <p align="center">
   <img src="https://img.shields.io/github/stars/hheydarian/csharp-12-in-a-nutshell-persian?style=social" alt="GitHub stars">
   <img src="https://img.shields.io/github/forks/hheydarian/csharp-12-in-a-nutshell-persian?color=blueviolet" alt="GitHub forks">
-  <img src="https://img.shields.io/github/issues/hheydarian/csharp-12-in-a-nutshell-persian?color=ff69b4" alt="GitHub issues">
-  <img src="https://img.shields.io/github/issues-pr/hheydarian/csharp-12-in-a-nutshell-persian?color=orange" alt="GitHub pull requests">
   <img src="https://img.shields.io/github/last-commit/hheydarian/csharp-12-in-a-nutshell-persian?color=9cf" alt="Last Commit">
+  <img src="https://img.shields.io/badge/Translation-100%25-success" alt="Translation Status">
+<img src="https://visitor-badge.laobi.icu/badge?page_id=hheydarian.csharp-12-in-a-nutshell-persian" alt="Visitors">
 </p>
-
 
 ---
 
