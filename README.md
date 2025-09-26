@@ -54,7 +54,7 @@
 | 00    | Preface                                   | مقدمه                                      | ✅     | [Preface](Book/00/Preface.md)                     |
 | 01    | Introducing C# and .NET                   | معرفی سی‌شارپ و دات‌نت                      | ✅    | [Introducing-C#-and-.NET](Book/01/Introducing-C%23-and-.NET.md) |
 | 02    | C# Language Basics                        | مبانی زبان سی‌شارپ                          | ✅     | [C#-Language-Basics](Book/02/C%23-Language-Basics.md)           |
-| 03    | Creating Types in C#                      | ساخت انواع در سی‌شارپ                       | 🟡     | [Creating-Types-in-C#](Book/03/Creating-Types-in-C%23.md)       |
+| 03    | Creating Types in C#                      | ساخت انواع در سی‌شارپ                       | ✅     | [Creating-Types-in-C#](Book/03/Creating-Types-in-C%23.md)       |
 | 04    | Advanced C#                               | سی‌شارپ پیشرفته                            | ✅     | [Advanced-C#](Book/04/Advanced-C%23.md)                         |
 | 05    | .NET Overview                             | نمای کلی دات‌نت                             | ✅     | [.NET-Overview](Book/05/.NET-Overview.md)                       |
 | 06    | .NET Fundamentals                         | مبانی دات‌نت                                | ✅     | [.NET-Fundamentals](Book/06/.NET-Fundamentals.md)               |
