@@ -27,7 +27,6 @@
 
 
 ---
-
 ## ⚙️ پیش‌نیاز مطالعه
 
 🔹 برای تجربه خوانایی بهتر در مرورگر، توصیه می‌کنیم افزونه [فونت ایران](https://chromewebstore.google.com/detail/fontiran/edbchgkbejkdkdkpgenlaciegoidmjoh) رو نصب کنید.
