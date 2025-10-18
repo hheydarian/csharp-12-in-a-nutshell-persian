@@ -16,6 +16,10 @@
   <img src="https://img.shields.io/badge/Translation-100%25-success" alt="Translation Status">
 <img src="https://visitor-badge.laobi.icu/badge?page_id=hheydarian.csharp-12-in-a-nutshell-persian" alt="Visitors">
 </p>
+
+<p align="center">
+   <a href="https://hheydarian.github.io/Gitab/" target="_blank"><strong>  گیتاب —  نسخه آنلاین کتاب </strong></a>
+</p>
  
 ---
 ## ✨ معرفی پروژه
