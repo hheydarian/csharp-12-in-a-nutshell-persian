@@ -1,3 +1,5 @@
+<div dir="rtl">
+
 # فصل اول: آشنایی با سی‌شارپ و دات‌نت
 
 سی شارپ یک زبان برنامه‌نویسی همه‌منظوره (general-purpose)، ایمن از نظر نوع داده (type-safe)، و شی‌گرا (object-oriented) است.
@@ -2052,3 +2054,6 @@ string y = nameof(Uri.Host);   // "Host"
 + و مجموعه‌ای از ویژگی‌های کوچک‌تر و متنوع مانند مخفف‌های فضای نام (namespace alias qualifier)، دوستان اسمبلی (friend assemblies)، و بافرهای با اندازه ثابت (fixed-size buffers)
 
 را نیز اضافه کرد.
+
+
+</dir>

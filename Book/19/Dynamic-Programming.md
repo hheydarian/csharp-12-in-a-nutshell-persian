@@ -1,3 +1,5 @@
+<div dir="rtl">
+
 # فصل نوزدهم:  برنامه‌نویسی پویا (Dynamic Programming)
 
 فصل ۴ توضیح داد که **dynamic binding** در زبان C# چگونه کار می‌کند.
@@ -756,3 +758,6 @@ source.Execute (scope);
 
 Console.WriteLine (sb.ToString());   // HelloWorld
 ```
+
+
+</dir>

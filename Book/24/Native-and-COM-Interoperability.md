@@ -1,3 +1,5 @@
+<div dir="rtl">
+
 # فصل بیست و چهارم: یکپارچه‌سازی با Native و COM 
 
 این فصل توضیح می‌دهد چگونه با کتابخانه‌های Native (غیرمدیریت‌شده) Dynamic-Link (DLL) و کامپوننت‌های Component Object Model (COM) یکپارچه شوید. مگر اینکه خلاف آن ذکر شده باشد، انواع داده‌ای که در این فصل آمده‌اند در فضای نام **System** یا **System.Runtime.InteropServices** وجود دارند.
@@ -1129,3 +1131,6 @@ Wscript.Echo result
 
  
 
+
+
+</dir>

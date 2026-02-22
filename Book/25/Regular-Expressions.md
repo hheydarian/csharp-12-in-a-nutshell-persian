@@ -1,3 +1,5 @@
+<div dir="rtl">
+
 # فصل بیست و پنجم: Regular Expressions
 
 زبان **Regular Expressions** الگوهای کاراکتری را شناسایی می‌کند. تایپ‌های .NET که از Regular Expressions پشتیبانی می‌کنند، بر اساس **Perl 5 Regular Expressions** ساخته شده‌اند و هم قابلیت جستجو (**search**) و هم جستجو/جایگزینی (**search/replace**) را پشتیبانی می‌کنند.
@@ -1085,3 +1087,6 @@ foreach (string keyword in keywords)
     
 ![Conventions-UsedThis-Book](../../assets/image/25/Table-25-14.jpeg) 
 </div>
+
+
+</dir>

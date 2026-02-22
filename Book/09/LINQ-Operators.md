@@ -1,3 +1,5 @@
+<div dir="rtl">
+
 # فصل نهم:  LINQ Operators
 
 این فصل به بررسی تک‌تک **عملگرهای LINQ** می‌پردازد. علاوه بر اینکه به‌عنوان یک مرجع عمل می‌کند، دو بخش **«Projecting»** (در صفحه ۴۷۳) و **«Joining»** (در صفحه ۴۷۳) مفاهیم مهمی را پوشش می‌دهند:
@@ -2997,3 +2999,6 @@ foreach (bool x in Enumerable.Repeat(true, 3))
     Console.Write(x + " ");    // True True True
 ```
 
+
+
+</dir>

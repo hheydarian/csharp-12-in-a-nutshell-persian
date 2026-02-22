@@ -1,3 +1,5 @@
+<div dir="rtl">
+
 # فصل هشتم: پرس‌وجوهای LINQ
 
 **LINQ** یا **Language Integrated Query** مجموعه‌ای از ویژگی‌های زبان و زمان اجراست که برای نوشتن پرس‌وجوهای ساختاریافته و نوع-ایمن (**type-safe**) روی مجموعه‌های محلی از اشیا و منابع داده راه دور استفاده می‌شود.
@@ -2356,3 +2358,6 @@ Console.WriteLine(runnable("dog"));        // True
 ساده‌ترین روش برای تعیین اینکه کدام نوع **expression** را باید استفاده کرد، این است که یک **lambda expression** موجود را در **Visual Studio debugger** بررسی کنید.
 
 ما ادامه این بحث را آنلاین ارائه داده‌ایم در: [http://www.albahari.com/expressions](http://www.albahari.com/expressions) ✅
+
+
+</dir>

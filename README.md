@@ -1,3 +1,5 @@
+<div dir="rtl">
+
 <p align="center">
   <a href="https://github.com/hheydarian/csharp-12-in-a-nutshell-persian">
     <img src="assets/image/Cover.jpg" alt="C# 12 in a Nutshell Book Cover" width="400"/>
@@ -112,3 +114,6 @@
 ---
 
 <p align="center">ساخته شده با ❤️ توسط حامد برای برنامه‌نویسان</p>
+
+
+</dir>

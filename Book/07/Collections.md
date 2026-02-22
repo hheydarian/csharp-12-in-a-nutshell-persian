@@ -1,3 +1,5 @@
+<div dir="rtl">
+
 # فصل هفتم: **مجموعه‌ها (Collections) 📚**
 
 .NET یک مجموعه استاندارد از نوع‌ها را برای ذخیره‌سازی و مدیریت مجموعه‌ای از اشیاء ارائه می‌دهد. این نوع‌ها شامل لیست‌های قابل تغییر اندازه (resizable lists)، لیست‌های پیوندی (linked lists)، دیکشنری‌های مرتب و نامرتب (sorted و unsorted dictionaries) و همچنین آرایه‌ها (arrays) هستند. از بین این‌ها، تنها آرایه‌ها بخشی از زبان C# را تشکیل می‌دهند؛ بقیه مجموعه‌ها فقط کلاس‌هایی هستند که می‌توانید مانند هر کلاس دیگری نمونه‌سازی (instantiate) کنید.
@@ -2319,3 +2321,6 @@ string[] a2 = "THE QUICK BROWN FOX".Split();
 IStructuralEquatable se1 = a1;
 bool isTrue = se1.Equals(a2, StringComparer.InvariantCultureIgnoreCase);
 ```
+
+
+</dir>

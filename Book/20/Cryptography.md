@@ -1,3 +1,5 @@
+<div dir="rtl">
+
 # فصل بیستم:  رمزنگاری
 
 در این فصل، ما به بررسی APIهای اصلی **Cryptography** در .NET می‌پردازیم:
@@ -684,3 +686,6 @@ using (var rsa = new RSACryptoServiceProvider())
 
 📦 فضای نام `System.Security.Cryptography.X509Certificates` انواع لازم برای کار با گواهی‌ها را فراهم می‌کند.
 
+
+
+</dir>
