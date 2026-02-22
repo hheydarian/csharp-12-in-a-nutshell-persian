@@ -1,5 +1,5 @@
-<div dir="rtl">
 
+<div dir="rtl">
 # فصل اول: آشنایی با سی‌شارپ و دات‌نت
 
 سی شارپ یک زبان برنامه‌نویسی همه‌منظوره (general-purpose)، ایمن از نظر نوع داده (type-safe)، و شی‌گرا (object-oriented) است.
@@ -464,6 +464,7 @@ Runtime — که گاهی به آن فریم‌ورک (Framework) هم گفته 
 
 تاریخچه نسخه‌های .NET
 تاریخچه انتشار نسخه‌های اصلی به این صورت است:
+</div>
 
 ```
 .NET Core 1.x  
@@ -474,6 +475,8 @@ Runtime — که گاهی به آن فریم‌ورک (Framework) هم گفته 
 → .NET 7  
 → .NET 8
 ```
+
+<div dir="rtl">
 🔹 بعد از .NET Core 3، مایکروسافت واژه‌ی "Core" را از نام نسخه‌ها حذف کرد.
 🔹 همچنین نسخه‌ی 4 را کاملاً رد کرد تا با .NET Framework 4.x که نسخه‌ای کاملاً متفاوت و قدیمی‌تر است اشتباه گرفته نشود.
 
@@ -653,15 +656,21 @@ UWP هنوز برای هدف‌گذاری روی Xbox، Surface Hub و HoloLens 
 ## عبارات مجموعه‌ای (Collection Expressions)
 
 قبلاً برای مقداردهی اولیه یک آرایه، مثلاً آرایه‌ای از حروف صدادار، از این شکل استفاده می‌کردید:
+</div>
 
 ```csharp
 char[ ] vowels = {'a','e','i','o','u'};
 ```
+
+<div dir="rtl">
 اما حالا می‌توانید از براکت‌های مربعی (علامت []) به این صورت استفاده کنید:
+</div>
 
 ```csharp
 char[ ] vowels = ['a','e','i','o','u'];
 ```
+
+<div dir="rtl">
 **مزایای عبارات مجموعه‌ای**
 
 عبارات مجموعه‌ای دو مزیت بزرگ دارند:
@@ -669,21 +678,27 @@ char[ ] vowels = ['a','e','i','o','u'];
 1. قابلیت استفاده در انواع دیگر مجموعه‌ها
 
 همین نگارش می‌تواند برای انواع مختلف مجموعه‌ها استفاده شود، مثل لیست‌ها، مجموعه‌ها (Set) و حتی نوع‌های پایین‌رده مثل Span:
+</div>
 
 ```csharp
 List<char> list         = ['a','e','i','o','u'];
 HashSet<char> set       = ['a','e','i','o','u'];
 ReadOnlySpan<char> span = ['a','e','i','o','u'];
 ```
+
+<div dir="rtl">
 2. هدف‌مند بودن نوع (Target-typed)
 
 یعنی کامپایلر می‌تواند نوع مجموعه را در بسیاری از موقعیت‌ها حدس بزند، و شما نیازی به نوشتن نوع ندارید، مثل وقتی که آرایه را به عنوان آرگومان به یک متد می‌دهید:
+</div>
 
 ```csharp
 Foo(['a','e','i','o','u']);
 
 void Foo(char[] letters) { ... }
 ```
+
+<div dir="rtl">
 برای جزئیات بیشتر، می‌توانید به بخش «Collection Initializers and Collection Expressions» در صفحه ۲۰۵ مراجعه کنید.
 
 ## سازنده‌های اولیه در کلاس‌ها و استراکچرها  Primary constructors in classes and structs
@@ -693,6 +708,7 @@ void Foo(char[] letters) { ... }
 
 از نسخه #C 12 به بعد، می‌تونید لیست پارامترهای سازنده رو مستقیم بعد از تعریف کلاس یا استراکچر بنویسید.
 برای مثال:
+</div>
 
 ```csharp
 class Person (string firstName, string lastName)
@@ -700,13 +716,18 @@ class Person (string firstName, string lastName)
     public void Print() => Console.WriteLine(firstName + " " + lastName);
 }
 ```
+
+<div dir="rtl">
 در اینجا، کامپایلر به‌طور خودکار یک سازنده اولیه (Primary Constructor) برای کلاس Person می‌سازه.
 بنابراین می‌تونید مثل زیر ازش استفاده کنید:
+</div>
 
 ```csharp
 Person p = new Person("Alice", "Jones");
 p.Print();    // خروجی: Alice Jones
 ```
+
+<div dir="rtl">
 **تفاوت با Recordها**
 
 این قابلیت از #C 9 برای record‌ها وجود داشت،
@@ -714,6 +735,7 @@ p.Print();    // خروجی: Alice Jones
 
 اما در کلاس‌ها و استراکچرها این اتفاق نمی‌افته.
 اگر بخواهید پارامترهای سازنده اولیه را به صورت Property در اختیار داشته باشید، باید خودتان به‌طور صریح آن‌ها را تعریف کنید:
+</div>
 
 ```csharp
 class Person (string firstName, string lastName)
@@ -722,6 +744,8 @@ class Person (string firstName, string lastName)
     public string LastName { get; set; } = lastName;
 }
 ```
+
+<div dir="rtl">
 ✅ سازنده‌های اولیه برای سناریوهای ساده، بسیار مفید و تمیز هستند.
 جزئیات بیشتر درباره تفاوت‌ها و محدودیت‌های آن‌ها در بخش
 “Primary Constructors (C# 12)” در صفحه ۱۱۹ ارائه شده است.
@@ -729,11 +753,15 @@ class Person (string firstName, string lastName)
 ## پارامتر پیش‌فرض در لامبداها Default lambda parameters
 
 در #C، مثل همیشه می‌تونید برای پارامترهای یک متد مقدار پیش‌فرض تعیین کنید:
+</div>
 
 ```csharp
 void Print(string message = "") => Console.WriteLine(message);
 ```
+
+<div dir="rtl">
 حالا در نسخه #C 12، همین امکان برای لامبداها (Lambda Expressions) هم فراهم شده:
+</div>
 
 ```csharp
 var print = (string message = "") => Console.WriteLine(message);
@@ -741,18 +769,24 @@ var print = (string message = "") => Console.WriteLine(message);
 print("Hello");  // خروجی: Hello  
 print();         // خروجی: (هیچ‌چیز)
 ```
+
+<div dir="rtl">
 ✅ این قابلیت خصوصاً در کتابخانه‌هایی مثل ASP.NET Minimal API بسیار مفید است،
 چون اجازه می‌دهد تابع‌ها انعطاف‌پذیرتر باشند و پارامترهای اختیاری داشته باشند.
 ## تعریف نام مستعار (Alias) برای هر نوع
 
 قبلاً در #C فقط می‌تونستید با استفاده از دستور using برای نوع‌های ساده یا جنریک نام مستعار تعریف کنید.
 برای مثال:
+</div>
 
 ```csharp
 using ListOfInt = System.Collections.Generic.List<int>;
 var list = new ListOfInt();
 ```
+
+<div dir="rtl">
 ولی حالا در #C 12، می‌تونید برای انواع دیگری مثل آرایه‌ها و Tupleها هم alias تعریف کنید:
+</div>
 
 ```csharp
 using NumberList = double[];
@@ -761,6 +795,8 @@ using Point = (int X, int Y);
 NumberList numbers = { 2.5, 3.5 };
 Point p = (3, 4);
 ```
+
+<div dir="rtl">
 ✅ این باعث می‌شه کد خواناتر و قابل نگهداری‌تر بشه — مخصوصاً وقتی از نوع‌های پیچیده به دفعات استفاده می‌کنید.
 
 
@@ -768,10 +804,13 @@ Point p = (3, 4);
 
 سی‌شارپ ۱۲ همچنین از ویژگی جدیدی به نام آرایه‌های درون‌خطی (Inline Arrays) پشتیبانی می‌کند.
 این ویژگی از طریق اتریبیوت:
+</div>
 
 ```csharp
 [System.Runtime.CompilerServices.InlineArray]
 ```
+
+<div dir="rtl">
 قابل استفاده است.
 
 🔹 با استفاده از آن می‌توانید درون یک struct، آرایه‌هایی با اندازه ثابت بسازید — بدون اینکه نیاز به قرار دادن کد در بلاک unsafe داشته باشید.
@@ -792,11 +831,15 @@ Point p = (3, 4);
 ✅ این نوع رشته می‌تواند هر کاراکتری را شامل شود — بدون اینکه نیاز به Escape کردن یا تکرار نقل قول‌ها داشته باشید.
 
 برای مثال، تعریف یک رشته خام برای نمایش XML:
+</div>
 
 ```csharp
 string raw = """<file path="c:\temp\test.txt"></file>""";
 ```
+
+<div dir="rtl">
 🟢 رشته‌های خام می‌توانند چندخطی باشند، و حتی می‌توانند از درج مقادیر (String Interpolation) با پیشوند $ پشتیبانی کنند:
+</div>
 
 ```csharp
 string multiLineRaw = $"""
@@ -805,14 +848,19 @@ string multiLineRaw = $"""
   The date and time is {DateTime.Now}
 """;
 ```
+
+<div dir="rtl">
 **درج آکولاد داخل رشته‌های خام**
 
 اگر بخواهید آکولاد {} واقعی را داخل رشته نگه دارید، می‌توانید با استفاده از دو $ یا بیشتر در ابتدای رشته،
 الگوی درج مقادیر را تغییر دهید (تا به جای {} از {{}} یا {{{}}} استفاده شود):
+</div>
 
 ```csharp
 Console.WriteLine($$"""{ "TimeStamp": "{{DateTime.Now}}" }""");
 ```
+
+<div dir="rtl">
 // خروجی: { "TimeStamp": "01/01/2024 12:13:25 PM" }
 📘 برای توضیح کامل‌تر این ویژگی، به بخش‌های:
 
@@ -831,11 +879,14 @@ Console.WriteLine($$"""{ "TimeStamp": "{{DateTime.Now}}" }""");
 مثلاً وقتی می‌خواهید متن JSON را با عملکرد بالا و مصرف کم حافظه پردازش کنید.
 
 مثال:
+</div>
 
 ```csharp
 ReadOnlySpan<byte> utf8 = "ab→cd"u8;  // → سه بایت مصرف می‌کند
 Console.WriteLine(utf8.Length);      // خروجی: 7
 ```
+
+<div dir="rtl">
 نوع این مقدار، ReadOnlySpan<byte> است (توضیح آن در فصل ۲۳ آمده).
 برای تبدیل آن به آرایه بایت می‌توانید از ToArray() استفاده کنید.
 
@@ -849,16 +900,22 @@ Console.WriteLine(utf8.Length);      // خروجی: 7
 + و از طریق ایندکس (Indexer) قابل دسترسی باشد (مثل آرایه‌ها یا لیست‌ها)
 
 مثال:
+</div>
 
 ```csharp
 int[] numbers = { 0, 1, 2, 3, 4 };
 Console.WriteLine(numbers is [0, 1, 2, 3, 4]);  // خروجی: True
 ```
+
+<div dir="rtl">
 🔸 علامت _ با هر مقدار دلخواه در یک موقعیت مطابقت دارد:
+</div>
 
 ```csharp
 Console.WriteLine(numbers is [_, 1, .., 4]);    // خروجی: True
 ```
+
+<div dir="rtl">
 🔸 دو نقطه .. نشان‌دهنده‌ی یک بُرش (Slice) است — یعنی صفر یا چند عنصر در وسط.
 
 📘 همچنین می‌توانید از var بعد از slice برای گرفتن بخش میانی استفاده کنید.
@@ -871,6 +928,7 @@ Console.WriteLine(numbers is [_, 1, .., 4]);    // خروجی: True
 حتماً آن عضو را مقداردهی کند — مثلاً از طریق Object Initializer.
 
 مثال:
+</div>
 
 ```csharp
 class Asset { public required string Name; }
@@ -878,6 +936,8 @@ class Asset { public required string Name; }
 Asset a1 = new Asset { Name = "House" };  // ✅ مجاز  
 Asset a2 = new Asset();                   // ❌ خطا — مقداردهی نشده!
 ```
+
+<div dir="rtl">
 ✅ این ویژگی کمک می‌کنه نیازی به نوشتن سازنده‌هایی با پارامترهای زیاد نداشته باشید،
 که این موضوع در کلاس‌های فرزند (Subclasses) ساده‌سازی بزرگی به‌حساب می‌آد.
 
@@ -891,6 +951,7 @@ Asset a2 = new Asset();                   // ❌ خطا — مقداردهی ن�
 از نسخه C# 11، امکان جدیدی اضافه شده که به شما اجازه می‌دهد درون یک Interface، متدهای استاتیک با نوع virtual یا abstract تعریف کنید.
 
 مثال:
+</div>
 
 ```csharp
 public interface IParsable<TSelf>
@@ -898,14 +959,19 @@ public interface IParsable<TSelf>
     static abstract TSelf Parse(string s);
 }
 ```
+
+<div dir="rtl">
 🔹 این یعنی کلاس یا structی که این اینترفیس را پیاده‌سازی می‌کند، باید یک تابع استاتیک با همین امضا ارائه دهد.
 
 📌 مزیت اصلی:
 می‌توان این توابع را به‌صورت پلی‌مورفیک (چندریخت) فراخوانی کرد، با استفاده از یک پارامتر generic که محدود به آن Interface شده:
+</div>
 
 ```csharp
 T ParseAny<T>(string s) where T : IParsable<T> => T.Parse(s);
 ```
+
+<div dir="rtl">
 ✅ حتی می‌توانید توابع عملگر (Operators) مثل +, -, *, / را هم به صورت static virtual یا static abstract در اینترفیس‌ها تعریف کنید.
 
 📘 برای اطلاعات بیشتر:
@@ -918,13 +984,17 @@ T ParseAny<T>(string s) where T : IParsable<T> => T.Parse(s);
 
 ### ریاضی عمومی (Generic Math)
 از نسخه .NET 7، اینترفیس جدیدی به نام:
+</div>
 
 ```csharp
 System.Numerics.INumber<TSelf>
 ```
+
+<div dir="rtl">
 معرفی شده که امکان انجام عملیات ریاضی روی نوع‌های عددی به‌صورت Generic را فراهم می‌کند.
 
 مثلاً می‌توان یک متد جمع‌زن (Sum) نوشت که برای هر نوع عددی کار کند:
+</div>
 
 ```csharp
 T Sum<T>(T[] numbers) where T : INumber<T>
@@ -935,20 +1005,28 @@ T Sum<T>(T[] numbers) where T : INumber<T>
     return total;
 }
 ```
+
+<div dir="rtl">
 و حالا می‌توانید این تابع را روی انواع مختلفی صدا بزنید:
+</div>
 
 ```csharp
 int intSum = Sum(new[] { 3, 5, 7 });
 double doubleSum = Sum(new[] { 3.2, 5.3, 7.1 });
 decimal decimalSum = Sum(new[] { 3.2m, 5.3m, 7.1m });
 ```
+
+<div dir="rtl">
 ✅ رابط INumber<TSelf> توسط تمام انواع عددی حقیقی و صحیح در دات‌نت (و حتی char) پیاده‌سازی شده است.
 
 این رابط شامل تعاریف عملگرها به‌صورت static abstract هم هست، مثل:
+</div>
 
 ```csharp
 static abstract TResult operator + (TSelf left, TOther right);
 ```
+
+<div dir="rtl">
 📘 این موضوعات در بخش‌های:
 
 + «Polymorphic Operators» در صفحه ۲۶۱
@@ -962,10 +1040,13 @@ static abstract TResult operator + (TSelf left, TOther right);
 🔸 دسترسی فایل (File Accessibility Modifier)
 
 از نسخه #C 11 می‌توانید با استفاده از کلمه کلیدی file، یک کلاس یا نوع را فقط در همان فایل منبع قابل دسترس کنید:
+</div>
 
 ```csharp
 file class Foo { ... }
 ```
+
+<div dir="rtl">
 ✅ این ویژگی مخصوصاً برای source generator‌ها طراحی شده،
 جایی که نیاز دارید نوع‌هایی بسازید که فقط در محدوده همان فایل قابل استفاده باشند و به بیرون درز نکنند.
 
@@ -1010,6 +1091,7 @@ file class Foo { ... }
 
 ### 📁 فضای نام در سطح فایل (File-Scoped Namespaces)
 در شرایطی که تمام کلاس‌ها یا نوع‌ها در یک فایل، داخل یک فضای نام (namespace) قرار دارند، C# 10 به شما اجازه می‌ده با یک اعلان کوتاه‌تر و ساده‌تر، از تورفتگی‌های اضافی جلوگیری کنید:
+</div>
 
 ```csharp
 namespace MyNamespace;  // این فضای نام برای کل فایل اعمال می‌شود
@@ -1017,27 +1099,35 @@ namespace MyNamespace;  // این فضای نام برای کل فایل اعم�
 class Class1 {}         // درون MyNamespace
 class Class2 {}         // درون MyNamespace
 ```
+
+<div dir="rtl">
 ✅ این کار، کد شما رو مرتب‌تر، کوتاه‌تر و خواناتر می‌کنه.
 
 ### 🌍 دستور global using
 
 با اضافه کردن کلیدواژه‌ی global قبل از دستور using،
 می‌تونید اون namespace رو به تمام فایل‌های پروژه اعمال کنید:
+</div>
 
 ```csharp
 global using System;
 global using System.Collections.Generic;
 ```
+
+<div dir="rtl">
 ✅ به این ترتیب، دیگه نیازی نیست توی هر فایل دوباره using بنویسید.
 
 🔹 حتی می‌تونید از global using static هم استفاده کنید.
 
 🛠 علاوه بر این، در پروژه‌های .NET 6، یک ویژگی جدید به نام Implicit Global Usings اضافه شده.
 اگه در فایل پروژه (csproj) بنویسید:
+</div>
 
 ```xml
 <ImplicitUsings>true</ImplicitUsings>
 ```
+
+<div dir="rtl">
 تعدادی از namespaceهای پرکاربرد، به‌صورت خودکار وارد پروژه می‌شن (بسته به نوع پروژه‌تون).
 📘 جزئیات بیشتر در صفحه ۹۶: «The global using Directive»
 
@@ -1047,6 +1137,7 @@ global using System.Collections.Generic;
 در C# 9، با کلیدواژه‌ی with می‌تونستید مقادیر جدیدی به recordها بدید بدون اینکه شیء اصلی تغییر کنه.
 
 در C# 10، این قابلیت برای نوع‌های ناشناس (anonymous types) هم اضافه شده:
+</div>
 
 ```csharp
 var a1 = new { A = 1, B = 2, C = 3, D = 4, E = 5 };
@@ -1054,6 +1145,8 @@ var a2 = a1 with { E = 10 };
 
 Console.WriteLine(a2);  // خروجی: { A = 1, B = 2, C = 3, D = 4, E = 10 }
 ```
+
+<div dir="rtl">
 ✅ شیء a1 بدون تغییر باقی می‌مونه، و a2 نسخه‌ی جدیدی از همون با مقدار E = 10 هست.
 
 ### 🧮 سینتکس جدید برای Deconstruction
@@ -1061,6 +1154,7 @@ Console.WriteLine(a2);  // خروجی: { A = 1, B = 2, C = 3, D = 4, E = 10 }
 در C# 7، امکان بازکردن مقدارهای Tuple یا Struct به متغیرها (Deconstruct) اضافه شد.
 
 در C# 10، می‌تونید اعلان و مقداردهی را ترکیب کنید، یعنی همزمان یک متغیر جدید تعریف کنید و به یک متغیر قدیمی مقدار بدهید:
+</div>
 
 ```csharp
 var point = (3, 4);
@@ -1068,6 +1162,8 @@ double x = 0;
 
 (x, double y) = point;
 ```
+
+<div dir="rtl">
 در این مثال:
 
 + متغیر x از قبل وجود داشته و مقدار جدیدی می‌گیره.
@@ -1097,10 +1193,13 @@ double x = 0;
 در نسخه C# 9، نوع جدیدی به نام record معرفی شد که نسخه‌ای ساده‌شده و بهینه‌شده از کلاس‌ها بود.
 
 در C# 10، حالا می‌تونید همون قابلیت رو برای structها هم داشته باشید:
+</div>
 
 ```csharp
 record struct Point(int X, int Y);
 ```
+
+<div dir="rtl">
 📌 شباهت‌ها و تفاوت‌ها:
 
 + تقریباً همه ویژگی‌های record برای record struct هم وجود دارن
@@ -1116,27 +1215,37 @@ record struct Point(int X, int Y);
 
 ✅ ۱. پشتیبانی از تایپ ضمنی (var)
 حالا می‌تونید از var برای تعریف lambda استفاده کنید:
+</div>
 
 ```csharp
 var greeter = () => "Hello, world";  // نوع: Func<string>
 ```
+
+<div dir="rtl">
 در اینجا، greeter به‌طور خودکار به Func<string> تبدیل می‌شه.
 
 🔸 اگر پارامتر داشته باشید، باید نوع اون رو صراحتاً مشخص کنید:
+</div>
 
 ```csharp
 var square = (int x) => x * x;
 ```
+
+<div dir="rtl">
 📌 ۲. امکان تعیین نوع بازگشتی (explicit return type)
 می‌تونید نوع بازگشتی یک lambda رو مشخص کنید:
+</div>
 
 ```csharp
 var sqr = int (int x) => x;
 ```
+
+<div dir="rtl">
 ✳️ این کار به ساده‌سازی فرآیند کامپایل در lambdaهای تو در تو کمک می‌کنه.
 
 📥 ۳. پذیرش lambda در متدهایی با نوع پارامتر عمومی
 حالا می‌تونید lambda رو به‌عنوان آرگومان به متدهایی بدید که نوع پارامترشون object یا Delegate یا Expression هست:
+</div>
 
 ```csharp
 M1(() => "test");   // تبدیل به Func<string>
@@ -1147,12 +1256,17 @@ void M1(object x) {}
 void M2(Delegate x) {}
 void M3(Expression x) {}
 ```
+
+<div dir="rtl">
 🏷 ۴. افزودن Attribute به lambda
 حالا می‌تونید به خود lambda، به پارامترهاش یا حتی به مقدار بازگشتی اون، attribute اضافه کنید:
+</div>
 
 ```csharp
 Action a = [Description("test")] () => { };
 ```
+
+<div dir="rtl">
 📘 جزئیات کامل در «Applying Attributes to Lambda Expressions» صفحه ۲۴۵
 
 ### 🧩 سایر ویژگی‌های جدید در C# 10
@@ -1161,6 +1275,7 @@ Action a = [Description("test")] () => { };
 ### 🧬 الگوی تطبیق در ویژگی‌های تو در تو (Nested Property Patterns)
 
 در C# 10، برای بررسی ویژگی‌های تو در تو (nested properties) می‌تونید از سینتکس ساده‌تری استفاده کنید. مثلاً:
+</div>
 
 ```csharp
 var obj = new Uri("https://www.linqpad.net");
@@ -1168,17 +1283,23 @@ var obj = new Uri("https://www.linqpad.net");
 if (obj is Uri { Scheme.Length: 5 })
   Console.WriteLine("طول Scheme برابر ۵ است");
 ```
+
+<div dir="rtl">
 ⬅️ این معادل با کدی با ساختار پیچیده‌تر در نسخه‌های قبلی است:
+</div>
 
 ```csharp
 if (obj is Uri { Scheme: { Length: 5 } })
 ```
+
+<div dir="rtl">
 🔹 این روش به نوشتن شرط‌ها با خوانایی بیشتر کمک می‌کنه.
 📘 برای اطلاعات بیشتر: «Property Patterns» صفحه ۲۴۱
 
 ### 🧾 ویژگی CallerArgumentExpression
 
 اگه بخواید عبارت اصلی‌ای که برای یک پارامتر متد استفاده شده رو بگیرید، می‌تونید از CallerArgumentExpression استفاده کنید:
+</div>
 
 ```csharp
 Print(Math.PI * 2);
@@ -1188,11 +1309,16 @@ void Print(
     [CallerArgumentExpression("number")] string expr = null)
     => Console.WriteLine(expr);
 ```
+
+<div dir="rtl">
 🟢 خروجی:
+</div>
 
 ```javascript
 Math.PI * 2
 ```
+
+<div dir="rtl">
 ✅ این قابلیت بیشتر برای کتابخانه‌های اعتبارسنجی (validation) و assertion کاربرد داره.
 📘 جزئیات: صفحه ۲۴۷، بخش «CallerArgumentExpression»
 
@@ -1200,17 +1326,21 @@ Math.PI * 2
 
 🧵 رشته‌های درون‌تابی (Interpolated Strings) می‌تونن ثابت (const) باشن
 به شرطی که مقادیری که درون‌شون استفاده شده هم const باشه:
+</div>
 
 ```csharp
 const string name = "Ali";
 const string message = $"Hello, {name}!";
 ```
+
+<div dir="rtl">
 **📏 دستور #line پیشرفته‌تر شده**
 
 حالا می‌تونید شماره ستون و بازه (range) هم تعیین کنید — مخصوصاً برای ابزارهای آنالیز کد مفیده.
 
 📛 در Recordها می‌تونید متد ToString() رو ببندید (seal کنید)
 یعنی نذارید کلاس‌های مشتق‌شده بتونن اون رو override کنن:
+</div>
 
 ```csharp
 public record Person
@@ -1218,14 +1348,19 @@ public record Person
     public sealed override string ToString() => "Hidden";
 }
 ```
+
+<div dir="rtl">
 **🧠 تجزیه و تحلیل انتساب قطعی (Definite Assignment) بهبود پیدا کرده**
 
 در نسخه‌های قبلی C#، این کد باعث خطا می‌شد چون کامپایلر فکر می‌کرد متغیر number ممکنه مقدار نگرفته باشه:
+</div>
 
 ```csharp
 if (foo?.TryParse("123", out var number) ?? false)
     Console.WriteLine(number);
 ```
+
+<div dir="rtl">
 اما از C# 10 به بعد، این کد کاملاً مجازه و کامپایل می‌شه.
 
 ## 🚀 چه چیزهایی در C# 9.0 جدید است؟
@@ -1234,11 +1369,14 @@ if (foo?.TryParse("123", out var number) ?? false)
 **🧾 دستورات سطح بالا (Top-Level Statements)**
 
 با استفاده از Top-Level Statements، می‌تونی برنامه‌ای بنویسی بدون اینکه مجبور باشی کلاس Program و متد Main رو تعریف کنی:
+</div>
 
 ```csharp
 using System;
 Console.WriteLine("Hello, world");
 ```
+
+<div dir="rtl">
 ✅ این ویژگی باعث می‌شه کدهای نمونه و آموزشی خیلی ساده‌تر و مختصرتر نوشته بشن.
 
 🔍 نکات تکمیلی:
@@ -1256,6 +1394,7 @@ Console.WriteLine("Hello, world");
 **🧷 ست‌کننده فقط-در-ابتدا (Init-Only Setters)**
 
 در C# 9.0، می‌تونی در تعریف ویژگی (property)، به جای set از init استفاده کنی:
+</div>
 
 ```csharp
 class Foo
@@ -1263,13 +1402,18 @@ class Foo
     public int ID { get; init; }
 }
 ```
+
+<div dir="rtl">
 این یعنی ویژگی فقط در زمان مقداردهی اولیه قابل تنظیم هست، و بعد از اون فقط خواندنیه.
 
 👨‍💻 استفاده از init بهت این امکان رو می‌ده که نوع‌هایی تغییرناپذیر (immutable) بسازی و با استفاده از initializer اون‌ها رو مقداردهی کنی، بدون نیاز به تعریف چندین سازنده (constructor):
+</div>
 
 ```csharp
 var foo = new Foo { ID = 123 };
 ```
+
+<div dir="rtl">
 🔄 در کنار رکوردها (records)، این قابلیت باعث می‌شه بتونی تغییرات غیرویرانگر (non-destructive mutation) انجام بدی — یعنی به جای تغییر شیء فعلی، یه نمونه‌ی جدید بسازی با مقادیر تغییر یافته.
 
 📘 جزئیات بیشتر در صفحه ۱۱۶: «Init-only Setters»
@@ -1279,13 +1423,17 @@ var foo = new Foo { ID = 123 };
 🔹 یک record (بخش کامل در صفحه ۲۲۷: «Records») نوع خاصی از کلاس است که برای داده‌های تغییرناپذیر (immutable) طراحی شده است.
 
 ✨ مهم‌ترین ویژگی آن، پشتیبانی از تغییر غیرویرانگر (nondestructive mutation) از طریق کلمه‌ی کلیدی جدید with است:
+</div>
 
 ```csharp
 Point p1 = new Point(2, 3);
 Point p2 = p1 with { Y = 4 };   // p2 کپی‌ای از p1 است با مقدار جدید Y
 Console.WriteLine(p2);         // خروجی: Point { X = 2, Y = 4 }
 ```
+
+<div dir="rtl">
 🔸 تعریف کلاس رکورد ما می‌تونه به این شکل باشه:
+</div>
 
 ```csharp
 record Point
@@ -1295,11 +1443,16 @@ record Point
     public double Y { get; init; }
 }
 ```
+
+<div dir="rtl">
 🔹 در موارد ساده، رکوردها می‌تونن ما رو از نوشتن کدهای تکراری (مثل تعریف ویژگی‌ها، سازنده و deconstructor) بی‌نیاز کنن. برای مثال، تعریف بالا رو می‌تونیم این‌طور خلاصه کنیم بدون از دست دادن قابلیت‌ها:
+</div>
 
 ```csharp
 record Point(double X, double Y);
 ```
+
+<div dir="rtl">
 📌 رکوردها مشابه تاپل‌ها (tuples)، به طور پیش‌فرض از برابری ساختاری (structural equality) استفاده می‌کنن، نه فقط مرجع (reference equality).
 
 + رکوردها می‌تونن از رکوردهای دیگه ارث‌بری کنن.
@@ -1312,6 +1465,7 @@ record Point(double X, double Y);
 
 **🔸 الگوهای رابطه‌ای (Relational Patterns)**
 از نسخه 9.0، می‌تونی عملگرهای <، >، <= و >= رو داخل الگوها استفاده کنی:
+</div>
 
 ```csharp
 string GetWeightCategory(decimal bmi) => bmi switch
@@ -1322,8 +1476,11 @@ string GetWeightCategory(decimal bmi) => bmi switch
     _       => "obese"
 };
 ```
+
+<div dir="rtl">
 **🔸 ترکیب‌گرهای الگو (Pattern Combinators)**
 حالا می‌تونی الگوها رو با استفاده از کلمات کلیدی and، or و not ترکیب کنی:
+</div>
 
 ```csharp
 bool IsVowel(char c) => c is 'a' or 'e' or 'i' or 'o' or 'u';
@@ -1332,6 +1489,8 @@ bool IsLetter(char c) =>
     c is >= 'a' and <= 'z'
     or >= 'A' and <= 'Z';
 ```
+
+<div dir="rtl">
 📌 درست مثل عملگرهای && و ||:
 
 + and اولویت بالاتری از or دارد.
@@ -1339,20 +1498,27 @@ bool IsLetter(char c) =>
 + می‌تونی با استفاده از پرانتزها اولویت رو تغییر بدی.
 
 🔍 از not هم می‌تونی با الگوی نوع (type pattern) استفاده کنی، برای مثال بررسی اینکه یک شیء از نوع خاصی نیست:
+</div>
 
 ```csharp
 if (obj is not string) ...
 ```
+
+<div dir="rtl">
 📘 برای جزئیات بیشتر، به صفحه ۲۳۸: «Patterns» مراجعه کن.
 
 **🆕 عبارات new با نوع هدف (Target-Typed new Expressions)**
 در C# 9.0 می‌تونی در جایی که کامپایلر می‌تونه نوع رو حدس بزنه، اسم نوع رو در new حذف کنی:
+</div>
 
 ```csharp
 System.Text.StringBuilder sb1 = new();
 System.Text.StringBuilder sb2 = new("Test");
 ```
+
+<div dir="rtl">
 📌 این ویژگی وقتی خیلی مفیده که تعریف متغیر و مقداردهی اولیه در دو بخش متفاوت از کدت باشه:
+</div>
 
 ```csharp
 class Foo
@@ -1362,13 +1528,18 @@ class Foo
     public Foo(string initialValue) => sb = new(initialValue);
 }
 ```
+
+<div dir="rtl">
 یا مثلاً وقتی می‌خوای مستقیماً به متد آرگومان بدی:
+</div>
 
 ```csharp
 MyMethod(new("test"));
 
 void MyMethod(System.Text.StringBuilder sb) { ... }
 ```
+
+<div dir="rtl">
 📘 جزئیات بیشتر در صفحه ۷۷: «Target-Typed new Expressions»
 
 ### بهبودهای بین‌زبانی (Interop)
@@ -1410,13 +1581,17 @@ C# 8.0 نخستین‌بار همراه با Visual Studio 2019 عرضه شد و
 
 اندیس‌ها به شما اجازه می‌دهند به عناصری نسبت به انتهای یک آرایه اشاره کنید، با استفاده از عملگر ^.
 ^1 به عنصر آخر اشاره می‌کند، ^2 به دومی از انتها، و به همین ترتیب:
+</div>
 
 ```csharp
 char[] vowels = new char[] {'a','e','i','o','u'};
 char lastElement  = vowels [^1];   // 'u'
 char secondToLast = vowels [^2];   // 'o'
 ```
+
+<div dir="rtl">
 بازه‌ها (ranges) به شما اجازه می‌دهند یک آرایه را با استفاده از عملگر .. «برش» دهید:
+</div>
 
 ```csharp
 char[] firstTwo   = vowels [..2];     // 'a', 'e'
@@ -1424,15 +1599,21 @@ char[] lastThree  = vowels [2..];     // 'i', 'o', 'u'
 char[] middleOne  = vowels [2..3];    // 'i'
 char[] lastTwo    = vowels [^2..];    // 'o', 'u'
 ```
+
+<div dir="rtl">
 C# اندیس‌ها و بازه‌ها را با کمک نوع‌های Index و Range پیاده‌سازی می‌کند:
+</div>
 
 ```csharp
 Index last = ^1;
 Range firstTwoRange = 0..2;
 char[] firstTwo = vowels [firstTwoRange];   // 'a', 'e'
 ```
+
+<div dir="rtl">
 شما می‌توانید پشتیبانی از اندیس‌ها و بازه‌ها را در کلاس‌های خودتان نیز فراهم کنید،
 با تعریف یک ایندکسر (indexer) که نوع پارامتر آن Index یا Range باشد:
+</div>
 
 ```csharp
 class Sentence
@@ -1442,25 +1623,34 @@ class Sentence
     public string[] this[Range range] => words[range];
 }
 ```
+
+<div dir="rtl">
 برای اطلاعات بیشتر، رجوع کنید به صفحه 63، «Indices and Ranges».
 
 ### ✅ عملگر نسبت‌دهی در صورت تهی بودن (Null-coalescing assignment)
 
 عملگر ??= تنها زمانی به یک متغیر مقدار می‌دهد که مقدار فعلی آن null باشد. به‌جای نوشتن کد زیر:
+</div>
 
 ```csharp
 if (s == null) s = "Hello, world";
 ```
+
+<div dir="rtl">
 اکنون می‌توان ساده‌تر نوشت:
+</div>
 
 ```csharp
 s ??= "Hello, world";
 ```
+
+<div dir="rtl">
 این نوشتار کد را کوتاه‌تر و خواناتر می‌کند. 📏🧹
 
 #### 🧹 اعلان‌های using (Using declarations)
 
 اگر پس از یک دستور using، از آکولاد و بلوک کدی استفاده نکنید، آن‌وقت به آن اعلان using گفته می‌شود. منبع (resource) مربوطه در این حالت، زمانی آزاد (dispose) می‌شود که اجرای برنامه از بلوک محاط‌کننده خارج شود:
+</div>
 
 ```csharp
 if (File.Exists("file.txt"))
@@ -1469,11 +1659,14 @@ if (File.Exists("file.txt"))
     Console.WriteLine(reader.ReadLine());
 }
 ```
+
+<div dir="rtl">
 در این مثال، شیء reader هنگام خروج از بلوک if به‌طور خودکار از بین می‌رود. ♻️📄
 
 #### 🛡️ اعضای فقط‌خواندنی (Read-only members)
 
 در C# 8 می‌توانید به توابع موجود در یک struct، ویژگی readonly بدهید. این کار تضمین می‌کند که تابع مذکور نتواند هیچ یک از فیلدها را تغییر دهد، وگرنه خطای زمان کامپایل رخ خواهد داد:
+</div>
 
 ```csharp
 struct Point
@@ -1482,6 +1675,8 @@ struct Point
     public readonly void ResetX() => X = 0;  // Error!
 }
 ```
+
+<div dir="rtl">
 اگر یک تابع readonly، تابعی غیرـ‌readonly را فراخوانی کند، کامپایلر یک هشدار می‌دهد و برای جلوگیری از تغییر احتمالی، ساختار را کپی می‌کند. 🚫✍️
 
 #### 🧩 توابع محلی ایستا (Static local methods)
@@ -1491,6 +1686,7 @@ struct Point
 #### 🧱 اعضای پیش‌فرض در واسط‌ها (Default interface members)
 
 C# 8 امکان افزودن پیاده‌سازی پیش‌فرض به اعضای واسط‌ها (interfaces) را فراهم کرده است. این بدان معناست که پیاده‌سازی آن عضو، برای کلاس‌هایی که از آن واسط استفاده می‌کنند اختیاری است:
+</div>
 
 ```csharp
 interface ILogger
@@ -1498,12 +1694,18 @@ interface ILogger
     void Log(string text) => Console.WriteLine(text);
 }
 ```
+
+<div dir="rtl">
 برای فراخوانی پیاده‌سازی پیش‌فرض، باید آن را به‌صورت صریح از طریق واسط صدا زد:
+</div>
 
 ```csharp
 ((ILogger)new Logger()).Log("message");
 ```
+
+<div dir="rtl">
 علاوه بر این، واسط‌ها می‌توانند اعضای ایستا مانند متدها و فیلدها را نیز تعریف کنند. این اعضا می‌توانند از درون پیاده‌سازی پیش‌فرض یا حتی از بیرون واسط استفاده شوند:
+</div>
 
 ```csharp
 interface ILogger
@@ -1515,11 +1717,14 @@ interface ILogger
 // استفاده از بیرون واسط:
 ILogger.Prefix = "File log: ";
 ```
+
+<div dir="rtl">
 ⚠️ فیلدهای نمونه (instance fields) همچنان در واسط‌ها ممنوع هستند. برای جزئیات بیشتر، به بخش «اعضای پیش‌فرض واسط‌ها» در صفحه 151 مراجعه کنید. 📘📌
 
 #### ✨ عبارات سوییچ (Switch Expressions)
 
 از نسخه C# 8 به بعد، می‌توانید از switch به‌عنوان یک عبارت (expression) استفاده کنید، نه صرفاً یک ساختار شرطی:
+</div>
 
 ```csharp
 string cardName = cardNumber switch
@@ -1530,6 +1735,8 @@ string cardName = cardNumber switch
     _ => "Pip card" // معادل default
 };
 ```
+
+<div dir="rtl">
 🔄 این قابلیت، نگارش کدهای تصمیم‌گیری را ساده‌تر و خواناتر می‌کند. برای مثال‌های بیشتر به بخش «Switch expressions» در صفحه ۹۰ مراجعه کنید.
 
 #### 🧩 الگوهای Tuple، موقعیتی و ویژگی‌ها
@@ -1537,6 +1744,7 @@ string cardName = cardNumber switch
 
 🔹 الگوی Tuple (تاپل)
 اجازه می‌دهد هم‌زمان بر اساس چند مقدار تصمیم‌گیری کنید:
+</div>
 
 ```csharp
 int cardNumber = 12; 
@@ -1549,6 +1757,8 @@ string cardName = (cardNumber, suite) switch
     _ => "Unknown card"
 };
 ```
+
+<div dir="rtl">
 **🔹 الگوهای موقعیتی (Positional Patterns)**
 
 اگر شیء شما یک deconstructor داشته باشد، می‌توانید با همین ساختار سوییچ کنید.
@@ -1556,10 +1766,13 @@ string cardName = (cardNumber, suite) switch
 **🔹 الگوی ویژگی‌ها (Property Patterns)**
 
 به شما امکان می‌دهد بر اساس ویژگی‌های داخلی یک شیء تصمیم بگیرید. برای مثال:
+</div>
 
 ```csharp
 if (obj is string { Length: 4 }) ...
 ```
+
+<div dir="rtl">
 👆 بررسی می‌کند آیا obj یک رشته با طول ۴ است یا نه.
 
 #### ❓ نوع‌های مرجع nullable (Nullable Reference Types)
@@ -1572,6 +1785,7 @@ if (obj is string { Length: 4 }) ...
 
 **فعال‌سازی**
 می‌توان از طریق فایل پروژه (.csproj) یا با دستور #nullable در کد فعالش کرد:
+</div>
 
 ```csharp
 #nullable enable
@@ -1579,16 +1793,24 @@ if (obj is string { Length: 4 }) ...
 string s1 = null;   // ⚠️ اخطار! s1 به طور پیش‌فرض nullable نیست
 string? s2 = null;  // ✅ مجاز است چون نوع nullable دارد
 ```
+
+<div dir="rtl">
 اگر فیلدی را که nullable نیست مقداردهی اولیه نکنید، یا از یک مقدار nullable استفاده کنید بدون بررسی null بودن، کامپایلر هشدار می‌دهد:
+</div>
 
 ```csharp
 void Foo(string? s) => Console.Write(s.Length);  // ⚠️ هشدار
 ```
+
+<div dir="rtl">
 برای رفع هشدار می‌توان از عملگر اطمینان از عدم null بودن (!) استفاده کرد:
+</div>
 
 ```csharp
 void Foo(string? s) => Console.Write(s!.Length); // ✅ بدون هشدار
 ```
+
+<div dir="rtl">
 📖 برای اطلاعات کامل‌تر، به بخش «Nullable Reference Types» در صفحه ۲۱۵ مراجعه کنید.
 
 #### 🌀 جریان‌های ناهمزمان (Asynchronous Streams)
@@ -1596,6 +1818,7 @@ void Foo(string? s) => Console.Write(s!.Length); // ✅ بدون هشدار
 تا پیش از C# 8، می‌توانستید با استفاده از yield return یک ایتراتور (iterator) بنویسید یا با استفاده از await یک تابع ناهمزمان (asynchronous function). اما نمی‌توانستید هر دو را با هم ترکیب کنید — یعنی ایتراتوری بنویسید که درون آن await استفاده شود و مقدارها را به‌صورت ناهمزمان بازگرداند.
 
 🔥 در C# 8 این امکان با معرفی جریان‌های ناهمزمان (asynchronous streams) فراهم شده است:
+</div>
 
 ```csharp
 async IAsyncEnumerable<int> RangeAsync(int start, int count, int delay)
@@ -1607,14 +1830,19 @@ async IAsyncEnumerable<int> RangeAsync(int start, int count, int delay)
     }
 }
 ```
+
+<div dir="rtl">
 ⬅️ متد بالا، اعدادی را از start تا start + count به‌صورت ناهمزمان و با تأخیر مشخص بازمی‌گرداند.
 
 برای مصرف کردن یک جریان ناهمزمان از ساختار await foreach استفاده می‌کنیم:
+</div>
 
 ```csharp
 await foreach (var number in RangeAsync(0, 10, 100))
     Console.WriteLine(number);
 ```
+
+<div dir="rtl">
 ✅ این کد، ۱۰ عدد را با تأخیر ۱۰۰ میلی‌ثانیه‌ای چاپ می‌کند، و هر بار منتظر مقدار جدید می‌ماند.
 
 📖 برای اطلاعات بیشتر، به بخش «Asynchronous Streams» در صفحه ۶۷۲ مراجعه کنید.
@@ -1631,11 +1859,14 @@ C# 7.3 بهبودهای کوچکی در ویژگی‌های موجود ایجا�
 +بهبود در انتخاب نسخه مناسب متد (Overload Resolution)
 
 +قابلیت اعمال Attribute روی فیلد پشتیبان (Backing Field) در ویژگی‌های خودکار:
+</div>
 
 ```csharp
 [field:NonSerialized]
 public int MyProperty { get; set; }
 ```
+
+<div dir="rtl">
 همچنین این نسخه ویژگی‌های برنامه‌نویسی با تخصیص حافظه کم را که در C# 7.2 معرفی شده بود، گسترش داد:
 
 + توانایی تخصیص مجدد متغیرهای محلی با ref
@@ -1643,11 +1874,14 @@ public int MyProperty { get; set; }
 + عدم نیاز به Pin کردن هنگام ایندکس‌گذاری روی فیلدهای ثابت (fixed fields)
 
 + پشتیبانی از مقداردهی اولیه فیلدها با stackalloc:
+</div>
 
 ```csharp
 int* pointer  = stackalloc int[] { 1, 2, 3 };
 Span<int> arr = stackalloc[] { 1, 2, 3 };
 ```
+
+<div dir="rtl">
 📌 توجه: حافظه اختصاص‌یافته با stackalloc را می‌توان مستقیماً به یک Span<T> نسبت داد (توضیحات بیشتر در فصل 23).
 
 #### 🔐 C# 7.2
@@ -1658,6 +1892,7 @@ Span<int> arr = stackalloc[] { 1, 2, 3 };
 + امکان استفاده از آرگومان‌های موقعیتی پس از آرگومان‌های نام‌گذاری‌شده هنگام فراخوانی متدها
 
 + معرفی ساختارهای فقط‌خواندنی (readonly struct) که باعث می‌شود تمام فیلدها readonly باشند:
+</div>
 
 ```csharp
 readonly struct Point
@@ -1665,6 +1900,8 @@ readonly struct Point
     public readonly int X, Y; // هر دو باید readonly باشند
 }
 ```
+
+<div dir="rtl">
 این ویژگی باعث بیان واضح‌تر قصد برنامه‌نویس و فراهم شدن بهینه‌سازی بیشتر توسط کامپایلر می‌شود.
 
 همچنین امکاناتی برای ریزبهینه‌سازی (micro-optimization) و برنامه‌نویسی با تخصیص حافظه کم افزوده شد:
@@ -1681,47 +1918,66 @@ readonly struct Point
 از نسخه 7.1 به بعد:
 
 + می‌توان نوع داده را هنگام استفاده از default حذف کرد، اگر قابل استنتاج باشد:
+</div>
 
 ```csharp
 decimal number = default; // نوع decimal است
 ```
+
+<div dir="rtl">
 + قوانین switch ساده‌تر شدند (امکان الگوگیری از پارامترهای نوع عمومی)
 
 + متد اصلی برنامه (Main) می‌تواند asynchronous باشد
 
 + امکان استنتاج نام عناصر تاپل از نام متغیرها:
+</div>
 
 ```csharp
 var now = DateTime.Now;
 var tuple = (now.Hour, now.Minute, now.Second);
 ```
+
+<div dir="rtl">
 ### بهبودهای مربوط به اعداد (Numeric Literal Improvements) 🔢
 در نسخه‌ی C# 7، می‌توانیم داخل عددها از کاراکتر زیرخط (_) استفاده کنیم تا خوانایی‌شان بهتر شود. به این‌ها جداکننده ارقام (digit separators) می‌گویند و کامپایلر این زیرخط‌ها را نادیده می‌گیرد:
+</div>
 
 ```csharp
 int million = 1_000_000;
 ```
+
+<div dir="rtl">
 همچنین می‌توانیم اعداد باینری را با پیشوند 0b بنویسیم:
+</div>
 
 ```csharp
 var b = 0b1010_1011_1100_1101_1110_1111;
 ```
+
+<div dir="rtl">
 #### متغیرهای Out و Discardها 🎯
 در C# 7 کار با متدهایی که پارامتر out دارند راحت‌تر شده است.
 حالا می‌توانید متغیرهای out را در لحظه تعریف کنید (بخش «Out variables and discards» در صفحه 72 را ببینید):
+</div>
 
 ```csharp
 bool successful = int.TryParse("123", out int result);
 Console.WriteLine(result);
 ```
+
+<div dir="rtl">
 اگر متدی چند پارامتر out داشته باشد و شما فقط به بعضی از آن‌ها نیاز داشته باشید، می‌توانید بقیه را با کاراکتر زیرخط (_) نادیده بگیرید:
+</div>
 
 ```csharp
 SomeBigMethod(out _, out _, out _, out int x, out _, out _, out _);
 Console.WriteLine(x);
 ```
+
+<div dir="rtl">
 #### الگوهای نوع و متغیرهای Pattern 🧩
 می‌توانید با استفاده از عملگر is، متغیرهایی را در لحظه معرفی کنید. به این‌ها متغیرهای الگو (pattern variables) می‌گویند (بخش «Introducing a pattern variable» در صفحه 130 را ببینید):
+</div>
 
 ```csharp
 void Foo(object x)
@@ -1730,9 +1986,12 @@ void Foo(object x)
         Console.WriteLine(s.Length);
 }
 ```
+
+<div dir="rtl">
 #### دستور Switch با پشتیبانی از الگوهای نوع 🔀
 دستور switch حالا می‌تواند علاوه بر ثابت‌ها، بر اساس نوع داده هم تصمیم‌گیری کند (بخش «Switching on types» در صفحه 89 را ببینید).
 همچنین می‌توانید با استفاده از عبارت when شرط اضافه کنید و حتی روی مقدار null هم سوئیچ کنید:
+</div>
 
 ```csharp
 switch (x)
@@ -1751,8 +2010,11 @@ switch (x)
         break;
 }
 ```
+
+<div dir="rtl">
 #### متدهای محلی 🛠️
 متد محلی (Local Method) متدی است که داخل یک تابع دیگر تعریف می‌شود (نگاه کنید به بخش «متدهای محلی» در صفحه 106).
+</div>
 
 ```csharp
 void WriteCubes()
@@ -1764,11 +2026,14 @@ void WriteCubes()
     int Cube(int value) => value * value * value;
 }
 ```
+
+<div dir="rtl">
 🔹 متدهای محلی فقط برای همان تابعی که در آن تعریف شده‌اند قابل مشاهده هستند و می‌توانند متغیرهای محلی همان تابع را بگیرند و استفاده کنند، درست مثل عبارات لامبدا.
 
 #### اعضای بدنه-بیان بیشتر ➡️
 در C# 6، سینتکس expression-bodied یا همان «پیکان چاق» (=>) برای متدها، پراپرتی‌های فقط-خواندنی، عملگرها و ایندکسرها معرفی شد.
 در C# 7 این قابلیت گسترش یافت و شامل سازنده‌ها، پراپرتی‌های خواندنی/نوشتنی و فاینالایزرها هم شد:
+</div>
 
 ```csharp
 public class Person
@@ -1786,11 +2051,14 @@ public class Person
     ~Person() => Console.WriteLine("finalize");
 }
 ```
+
+<div dir="rtl">
 #### دی‌کانستراکتورها 🔄
 در C# 7، الگوی Deconstructor معرفی شد (بخش «دی‌کانستراکتورها» در صفحه 110).
 🔹 برعکس سازنده (Constructor) که معمولاً یک سری مقادیر را به‌عنوان پارامتر گرفته و در فیلدها ذخیره می‌کند، یک دی‌کانستراکتور برعکس عمل می‌کند و مقدار فیلدها را به مجموعه‌ای از متغیرها برمی‌گرداند.
 
 برای مثال، می‌توانیم برای کلاس Person بالا یک دی‌کانستراکتور به این صورت بنویسیم:
+</div>
 
 ```csharp
 public void Deconstruct(out string firstName, out string lastName)
@@ -1800,7 +2068,10 @@ public void Deconstruct(out string firstName, out string lastName)
     lastName = name.Substring(spacePos + 1);
 }
 ```
+
+<div dir="rtl">
 📌 دی‌کانستراکتورها با سینتکس خاصی صدا زده می‌شوند:
+</div>
 
 ```csharp
 var joe = new Person("Joe Bloggs");
@@ -1808,24 +2079,33 @@ var (first, last) = joe;   // دی‌کانستراکشن
 Console.WriteLine(first);  // Joe
 Console.WriteLine(last);   // Bloggs
 ```
+
+<div dir="rtl">
 #### تاپل‌ها (Tuples) 🧩
 شاید مهم‌ترین بهبود در C# 7، پشتیبانی مستقیم و واضح از تاپل‌ها باشد (نگاه کنید به بخش «Tuples» در صفحه 222 📖).
 تاپل‌ها یک روش ساده برای ذخیره یک مجموعه از مقادیر مرتبط فراهم می‌کنند:
+</div>
 
 ```csharp
 var bob = ("Bob", 23);
 Console.WriteLine(bob.Item1);   // Bob
 Console.WriteLine(bob.Item2);   // 23
 ```
+
+<div dir="rtl">
 تاپل‌های جدید در C# در واقع نوعی syntactic sugar (شیرینی语 نحوی 😄) برای استفاده از ساختارهای جنریک System.ValueTuple<…> هستند.
 اما به لطف قابلیت‌های کامپایلر، می‌توان به عناصر تاپل نام هم داد:
+</div>
 
 ```csharp
 var tuple = (name: "Bob", age: 23);
 Console.WriteLine(tuple.name);   // Bob
 Console.WriteLine(tuple.age);    // 23
 ```
+
+<div dir="rtl">
 با استفاده از تاپل‌ها، توابع می‌توانند چند مقدار را برگردانند، بدون اینکه مجبور باشیم از پارامترهای out یا انواع اضافه و پیچیده استفاده کنیم:
+</div>
 
 ```csharp
 static (int row, int column) GetFilePosition() => (3, 10);
@@ -1837,7 +2117,10 @@ static void Main()
     Console.WriteLine(pos.column);   // 10
 }
 ```
+
+<div dir="rtl">
 تاپل‌ها به‌طور ضمنی از الگوی deconstruction پشتیبانی می‌کنند، بنابراین می‌توان آن‌ها را به‌راحتی به متغیرهای جداگانه تجزیه کرد:
+</div>
 
 ```csharp
 static void Main()
@@ -1847,14 +2130,20 @@ static void Main()
     Console.WriteLine(column);   // 10
 }
 ```
+
+<div dir="rtl">
 #### عبارت‌های throw 🚨
 قبل از نسخه C# 7، دستور throw همیشه یک statement (دستور مستقل) بود.
 اما اکنون می‌تواند به عنوان یک expression (عبارت) هم استفاده شود، مثلاً در توابع expression-bodied:
+</div>
 
 ```csharp
 public string Foo() => throw new NotImplementedException();
 ```
+
+<div dir="rtl">
 همچنین می‌توان از throw در یک عبارت شرطی سه‌تایی (ternary conditional expression) استفاده کرد:
+</div>
 
 ```csharp
 string Capitalize(string value) =>
@@ -1862,6 +2151,8 @@ string Capitalize(string value) =>
     value == "" ? "" :
     char.ToUpper(value[0]) + value.Substring(1);
 ```
+
+<div dir="rtl">
 💡 این ویژگی باعث می‌شود بتوانید پرتاب استثنا (Exception) را در جاهایی انجام دهید که قبلاً فقط می‌توانستید یک مقدار برگردانید یا عملیات انجام دهید، و این انعطاف‌پذیری کد را افزایش می‌دهد.
 
 ### چه چیزهایی در ‎C# 6.0‎ جدید است
@@ -1875,39 +2166,52 @@ https://github.com/dotnet/roslyn
 
 (بخش Null Operators در صفحه 82)
 با این عملگر دیگر لازم نیست قبل از فراخوانی یک متد یا دسترسی به یک عضو، مقدار null را بررسی کنید. در مثال زیر، متغیر result به جای پرتاب کردن خطای NullReferenceException، برابر null می‌شود:
+</div>
 
 ```csharp
 System.Text.StringBuilder sb = null;
 string result = sb?.ToString(); // result برابر null است
 ```
+
+<div dir="rtl">
 **2. توابع بدنه‌-بیان (Expression-Bodied)**
 
 (بخش Methods در صفحه 106)
 اجازه می‌دهد متدها، پراپرتی‌ها، عملگرها و ایندکسرهایی که فقط شامل یک عبارت هستند، کوتاه و شبیه به lambda expression نوشته شوند:
+</div>
 
 ```csharp
 public int TimesTwo(int x) => x * 2;
 public string SomeProperty => "Property value";
 ```
+
+<div dir="rtl">
 **3. مقداردهی اولیه به پراپرتی‌ها (Property Initializers)**
 
 (فصل 3)
 قابلیت مقداردهی اولیه به یک پراپرتی خودکار هنگام تعریف آن:
+</div>
 
 ```csharp
 public DateTime TimeCreated { get; set; } = DateTime.Now;
 ```
+
+<div dir="rtl">
 حتی می‌توان پراپرتی‌های فقط‌خواندنی را مقداردهی کرد:
+</div>
 
 ```csharp
 public DateTime TimeCreated { get; } = DateTime.Now;
 ```
+
+<div dir="rtl">
 این پراپرتی‌های فقط‌خواندنی همچنین می‌توانند در سازنده (Constructor) مقداردهی شوند، که ایجاد نوع‌های تغییرناپذیر (Immutable) را ساده‌تر می‌کند.
 
 **4. مقداردهی اولیه اندیس‌ها (Index Initializers)**
 
 (فصل 4)
 اجازه می‌دهد هر نوعی که ایندکسر دارد را در یک مرحله مقداردهی کنید:
+</div>
 
 ```csharp
 var dict = new Dictionary<int, string>()
@@ -1916,18 +2220,24 @@ var dict = new Dictionary<int, string>()
     [10] = "ten"
 };
 ```
+
+<div dir="rtl">
 **5. درون‌گذاری رشته‌ای (String Interpolation)**
 
 (بخش String Type در صفحه 58)
 جایگزینی خلاصه‌تر برای string.Format:
+</div>
 
 ```csharp
 string s = $"It is {DateTime.Now.DayOfWeek} today";
 ```
+
+<div dir="rtl">
 **6. فیلترهای استثنا (Exception Filters)**
 
 (بخش try Statements and Exceptions در صفحه 195)
 امکان تعیین شرط برای یک بلوک catch:
+</div>
 
 ```csharp
 string html;
@@ -1940,26 +2250,34 @@ catch (WebException ex) when (ex.Status == WebExceptionStatus.Timeout)
     ...
 }
 ```
+
+<div dir="rtl">
 **7. دستور using static**
 
 (بخش Namespaces در صفحه 95)
 تمام اعضای استاتیک یک نوع را وارد می‌کند تا بتوانید بدون نام‌گذاری کامل از آن‌ها استفاده کنید:
+</div>
 
 ```csharp
 using static System.Console;
 
 WriteLine("Hello, world"); // به‌جای Console.WriteLine
 ```
+
+<div dir="rtl">
 **8. عملگر nameof**
 
 (فصل 3)
 نام یک متغیر، نوع، یا نماد دیگر را به‌صورت رشته برمی‌گرداند. این کار باعث می‌شود در هنگام تغییر نام نمادها در Visual Studio، کد خراب نشود:
+</div>
 
 ```csharp
 int capacity = 123;
 string x = nameof(capacity);   // "capacity"
 string y = nameof(Uri.Host);   // "Host"
 ```
+
+<div dir="rtl">
 **9. امکان await داخل بلوک‌های catch و finally**
 
 اکنون مجاز هستید داخل catch و finally از await استفاده کنید.
@@ -2054,6 +2372,5 @@ string y = nameof(Uri.Host);   // "Host"
 + و مجموعه‌ای از ویژگی‌های کوچک‌تر و متنوع مانند مخفف‌های فضای نام (namespace alias qualifier)، دوستان اسمبلی (friend assemblies)، و بافرهای با اندازه ثابت (fixed-size buffers)
 
 را نیز اضافه کرد.
-
-
 </div>
+

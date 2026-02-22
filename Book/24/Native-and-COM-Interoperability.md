@@ -1,5 +1,5 @@
-<div dir="rtl">
 
+<div dir="rtl">
 # فصل بیست و چهارم: یکپارچه‌سازی با Native و COM 
 
 این فصل توضیح می‌دهد چگونه با کتابخانه‌های Native (غیرمدیریت‌شده) Dynamic-Link (DLL) و کامپوننت‌های Component Object Model (COM) یکپارچه شوید. مگر اینکه خلاف آن ذکر شده باشد، انواع داده‌ای که در این فصل آمده‌اند در فضای نام **System** یا **System.Runtime.InteropServices** وجود دارند.
@@ -11,12 +11,15 @@
 **P/Invoke**، کوتاه شده‌ی **Platform Invocation Services**، به شما اجازه می‌دهد به توابع، ساختارها و callback‌ها در DLLهای غیرمدیریت‌شده (کتابخانه‌های مشترک در Unix) دسترسی پیدا کنید.
 
 برای مثال، تابع `MessageBox` که در DLL ویندوز **user32.dll** تعریف شده است به شکل زیر است:
+</div>
 
 ```c
 int MessageBox(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType);
 ```
 
+<div dir="rtl">
 می‌توانید این تابع را مستقیماً با تعریف یک متد **static** با همان نام، استفاده از کلمه کلیدی `extern` و افزودن attribute `DllImport` فراخوانی کنید:
+</div>
 
 ```csharp
 using System;
@@ -29,9 +32,11 @@ MessageBox(IntPtr.Zero,
 static extern int MessageBox(IntPtr hWnd, string text, string caption, int type);
 ```
 
+<div dir="rtl">
 کلاس‌های `MessageBox` در فضای نام‌های **System.Windows** و **System.Windows.Forms** خودشان متدهای مشابه غیرمدیریت‌شده را فراخوانی می‌کنند.
 
 نمونه‌ای از `DllImport` برای **Ubuntu Linux**:
+</div>
 
 ```csharp
 Console.WriteLine($"User ID: {getuid()}");
@@ -40,6 +45,7 @@ Console.WriteLine($"User ID: {getuid()}");
 static extern uint getuid();
 ```
 
+<div dir="rtl">
 CLR شامل یک **marshaler** است که می‌داند چگونه پارامترها و مقادیر بازگشتی بین انواع .NET و انواع غیرمدیریت‌شده تبدیل شوند. در مثال ویندوز، پارامترهای `int` مستقیماً به عدد صحیح چهار بایتی که تابع انتظار دارد تبدیل می‌شوند و پارامترهای `string` به آرایه‌های Unicode پایان‌یافته با null (UTF-16) تبدیل می‌شوند.
 `IntPtr` یک struct است که برای پوشش یک **handle** غیرمدیریت‌شده طراحی شده؛ در پلتفرم‌های ۳۲ بیتی، ۳۲ بیت و در پلتفرم‌های ۶۴ بیتی، ۶۴ بیت عرض دارد. تبدیل مشابهی در Unix نیز انجام می‌شود. (از C# 9 به بعد، می‌توانید از نوع `nint` هم استفاده کنید که به `IntPtr` نگاشت می‌شود.)
 
@@ -53,12 +59,14 @@ CLR شامل یک **marshaler** است که می‌داند چگونه پارا�
 برای مثال، یک رشته (`string`) می‌تواند شامل کاراکترهای تک‌بایتی ANSI یا کاراکترهای Unicode UTF-16 باشد و طول آن می‌تواند با پیش‌وند مشخص شود، یا null-terminated باشد، یا طول ثابت داشته باشد.
 
 با استفاده از attribute `MarshalAs` می‌توانید به marshaler CLR مشخص کنید کدام حالت استفاده شود تا تبدیل صحیح انجام گیرد. مثال:
+</div>
 
 ```csharp
 [DllImport("...")]
 static extern int Foo([MarshalAs(UnmanagedType.LPStr)] string s);
 ```
 
+<div dir="rtl">
 enum `UnmanagedType` شامل تمام انواع Win32 و COM است که marshaler آن‌ها را می‌شناسد. در این مثال، marshaler به ترجمه به `LPStr` دستور داده شد، که یک رشته تک‌بایتی ANSI پایان‌یافته با null است.
 
 در سمت .NET نیز شما می‌توانید نوع داده‌ای که استفاده می‌کنید را انتخاب کنید. **Handles** غیرمدیریت‌شده، برای مثال، می‌توانند به `IntPtr`، `int`، `uint`، `long` یا `ulong` نگاشت شوند.
@@ -76,6 +84,7 @@ enum `UnmanagedType` شامل تمام انواع Win32 و COM است که marsh
 ---
 
 دریافت رشته‌ها از کد غیرمدیریت‌شده به .NET نیازمند مدیریت حافظه است. marshaler به طور خودکار این کار را انجام می‌دهد اگر متد خارجی را با `StringBuilder` به جای `string` اعلام کنید، مانند:
+</div>
 
 ```csharp
 StringBuilder s = new StringBuilder(256);
@@ -86,7 +95,9 @@ Console.WriteLine(s);
 static extern int GetWindowsDirectory(StringBuilder sb, int maxChars);
 ```
 
+<div dir="rtl">
 در Unix نیز مشابه عمل می‌کند. مثال زیر تابع `getcwd` را فراخوانی می‌کند تا مسیر جاری را بازگرداند:
+</div>
 
 ```csharp
 var sb = new StringBuilder(256);
@@ -96,14 +107,18 @@ Console.WriteLine(getcwd(sb, sb.Capacity));
 static extern string getcwd(StringBuilder buf, int size);
 ```
 
+<div dir="rtl">
 اگرچه استفاده از `StringBuilder` راحت است، اما کمی ناکارآمد است زیرا CLR باید تخصیص‌های حافظه اضافی و کپی‌کردن‌ها را انجام دهد. در نقاط حساس عملکرد، می‌توانید با استفاده از `char[]` این سربار را کاهش دهید:
+</div>
 
 ```csharp
 [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
 static extern int GetWindowsDirectory(char[] buffer, int maxChars);
 ```
 
+<div dir="rtl">
 توجه کنید که باید `CharSet` را در attribute `DllImport` مشخص کنید. همچنین پس از فراخوانی تابع، باید رشته خروجی را به طول مناسب برش دهید. می‌توانید این کار را با حداقل تخصیص حافظه با استفاده از **array pooling** (صفحه ۵۹۹) انجام دهید:
+</div>
 
 ```csharp
 string GetWindowsDirectory()
@@ -118,6 +133,7 @@ string GetWindowsDirectory()
 }
 ```
 
+<div dir="rtl">
 (البته، این مثال صرفاً آموزشی است و شما می‌توانید مسیر Windows را از طریق متد داخلی `Environment.GetFolderPath` دریافت کنید.)
 
 اگر مطمئن نیستید چگونه یک متد خاص Win32 یا Unix را فراخوانی کنید، معمولاً با جستجوی نام تابع و `DllImport` در اینترنت، نمونه‌ای پیدا خواهید کرد. برای ویندوز، سایت [http://www.pinvoke.net](http://www.pinvoke.net) یک ویکی است که هدف آن مستندسازی تمام signatureهای Win32 است.
@@ -125,12 +141,15 @@ string GetWindowsDirectory()
 ### Marshaling کلاس‌ها و Structها 📦
 
 گاهی اوقات نیاز دارید یک **struct** را به یک متد غیرمدیریت‌شده ارسال کنید. برای مثال، تابع `GetSystemTime` در API ویندوز به شکل زیر تعریف شده است:
+</div>
 
 ```c
 void GetSystemTime(LPSYSTEMTIME lpSystemTime);
 ```
 
+<div dir="rtl">
 `LPSYSTEMTIME` مطابق با این struct در C است:
+</div>
 
 ```c
 typedef struct _SYSTEMTIME {
@@ -145,7 +164,9 @@ typedef struct _SYSTEMTIME {
 } SYSTEMTIME, *PSYSTEMTIME;
 ```
 
+<div dir="rtl">
 برای فراخوانی `GetSystemTime`، باید یک کلاس یا struct در .NET تعریف کنیم که با این struct در C مطابقت داشته باشد:
+</div>
 
 ```csharp
 using System;
@@ -165,9 +186,11 @@ class SystemTime
 }
 ```
 
+<div dir="rtl">
 Attribute `StructLayout` به marshaler می‌گوید چگونه هر فیلد را به معادل غیرمدیریت‌شده‌اش نگاشت کند. `LayoutKind.Sequential` به این معنی است که فیلدها به ترتیب پشت سر هم و روی مرزهای **pack-size** قرار می‌گیرند (که بعداً توضیح داده می‌شود)، درست مانند struct در C. نام فیلدها اهمیت ندارد، بلکه **ترتیب فیلدها** مهم است.
 
 حالا می‌توانیم `GetSystemTime` را فراخوانی کنیم:
+</div>
 
 ```csharp
 SystemTime t = new SystemTime();
@@ -178,7 +201,9 @@ Console.WriteLine(t.Year);
 static extern void GetSystemTime(SystemTime t);
 ```
 
+<div dir="rtl">
 به‌طور مشابه، در Unix:
+</div>
 
 ```csharp
 Console.WriteLine(GetSystemTime());
@@ -203,6 +228,7 @@ struct Timespec
 }
 ```
 
+<div dir="rtl">
 در هر دو زبان C و C#، فیلدهای یک شیء در فاصله‌ای از آدرس آن شیء قرار دارند. تفاوت در این است که در برنامه C#، CLR این **offset** را با استفاده از token فیلد پیدا می‌کند؛ اما در C، نام فیلد مستقیماً به offset کامپایل می‌شود.
 برای مثال، در C، `wDay` فقط یک token است که نشان می‌دهد چه چیزی در آدرس یک نمونه `SystemTime` به اضافه ۲۴ بایت قرار دارد.
 
@@ -215,12 +241,14 @@ Attribute `StructLayout` همچنین اجازه می‌دهد **offsetهای ص
 #### In و Out Marshaling ↔️
 
 در مثال قبلی، `SystemTime` به صورت کلاس پیاده‌سازی شد. می‌توانستیم به جای آن struct انتخاب کنیم—مشروط بر اینکه `GetSystemTime` با پارامتر `ref` یا `out` اعلام شود:
+</div>
 
 ```csharp
 [DllImport("kernel32.dll")]
 static extern void GetSystemTime(out SystemTime t);
 ```
 
+<div dir="rtl">
 در اکثر موارد، semantics پارامترهای جهت‌دار C# با متدهای خارجی یکسان است:
 
 * پارامترهای **Pass-by-value** کپی می‌شوند،
@@ -230,10 +258,13 @@ static extern void GetSystemTime(out SystemTime t);
 با این حال، برای برخی نوع‌ها که تبدیل خاصی دارند، استثنا وجود دارد. برای مثال، کلاس‌های آرایه و `StringBuilder` هنگام خروج از تابع نیاز به کپی دارند، بنابراین رفتارشان **in/out** است. گاهی اوقات مفید است که این رفتار را با attributes `In` و `Out` بازنویسی کنیم.
 
 برای مثال، اگر یک آرایه باید **فقط خواندنی** باشد، modifier `in` مشخص می‌کند که فقط کپی ورودی آرایه به تابع انجام شود، نه خروجی آن:
+</div>
 
 ```csharp
 static extern void Foo([In] int[] array);
 ```
+
+<div dir="rtl">
 ### Calling Conventions ⚙️
 
 متدهای غیرمدیریت‌شده آرگومان‌ها و مقادیر بازگشتی را از طریق **stack** و (اختیاری) **CPU registers** دریافت می‌کنند. از آنجا که چندین روش برای انجام این کار وجود دارد، پروتکل‌های مختلفی شکل گرفته‌اند که به آن‌ها **calling conventions** گفته می‌شود.
@@ -247,12 +278,14 @@ CLR در حال حاضر از سه calling convention پشتیبانی می‌ک
 به طور پیش‌فرض، CLR از **calling convention پیش‌فرض پلتفرم** استفاده می‌کند (convention استاندارد برای آن پلتفرم). در ویندوز، این convention برابر با `StdCall` است و در لینوکس x86 برابر با `Cdecl`.
 
 اگر یک متد غیرمدیریت‌شده از این پیش‌فرض پیروی نکند، می‌توانید به صورت صریح calling convention آن را مشخص کنید:
+</div>
 
 ```csharp
 [DllImport("MyLib.dll", CallingConvention=CallingConvention.Cdecl)]
 static extern void SomeFunc(...);
 ```
 
+<div dir="rtl">
 توجه داشته باشید که نام somewhat misleading `CallingConvention.WinApi` به convention پیش‌فرض پلتفرم اشاره دارد.
 
 ---
@@ -265,28 +298,35 @@ C# همچنین اجازه می‌دهد توابع خارجی، کد C# را ف
 * از طریق **delegates**
 
 برای مثال، تابع زیر در `User32.dll` ویندوز، تمام handles پنجره‌های سطح بالا را enumerate می‌کند:
+</div>
 
 ```c
 BOOL EnumWindows(WNDENUMPROC lpEnumFunc, LPARAM lParam);
 ```
 
+<div dir="rtl">
 `WNDENUMPROC` یک callback است که برای هر handle پنجره به ترتیب فراخوانی می‌شود (یا تا زمانی که callback `false` بازگرداند). تعریف آن به شکل زیر است:
+</div>
 
 ```c
 BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam);
 ```
 
+<div dir="rtl">
 ---
 
 #### Callbacks با Function Pointers 🔹
 
 از **C# 9**، ساده‌ترین و سریع‌ترین گزینه—وقتی callback شما یک متد **static** است—استفاده از function pointer است. در مورد callback `WNDENUMPROC`، می‌توان از function pointer زیر استفاده کرد:
+</div>
 
 ```csharp
 delegate*<IntPtr, IntPtr, bool>
 ```
 
+<div dir="rtl">
 این یک تابع را نشان می‌دهد که دو آرگومان `IntPtr` می‌گیرد و `bool` برمی‌گرداند. سپس می‌توانید با استفاده از عملگر `&` آن را به یک متد static اختصاص دهید:
+</div>
 
 ```csharp
 using System;
@@ -307,6 +347,7 @@ unsafe
 }
 ```
 
+<div dir="rtl">
 با function pointers، callback باید یک متد **static** باشد (یا یک **static local function** همانند مثال بالا).
 
 ---
@@ -314,6 +355,7 @@ unsafe
 #### UnmanagedCallersOnly ⚡
 
 می‌توانید با اعمال **unmanaged** به declaration function pointer و attribute `[UnmanagedCallersOnly]` به متد callback، عملکرد را بهبود دهید:
+</div>
 
 ```csharp
 using System;
@@ -336,6 +378,7 @@ unsafe
 }
 ```
 
+<div dir="rtl">
 این attribute به CLR اطلاع می‌دهد که متد `PrintWindow` تنها از کد غیرمدیریت‌شده قابل فراخوانی است و اجازه می‌دهد runtime برخی shortcuts را اعمال کند. توجه کنید که نوع بازگشتی متد از `bool` به `byte` تغییر کرده است، زیرا متدهایی که `[UnmanagedCallersOnly]` دارند، تنها می‌توانند از **blittable value types** در signature استفاده کنند.
 
 **Blittable types** آن‌هایی هستند که نیاز به marshaling خاص ندارند، زیرا در محیط‌های مدیریت‌شده و غیرمدیریت‌شده به یک شکل نمایش داده می‌شوند. این نوع‌ها شامل:
@@ -345,25 +388,32 @@ unsafe
 * structهایی که تنها شامل blittable types هستند
 
 نوع `char` نیز blittable است، اگر بخشی از structی باشد که attribute `StructLayout` آن **CharSet.Unicode** را مشخص کرده باشد:
+</div>
 
 ```csharp
 [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Unicode)]
 ```
+
+<div dir="rtl">
 ### Nondefault Calling Conventions ⚙️
 
 به طور پیش‌فرض، کامپایلر فرض می‌کند که callback غیرمدیریت‌شده از **calling convention پیش‌فرض پلتفرم** پیروی می‌کند. اگر این‌گونه نباشد، می‌توانید به صورت صریح calling convention آن را با استفاده از پارامتر `CallConvs` در attribute `[UnmanagedCallersOnly]` مشخص کنید:
+</div>
 
 ```csharp
 [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
 static byte PrintWindow(IntPtr hWnd, IntPtr lParam) ...
 ```
 
+<div dir="rtl">
 همچنین باید نوع function pointer را با درج یک **modifier خاص** بعد از کلمه کلیدی `unmanaged` به‌روزرسانی کنید:
+</div>
 
 ```csharp
 delegate* unmanaged[Stdcall]<IntPtr, IntPtr, byte> hWnd, IntPtr lParam);
 ```
 
+<div dir="rtl">
 کامپایلر اجازه می‌دهد هر شناسه‌ای (مثل `XYZ`) را داخل کروشه‌ها قرار دهید، مشروط بر اینکه یک نوع .NET به نام `CallConvXYZ` وجود داشته باشد که توسط runtime درک شود و با چیزی که هنگام اعمال `[UnmanagedCallersOnly]` مشخص کرده‌اید مطابقت داشته باشد. این ویژگی به مایکروسافت اجازه می‌دهد در آینده **calling conventions** جدید اضافه کند.
 
 در این مثال، ما `StdCall` را مشخص کردیم، که **calling convention پیش‌فرض ویندوز** است (در لینوکس x86، پیش‌فرض `Cdecl` است).
@@ -378,6 +428,7 @@ delegate* unmanaged[Stdcall]<IntPtr, IntPtr, byte> hWnd, IntPtr lParam);
 می‌توان callbacks غیرمدیریت‌شده را با استفاده از **delegates** نیز پیاده‌سازی کرد. این روش در تمام نسخه‌های C# کار می‌کند و اجازه می‌دهد callbackهایی که به متدهای **instance** اشاره دارند نیز استفاده شوند.
 
 برای انجام این کار، ابتدا یک نوع delegate با signature مشابه callback تعریف می‌کنیم. سپس می‌توان یک نمونه delegate را به متد خارجی پاس داد:
+</div>
 
 ```csharp
 class CallbackFun
@@ -399,6 +450,7 @@ class CallbackFun
 }
 ```
 
+<div dir="rtl">
 استفاده از delegates برای callbacks غیرمدیریت‌شده **ironically unsafe** است، زیرا ممکن است callback بعد از خارج شدن نمونه delegate از scope رخ دهد و در این صورت delegate واجد شرایط **garbage collection** می‌شود. این می‌تواند منجر به شدیدترین نوع exception در runtime شود—یکی بدون **stack trace** مفید.
 
 در مورد callbackهای متد static، می‌توان با اختصاص نمونه delegate به یک **read-only static field** از این مشکل جلوگیری کرد (همانند مثال بالا). اما برای callbackهای متد instance، این روش کافی نیست و باید با دقت کدنویسی کنید تا حداقل یک reference به نمونه delegate برای مدت زمان هر callback احتمالی حفظ شود. حتی در این حالت، اگر یک باگ در سمت غیرمدیریت‌شده وجود داشته باشد—که callback را بعد از اینکه به آن گفته‌اید اجرا کند—ممکن است همچنان با یک exception غیرقابل ردیابی مواجه شوید. یک راهکار این است که برای هر تابع غیرمدیریت‌شده، یک نوع delegate منحصر به فرد تعریف کنید؛ این کار در تشخیص مشکلات کمک می‌کند، زیرا نوع delegate در exception گزارش می‌شود.
@@ -406,12 +458,14 @@ class CallbackFun
 ---
 
 می‌توانید **calling convention** callback را از پیش‌فرض پلتفرم تغییر دهید با اعمال attribute `[UnmanagedFunctionPointer]` روی delegate:
+</div>
 
 ```csharp
 [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 delegate void MyCallback(int foo, short bar);
 ```
 
+<div dir="rtl">
 ---
 
 ### شبیه‌سازی C Union 🔧
@@ -424,15 +478,18 @@ delegate void MyCallback(int foo, short bar);
 ---
 
 ممکن است سخت باشد موردی پیدا کنید که این کاربردی باشد. اما فرض کنید می‌خواهید یک نت موسیقی را روی یک **synthesizer خارجی** پخش کنید. Windows Multimedia API یک تابع برای این کار از طریق پروتکل MIDI فراهم می‌کند:
+</div>
 
 ```csharp
 [DllImport("winmm.dll")]
 public static extern uint midiOutShortMsg(IntPtr handle, uint message);
 ```
 
+<div dir="rtl">
 آرگومان دوم، `message`، مشخص می‌کند چه نتی پخش شود. مشکل در ساخت این عدد ۳۲ بیتی unsigned است: این عدد به بایت‌هایی تقسیم می‌شود که نماینده **کانال MIDI، نت، و سرعت ضربه** هستند.
 
 راه حل کلاسیک، استفاده از عملگرهای بیتی `<<`, `>>`, `&`, `|` برای تبدیل بین بایت‌ها و عدد ۳۲ بیتی است. اما روش ساده‌تر، تعریف یک struct با **layout صریح** است:
+</div>
 
 ```csharp
 [StructLayout(LayoutKind.Explicit)]
@@ -445,7 +502,9 @@ public struct NoteMessage
 }
 ```
 
+<div dir="rtl">
 فیلدهای `Channel`, `Note` و `Velocity` عمداً با عدد ۳۲ بیتی packed overlap دارند. این امکان را می‌دهد که بتوانید از هر دو روش خواندن و نوشتن کنید، بدون نیاز به محاسبات اضافی برای هماهنگی فیلدها:
+</div>
 
 ```csharp
 NoteMessage n = new NoteMessage();
@@ -459,6 +518,8 @@ Console.WriteLine(n.PackedMsg);  // 3302410
 n.PackedMsg = 3328010;
 Console.WriteLine(n.Note);       // 200
 ```
+
+<div dir="rtl">
 ### Shared Memory 🗂️
 
 **Memory-mapped files** یا **shared memory** قابلیتی در ویندوز است که به چندین فرآیند روی یک کامپیوتر اجازه می‌دهد داده‌ها را با هم به اشتراک بگذارند. Shared memory بسیار سریع است و بر خلاف **pipes**، امکان **دسترسی تصادفی** به داده‌های مشترک را فراهم می‌کند. در فصل ۱۵ دیدیم که چگونه می‌توان از کلاس `MemoryMappedFile` برای دسترسی به فایل‌های memory-mapped استفاده کرد؛ اما عبور از این کلاس و فراخوانی مستقیم متدهای Win32، راهی عالی برای نشان دادن **P/Invoke** است.
@@ -466,6 +527,7 @@ Console.WriteLine(n.Note);       // 200
 تابع Win32 به نام `CreateFileMapping` حافظه مشترک اختصاص می‌دهد. شما تعداد بایت مورد نیاز و نامی که برای شناسایی share استفاده می‌شود را مشخص می‌کنید. سپس یک برنامه دیگر می‌تواند با فراخوانی `OpenFileMapping` و استفاده از همان نام، به این حافظه مشترک متصل شود. هر دو متد یک **handle** بازمی‌گردانند که با فراخوانی `MapViewOfFile` می‌توان آن را به یک **pointer** تبدیل کرد.
 
 در ادامه، یک کلاس که دسترسی به shared memory را encapsulate می‌کند مشاهده می‌کنید:
+</div>
 
 ```csharp
 using System;
@@ -546,6 +608,7 @@ public sealed class SharedMem : IDisposable
 }
 ```
 
+<div dir="rtl">
 در این مثال، برای متدهای `DllImport` که از پروتکل `SetLastError` برای ارائه کدهای خطا استفاده می‌کنند، `SetLastError=true` تنظیم شده است. این باعث می‌شود که هنگام ایجاد **Win32Exception**، جزئیات خطا به درستی پر شود. همچنین می‌توان خطا را به صورت صریح با فراخوانی `Marshal.GetLastWin32Error` پرس و جو کرد.
 
 ---
@@ -553,6 +616,7 @@ public sealed class SharedMem : IDisposable
 برای آزمایش این کلاس، نیاز به اجرای دو برنامه داریم:
 
 1. برنامه اول shared memory را ایجاد می‌کند:
+</div>
 
 ```csharp
 using (SharedMem sm = new SharedMem("MyShare", false, 1000))
@@ -563,7 +627,9 @@ using (SharedMem sm = new SharedMem("MyShare", false, 1000))
 }
 ```
 
+<div dir="rtl">
 2. برنامه دوم با ساخت یک شیء `SharedMem` با همان نام و مقدار `existing = true` به حافظه مشترک متصل می‌شود:
+</div>
 
 ```csharp
 using (SharedMem sm = new SharedMem("MyShare", true, 1000))
@@ -574,6 +640,7 @@ using (SharedMem sm = new SharedMem("MyShare", true, 1000))
 }
 ```
 
+<div dir="rtl">
 نتیجه این است که هر برنامه یک `IntPtr`—یک pointer به همان حافظه unmanaged—دارد. حالا دو برنامه می‌توانند داده‌ها را از طریق این pointer مشترک بخوانند و بنویسند.
 
 یک روش این است که یک کلاس برای encapsulate کل داده‌های مشترک تعریف کنید و سپس داده‌ها را با استفاده از `UnmanagedMemoryStream` **serialize** و **deserialize** کنید. اما اگر حجم داده زیاد باشد، این روش ناکارآمد است.
@@ -583,6 +650,7 @@ using (SharedMem sm = new SharedMem("MyShare", true, 1000))
 ### Mapping a Struct to Unmanaged Memory 🧩
 
 می‌توان یک **struct** با `StructLayout` از نوع `Sequential` یا `Explicit` را مستقیماً به حافظه غیرمدیریت‌شده map کرد. به مثال زیر توجه کنید:
+</div>
 
 ```csharp
 [StructLayout(LayoutKind.Sequential)]
@@ -594,14 +662,17 @@ unsafe struct MySharedData
 }
 ```
 
+<div dir="rtl">
 دستور `fixed` به ما اجازه می‌دهد **آرایه‌هایی با طول ثابت از نوع value** را درون struct تعریف کنیم، و همین ویژگی ما را وارد فضای **unsafe** می‌کند. فضای لازم برای ۵۰ عدد اعشاری (float) به صورت inline در struct اختصاص می‌یابد. بر خلاف آرایه‌های معمولی C#، `Numbers` یک reference به آرایه نیست—خود آرایه است.
 
 اگر کد زیر را اجرا کنیم:
+</div>
 
 ```csharp
 static unsafe void Main() => Console.WriteLine(sizeof(MySharedData));
 ```
 
+<div dir="rtl">
 نتیجه برابر با **208** خواهد بود:
 
 * ۵۰ عدد float چهار بایتی
@@ -613,6 +684,7 @@ static unsafe void Main() => Console.WriteLine(sizeof(MySharedData));
 ---
 
 می‌توانیم `MySharedData` را در یک **context unsafe** با حافظه تخصیص‌یافته روی stack آزمایش کنیم:
+</div>
 
 ```csharp
 MySharedData d;
@@ -622,7 +694,9 @@ data->Letter = 'X';
 data->Numbers[10] = 1.45f;
 ```
 
+<div dir="rtl">
 یا:
+</div>
 
 ```csharp
 // تخصیص آرایه روی stack
@@ -632,7 +706,9 @@ data->Letter = 'X';
 data->Numbers[10] = 1.45f;
 ```
 
+<div dir="rtl">
 البته، این روش چیزی بیش از آنچه در managed context می‌توان انجام داد، نشان نمی‌دهد. اما اگر بخواهیم یک نمونه از `MySharedData` را روی **heap غیرمدیریت‌شده** ذخیره کنیم، خارج از محدوده garbage collector CLR، اینجاست که **pointers** واقعاً مفید می‌شوند:
+</div>
 
 ```csharp
 MySharedData* data = (MySharedData*) Marshal.AllocHGlobal(sizeof(MySharedData)).ToPointer();
@@ -641,12 +717,15 @@ data->Letter = 'X';
 data->Numbers[10] = 1.45f;
 ```
 
+<div dir="rtl">
 تابع `Marshal.AllocHGlobal` حافظه‌ای روی **heap غیرمدیریت‌شده** اختصاص می‌دهد. برای آزاد کردن این حافظه:
+</div>
 
 ```csharp
 Marshal.FreeHGlobal(new IntPtr(data));
 ```
 
+<div dir="rtl">
 (فراموش کردن آزادسازی حافظه، منجر به **memory leak** می‌شود.)
 
 ---
@@ -656,6 +735,7 @@ Marshal.FreeHGlobal(new IntPtr(data));
 ---
 
 در ادامه، ما `MySharedData` را با کلاس `SharedMem` که در بخش قبل نوشتیم، ترکیب می‌کنیم. برنامه زیر یک بلوک حافظه مشترک تخصیص می‌دهد و struct را مستقیماً در آن map می‌کند:
+</div>
 
 ```csharp
 static unsafe void Main()
@@ -680,7 +760,9 @@ static unsafe void Main()
 }
 ```
 
+<div dir="rtl">
 می‌توان به جای `SharedMem` از کلاس built-in `MemoryMappedFile` نیز استفاده کرد:
+</div>
 
 ```csharp
 using (MemoryMappedFile mmFile = MemoryMappedFile.CreateNew("MyShare", 1000))
@@ -693,9 +775,11 @@ using (MemoryMappedViewAccessor accessor = mmFile.CreateViewAccessor())
 }
 ```
 
+<div dir="rtl">
 ---
 
 برنامه دوم می‌تواند به همان حافظه مشترک متصل شود و مقادیر نوشته شده توسط برنامه اول را بخواند:
+</div>
 
 ```csharp
 static unsafe void Main()
@@ -720,26 +804,31 @@ static unsafe void Main()
 }
 ```
 
+<div dir="rtl">
 خروجی هر دو برنامه:
 
 * **برنامه اول**:
+</div>
 
-  ```
+```
   Written to shared memory
   Value is 124
   Letter is !
   11th Number is 987.5
   ```
 
+<div dir="rtl">
 * **برنامه دوم**:
+</div>
 
-  ```
+```
   Value is 123
   Letter is X
   11th Number is 1.45
   Updated shared memory
   ```
 
+<div dir="rtl">
 ---
 
 نگران pointers نباشید: برنامه‌نویسان C++ از آن‌ها در سراسر برنامه‌ها استفاده می‌کنند و معمولاً همه چیز را درست اجرا می‌کنند. کاربرد ما نسبتاً ساده است.
@@ -750,6 +839,7 @@ static unsafe void Main()
 ### fixed و fixed {...} 🔒
 
 یکی از محدودیت‌های **map کردن مستقیم struct به حافظه** این است که struct تنها می‌تواند شامل **unmanaged types** باشد. اگر نیاز دارید داده‌ای از نوع **string** را به اشتراک بگذارید، باید به جای آن از **آرایه‌ای از کاراکترهای ثابت** استفاده کنید. این یعنی تبدیل دستی بین string و آرایه. مثال:
+</div>
 
 ```csharp
 [StructLayout(LayoutKind.Sequential)]
@@ -779,16 +869,19 @@ unsafe struct MySharedData
 }
 ```
 
+<div dir="rtl">
 هیچ مفهومی به نام **reference به یک آرایه fixed** وجود ندارد؛ به جای آن، یک **pointer** دریافت می‌کنید. وقتی به یک آرایه fixed اندیس‌دهی می‌کنید، در واقع **arithmetics pointer** انجام می‌دهید!
 
 در اولین استفاده از keyword `fixed`، ما فضای لازم برای ۲۰۰ کاراکتر را **inline** در struct اختصاص دادیم. همین keyword در property معنای متفاوتی دارد: به CLR می‌گوید که **object را pin کند** تا اگر garbage collection رخ داد، محتوای struct جابجا نشود، زیرا داریم مستقیماً با memory pointers به آن دسترسی پیدا می‌کنیم.
 
 ممکن است بپرسید چرا MySharedData می‌تواند در managed memory جابجا شود، وقتی که در unmanaged memory قرار دارد. پاسخ این است که **کامپایلر نمی‌داند** و فرض می‌کند ممکن است MySharedData در context مدیریت‌شده استفاده شود، پس insist می‌کند که `fixed` اضافه شود تا کد unsafe ما در managed context امن شود. و واقعاً هم درست است، زیرا کافی است:
+</div>
 
 ```csharp
 object obj = new MySharedData();
 ```
 
+<div dir="rtl">
 این باعث می‌شود MySharedData روی heap قرار گیرد و **boxed** شود و تحت تاثیر garbage collection قرار گیرد.
 
 این مثال نشان می‌دهد چگونه می‌توان یک **string** را در structی که به unmanaged memory map شده است، نمایش داد. برای نوع داده‌های پیچیده‌تر، می‌توان از **کدهای serialization موجود** استفاده کرد، با این شرط که طول داده serialize شده از فضای اختصاص‌یافته در struct تجاوز نکند؛ در غیر این صورت، نتیجه می‌تواند **تداخل ناخواسته با فیلدهای بعدی** باشد.
@@ -824,6 +917,7 @@ COM مخفف **Component Object Model** است؛ یک استاندارد بای�
 سیستم نوع COM حول **interfaces** می‌چرخد. یک COM interface شبیه یک .NET interface است، اما کاربرد آن گسترده‌تر است، زیرا COM تنها از طریق interface قابلیت‌های خود را ارائه می‌دهد.
 
 مثال در دنیای .NET:
+</div>
 
 ```csharp
 public class Foo
@@ -832,25 +926,30 @@ public class Foo
 }
 ```
 
+<div dir="rtl">
 کاربران می‌توانند Foo را مستقیم استفاده کنند. اگر بعدها implementation تابع Test() تغییر کند، assemblyهای فراخوان نیازی به recompile ندارند.
 
 در COM، Foo برای جداسازی interface از implementation، **قابلیت‌های خود را از طریق یک interface ارائه می‌دهد**:
+</div>
 
 ```csharp
 public interface IFoo { string Test(); }
 ```
 
+<div dir="rtl">
 اضافه کردن overload در COM پیچیده‌تر است، زیرا:
 
 * interfaces منتشرشده immutable هستند.
 * COM اجازه method overloading نمی‌دهد.
 
 راه‌حل: ایجاد interface دوم:
+</div>
 
 ```csharp
 public interface IFoo2 { string Test(string s); }
 ```
 
+<div dir="rtl">
 پشتیبانی از چندین interface کلیدی است تا **کتابخانه‌های COM versionable** شوند.
 
 ---
@@ -886,6 +985,7 @@ CLR در **پشتیبانی داخلی از COM** به شما اجازه نمی�
 
 * از **Add Reference** > COM tab، کتابخانه مورد نظر را انتخاب کنید (مثلاً Microsoft Excel Object Library).
 * کد نمونه برای ایجاد یک Workbook و پر کردن یک سلول در Excel:
+</div>
 
 ```csharp
 using System;
@@ -902,10 +1002,12 @@ Excel.Workbook workBook = excel.Workbooks.Add();
 workBook.SaveAs(@"d:\temp.xlsx");
 ```
 
+<div dir="rtl">
 **نکته مهم:** برای اینکه runtime بتواند interop types را پیدا کند، باید **Embed Interop Types** را فعال کنید.
 
 * در Visual Studio: روی COM reference کلیک کنید و `Embed Interop Types = true` تنظیم کنید.
 * یا در `.csproj`:
+</div>
 
 ```xml
 <ItemGroup>
@@ -915,6 +1017,7 @@ workBook.SaveAs(@"d:\temp.xlsx");
 </ItemGroup>
 ```
 
+<div dir="rtl">
 ---
 
 ### Optional Parameters و Named Arguments
@@ -922,17 +1025,21 @@ workBook.SaveAs(@"d:\temp.xlsx");
 COM APIs معمولاً تابع‌هایی با **تعداد زیادی پارامتر اختیاری** دارند، زیرا overloading ندارند.
 
 * C# **COM-aware** است و می‌توانید از optional parameters استفاده کنید:
+</div>
 
 ```csharp
 workBook.SaveAs(@"d:\temp.xlsx");
 ```
 
+<div dir="rtl">
 * **Named arguments** امکان مشخص کردن پارامترها بدون توجه به موقعیت را فراهم می‌کنند:
+</div>
 
 ```csharp
 workBook.SaveAs(@"d:\test.xlsx", Password: "foo");
 ```
 
+<div dir="rtl">
 ---
 
 ### Implicit ref Parameters
@@ -940,6 +1047,7 @@ workBook.SaveAs(@"d:\test.xlsx", Password: "foo");
 برخی COM APIs (مثل Microsoft Word) **تمام پارامترها را به صورت pass-by-reference** تعریف می‌کنند، حتی اگر تغییر ندهند.
 
 * قبلاً مجبور بودید `ref` را برای هر پارامتر استفاده کنید، که optional parameters را غیرممکن می‌کرد:
+</div>
 
 ```csharp
 object filename = "foo.doc";
@@ -947,12 +1055,15 @@ object notUsed = Missing.Value;
 word.Open(ref filename, ref notUsed, ...);
 ```
 
+<div dir="rtl">
 * با implicit ref parameters در C#، می‌توانید بدون `ref` فراخوانی کنید:
+</div>
 
 ```csharp
 word.Open("foo.doc");
 ```
 
+<div dir="rtl">
 > هشدار: اگر COM method واقعا یک پارامتر را تغییر دهد، هیچ خطای compile-time یا runtime دریافت نمی‌کنید.
 
 ---
@@ -960,11 +1071,13 @@ word.Open("foo.doc");
 ### Indexers
 
 * حذف نیاز به `ref` اجازه می‌دهد COM **indexers با پارامتر ref** را به شکل ordinary C# indexer استفاده کنید:
+</div>
 
 ```csharp
 myComObject.Foo[123] = "Hello";
 ```
 
+<div dir="rtl">
 * خودتان نمی‌توانید چنین indexerهایی بسازید؛ فقط COM می‌تواند چنین propertyهایی ارائه دهد که خودشان indexer دارند.
 
 ---
@@ -972,6 +1085,7 @@ myComObject.Foo[123] = "Hello";
 ### Dynamic Binding
 
 * اجازه دسترسی به COM component بدون **COM interop type**:
+</div>
 
 ```csharp
 Type excelAppType = Type.GetTypeFromProgID("Excel.Application", true);
@@ -981,21 +1095,26 @@ dynamic wb = excel.Workbooks.Add();
 excel.Cells[1, 1].Value2 = "foo";
 ```
 
+<div dir="rtl">
 * جایگزین قدیمی و سخت‌تر: استفاده از reflection به جای dynamic.
 * Dynamic همچنین می‌تواند با **COM variant type** بهتر کار کند (معادل object در .NET). با فعال کردن **Embed Interop Types**، variant به dynamic map می‌شود و نیازی به cast نیست:
+</div>
 
 ```csharp
 excel.Cells[1, 1].Font.FontStyle = "Bold";
 ```
 
+<div dir="rtl">
 * معایب dynamic: **از دست دادن IntelliSense** و چک‌های compile-time.
 * راه معمول: تبدیل نتیجه به interop type شناخته شده:
+</div>
 
 ```csharp
 Excel.Range range = excel.Cells[1, 1];
 range.Font.FontStyle = "Bold";
 ```
 
+<div dir="rtl">
 > mapping variant → dynamic پیش‌فرض است و وابسته به فعال بودن Embed Interop Types می‌باشد.
 ### جاسازی Interop Types در C# 🧩
 
@@ -1013,6 +1132,7 @@ range.Font.FontStyle = "Bold";
 
 * روی COM reference کلیک کرده و `Embed Interop Types = true` را در Properties فعال کنید.
 * یا در `.csproj`:
+</div>
 
 ```xml
 <ItemGroup>
@@ -1022,6 +1142,7 @@ range.Font.FontStyle = "Bold";
 </ItemGroup>
 ```
 
+<div dir="rtl">
 ---
 
 ### Type Equivalence ⚖️
@@ -1045,6 +1166,7 @@ CLR از **Type Equivalence** برای linked interop types پشتیبانی م�
 #### مراحل:
 
 1. ایجاد یک interface و اختصاص GUID یکتا به آن:
+</div>
 
 ```csharp
 namespace MyCom
@@ -1059,7 +1181,9 @@ namespace MyCom
 }
 ```
 
+<div dir="rtl">
 2. پیاده‌سازی interface و اختصاص GUID به کلاس:
+</div>
 
 ```csharp
 namespace MyCom
@@ -1084,7 +1208,9 @@ namespace MyCom
 }
 ```
 
+<div dir="rtl">
 3. فعال کردن COM hosting در `.csproj`:
+</div>
 
 ```xml
 <PropertyGroup>
@@ -1092,6 +1218,7 @@ namespace MyCom
 </PropertyGroup>
 ```
 
+<div dir="rtl">
 4. فایل تولید شده (`MyCom.comhost.dll`) را با `regsvr32` ثبت کنید.
 
 ---
@@ -1099,6 +1226,7 @@ namespace MyCom
 ### مصرف COM از سایر زبان‌ها
 
 مثال با **VBScript**:
+</div>
 
 ```vb
 REM Save as ComClient.vbs
@@ -1108,6 +1236,7 @@ result = obj.Fibonacci(12)
 Wscript.Echo result
 ```
 
+<div dir="rtl">
 > توجه: .NET Framework و .NET 5+ / .NET Core نمی‌توانند در یک process بارگذاری شوند؛ بنابراین COM server در .NET 5+ نمی‌تواند در .NET Framework client فراخوانی شود.
 
 ---
@@ -1116,6 +1245,7 @@ Wscript.Echo result
 
 * به جای ثبت COM object در رجیستری، از **manifest فایل** استفاده می‌شود.
 * فعال‌سازی در `.csproj`:
+</div>
 
 ```xml
 <PropertyGroup>
@@ -1125,12 +1255,9 @@ Wscript.Echo result
 </PropertyGroup>
 ```
 
+<div dir="rtl">
 * در این حالت فایل `MyCom.X.manifest` ساخته می‌شود.
 
 > در .NET 5+ امکان تولید **COM type library (*.tlb)** به صورت خودکار وجود ندارد. باید دستی IDL یا header C++ ایجاد کنید.
-
- 
-
-
-
 </div>
+

@@ -1,5 +1,5 @@
-<div dir="rtl">
 
+<div dir="rtl">
 # فصل پانزدهم:  استریم‌ها و ورودی/خروجی (Streams and I/O)
 
 این فصل، انواع بنیادی برای **ورودی (Input)** و **خروجی (Output)** در .NET را توضیح می‌دهد، با تمرکز ویژه روی موضوعات زیر:
@@ -111,6 +111,7 @@ Adapter درست مثل یک Decorator، یک استریم را می‌پوشا�
 ---
 
 ### 📂 نمونه کد: خواندن، نوشتن و Seek در FileStream
+</div>
 
 ```csharp
 using System;
@@ -144,11 +145,13 @@ using (Stream s = new FileStream("test.txt", FileMode.Create))
 }
 ```
 
+<div dir="rtl">
 ---
 
 ### 🌀 نمونه کد: استفاده از متدهای Async
 
 خواندن یا نوشتن به‌صورت **Asynchronous** فقط به این معنی است که به‌جای **Read/Write**، از **ReadAsync/WriteAsync** استفاده کنید و نتیجه را `await` کنید (و همچنین باید متد فراخواننده `async` تعریف شود، همان‌طور که در فصل ۱۴ توضیح داده شد).
+</div>
 
 ```csharp
 async static void AsyncDemo()
@@ -166,6 +169,7 @@ async static void AsyncDemo()
 }
 ```
 
+<div dir="rtl">
 متدهای Asynchronous کمک می‌کنند برنامه‌های **Responsive** و **Scalable** نوشته شوند که بتوانند با استریم‌های بالقوه کند (به‌ویژه استریم‌های شبکه‌ای) کار کنند، بدون این‌که یک Thread به‌طور کامل مشغول شود.
 
 > برای سادگی، در بیشتر مثال‌های این فصل از متدهای **Synchronous** استفاده می‌کنیم. با این حال، در بیشتر سناریوهای **I/O شبکه‌ای** توصیه می‌شود از متدهای Async استفاده کنید.
@@ -191,6 +195,7 @@ async static void AsyncDemo()
 ### ❌ مثال اشتباه
 
 فرض کنید یک استریم ۱۰۰۰ بایتی داریم:
+</div>
 
 ```csharp
 // فرض کنید s یک استریم است:
@@ -198,11 +203,13 @@ byte[] data = new byte[1000];
 s.Read(data, 0, data.Length);
 ```
 
+<div dir="rtl">
 در این حالت، `Read` ممکن است هر مقداری بین **۱ تا ۱۰۰۰** برگرداند و بخش باقی‌مانده خوانده نشود.
 
 ---
 
 ### ✅ مثال درست
+</div>
 
 ```csharp
 byte[] data = new byte[1000];
@@ -214,6 +221,7 @@ while (bytesRead < data.Length && chunkSize > 0)
     bytesRead += chunkSize = s.Read(data, bytesRead, data.Length - bytesRead);
 ```
 
+<div dir="rtl">
 ---
 
 ### 🆕 متدهای جدید در .NET 7
@@ -224,28 +232,34 @@ while (bytesRead < data.Length && chunkSize > 0)
 * `ReadAtLeast`
 
 (به همراه نسخه‌های Async آن‌ها).
+</div>
 
 ```csharp
 byte[] data = new byte[1000];
 s.ReadExactly(data);   // دقیقاً 1000 بایت می‌خواند
 ```
 
+<div dir="rtl">
 معادل:
+</div>
 
 ```csharp
 s.ReadExactly(data, offset: 0, count: 1000);
 ```
 
+<div dir="rtl">
 ---
 
 ### 📦 BinaryReader
 
 نوع **BinaryReader** راه‌حل دیگری برای این کار است:
+</div>
 
 ```csharp
 byte[] data = new BinaryReader(s).ReadBytes(1000);
 ```
 
+<div dir="rtl">
 * اگر طول استریم کمتر از ۱۰۰۰ بایت باشد، اندازه آرایه متناسب با طول واقعی استریم خواهد بود.
 * اگر استریم قابلیت `Seek` داشته باشد، می‌توان با جایگزین کردن ۱۰۰۰ با `(int)s.Length` کل محتوای آن را خواند.
 
@@ -296,11 +310,14 @@ byte[] data = new BinaryReader(s).ReadBytes(1000);
 
 * متد **Flush** باعث می‌شود داده‌های بافر شده فوراً نوشته شوند.
 * `Flush` به‌صورت خودکار هنگام بسته شدن استریم صدا زده می‌شود، بنابراین هیچ‌وقت نیازی به نوشتن کدی مثل زیر ندارید:
+</div>
 
 ```csharp
 s.Flush();
 s.Close();
 ```
+
+<div dir="rtl">
 ## ⏱️ Timeoutها
 
 یک استریم زمانی از **Timeout** پشتیبانی می‌کند که ویژگی `CanTimeout` مقدار `true` داشته باشد.
@@ -373,6 +390,7 @@ s.Close();
 ### 🛠️ ساخت یک FileStream
 
 ساده‌ترین راه برای نمونه‌سازی **FileStream** استفاده از متدهای استاتیک کلاس **File** است:
+</div>
 
 ```csharp
 FileStream fs1 = File.OpenRead("readme.bin");   // فقط خواندن
@@ -380,6 +398,7 @@ FileStream fs2 = File.OpenWrite("writeme.tmp"); // فقط نوشتن
 FileStream fs3 = File.Create("readwrite.tmp");  // خواندن/نوشتن
 ```
 
+<div dir="rtl">
 ⚠️ تفاوت `OpenWrite` و `Create`:
 
 * `Create` محتوای قبلی فایل را **کامل پاک می‌کند** (truncate).
@@ -393,11 +412,13 @@ FileStream fs3 = File.Create("readwrite.tmp");  // خواندن/نوشتن
 * گزینه‌های اشتراک‌گذاری (sharing)، بافرینگ و امنیت
 
 را فراهم می‌کنند. برای مثال:
+</div>
 
 ```csharp
 using var fs = new FileStream("readwrite.tmp", FileMode.Open);
 ```
 
+<div dir="rtl">
 (کلیدواژه‌ی `using` تضمین می‌کند که استریم پس از خروج از محدوده dispose شود).
 
 🔎 در ادامه به جزئیات `FileMode` می‌پردازیم.
@@ -422,12 +443,14 @@ using var fs = new FileStream("readwrite.tmp", FileMode.Open);
 همچنین متدی به نام `File.ReadLines` وجود دارد که مانند `ReadAllLines` است، با این تفاوت که یک `IEnumerable<string>` **Lazy** بازمی‌گرداند (به‌صورت تدریجی خوانده می‌شود، نه یک‌جا). این کارایی بهتری دارد چون کل فایل یک‌جا در حافظه بارگذاری نمی‌شود.
 
 مثال با LINQ برای شمردن تعداد خطوطی که طول آن‌ها بیشتر از ۸۰ کاراکتر است:
+</div>
 
 ```csharp
 int longLines = File.ReadLines("filePath")
                    .Count(l => l.Length > 80);
 ```
 
+<div dir="rtl">
 ---
 
 ### 📁 مشخص‌کردن نام فایل
@@ -444,24 +467,29 @@ int longLines = File.ReadLines("filePath")
   * `temp\test.txt`
 
 🔹 دایرکتوری فعلی برنامه از طریق ویژگی استاتیک:
+</div>
 
 ```csharp
 Environment.CurrentDirectory
 ```
 
+<div dir="rtl">
 قابل دسترسی و تغییر است.
 
 ⚠️ اما دایرکتوری فعلی **ممکن است با مسیر اجرایی برنامه یکی نباشد**. بنابراین **هیچ‌وقت** برای یافتن فایل‌های همراه executable روی آن حساب نکنید.
 
 دایرکتوری پایه‌ی اپلیکیشن از طریق:
+</div>
 
 ```csharp
 AppDomain.CurrentDomain.BaseDirectory
 ```
 
+<div dir="rtl">
 دریافت می‌شود (معمولاً همان پوشه‌ی فایل اجرایی است).
 
 برای مشخص کردن نام فایل به‌صورت نسبی نسبت به این دایرکتوری:
+</div>
 
 ```csharp
 string baseFolder = AppDomain.CurrentDomain.BaseDirectory;
@@ -469,6 +497,7 @@ string logoPath = Path.Combine(baseFolder, "logo.jpg");
 Console.WriteLine(File.Exists(logoPath));
 ```
 
+<div dir="rtl">
 ---
 
 ### 🌐 مسیرهای شبکه‌ای (UNC Path)
@@ -495,38 +524,46 @@ Console.WriteLine(File.Exists(logoPath));
 ## 📂 FileStream
 
 🔹 اگر روی فایل‌های **Hidden** از `File.Create` یا `FileMode.Create` استفاده کنید، یک **استثنا (Exception)** پرتاب می‌شود. برای بازنویسی یک فایل مخفی، باید ابتدا آن را **حذف** و سپس دوباره ایجاد کنید:
+</div>
 
 ```csharp
 File.Delete("hidden.txt");
 using var file = File.Create("hidden.txt");
 ```
 
+<div dir="rtl">
 ---
 
 ### 📖 FileAccess
 
 اگر فقط نام فایل و یک `FileMode` را به سازنده‌ی `FileStream` بدهید، نتیجه (با یک استثنا) یک استریم **قابل خواندن/نوشتن** خواهد بود.
 اما می‌توانید با مشخص‌کردن آرگومان **FileAccess** دسترسی را محدود کنید:
+</div>
 
 ```csharp
 [Flags]
 public enum FileAccess { Read = 1, Write = 2, ReadWrite = 3 }
 ```
 
+<div dir="rtl">
 مثال: ساختن یک استریم فقط-خواندنی (معادل `File.OpenRead`):
+</div>
 
 ```csharp
 using var fs = new FileStream("x.bin", FileMode.Open, FileAccess.Read);
 ```
 
+<div dir="rtl">
 ⚠️ حالت خاص: `FileMode.Append` → فقط **Write-only** است.
 اگر می‌خواهید داده‌ها را **اضافه (Append)** کنید و همزمان امکان خواندن داشته باشید، باید از `FileMode.Open` یا `FileMode.OpenOrCreate` استفاده کنید و سپس مکان استریم را به انتهای فایل ببرید:
+</div>
 
 ```csharp
 using var fs = new FileStream("myFile.bin", FileMode.Open);
 fs.Seek(0, SeekOrigin.End);
 ```
 
+<div dir="rtl">
 ---
 
 ### ⚙️ ویژگی‌های پیشرفته‌ی FileStream
@@ -547,12 +584,14 @@ fs.Seek(0, SeekOrigin.End);
 ⚠️ فلگ‌هایی که سیستم‌عامل پشتیبانی نکند، بی‌صدا (silently) نادیده گرفته می‌شوند.
 
 اگر با `FileShare.ReadWrite` فایل را باز کنید، چند پردازش یا کاربر می‌توانند همزمان بخوانند/بنویسند. برای جلوگیری از تداخل، می‌توان بخش‌هایی از فایل را قفل کرد:
+</div>
 
 ```csharp
 public virtual void Lock(long position, long length);
 public virtual void Unlock(long position, long length);
 ```
 
+<div dir="rtl">
 متد `Lock` اگر ناحیه‌ای از فایل قبلاً قفل باشد، استثنا پرتاب می‌کند.
 
 ---
@@ -568,12 +607,14 @@ public virtual void Unlock(long position, long length);
 * داده‌ی اصلی کوچک و قابل مدیریت است.
 
 📌 مثال: کپی کردن داده‌ی یک استریم درون MemoryStream:
+</div>
 
 ```csharp
 var ms = new MemoryStream();
 sourceStream.CopyTo(ms);
 ```
 
+<div dir="rtl">
 * برای گرفتن داده‌ها:
 
   * `ToArray()` → یک کپی از داده‌ها بازمی‌گرداند.
@@ -627,6 +668,7 @@ PipeStream یک کلاس انتزاعی است. چهار زیرکلاس اصلی
 📍 مثال ساده:
 
 **Server** → ارسال یک بایت (۱۰۰) و دریافت یک بایت:
+</div>
 
 ```csharp
 using var s = new NamedPipeServerStream("pipedream");
@@ -635,7 +677,9 @@ s.WriteByte(100);
 Console.WriteLine(s.ReadByte());
 ```
 
+<div dir="rtl">
 **Client** → دریافت بایت و ارسال یک بایت (۲۰۰):
+</div>
 
 ```csharp
 using var s = new NamedPipeClientStream("pipedream");
@@ -644,6 +688,7 @@ Console.WriteLine(s.ReadByte());
 s.WriteByte(200);
 ```
 
+<div dir="rtl">
 🔹 Pipeها به‌طور پیش‌فرض **دوطرفه** هستند. پس باید یک **پروتکل توافقی** بین Client و Server وجود داشته باشد تا هر دو همزمان ننویسند یا نخوانند.
 
 ---
@@ -654,6 +699,7 @@ s.WriteByte(200);
 در این حالت می‌توان با ویژگی `IsMessageComplete` فهمید یک پیام کامل دریافت شده است.
 
 📌 مثال: خواندن کل پیام:
+</div>
 
 ```csharp
 static byte[] ReadMessage(PipeStream s)
@@ -666,11 +712,13 @@ static byte[] ReadMessage(PipeStream s)
 }
 ```
 
+<div dir="rtl">
 ---
 
 ### ✨ فعال‌سازی Message Mode
 
 **Server**:
+</div>
 
 ```csharp
 using var s = new NamedPipeServerStream(
@@ -682,7 +730,9 @@ s.Write(msg, 0, msg.Length);
 Console.WriteLine(Encoding.UTF8.GetString(ReadMessage(s)));
 ```
 
+<div dir="rtl">
 **Client**:
+</div>
 
 ```csharp
 using var s = new NamedPipeClientStream("pipedream");
@@ -694,6 +744,7 @@ byte[] msg = Encoding.UTF8.GetBytes("Hello right back!");
 s.Write(msg, 0, msg.Length);
 ```
 
+<div dir="rtl">
 ⚠️ **Message Mode فقط روی ویندوز پشتیبانی می‌شود.**
 در سایر سیستم‌عامل‌ها → `PlatformNotSupportedException` پرتاب می‌شود.
 
@@ -715,6 +766,7 @@ s.Write(msg, 0, msg.Length);
 از آنجا که پایپ‌های ناشناس یک‌طرفه هستند، یک سرور برای ارتباط دوطرفه باید **دو پایپ** بسازد.
 
 کد زیر نشان می‌دهد که چطور دو پایپ (ورودی و خروجی) ساخته می‌شوند و سپس یک پردازش فرزند راه‌اندازی می‌شود. در ادامه، یک بایت از سرور به فرزند ارسال شده و یک بایت در پاسخ دریافت می‌شود:
+</div>
 
 ```csharp
 class Program
@@ -765,6 +817,7 @@ class Program
 }
 ```
 
+<div dir="rtl">
 📌 همانند پایپ‌های نام‌دار، **کلاینت و سرور باید ارسال و دریافت خود را هماهنگ کنند** و روی طول هر انتقال توافق داشته باشند. متأسفانه پایپ‌های ناشناس از **حالت پیام (message mode)** پشتیبانی نمی‌کنند، بنابراین باید خودتان پروتکل مدیریت طول پیام را پیاده‌سازی کنید.
 
 یکی از راه‌حل‌ها این است که در چهار بایت اول هر انتقال، یک **عدد صحیح (integer)** ارسال شود که طول پیام بعدی را مشخص کند. کلاس **BitConverter** متدهایی برای تبدیل بین یک عدد صحیح و یک آرایه‌ی ۴ بایتی فراهم می‌کند.
@@ -782,6 +835,7 @@ class Program
 بافرینگ باعث بهبود کارایی می‌شود چون تعداد دفعات رفت‌وبرگشت به **backing store** (مثل فایل یا شبکه) را کاهش می‌دهد.
 
 در مثال زیر ما یک **FileStream** را داخل یک **BufferedStream** با اندازه‌ی بافر ۲۰ کیلوبایت می‌پیچیم:
+</div>
 
 ```csharp
 // نوشتن 100K در یک فایل:
@@ -792,6 +846,7 @@ bs.ReadByte();
 Console.WriteLine (fs.Position);   // 20000
 ```
 
+<div dir="rtl">
 🔍 در این مثال، استریم زیرین (**FileStream**) بعد از خواندن فقط **یک بایت**، به اندازه‌ی ۲۰,۰۰۰ بایت جلو می‌رود؛ این به خاطر **read-ahead buffering** است. ما می‌توانیم متد `ReadByte` را **۱۹,۹۹۹ بار دیگر** صدا بزنیم، بدون اینکه دوباره `FileStream` درگیر شود.
 
 ✅ در عمل، بستن یک **BufferedStream** به طور خودکار استریم backing store زیرین را هم می‌بندد.
@@ -872,6 +927,7 @@ Console.WriteLine (fs.Position);   // 20000
 ### StreamReader و StreamWriter 📄✍️
 
 در مثال زیر، یک `StreamWriter` دو خط متن را در یک فایل می‌نویسد و سپس یک `StreamReader` فایل را دوباره می‌خواند:
+</div>
 
 ```csharp
 using (FileStream fs = File.Create("test.txt"))
@@ -888,7 +944,9 @@ using (TextReader reader = new StreamReader(fs))
 }
 ```
 
+<div dir="rtl">
 چون **Text adapters** اغلب همراه با فایل‌ها استفاده می‌شوند، کلاس `File` متدهای **استاتیک** `CreateText`، `AppendText` و `OpenText` را برای کوتاه کردن روند فراهم می‌کند:
+</div>
 
 ```csharp
 using (TextWriter writer = File.CreateText("test.txt"))
@@ -904,9 +962,11 @@ using (TextReader reader = File.OpenText("test.txt"))
         Console.WriteLine(reader.ReadLine()); // Line1, Line2, Line3
 ```
 
+<div dir="rtl">
 این مثال همچنین نشان می‌دهد که چگونه پایان فایل را بررسی کنیم (`reader.Peek()`). روش دیگر این است که تا وقتی `reader.ReadLine` مقدار `null` برگرداند، ادامه دهیم.
 
 می‌توانید انواع دیگری مانند **اعداد صحیح** را نیز بخوانید و بنویسید، اما چون `TextWriter` متد `ToString` را روی نوع شما صدا می‌زند، هنگام خواندن باید رشته را **Parse** کنید:
+</div>
 
 ```csharp
 using (TextWriter w = File.CreateText("data.txt"))
@@ -921,11 +981,13 @@ using (TextReader r = File.OpenText("data.txt"))
 }
 ```
 
+<div dir="rtl">
 ### رمزگذاری کاراکترها 🔤
 
 `TextReader` و `TextWriter` خودشان تنها کلاس‌های **abstract** هستند و ارتباطی با یک **stream** یا **backing store** ندارند. اما `StreamReader` و `StreamWriter` به یک **stream بایت‌محور** متصل‌اند و باید بین **کاراکترها و بایت‌ها** تبدیل انجام دهند. این کار از طریق کلاس `Encoding` در **System.Text** انجام می‌شود که هنگام ساخت `StreamReader` یا `StreamWriter` انتخاب می‌کنید. اگر چیزی انتخاب نکنید، **UTF-8** پیش‌فرض استفاده می‌شود.
 
 اگر به‌طور صریح یک **Encoding** مشخص کنید، `StreamWriter` به‌طور پیش‌فرض یک پیش‌وند (prefix) برای شناسایی رمزگذاری به ابتدای جریان می‌نویسد. این معمولاً ناخواسته است و می‌توانید با ساخت Encoding به شکل زیر از آن جلوگیری کنید:
+</div>
 
 ```csharp
 var encoding = new UTF8Encoding(
@@ -934,6 +996,7 @@ var encoding = new UTF8Encoding(
 );
 ```
 
+<div dir="rtl">
 آرگومان دوم به `StreamWriter` یا `StreamReader` می‌گوید اگر با بایت‌هایی مواجه شد که ترجمه معتبر به رشته ندارند، **Exception** پرتاب کند، که با رفتار پیش‌فرض مطابقت دارد.
 
 ### مثال رمزگذاری ASCII و UTF-8
@@ -941,6 +1004,7 @@ var encoding = new UTF8Encoding(
 رمزگذاری ساده `ASCII` است، چون هر کاراکتر با یک بایت نمایش داده می‌شود. کاراکترهای غیرانگلیسی یا نمادهای ویژه قابل نمایش نیستند و به `□` تبدیل می‌شوند.
 
 رمزگذاری پیش‌فرض `UTF-8` می‌تواند تمام کاراکترهای یونیکد را نمایش دهد. کاراکترهای ASCII (127 کاراکتر اول) با یک بایت کدگذاری می‌شوند؛ بقیه کاراکترها با تعداد بایت متغیر (معمولاً دو یا سه) کدگذاری می‌شوند. مثال:
+</div>
 
 ```csharp
 using (TextWriter w = File.CreateText("but.txt")) // استفاده از UTF-8 پیش‌فرض
@@ -951,6 +1015,7 @@ using (Stream s = File.OpenRead("but.txt"))
         Console.WriteLine(b);
 ```
 
+<div dir="rtl">
 برای کاراکتر **em dash (—)** که خارج از 127 کاراکتر اول یونیکد است، UTF-8 سه بایت استفاده می‌کند.
 
 ### UTF-16
@@ -964,17 +1029,20 @@ UTF-16 از یک پیش‌وند دو بایتی برای مشخص کردن **li
 این‌ها **stream** را wrap نمی‌کنند و از یک **string** یا **StringBuilder** به‌عنوان منبع داده استفاده می‌کنند. بنابراین نیاز به ترجمه بایت نیست و کلاس‌ها تنها بر اساس همان رفتار پایه `StreamReader/StreamWriter` عمل می‌کنند.
 
 مثال: اگر بخواهید یک رشته حاوی XML را با `XmlReader` تجزیه کنید:
+</div>
 
 ```csharp
 XmlReader r = XmlReader.Create(new StringReader(myString));
 ```
 
+<div dir="rtl">
 ### Binary Adapters 💾
 
 `BinaryReader` و `BinaryWriter` داده‌های native مانند `bool`، `byte`، `int`، `double`، `string` و آرایه‌های نوع‌های اولیه را می‌خوانند و می‌نویسند.
 بر خلاف `StreamReader/StreamWriter`، binary adapters داده‌ها را به‌صورت **موثر در حافظه** ذخیره می‌کنند.
 
 مثال تعریف کلاس ساده و ذخیره/بارگذاری با binary adapters:
+</div>
 
 ```csharp
 public class Person
@@ -1002,12 +1070,15 @@ public class Person
 }
 ```
 
+<div dir="rtl">
 همچنین می‌توان با `BinaryReader` کل محتوای یک **stream seekable** را به آرایه بایت خواند:
+</div>
 
 ```csharp
 byte[] data = new BinaryReader(s).ReadBytes((int)s.Length);
 ```
 
+<div dir="rtl">
 این روش راحت‌تر از خواندن مستقیم از stream است، چون نیاز به loop برای اطمینان از خواندن تمام داده‌ها ندارد.
 ### بستن و آزادسازی Stream Adapters 🔒
 
@@ -1021,6 +1092,7 @@ byte[] data = new BinaryReader(s).ReadBytes((int)s.Length);
 در adapters، متدهای `Close` و `Dispose` **هم‌معنی** هستند، همانند رفتارشان در streams.
 
 گزینه‌های 1 و 2 از نظر معنایی **یکسان** هستند، زیرا بستن یک adapter به‌طور خودکار **stream زیرین** را نیز می‌بندد. هر زمان که از **nested using statements** استفاده می‌کنید، عملاً گزینه 2 را انتخاب کرده‌اید:
+</div>
 
 ```csharp
 using (FileStream fs = File.Create("test.txt"))
@@ -1028,11 +1100,13 @@ using (TextWriter writer = new StreamWriter(fs))
     writer.WriteLine("Line");
 ```
 
+<div dir="rtl">
 چون dispose به ترتیب از داخل به بیرون انجام می‌شود، ابتدا adapter بسته می‌شود و سپس stream. همچنین اگر در **constructor** adapter استثنایی رخ دهد، stream همچنان بسته می‌شود. استفاده از nested using statements تقریباً همیشه ایمن است.
 
 > هرگز یک stream را قبل از بستن یا Flush کردن writer آن نبندید — در غیر این صورت داده‌های بافر شده در adapter از بین می‌روند.
 
 گزینه‌های 3 و 4 کار می‌کنند چون adapters در دسته **objects با disposal اختیاری** قرار دارند. یک مثال: ممکن است adapter را تمام کرده باشید ولی بخواهید **stream زیرین** برای استفاده‌های بعدی باز بماند:
+</div>
 
 ```csharp
 using (FileStream fs = new FileStream("test.txt", FileMode.Create))
@@ -1045,11 +1119,13 @@ using (FileStream fs = new FileStream("test.txt", FileMode.Create))
 }
 ```
 
+<div dir="rtl">
 در اینجا، ابتدا به فایل می‌نویسیم، موقعیت stream را تغییر می‌دهیم و سپس اولین بایت را می‌خوانیم. اگر StreamWriter را dispose می‌کردیم، FileStream نیز بسته می‌شد و خواندن بعدی شکست می‌خورد. شرط این است که **Flush** را صدا بزنیم تا بافر StreamWriter به stream نوشته شود.
 
 Stream adapters با semantics **اختیاری در disposal**، الگوی **extended disposal** که finalizer در آن Dispose را صدا می‌زند، پیاده‌سازی نمی‌کنند. این امکان را می‌دهد که adapter رهاشده هنگام رسیدن **garbage collector** به آن، خودکار dispose نشود.
 
 همچنین یک constructor در StreamReader/StreamWriter وجود دارد که دستور می‌دهد stream بعد از disposal باز بماند. بنابراین می‌توان مثال قبل را به شکل زیر بازنویسی کرد:
+</div>
 
 ```csharp
 using (var fs = new FileStream("test.txt", FileMode.Create))
@@ -1062,6 +1138,7 @@ using (var fs = new FileStream("test.txt", FileMode.Create))
 }
 ```
 
+<div dir="rtl">
 ---
 
 ### Compression Streams 📦
@@ -1078,6 +1155,7 @@ using (var fs = new FileStream("test.txt", FileMode.Create))
 `DeflateStream`، `GZipStream` و `BrotliStream` **decorator** هستند؛ آن‌ها داده‌ها را از stream دیگری که هنگام ساخت ارائه می‌دهید، فشرده یا دیکامپر می‌کنند.
 
 مثال فشرده‌سازی و دیکامپرشن یک سری بایت با استفاده از FileStream:
+</div>
 
 ```csharp
 using (Stream s = File.Create("compressed.bin"))
@@ -1091,9 +1169,11 @@ using (Stream ds = new DeflateStream(s, CompressionMode.Decompress))
         Console.WriteLine(ds.ReadByte()); // 0 تا 99
 ```
 
+<div dir="rtl">
 با DeflateStream، فایل فشرده 102 بایت است: کمی بزرگتر از اصلی. BrotliStream آن را به 73 بایت فشرده می‌کند. فشرده‌سازی با داده‌های باینری **متراکم و غیرتکراری** ضعیف عمل می‌کند و با داده‌های رمزنگاری شده بدتر است. اما برای فایل‌های متنی عملکرد خوبی دارد.
 
 مثال بعدی: فشرده و دیکامپرشن یک متن 1000 کلمه با الگوریتم Brotli:
+</div>
 
 ```csharp
 string[] words = "The quick brown fox jumps over the lazy dog".Split();
@@ -1112,6 +1192,7 @@ using (TextReader r = new StreamReader(ds))
     Console.Write(await r.ReadToEndAsync());
 ```
 
+<div dir="rtl">
 در این حالت، BrotliStream به طور مؤثر فایل را به 808 بایت فشرده می‌کند — کمتر از یک بایت برای هر کلمه. (DeflateStream همان داده‌ها را به 885 بایت فشرده می‌کند.)
 
 ---
@@ -1119,6 +1200,7 @@ using (TextReader r = new StreamReader(ds))
 ### فشرده‌سازی در حافظه 🧠💨
 
 گاهی لازم است فشرده‌سازی کاملاً **در حافظه** انجام شود. نمونه با MemoryStream:
+</div>
 
 ```csharp
 byte[] data = new byte[1000]; // آرایه خالی برای تست فشرده‌سازی
@@ -1135,9 +1217,11 @@ using (Stream ds = new DeflateStream(ms, CompressionMode.Decompress))
     for (int i = 0; i < 1000; i += ds.Read(data, i, 1000 - i));
 ```
 
+<div dir="rtl">
 استفاده از `using` روی DeflateStream آن را به‌طور استاندارد می‌بندد و هر بافر نوشته‌نشده را Flush می‌کند. این همچنین MemoryStream را می‌بندد، بنابراین برای استخراج داده‌ها باید `ToArray` را صدا بزنیم.
 
 نسخه جایگزین که **MemoryStream را باز نگه می‌دارد** و از متدهای **آسنکرون** استفاده می‌کند:
+</div>
 
 ```csharp
 byte[] data = new byte[1000];
@@ -1151,12 +1235,14 @@ using (Stream ds = new DeflateStream(ms, CompressionMode.Decompress))
     for (int i = 0; i < 1000; i += await ds.ReadAsync(data, i, 1000 - i));
 ```
 
+<div dir="rtl">
 فلگ اضافی در constructor به DeflateStream می‌گوید که **stream زیرین را در disposal نبندد**. به این ترتیب MemoryStream باز می‌ماند و می‌توانیم آن را دوباره از موقعیت صفر بخوانیم.
 ### فشرده‌سازی فایل‌ها در Unix با GZip 🐧📦
 
 الگوریتم فشرده‌سازی **GZipStream** در سیستم‌های Unix به‌عنوان فرمت فشرده‌سازی فایل محبوب است. هر فایل منبع در یک فایل هدف جداگانه با پسوند `.gz` فشرده می‌شود.
 
 روش‌های زیر همان کار **gzip** و **gunzip** در خط فرمان Unix را انجام می‌دهند:
+</div>
 
 ```csharp
 async Task GZip(string sourcefile, bool deleteSource = true)
@@ -1193,13 +1279,16 @@ async Task GUnzip(string gzipfile, bool deleteGzip = true)
 }
 ```
 
+<div dir="rtl">
 نمونه استفاده:
+</div>
 
 ```csharp
 await GZip("/tmp/myfile.txt");        // ایجاد /tmp/myfile.txt.gz
 await GUnzip("/tmp/myfile.txt.gz");   // بازسازی /tmp/myfile.txt
 ```
 
+<div dir="rtl">
 ---
 
 ### کار با فایل‌های ZIP 🗜️
@@ -1215,22 +1304,27 @@ await GUnzip("/tmp/myfile.txt.gz");   // بازسازی /tmp/myfile.txt
 * **ZipFile** سناریوی معمول کار با فایل‌ها را پوشش می‌دهد و کلاس کمکی است برای ZipArchive.
 
 نمونه استفاده از **CreateFromDirectory** برای افزودن تمام فایل‌های یک دایرکتوری به ZIP:
+</div>
 
 ```csharp
 ZipFile.CreateFromDirectory(@"d:\MyFolder", @"d:\archive.zip");
 ```
 
+<div dir="rtl">
 برای استخراج ZIP به دایرکتوری:
+</div>
 
 ```csharp
 ZipFile.ExtractToDirectory(@"d:\archive.zip", @"d:\MyFolder");
 ```
 
+<div dir="rtl">
 > از .NET 8 به بعد می‌توانید به جای مسیر فایل، یک Stream نیز مشخص کنید.
 
 هنگام فشرده‌سازی، می‌توانید مشخص کنید که بهینه‌سازی برای **حجم فایل یا سرعت** انجام شود و آیا نام دایرکتوری منبع در آرشیو لحاظ شود یا نه.
 
 برای دسترسی به ورودی‌های منفرد ZIP از **Open** استفاده می‌کنیم، که یک **ZipArchive** برمی‌گرداند. می‌توان فایل‌ها را از طریق **Entries** شمارش یا با **GetEntry** به‌صورت خاص یافت:
+</div>
 
 ```csharp
 using (ZipArchive zip = ZipFile.Open(@"d:\zz.zip", ZipArchiveMode.Read))
@@ -1238,7 +1332,9 @@ using (ZipArchive zip = ZipFile.Open(@"d:\zz.zip", ZipArchiveMode.Read))
         Console.WriteLine(entry.FullName + " " + entry.Length);
 ```
 
+<div dir="rtl">
 **ZipArchiveEntry** همچنین متدهای `Delete`، `ExtractToFile` و `Open` را دارد. برای ایجاد ورودی جدید از `CreateEntry` یا متد اکستنشن `CreateEntryFromFile` استفاده می‌کنیم:
+</div>
 
 ```csharp
 byte[] data = File.ReadAllBytes(@"d:\foo.dll"); 
@@ -1246,6 +1342,7 @@ using (ZipArchive zip = ZipFile.Open(@"d:\zz.zip", ZipArchiveMode.Update))
     zip.CreateEntry(@"bin\X64\foo.dll").Open().Write(data, 0, data.Length);
 ```
 
+<div dir="rtl">
 می‌توان تمام این کارها را کاملاً در حافظه انجام داد با استفاده از **MemoryStream** به جای مسیر فایل.
 
 ---
@@ -1255,24 +1352,29 @@ using (ZipArchive zip = ZipFile.Open(@"d:\zz.zip", ZipArchiveMode.Update))
 کلاس‌های `System.Formats.Tar` (.NET 7 به بعد) از فرمت **.tar** پشتیبانی می‌کنند. این فرمت در Unix برای بسته‌بندی چندین فایل محبوب است.
 
 ایجاد یک فایل tar (tarball):
+</div>
 
 ```csharp
 TarFile.CreateFromDirectory("/tmp/testfolder", "/tmp/test.tar", false);
 ```
 
+<div dir="rtl">
 * آرگومان سوم مشخص می‌کند که آیا نام دایرکتوری پایه در ورودی‌های آرشیو لحاظ شود یا خیر.
 
 استخراج tarball:
+</div>
 
 ```csharp
 TarFile.ExtractToDirectory("/tmp/test.tar", "/tmp/testfolder", true);
 ```
 
+<div dir="rtl">
 * آرگومان سوم مشخص می‌کند که آیا فایل‌های موجود بازنویسی شوند یا خیر.
 
 هر دو متد امکان استفاده از **Stream** به جای مسیر فایل tar را نیز دارند.
 
 نمونه فشرده‌سازی tar به tar.gz با GZipStream:
+</div>
 
 ```csharp
 var ms = new MemoryStream();
@@ -1284,9 +1386,11 @@ using (var gz = new GZipStream(fs, CompressionMode.Compress))
     ms.CopyTo(gz);
 ```
 
+<div dir="rtl">
 * این کار مفید است چون فرمت tar خودش فشرده‌سازی ندارد، بر خلاف zip.
 
 استخراج tar.gz:
+</div>
 
 ```csharp
 using (var fs = File.OpenRead("/tmp/test.tar.gz"))
@@ -1294,7 +1398,9 @@ using (var gz = new GZipStream(fs, CompressionMode.Decompress))
     TarFile.ExtractToDirectory(gz, "/tmp/testfolder", true);
 ```
 
+<div dir="rtl">
 همچنین می‌توانید با کلاس‌های **TarReader** و **TarWriter** به سطح API دقیق‌تری دسترسی داشته باشید. نمونه استفاده از **TarReader**:
+</div>
 
 ```csharp
 using (FileStream archiveStream = File.OpenRead("/tmp/test.tar"))
@@ -1310,6 +1416,7 @@ using (TarReader reader = new(archiveStream))
 }
 ```
 
+<div dir="rtl">
 ---
 
 ### عملیات فایل و دایرکتوری 📁⚙️
@@ -1329,6 +1436,7 @@ using (TarReader reader = new(archiveStream))
 ### کلاس File 📁💻
 
 کلاس **File** یک کلاس ایستا (static) است که تمام متدهای آن یک **نام فایل** می‌گیرند. نام فایل می‌تواند نسبی به دایرکتوری جاری یا کامل با مسیر دایرکتوری باشد. متدهای این کلاس (تمامی **public** و **static**) عبارت‌اند از:
+</div>
 
 ```csharp
 bool Exists(string path);                 // اگر فایل موجود باشد true برمی‌گرداند
@@ -1352,11 +1460,13 @@ FileSecurity GetAccessControl(string path, AccessControlSections includeSections
 void SetAccessControl(string path, FileSecurity fileSecurity);
 ```
 
+<div dir="rtl">
 * متد **Move** اگر فایل مقصد وجود داشته باشد استثنا می‌اندازد؛ اما **Replace** این کار را نمی‌کند.
 * هر دو متد امکان تغییر نام فایل یا انتقال آن به دایرکتوری دیگر را فراهم می‌کنند.
 * **Delete** اگر فایل **read-only** باشد یا مجوز حذف توسط سیستم‌عامل به فرآیند شما داده نشده باشد، استثنا `UnauthorizedAccessException` پرتاب می‌کند.
 
 تمام اعضای **FileAttributes** که توسط `GetAttributes` برگردانده می‌شوند:
+</div>
 
 ```
 Archive, Compressed, Device, Directory, Encrypted,
@@ -1364,7 +1474,9 @@ Hidden, IntegritySystem, Normal, NoScrubData, NotContentIndexed,
 Offline, ReadOnly, ReparsePoint, SparseFile, System, Temporary
 ```
 
+<div dir="rtl">
 این اعضا قابل ترکیب هستند. برای تغییر یک ویژگی فایل بدون تغییر سایر ویژگی‌ها:
+</div>
 
 ```csharp
 string filePath = "test.txt";
@@ -1380,12 +1492,15 @@ if ((fa & FileAttributes.ReadOnly) != 0)
 File.Delete(filePath);
 ```
 
+<div dir="rtl">
 راه ساده‌تر با **FileInfo**:
+</div>
 
 ```csharp
 new FileInfo("test.txt").IsReadOnly = false;
 ```
 
+<div dir="rtl">
 ---
 
 ### ویژگی‌های فشرده‌سازی و رمزگذاری 🔒🗜️
@@ -1398,6 +1513,7 @@ new FileInfo("test.txt").IsReadOnly = false;
 
 راه حل: برای رمزگذاری و رمزگشایی از متدهای `Encrypt()` و `Decrypt()` در کلاس **File** استفاده کنید.
 برای فشرده‌سازی، استفاده از WMI در `System.Management` راه حل است:
+</div>
 
 ```csharp
 static uint CompressFolder(string folder, bool recursive)
@@ -1413,6 +1529,7 @@ static uint CompressFolder(string folder, bool recursive)
 }
 ```
 
+<div dir="rtl">
 * برای استخراج، `CompressEx` را با `UncompressEx` جایگزین کنید.
 
 **رمزگذاری شفاف** بر پایه کلیدی ساخته شده از رمز عبور کاربر لاگین شده است. تغییر رمز عبور توسط کاربر معتبر مشکلی ایجاد نمی‌کند، اما اگر رمز توسط مدیر ریست شود، داده‌های فایل‌های رمزگذاری‌شده قابل بازیابی نخواهند بود.
@@ -1420,6 +1537,7 @@ static uint CompressFolder(string folder, bool recursive)
 **NTFS** این قابلیت‌ها را پشتیبانی می‌کند؛ اما **CDFS** (روی CD-ROM) و **FAT** (روی کارت‌های قابل حمل) پشتیبانی نمی‌کنند.
 
 برای تشخیص پشتیبانی یک حجم از فشرده‌سازی و رمزگذاری:
+</div>
 
 ```csharp
 using System;
@@ -1451,6 +1569,7 @@ class SupportsCompressionEncryption
 }
 ```
 
+<div dir="rtl">
 ---
 
 ### امنیت فایل در Windows 🔐
@@ -1458,6 +1577,7 @@ class SupportsCompressionEncryption
 این ویژگی نیز **ویندوزی** است و نیازمند پکیج NuGet `System.IO.FileSystem.AccessControl` می‌باشد.
 
 کلاس **FileSecurity** اجازه می‌دهد مجوزهای سیستم‌عامل را برای کاربران و نقش‌ها مشاهده و تغییر دهید:
+</div>
 
 ```csharp
 using System;
@@ -1499,6 +1619,7 @@ Console.WriteLine("AFTER MODIFY:");
 ShowSecurity(sec); // BUILTIN\Users اکنون دسترسی Write دارد
 ```
 
+<div dir="rtl">
 مثال‌های بیشتری در بخش **Special Folders** صفحه 730 ارائه شده است.
 
 ---
@@ -1508,6 +1629,7 @@ ShowSecurity(sec); // BUILTIN\Users اکنون دسترسی Write دارد
 از **.NET 7** به بعد، کلاس **File** شامل متدهای **GetUnixFileMode** و **SetUnixFileMode** برای گرفتن و تعیین مجوز فایل‌ها در Unix است.
 
 همچنین متد **Directory.CreateDirectory** اورلود شده تا بتواند مجوز Unix را بپذیرد، و هنگام ایجاد فایل می‌توان مجوز را مشخص کرد:
+</div>
 
 ```csharp
 var fs = new FileStream("test.txt",
@@ -1517,11 +1639,14 @@ var fs = new FileStream("test.txt",
         UnixCreateMode = UnixFileMode.UserRead | UnixFileMode.UserWrite
     });
 ```
+
+<div dir="rtl">
 ### کلاس Directory 📂💻
 
 کلاس **Directory** یک کلاس ایستا (static) است که مجموعه‌ای از متدها مشابه کلاس **File** ارائه می‌دهد، از جمله: بررسی وجود دایرکتوری (`Exists`)، جابجایی (`Move`)، حذف (`Delete`)، دریافت/تنظیم زمان ایجاد یا آخرین دسترسی، و دریافت/تنظیم مجوزهای امنیتی.
 
 متدهای مهم آن عبارت‌اند از:
+</div>
 
 ```csharp
 string GetCurrentDirectory();                 // دایرکتوری جاری
@@ -1540,6 +1665,7 @@ IEnumerable<string> EnumerateDirectories(string path);
 IEnumerable<string> EnumerateFileSystemEntries(string path);
 ```
 
+<div dir="rtl">
 نکات مهم:
 
 * متدهای `Enumerate*` به صورت **lazy** عمل می‌کنند و داده‌ها را هنگام پیمایش از سیستم فایل دریافت می‌کنند، بنابراین برای **LINQ** بسیار مناسب هستند.
@@ -1547,12 +1673,14 @@ IEnumerable<string> EnumerateFileSystemEntries(string path);
 * متدهای `*FileSystemEntries` ترکیبی از فایل‌ها و دایرکتوری‌ها هستند.
 
 ایجاد یک دایرکتوری تنها در صورت عدم وجود:
+</div>
 
 ```csharp
 if (!Directory.Exists(@"d:\test"))
     Directory.CreateDirectory(@"d:\test");
 ```
 
+<div dir="rtl">
 ---
 
 ### FileInfo و DirectoryInfo 📝
@@ -1560,6 +1688,7 @@ if (!Directory.Exists(@"d:\test"))
 متدهای ایستا برای عملیات یکباره مناسب هستند، اما اگر نیاز به مجموعه‌ای از عملیات پشت سر هم دارید، استفاده از کلاس‌های **FileInfo** و **DirectoryInfo** راحت‌تر است.
 
 * **FileInfo** اکثر متدهای کلاس **File** را به صورت instance ارائه می‌دهد و ویژگی‌های اضافی مثل `Extension`، `Length`، `IsReadOnly` و `Directory` دارد:
+</div>
 
 ```csharp
 static string TestDirectory =>
@@ -1590,7 +1719,9 @@ Console.WriteLine(fi.CreationTime);   // زمان ایجاد
 fi.MoveTo(Path.Combine(TestDirectory, "FileInfoX.txt")); 
 ```
 
+<div dir="rtl">
 * **DirectoryInfo** برای پیمایش دایرکتوری‌ها و فایل‌ها مناسب است:
+</div>
 
 ```csharp
 DirectoryInfo di = new DirectoryInfo(@"e:\photos");
@@ -1602,6 +1733,7 @@ foreach (DirectoryInfo subDir in di.GetDirectories())
     Console.WriteLine(subDir.FullName);
 ```
 
+<div dir="rtl">
 ---
 
 ### کلاس Path 🛤️
@@ -1609,6 +1741,7 @@ foreach (DirectoryInfo subDir in di.GetDirectories())
 کلاس **Path** به صورت ایستا متدها و فیلدهایی برای کار با مسیرها و نام فایل‌ها ارائه می‌دهد.
 
 مثال:
+</div>
 
 ```csharp
 string dir  = @"c:\mydir";    // یا /mydir
@@ -1617,6 +1750,7 @@ string path = @"c:\mydir\myfile.txt";    // یا /mydir/myfile.txt
 Directory.SetCurrentDirectory(@"k:\demo");  // یا /demo
 ```
 
+<div dir="rtl">
 با این setup می‌توان از متدهای کلاس **Path** برای دستکاری رشته‌های مسیر و نام فایل استفاده کرد، مانند ترکیب مسیر، استخراج نام فایل، استخراج پسوند، و غیره.
 <div align="center">
     
@@ -1635,11 +1769,13 @@ Directory.SetCurrentDirectory(@"k:\demo");  // یا /demo
 #### ۲. **GetFullPath**
 
 تبدیل مسیر نسبی به مسیر کامل (Absolute).
+</div>
 
 ```csharp
 string fullPath = Path.GetFullPath(@"..\..\file.txt");
 ```
 
+<div dir="rtl">
 #### ۳. **GetRandomFileName و GetTempFileName**
 
 * `GetRandomFileName` نام فایل ۸.۳ منحصر به‌فرد تولید می‌کند بدون ایجاد فایل واقعی.
@@ -1653,18 +1789,22 @@ string fullPath = Path.GetFullPath(@"..\..\file.txt");
 ### پوشه‌های ویژه (Special Folders) 🌟
 
 کلاس **Path** و **Directory** پوشه‌های ویژه مثل **My Documents** یا **Program Files** را پوشش نمی‌دهند. برای این کار از:
+</div>
 
 ```csharp
 string myDocPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 ```
 
+<div dir="rtl">
 * `Environment.SpecialFolder` یک enum است که تمام پوشه‌های ویژه ویندوز را شامل می‌شود: AdminTools, ApplicationData, Fonts, StartMenu و غیره.
 * مسیر runtime دات‌نت با:
+</div>
 
 ```csharp
 System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory()
 ```
 
+<div dir="rtl">
 #### نکات مهم در ویندوز:
 
 * **ApplicationData:** داده‌های کاربر که در شبکه منتقل می‌شوند (روامینگ).
@@ -1672,6 +1812,7 @@ System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory()
 * **CommonApplicationData:** داده‌های مشترک بین کاربران.
 
 رعایت استاندارد: ایجاد یک زیرپوشه با نام برنامه شما برای ذخیره‌سازی داده‌ها.
+</div>
 
 ```csharp
 string localAppDataPath = Path.Combine(
@@ -1682,6 +1823,7 @@ if (!Directory.Exists(localAppDataPath))
     Directory.CreateDirectory(localAppDataPath);
 ```
 
+<div dir="rtl">
 ⚠️ نکته: اگر برنامه با سطح دسترسی مدیر اجرا شود و پوشه‌ها در `CommonApplicationData` ایجاد شوند، کاربران با دسترسی محدود ممکن است نتوانند فایل‌ها را بعداً تغییر دهند. راه‌حل: ایجاد پوشه‌ها با مجوز مناسب در فرآیند نصب.
 
 ---
@@ -1689,6 +1831,7 @@ if (!Directory.Exists(localAppDataPath))
 ### Querying Volume Information 💽
 
 برای دریافت اطلاعات درایوها از **DriveInfo** استفاده می‌کنیم:
+</div>
 
 ```csharp
 DriveInfo c = new DriveInfo("C"); // یا "/" در Unix
@@ -1709,6 +1852,7 @@ foreach (DriveInfo d in DriveInfo.GetDrives())
 }
 ```
 
+<div dir="rtl">
 * `GetDrives` همه درایوهای تعریف‌شده، شامل CD-ROM، کارت حافظه و شبکه را بازمی‌گرداند.
 * `DriveType` enum: `Unknown, NoRootDirectory, Removable, Fixed, Network, CDRom, Ram`.
 
@@ -1720,6 +1864,7 @@ foreach (DriveInfo d in DriveInfo.GetDrives())
 * رویدادهایی دارد که هنگام ایجاد، تغییر، حذف، تغییر نام یا تغییر ویژگی فایل/دایرکتوری فعال می‌شوند.
 
 مثال:
+</div>
 
 ```csharp
 Watch(GetTestDirectory(), "*.txt", true);
@@ -1752,6 +1897,7 @@ string GetTestDirectory() =>
     RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? @"C:\Temp" : "/tmp";
 ```
 
+<div dir="rtl">
 نکات مهم:
 
 * رویدادها در یک **Thread جداگانه** اجرا می‌شوند، بنابراین باید مدیریت استثنا داشته باشید.
@@ -1788,6 +1934,7 @@ string GetTestDirectory() =>
   2. یا دسترسی مدیریتی را از طریق **Application Manifest** درخواست کنید (ویندوز)
 
 برای تشخیص اینکه برنامه با دسترسی مدیر اجرا می‌شود:
+</div>
 
 ```csharp
 [DllImport("libc")]
@@ -1805,6 +1952,7 @@ static bool IsRunningAsAdmin()
 }
 ```
 
+<div dir="rtl">
 * در ویندوز، فقط در صورت فعال بودن UAC و Elevation، مقدار true برمی‌گردد.
 * در لینوکس، true فقط وقتی فرآیند با sudo اجرا شود.
 
@@ -1831,6 +1979,7 @@ static bool IsRunningAsAdmin()
 ---
 
 #### ۴. **مکان‌های پیشنهادی ذخیره‌سازی فایل‌ها**
+</div>
 
 ```csharp
 string docsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -1844,6 +1993,7 @@ if (!Directory.Exists(configFolder))
     Directory.CreateDirectory(configFolder);
 ```
 
+<div dir="rtl">
 ⚠️ توجه: استفاده از `CommonApplicationData` برای دسترسی همه کاربران، باید با تنظیم مجوزها همراه باشد.
 
 ---
@@ -1851,11 +2001,13 @@ if (!Directory.Exists(configFolder))
 #### ۵. **Elevation مدیریتی و Virtualization ویندوز**
 
 با **Application Manifest** می‌توانید درخواست دسترسی مدیر کنید:
+</div>
 
 ```xml
 <requestedExecutionLevel level="requireAdministrator" />
 ```
 
+<div dir="rtl">
 * `asInvoker`: برنامه بدون دسترسی مدیر اجرا شود و Virtualization غیرفعال است.
 
 **Virtualization:** تغییرات در پوشه Program Files یا Windows و HKEY\_LOCAL\_MACHINE به مکان جداگانه هدایت می‌شود تا از آسیب به سیستم جلوگیری شود.
@@ -1887,6 +2039,7 @@ Memory-mapped files برای دسترسی **تصادفی و سریع** به دا
 1. یک `FileStream` معمولی بسازید.
 2. یک `MemoryMappedFile` بسازید و فایل را به آن بدهید.
 3. از `CreateViewAccessor` برای ایجاد **View Accessor** استفاده کنید.
+</div>
 
 ```csharp
 File.WriteAllBytes("long.bin", new byte[1_000_000]);
@@ -1897,6 +2050,7 @@ accessor.Write(500_000, (byte)77);
 Console.WriteLine(accessor.ReadByte(500_000));  // 77
 ```
 
+<div dir="rtl">
 * می‌توان نام Map و ظرفیت مشخص کرد تا حافظه به اشتراک گذاشته شود یا اندازه فایل بزرگ‌تر شود.
 
 ---
@@ -1905,6 +2059,7 @@ Console.WriteLine(accessor.ReadByte(500_000));  // 77
 
 * یک فرآیند `MemoryMappedFile.CreateNew` ایجاد می‌کند.
 * فرآیندهای دیگر با `OpenExisting` به همان حافظه دسترسی دارند.
+</div>
 
 ```csharp
 // Writer
@@ -1919,12 +2074,14 @@ using var accessor = mmFile.CreateViewAccessor();
 Console.WriteLine(accessor.ReadInt32(0)); // 12345
 ```
 
+<div dir="rtl">
 ---
 
 #### ۳. اشتراک حافظه بین فرآیندها در Windows و Unix
 
 * فایل را با `FileStream` باز کنید و اجازه خواندن/نوشتن مشترک بدهید (`FileShare.ReadWrite`).
 * سپس `MemoryMappedFile.CreateFromFile` بسازید.
+</div>
 
 ```csharp
 var file = Path.Combine(TestDirectory, "interprocess.bin");
@@ -1938,12 +2095,14 @@ Console.ReadLine();
 File.Delete(file);
 ```
 
+<div dir="rtl">
 ---
 
 #### ۴. کار با View Accessor
 
 * `Read*` و `Write*` برای **نوع‌های عددی، bool، char** و آرایه‌ها/structهای Value Type استفاده می‌شوند.
 * برای رشته‌ها، باید ابتدا آن‌ها را به آرایه بایت تبدیل کنید.
+</div>
 
 ```csharp
 byte[] data = Encoding.UTF8.GetBytes("This is a test");
@@ -1956,7 +2115,9 @@ accessor.ReadArray(4, readData, 0, readData.Length);
 Console.WriteLine(Encoding.UTF8.GetString(readData)); // This is a test
 ```
 
+<div dir="rtl">
 * کار با struct:
+</div>
 
 ```csharp
 struct Data { public int X, Y; }
@@ -1966,11 +2127,13 @@ accessor.Read(0, out data);
 Console.WriteLine(data.X + " " + data.Y); // 123 456
 ```
 
+<div dir="rtl">
 ---
 
 #### ۵. بهینه‌سازی عملکرد با اشاره‌گرها (Unsafe)
 
 * استفاده از `SafeMemoryMappedViewHandle.AcquirePointer` بسیار سریع‌تر از `Read/Write` است، مخصوصاً برای داده‌های بزرگ:
+</div>
 
 ```csharp
 unsafe
@@ -1990,7 +2153,9 @@ unsafe
 }
 ```
 
+<div dir="rtl">
 * نیاز به فعال کردن unsafe code در فایل `.csproj`:
+</div>
 
 ```xml
 <PropertyGroup>
@@ -1998,9 +2163,9 @@ unsafe
 </PropertyGroup>
 ```
 
+<div dir="rtl">
 دلیل اصلی برتری عملکرد استفاده از **اشاره‌گرها (pointers)** وقتی با ساختارهای بزرگ کار می‌کنیم این است که اشاره‌گرها اجازه می‌دهند مستقیماً با داده‌های خام (raw data) کار کنیم، بدون اینکه مجبور باشیم از متدهای `Read` و `Write` برای کپی کردن داده‌ها بین حافظه **مدیریت‌شده (managed)** و **مدیریت‌نشده (unmanaged)** استفاده کنیم.
 
 این کار باعث صرفه‌جویی قابل‌توجهی در زمان و منابع می‌شود، به‌ویژه وقتی حجم داده‌ها زیاد باشد. این موضوع در **فصل ۲۴** کتاب به‌طور کامل بررسی شده است.
-
-
 </div>
+
