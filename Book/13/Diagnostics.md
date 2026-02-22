@@ -1303,4 +1303,4 @@ dotnet-dump analyze <<dumpfile>>
 Shell ابزار **dotnet-dump** دستورات متعددی دارد که می‌توانید با دستور **help** لیست کامل آن‌ها را مشاهده کنید.
 
 
-</dir>
+</div>

@@ -1618,4 +1618,4 @@ customers.Save("data.xml");
 * توجه: XStreamingElement قابلیت پیمایش ندارد و فقط برای **تولید خروجی XML** مناسب است.
 
 
-</dir>
+</div>

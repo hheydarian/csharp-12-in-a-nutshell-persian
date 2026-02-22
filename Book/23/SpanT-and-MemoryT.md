@@ -462,4 +462,4 @@ var span = new Span<char>((char*)ptr, source.Length * 2); // خطرناک!
 همچنین هیچ محافظتی در برابر **dangling pointer** وجود ندارد، بنابراین باید مراقب باشید پس از آزاد کردن حافظه unmanaged با `Marshal.FreeHGlobal` به span دسترسی نداشته باشید.
 
 
-</dir>
+</div>

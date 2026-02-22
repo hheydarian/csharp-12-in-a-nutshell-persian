@@ -2693,4 +2693,4 @@ Console.WriteLine(Disassembler.Disassemble(mi));
 * این خروجی IL خوانا و مشابه **ildasm** تولید می‌کند. ✅
 
 
-</dir>
+</div>

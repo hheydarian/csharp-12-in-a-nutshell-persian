@@ -1775,4 +1775,4 @@ Context: DefaultAssemblyLoadContext Default
 حتی اگر هر دو پلاگین نسخه یکسان Humanizer را استفاده کنند، **ایزوله‌سازی ALCها** مزیت دارد، زیرا **متغیرهای static هر پلاگین جدا خواهند بود**.
 
 
-</dir>
+</div>

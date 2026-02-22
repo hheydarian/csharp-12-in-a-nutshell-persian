@@ -2729,4 +2729,4 @@ worker.RunWorkerAsync();   // شروع عملیات و capture synchronization c
 * **TAP (Task + async/await)** جایگزین مدرن، ساده و انعطاف‌پذیر است و تقریبا همه متدهای جدید .NET از آن استفاده می‌کنند.
 
 
-</dir>
+</div>

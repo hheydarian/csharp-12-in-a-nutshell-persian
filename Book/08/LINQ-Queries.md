@@ -2360,4 +2360,4 @@ Console.WriteLine(runnable("dog"));        // True
 ما ادامه این بحث را آنلاین ارائه داده‌ایم در: [http://www.albahari.com/expressions](http://www.albahari.com/expressions) ✅
 
 
-</dir>
+</div>

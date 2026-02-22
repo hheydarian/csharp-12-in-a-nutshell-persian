@@ -205,4 +205,4 @@ Eric Lippert, Jon Skeet, Stephen Toub, Nicholas Paldino, Chris Burrows, Shawn Fa
 و در پایان، عمیق‌ترین قدردانی‌ام را نثار همسر فوق‌العاده‌ام، لی آلباهاری، می‌کنم که حضورش در کنارم، در تمام طول این پروژه، منبع شادی و آرامش من بود.
 
 
-</dir>
+</div>
