@@ -1,5 +1,6 @@
 
 <div dir="rtl">
+
 # فصل شانزدهم: شبکه‌سازی 
 
 .NET مجموعه‌ای از کلاس‌ها را در فضای نام **System.Net.\*** برای برقراری ارتباط از طریق پروتکل‌های استاندارد شبکه مثل **HTTP** و **TCP/IP** ارائه می‌دهد. در اینجا خلاصه‌ای از اجزای کلیدی آورده شده است:
@@ -91,6 +92,7 @@ Console.WriteLine (a3.AddressFamily);     // InterNetworkV6
 ```
 
 <div dir="rtl">
+
 ---
 
 ### پورت‌ها 🔌
@@ -114,6 +116,7 @@ Console.WriteLine (ep.ToString());            // 101.102.103.104:222
 ```
 
 <div dir="rtl">
+
 ---
 
 ### URI 📑
@@ -194,6 +197,7 @@ Console.WriteLine (relative.ToString());    // page.html
 ```
 
 <div dir="rtl">
+
 یک **URI نسبی (relative URI)** مثل `page.html` در این مثال، اگر تقریباً هر property یا متدی به‌جز **IsAbsoluteUri** و **ToString** را فراخوانی کنید، یک exception پرتاب می‌کند. می‌توانید مستقیماً یک URI نسبی بسازید:
 </div>
 
@@ -202,6 +206,7 @@ Uri u = new Uri ("page.html", UriKind.Relative);
 ```
 
 <div dir="rtl">
+
 ---
 
 ### اهمیت اسلش انتهایی `/` ⚠️
@@ -252,6 +257,7 @@ string html = await new HttpClient().GetStringAsync ("http://linqpad.net");
 ```
 
 <div dir="rtl">
+
 همچنین متدهای **GetByteArrayAsync** و **GetStreamAsync** وجود دارند. تمام متدهای I/O در **HttpClient** به‌صورت **asynchronous** هستند.
 
 💡 برخلاف WebRequest/WebResponse، برای بهترین کارایی باید از **یک نمونه‌ی HttpClient** استفاده‌ی مجدد کنید؛ در غیر این صورت، عملیات‌هایی مثل **DNS resolution** دوباره و دوباره انجام می‌شوند و **ساکت‌ها** (sockets) بیشتر از حد لازم باز می‌مانند.
@@ -269,6 +275,7 @@ Console.WriteLine (await task2);
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ویژگی‌ها و پیکربندی ⚙️
@@ -285,6 +292,7 @@ var client = new HttpClient (handler);
 ```
 
 <div dir="rtl">
+
 در این مثال، **پشتیبانی از Proxy** غیرفعال شد تا هزینه‌ی شناسایی خودکار Proxy حذف شود و کارایی افزایش یابد.
 
 کلاس **HttpClientHandler** همچنین propertyهایی برای کنترل **کوکی‌ها، ریدایرکت خودکار، احراز هویت** و … دارد.
@@ -306,6 +314,7 @@ string html = await response.Content.ReadAsStringAsync();
 ```
 
 <div dir="rtl">
+
 * **HttpResponseMessage** → دسترسی به **Headers** و **StatusCode**.
 * اگر **status code ناموفق** مثل ۴۰۴ برگردد، exception پرتاب نمی‌شود مگر اینکه **EnsureSuccessStatusCode** را صریحاً فراخوانی کنید.
 * خطاهای ارتباطی یا DNS → همیشه exception پرتاب می‌کنند.
@@ -319,6 +328,7 @@ using (var fileStream = File.Create ("linqpad.html"))
 ```
 
 <div dir="rtl">
+
 متد **GetAsync** یکی از چهار متد متناظر با افعال HTTP است (بقیه: **PostAsync، PutAsync، DeleteAsync**).
 
 ---
@@ -339,6 +349,7 @@ response.EnsureSuccessStatusCode();
 ```
 
 <div dir="rtl">
+
 ایجاد یک **HttpRequestMessage** به شما امکان می‌دهد propertyهای درخواست مثل **Headers** و **Content** را شخصی‌سازی کنید، که شامل آپلود داده‌ها نیز می‌شود.
 ### 📤 آپلود داده‌ها و HttpContent
 
@@ -363,6 +374,7 @@ Console.WriteLine (await response.Content.ReadAsStringAsync());
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ⚙️ HttpMessageHandler
@@ -381,6 +393,7 @@ public abstract class HttpMessageHandler : IDisposable
 ```
 
 <div dir="rtl">
+
 متد `SendAsync` درون متد `SendAsync` کلاس `HttpClient` فراخوانی می‌شود.
 `HttpMessageHandler` به اندازه‌ای ساده است که بتوان به‌راحتی آن را زیرکلاس کرد و در نتیجه، یک نقطه‌ی توسعه‌پذیری برای `HttpClient` فراهم می‌کند.
 
@@ -412,6 +425,7 @@ class MockHandler : HttpMessageHandler
 ```
 
 <div dir="rtl">
+
 🔹 سازنده‌ی این کلاس یک تابع دریافت می‌کند که مشخص می‌کند پاسخ از روی درخواست چگونه ساخته شود. این رویکرد بسیار انعطاف‌پذیر است زیرا همان هندلر می‌تواند چندین درخواست مختلف را تست کند.
 
 متد `SendAsync` در اینجا به‌صورت **همگام** عمل می‌کند چون از `Task.FromResult` استفاده کرده‌ایم. البته می‌توانستیم با برگرداندن `Task<HttpResponseMessage>` از تابع پاسخ‌ساز، حالت **غیرهمگام** را هم حفظ کنیم، اما از آنجا که تابع Mock معمولاً کوتاه و سریع است، ضرورتی ندارد.
@@ -432,6 +446,7 @@ Assert.AreEqual ("You asked for http://www.linqpad.net/", result);
 ```
 
 <div dir="rtl">
+
 (`Assert.AreEqual` متدی است که معمولاً در فریم‌ورک‌های تست واحد مثل NUnit استفاده می‌شود.)
 
 ---
@@ -462,6 +477,7 @@ class LoggingHandler : DelegatingHandler
 ```
 
 <div dir="rtl">
+
 ✅ در اینجا ما **غیرهمزمانی** را در Override کردن `SendAsync` حفظ کرده‌ایم. استفاده از `async` در متدهایی که خروجی Task دارند هم قانونی است و هم در اینجا مطلوب.
 
 ---
@@ -482,6 +498,7 @@ var client = new HttpClient (handler);
 ```
 
 <div dir="rtl">
+
 ویژگی `UseProxy` در `HttpClientHandler` را می‌توان روی `false` تنظیم کرد تا به جای null کردن `Proxy`، تشخیص خودکار غیرفعال شود.
 
 اگر هنگام ساختن `NetworkCredential` یک **دامنه** مشخص کنید، پروتکل‌های احراز هویت مبتنی بر ویندوز (NTLM یا Kerberos) استفاده می‌شوند. برای استفاده از کاربر فعلی ویندوز، مقدار `CredentialCache.DefaultNetworkCredentials` را به ویژگی `Credentials` پروکسی اختصاص دهید.
@@ -494,6 +511,7 @@ HttpClient.DefaultWebProxy = myWebProxy;
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔐 احراز هویت (Authentication)
@@ -511,6 +529,7 @@ var client = new HttpClient (handler);
 ```
 
 <div dir="rtl">
+
 این روش با پروتکل‌های مبتنی بر دیالوگ مثل **Basic** و **Digest** کار می‌کند و از طریق کلاس `AuthenticationManager` نیز قابل گسترش است. همچنین از **Windows NTLM** و **Kerberos** هم پشتیبانی می‌کند (اگر هنگام ساختن `NetworkCredential` دامنه وارد کرده باشید). اگر بخواهید از کاربر فعلی ویندوز استفاده کنید، کافی است ویژگی `Credentials` را مقداردهی نکنید و به‌جای آن `UseDefaultCredentials = true` تنظیم کنید.
 
 وقتی اطلاعات ورود (Credentials) را مشخص می‌کنید، `HttpClient` به‌طور خودکار پروتکل مناسب را مذاکره می‌کند. در برخی موارد گزینه‌های مختلفی وجود دارد؛ برای مثال، پاسخ اولیه‌ی یک سرور Microsoft Exchange Web Mail ممکن است شامل هدرهای زیر باشد:
@@ -529,6 +548,7 @@ Date: Sat, 05 Aug 2006 12:37:23 GMT
 ```
 
 <div dir="rtl">
+
 کد **401** به معنای نیاز به احراز هویت است؛ هدرهای `WWW-Authenticate` هم نشان می‌دهند چه پروتکل‌هایی پشتیبانی می‌شوند.
 
 اگر `HttpClientHandler` را با نام کاربری و رمز درست پیکربندی کنید، این پیام را نخواهید دید چون زمان اجرا به‌طور خودکار یک پروتکل سازگار انتخاب می‌کند، درخواست اصلی را دوباره ارسال می‌کند و یک هدر اضافی اضافه می‌کند.
@@ -542,6 +562,7 @@ ATmKAAAAD0lVDRdPUksHUq9VUA==
 ```
 
 <div dir="rtl">
+
 این مکانیزم شفاف است، اما باعث می‌شود هر درخواست یک رفت‌وبرگشت اضافی ایجاد کند. برای جلوگیری از این موضوع در درخواست‌های بعدی به همان URI، می‌توانید ویژگی `PreAuthenticate` در `HttpClientHandler` را روی true قرار دهید.
 ### 🔑 CredentialCache
 
@@ -562,6 +583,7 @@ handler.Credentials = cache;
 ```
 
 <div dir="rtl">
+
 پروتکل احراز هویت به صورت رشته‌ای مشخص می‌شود. مقادیر معتبر شامل موارد زیر هستند:
 `Basic`, `Digest`, `NTLM`, `Kerberos`, `Negotiate`
 
@@ -576,6 +598,7 @@ cache.Add (prefix, "Negotiate", CredentialCache.DefaultNetworkCredentials);
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 📨 احراز هویت از طریق Header
@@ -592,6 +615,7 @@ client.DefaultRequestHeaders.Authorization =
 ```
 
 <div dir="rtl">
+
 این استراتژی با سیستم‌های احراز هویت سفارشی مثل **OAuth** هم کار می‌کند.
 
 ---
@@ -612,6 +636,7 @@ client.DefaultRequestHeaders.Add ("CustomHeader", "VisualStudio/2022");
 ```
 
 <div dir="rtl">
+
 * ویژگی `Headers` در کلاس `HttpRequestMessage` مخصوص هدرهای خاص همان درخواست است.
 
 ---
@@ -628,6 +653,7 @@ client.DefaultRequestHeaders.Add ("CustomHeader", "VisualStudio/2022");
 ```
 
 <div dir="rtl">
+
 مثال:
 </div>
 
@@ -636,6 +662,7 @@ string requestURI = "http://www.google.com/search?q=HttpClient&hl=fr";
 ```
 
 <div dir="rtl">
+
 اگر احتمال دارد Query شامل **کاراکترهای خاص یا فاصله** باشد، می‌توانید از متد `EscapeDataString` در کلاس `Uri` استفاده کنید تا URI معتبر تولید شود:
 </div>
 
@@ -647,6 +674,7 @@ string requestURI = "http://www.google.com/search?q=" + search +
 ```
 
 <div dir="rtl">
+
 🔹 نتیجه:
 </div>
 
@@ -655,6 +683,7 @@ http://www.google.com/search?q=(HttpClient%20OR%20HttpRequestMessage)&hl=fr
 ```
 
 <div dir="rtl">
+
 (متد `EscapeDataString` شبیه `EscapeUriString` است، با این تفاوت که کاراکترهایی مثل `&` و `=` را هم کدگذاری می‌کند، چون در غیر این صورت Query String را به‌هم می‌ریزد.)
 
 ---
@@ -679,6 +708,7 @@ Console.WriteLine (await response.Content.ReadAsStringAsync());
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🍪 کوکی‌ها (Cookies)
@@ -699,6 +729,7 @@ var client = new HttpClient (handler);
 ```
 
 <div dir="rtl">
+
 برای استفاده مجدد از کوکی‌ها در درخواست‌های بعدی، کافی است از همان `CookieContainer` دوباره استفاده کنید.
 همچنین می‌توانید یک `CookieContainer` تازه بسازید و کوکی‌ها را به‌صورت دستی اضافه کنید:
 </div>
@@ -712,6 +743,7 @@ freshCookieContainer.Add (c);
 ```
 
 <div dir="rtl">
+
 آرگومان سوم و چهارم به ترتیب **مسیر (Path)** و **دامنه (Domain)** صادرکننده را مشخص می‌کنند.
 
 یک `CookieContainer` در سمت کلاینت می‌تواند کوکی‌هایی از چندین مبدا مختلف را در خود جای دهد؛ `HttpClient` فقط کوکی‌هایی را می‌فرستد که مسیر و دامنه‌شان با سرور درخواست‌شده مطابقت داشته باشند.
@@ -727,6 +759,7 @@ app.Run();
 ```
 
 <div dir="rtl">
+
 همچنین می‌توانید با استفاده از کلاس **HttpListener**، سرور HTTP اختصاصی خودتان را بسازید. نمونه‌ی زیر یک سرور ساده است که روی پورت 51111 گوش می‌دهد، منتظر یک درخواست از کلاینت می‌شود و سپس یک پاسخ یک‌خطی برمی‌گرداند:
 </div>
 
@@ -763,6 +796,7 @@ class SimpleHttpServer : IDisposable
 ```
 
 <div dir="rtl">
+
 📤 **خروجی:**
 </div>
 
@@ -771,6 +805,7 @@ You asked for: /MyApp/Request.txt
 ```
 
 <div dir="rtl">
+
 روی ویندوز، `HttpListener` به صورت داخلی از **.NET Socket** استفاده نمی‌کند، بلکه از **Windows HTTP Server API** کمک می‌گیرد. این موضوع باعث می‌شود چندین برنامه روی یک IP و پورت یکسان گوش بدهند، به شرطی که هر کدام پیشوندهای متفاوتی ثبت کنند (مثلاً `/myapp` یا `/anotherapp`).
 
 ویژگی‌های اصلی:
@@ -839,6 +874,7 @@ class WebServer
 ```
 
 <div dir="rtl">
+
 📌 راه‌اندازی:
 </div>
 
@@ -854,6 +890,7 @@ finally { server.Stop(); }
 ```
 
 <div dir="rtl">
+
 حالا می‌توانید با هر مرورگری این سرور را تست کنید.
 
 ---
@@ -871,6 +908,7 @@ foreach (IPAddress a in Dns.GetHostAddresses ("albahari.com"))
 ```
 
 <div dir="rtl">
+
 🔹 تبدیل IP به نام دامنه:
 </div>
 
@@ -880,6 +918,7 @@ Console.WriteLine (entry.HostName);  // albahari.com
 ```
 
 <div dir="rtl">
+
 🔹 روش ناهمزمان:
 </div>
 
@@ -889,6 +928,7 @@ foreach (IPAddress a in await Dns.GetHostAddressesAsync ("albahari.com"))
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 📧 ارسال ایمیل با SmtpClient
@@ -905,6 +945,7 @@ client.Send ("from@adomain.com", "to@adomain.com", "subject", "body");
 ```
 
 <div dir="rtl">
+
 📎 افزودن پیوست‌ها:
 </div>
 
@@ -927,6 +968,7 @@ client.Send (mm);
 ```
 
 <div dir="rtl">
+
 🔐 بیشتر سرورهای SMTP فقط ارتباط‌های **احراز هویت‌شده و امن (SSL/TLS)** را قبول می‌کنند:
 </div>
 
@@ -941,6 +983,7 @@ Console.WriteLine ("Sent");
 ```
 
 <div dir="rtl">
+
 📂 در زمان توسعه، می‌توانید ایمیل‌ها را به جای ارسال، در یک پوشه ذخیره کنید:
 </div>
 
@@ -951,6 +994,7 @@ client.PickupDirectoryLocation = @"c:\mail";
 ```
 
 <div dir="rtl">
+
 ---
 
 ✨ در این بخش یاد گرفتیم چطور در .NET یک **HTTP server** ساده بنویسیم، با **DNS** کار کنیم و با استفاده از **SMTP** ایمیل ارسال کنیم.
@@ -996,6 +1040,7 @@ using (TcpClient client = new TcpClient())
 ```
 
 <div dir="rtl">
+
 * متد **Connect** در TcpClient بلوکه می‌شود تا اتصال برقرار گردد (نسخه‌ی غیرهمگام آن **ConnectAsync** است).
 * پس از آن، **NetworkStream** امکان ارتباط دوطرفه (ارسال و دریافت داده‌های باینری) با سرور را فراهم می‌کند.
 
@@ -1017,6 +1062,7 @@ listener.Stop();
 ```
 
 <div dir="rtl">
+
 * برای **TcpListener** باید آدرس IP محلی تعیین شود (یک کامپیوتر با دو کارت شبکه می‌تواند دو آدرس داشته باشد).
 * می‌توان از **IPAddress.Any** استفاده کرد تا روی تمام آدرس‌های IP محلی گوش دهد.
 * متد **AcceptTcpClient** تا دریافت درخواست از یک Client بلوکه می‌ماند (نسخه‌ی غیرهمگام آن نیز وجود دارد).
@@ -1071,6 +1117,7 @@ void Server()   // فقط یک درخواست را پردازش می‌کند
 ```
 
 <div dir="rtl">
+
 * در این مثال از **localhost loopback** استفاده شده تا Client و Server روی همان سیستم اجرا شوند.
 * پورتی در بازه‌ی آزاد (بالاتر از ۴۹۱۵۲) انتخاب شده است.
 * برای ارسال و دریافت متن‌ها از **BinaryWriter** و **BinaryReader** استفاده کرده‌ایم.
@@ -1123,6 +1170,7 @@ async Task Accept(TcpClient client)
 ```
 
 <div dir="rtl">
+
 این برنامه **Scalable** است چون برای کل مدت درخواست یک Thread اشغال نمی‌کند.
 مثلاً اگر ۱۰۰۰ Client هم‌زمان متصل شوند و هرکدام چند ثانیه طول بکشد، این راهکار نیازی به ۱۰۰۰ Thread ندارد. فقط در بازه‌های کوتاه قبل و بعد از عبارت‌های `await` از Thread استفاده می‌کند. ✅
 
@@ -1158,6 +1206,7 @@ string ReadLine (Stream s)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### متد کمکی برای ارسال دستور ✉️
@@ -1177,6 +1226,7 @@ void SendCommand (Stream stream, string line)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### دریافت ایمیل‌ها از سرور 📬
@@ -1221,6 +1271,7 @@ using (NetworkStream n = client.GetStream())
 ```
 
 <div dir="rtl">
+
 ---
 
 ### نکته 💡

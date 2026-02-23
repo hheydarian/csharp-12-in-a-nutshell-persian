@@ -1,5 +1,6 @@
 
 <div dir="rtl">
+
 # فصل بیست و پنجم: Regular Expressions
 
 زبان **Regular Expressions** الگوهای کاراکتری را شناسایی می‌کند. تایپ‌های .NET که از Regular Expressions پشتیبانی می‌کنند، بر اساس **Perl 5 Regular Expressions** ساخته شده‌اند و هم قابلیت جستجو (**search**) و هم جستجو/جایگزینی (**search/replace**) را پشتیبانی می‌کنند.
@@ -38,6 +39,7 @@ Console.WriteLine (Regex.Match ("colouur", @"colou?r").Success);  // False
 ```
 
 <div dir="rtl">
+
 متد **Regex.Match** در یک رشته بزرگ‌تر جستجو می‌کند. شیء برگردانده‌شده ویژگی‌هایی مثل **Index** (مکان شروع تطبیق)، **Length** (طول تطبیق)، و **Value** (رشته واقعی تطبیق داده‌شده) دارد:
 </div>
 
@@ -51,6 +53,7 @@ Console.WriteLine (m.ToString());  // colour
 ```
 
 <div dir="rtl">
+
 می‌توانید به **Regex.Match** مثل نسخه قوی‌تر متد **IndexOf** در رشته نگاه کنید. تفاوت این است که **Regex.Match** به‌جای رشته‌ی ثابت، یک **الگو** را جستجو می‌کند.
 
 متد **IsMatch** یک میانبر است برای صدا زدن Match و سپس بررسی ویژگی Success.
@@ -68,6 +71,7 @@ Console.WriteLine (m2);         // colours
 ```
 
 <div dir="rtl">
+
 متد **Matches** همه تطبیق‌ها را در یک آرایه برمی‌گرداند. پس می‌توان مثال قبلی را به شکل زیر بازنویسی کرد:
 </div>
 
@@ -78,6 +82,7 @@ foreach (Match m in Regex.Matches
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 🔀 عملگر Alternator
@@ -92,6 +97,7 @@ Console.WriteLine (Regex.IsMatch ("Jenny", "Jen(ny|nifer)?"));  // True
 ```
 
 <div dir="rtl">
+
 🔹 پرانتزها در اطراف Alternator باعث می‌شوند این گزینه‌ها از بقیه عبارت جدا شوند.
 
 ---
@@ -118,6 +124,7 @@ Console.WriteLine (r.Match ("sausages"));  // sausages
 ```
 
 <div dir="rtl">
+
 گزینه **RegexOptions.Compiled** به نمونه Regex می‌گوید از **تولید کد سبک‌وزن** (با استفاده از DynamicMethod در Reflection.Emit) برای ساخت و کامپایل پویا کدی که مخصوص همان Regular Expression است استفاده کند.
 
 🔹 نتیجه این کار: تطبیق سریع‌تر، اما با هزینه اولیه‌ی کامپایل.
@@ -140,6 +147,7 @@ Console.WriteLine (Regex.Match ("a", "A", RegexOptions.IgnoreCase)); // a
 ```
 
 <div dir="rtl">
+
 این کار قوانین فرهنگ (Culture) فعلی را برای معادل‌سازی حروف اعمال می‌کند. اگر بخواهید از **Invariant Culture** استفاده کنید، می‌توانید از گزینه **CultureInvariant** کمک بگیرید:
 </div>
 
@@ -149,6 +157,7 @@ Console.WriteLine (Regex.Match ("a", "A", RegexOptions.IgnoreCase
 ```
 
 <div dir="rtl">
+
 🔹 بیشتر گزینه‌های RegexOptions را می‌توان داخل خود عبارت Regular Expression با کد تک‌حرفی فعال کرد:
 </div>
 
@@ -157,6 +166,7 @@ Console.WriteLine (Regex.Match ("a", @"(?i)A"));                     // a
 ```
 
 <div dir="rtl">
+
 می‌توانید گزینه‌ها را در طول یک عبارت روشن و خاموش کنید:
 </div>
 
@@ -165,6 +175,7 @@ Console.WriteLine (Regex.Match ("AAAa", @"(?i)a(?-i)a"));            // Aa
 ```
 
 <div dir="rtl">
+
 یک گزینه مفید دیگر **IgnorePatternWhitespace** یا `(?x)` است. این گزینه به شما اجازه می‌دهد برای خوانایی بهتر، فاصله (Whitespace) داخل عبارت قرار دهید—بدون اینکه آن فاصله به‌عنوان بخشی از الگو در نظر گرفته شود.
 
 🔸 گزینه **NonBacktracking** (از .NET 7) به موتور Regex می‌گوید فقط از الگوریتم تطبیق رو‌به‌جلو استفاده کند. این کار معمولاً سرعت را کمتر می‌کند و بعضی قابلیت‌های پیشرفته مثل Lookahead یا Lookbehind را غیرفعال می‌کند. اما از اجرای تقریباً بی‌نهایت الگوهای خراب یا مخرب جلوگیری کرده و جلوی حمله‌های **ReDOS** (Regular Expression Denial of Service) را می‌گیرد. در این شرایط تعیین Timeout هم بسیار مفید است.
@@ -187,6 +198,7 @@ Console.WriteLine (Regex.Match ("AAAa", @"(?i)a(?-i)a"));            // Aa
 ```
 
 <div dir="rtl">
+
 برای اینکه یک متاکاراکتر را به صورت **لیترال** (یعنی دقیقاً همان کاراکتر) استفاده کنیم، باید قبل از آن یک **بک‌اسلش** (`\`) قرار دهیم (اصطلاحاً Escape کنیم).
 
 مثال: در کد زیر، علامت `?` را Escape می‌کنیم تا بتوانیم دقیقاً رشته `"what?"` را تطبیق دهیم:
@@ -198,6 +210,7 @@ Console.WriteLine (Regex.Match ("what?", @"what?"));  // what  (نادرست)
 ```
 
 <div dir="rtl">
+
 📌 نکته: اگر کاراکتر داخل یک **مجموعه (Set)** باشد (یعنی داخل براکت‌های `[]` نوشته شده باشد)، این قانون اعمال نمی‌شود و متاکاراکترها همان‌طور که هستند به صورت **لیترال** در نظر گرفته می‌شوند. (مجموعه‌ها را در بخش بعدی بررسی می‌کنیم).
 
 ---
@@ -218,6 +231,7 @@ Console.WriteLine (Regex.Unescape (@"\?"));    // ?>
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 💡 نکته درباره @ در رشته‌های C#
@@ -234,6 +248,7 @@ Console.WriteLine (Regex.Match ("\\", "\\\\"));    // \
 ```
 
 <div dir="rtl">
+
 ---
 
 ## ⚠️ فاصله‌ها در Regular Expressions
@@ -248,6 +263,7 @@ Console.Write (Regex.IsMatch ("hello world", @"hello world"));  // True
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 🎭 Character Sets
@@ -270,6 +286,7 @@ Console.Write (Regex.Matches ("That is that.", "[Tt]hat").Count);   // 2
 ```
 
 <div dir="rtl">
+
 🔹 در مثال بالا، الگو `[Tt]hat` هم کلمه **That** (با T بزرگ) و هم **that** (با t کوچک) را پیدا می‌کند. نتیجه برابر **۲** خواهد بود.
 
 ---
@@ -284,6 +301,7 @@ Console.Write (Regex.Match ("quiz qwerty", "q[^aeiou]").Index);    // 5
 ```
 
 <div dir="rtl">
+
 🔹 در اینجا الگو `q[^aeiou]` به دنبال یک حرف `q` است که بعد از آن **هیچ‌کدام از حروف صدادار a, e, i, o, u** نیاید. نتیجه این است که تطبیق از ایندکس ۵ پیدا می‌شود.
 
 ---
@@ -298,6 +316,7 @@ Console.Write (Regex.Match ("b1-c4", @"[a-h]\d-[a-h]\d").Success);  // True
 ```
 
 <div dir="rtl">
+
 🔹 در اینجا `[a-h]` یعنی هر حرفی بین **a تا h**، و `\d` یعنی یک عدد (رقم). بنابراین عبارت کل حرکت شطرنج **b1-c4** را شناسایی می‌کند ✅.
 
 ---
@@ -338,6 +357,7 @@ Console.Write (Regex.IsMatch ("Yes, please", @"\p{P}"));   // True
 ```
 
 <div dir="rtl">
+
 🔹 در اینجا چون رشته `"Yes, please"` شامل علامت ویرگول (,) است، نتیجه `True` خواهد بود.
 
 ---
@@ -365,6 +385,7 @@ Console.Write (Regex.Match ("cv15.docx", @"cv\d*\.docx").Success);  // True
 ```
 
 <div dir="rtl">
+
 توجه کنید که باید نقطه را در پسوند فایل با `\` فرار (escape) بدهیم.
 
 مثال زیر هر چیزی بین `cv` و `.docx` را مجاز می‌داند و معادل دستور زیر است:
@@ -376,6 +397,7 @@ Console.Write (Regex.Match ("cvjoint.docx", @"cv.*\.docx").Success); // True
 ```
 
 <div dir="rtl">
+
 تکرارگر `+` کاراکتر یا گروه قبلی را **یک بار یا بیشتر** تطبیق می‌دهد. برای نمونه:
 </div>
 
@@ -384,6 +406,7 @@ Console.Write (Regex.Matches ("slow! yeah slooow!", "slo+w").Count);  // 2
 ```
 
 <div dir="rtl">
+
 ---
 
 تکرارگر `{}` یک **تعداد مشخص (یا بازه‌ای)** از تکرارها را تطبیق می‌دهد. مثال زیر یک فشار خون را تطبیق می‌دهد:
@@ -396,6 +419,7 @@ Console.WriteLine (bp.Match ("Now it's only 115/75"));   // 115/75
 ```
 
 <div dir="rtl">
+
 ---
 
 ## ⚖️ Greedy در مقابل Lazy Quantifiers
@@ -415,6 +439,7 @@ string html = "<i>By default</i> quantifiers are <i>greedy</i> creatures";
 ```
 
 <div dir="rtl">
+
 فرض کنید می‌خواهیم دو عبارت ایتالیک را استخراج کنیم. اگر کد زیر را اجرا کنیم:
 </div>
 
@@ -424,6 +449,7 @@ foreach (Match m in Regex.Matches (html, @"<i>.*</i>"))
 ```
 
 <div dir="rtl">
+
 نتیجه دو تطبیق نیست، بلکه **یک تطبیق** است:
 </div>
 
@@ -432,6 +458,7 @@ foreach (Match m in Regex.Matches (html, @"<i>.*</i>"))
 ```
 
 <div dir="rtl">
+
 مشکل اینجاست که `*` به‌صورت greedy تا جایی که می‌تواند تکرار می‌شود قبل از اینکه به `</i>` برسد. بنابراین از اولین `</i>` عبور می‌کند و فقط در آخرین `</i>` متوقف می‌شود.
 
 اگر تکرارگر را Lazy کنیم، `*` در همان اولین جایی که بقیه‌ی عبارت می‌تواند تطبیق پیدا کند متوقف می‌شود:
@@ -443,6 +470,7 @@ foreach (Match m in Regex.Matches (html, @"<i>.*?</i>"))
 ```
 
 <div dir="rtl">
+
 نتیجه:
 </div>
 
@@ -452,6 +480,7 @@ foreach (Match m in Regex.Matches (html, @"<i>.*?</i>"))
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 🪝 Zero-Width Assertions
@@ -473,6 +502,7 @@ Console.WriteLine (Regex.Match ("say 25 miles more", @"\d+\s(?=miles)"));
 ```
 
 <div dir="rtl">
+
 📤 خروجی:
 </div>
 
@@ -481,6 +511,7 @@ Console.WriteLine (Regex.Match ("say 25 miles more", @"\d+\s(?=miles)"));
 ```
 
 <div dir="rtl">
+
 دقت کنید که کلمه‌ی `"miles"` در نتیجه برگردانده نشد، حتی اگر برای تطبیق لازم بود.
 
 پس از یک lookahead موفق، تطبیق ادامه پیدا می‌کند، انگار که این پیش‌نمایش اصلاً اتفاق نیفتاده است. پس اگر عبارت را این‌طور بنویسیم:
@@ -491,6 +522,7 @@ Console.WriteLine (Regex.Match ("say 25 miles more", @"\d+\s(?=miles).*"));
 ```
 
 <div dir="rtl">
+
 📤 خروجی:
 </div>
 
@@ -499,6 +531,7 @@ Console.WriteLine (Regex.Match ("say 25 miles more", @"\d+\s(?=miles).*"));
 ```
 
 <div dir="rtl">
+
 ---
 
 ✅ Lookahead می‌تواند برای اعمال قوانین روی پسوردهای قوی مفید باشد. فرض کنید پسورد باید حداقل ۶ کاراکتر باشد و حداقل یک عدد داشته باشد. با یک lookahead می‌توانیم این شرط را برقرار کنیم:
@@ -510,6 +543,7 @@ bool ok = Regex.IsMatch (password, @"(?=.*\d).{6,}");
 ```
 
 <div dir="rtl">
+
 این ابتدا یک lookahead انجام می‌دهد تا مطمئن شود که حداقل یک رقم در رشته وجود دارد. اگر برقرار بود، به جای قبلی خود برمی‌گردد و سپس حداقل ۶ کاراکتر را تطبیق می‌دهد.
 
 ---
@@ -526,6 +560,7 @@ Console.WriteLine (Regex.IsMatch ("Good work! Thanks!", regex));  // True
 ```
 
 <div dir="rtl">
+
 ---
 
 ساختار `(?<=expr)` به معنای **positive lookbehind** است و نیاز دارد که تطبیق با یک عبارت خاص **قبل از آن** باشد.
@@ -541,6 +576,7 @@ Console.WriteLine (Regex.IsMatch ("Very good, thanks!", regex));  // True
 ```
 
 <div dir="rtl">
+
 ---
 
 🔖 ما می‌توانیم این مثال‌ها را با اضافه کردن **word boundary assertions** (که به‌زودی معرفی می‌کنیم) بهبود دهیم.
@@ -560,6 +596,7 @@ Console.WriteLine (Regex.Match ("f = 0.2F", "[Ff]$"));   // F
 ```
 
 <div dir="rtl">
+
 🔹 `^` دو معنای وابسته به متن دارد: **یک لنگر** و **علامت نفی در کلاس کاراکتر**.
 🔹 `$` هم دو معنای وابسته به متن دارد: **یک لنگر** و **نشانه‌ی گروه جایگزین (replacement group denoter)**.
 
@@ -578,6 +615,7 @@ Console.WriteLine (Regex.Match ("f = 0.2F", "[Ff]$"));   // F
 ```
 
 <div dir="rtl">
+
 این **positive lookahead** تضمین می‌کند که `\r` جزئی از نتیجه نشود.
 
 مثال زیر خطوطی را که به ".txt" ختم می‌شوند، تطبیق می‌دهد:
@@ -591,6 +629,7 @@ foreach (Match m in Regex.Matches (fileNames, r, RegexOptions.Multiline))
 ```
 
 <div dir="rtl">
+
 📤 خروجی:
 </div>
 
@@ -599,6 +638,7 @@ a.txt c.txt
 ```
 
 <div dir="rtl">
+
 ---
 
 مثال بعدی همه‌ی خطوط خالی را در رشته‌ی `s` پیدا می‌کند:
@@ -610,6 +650,7 @@ MatchCollection emptyLines = Regex.Matches (s, "^(?=\r?$)",
 ```
 
 <div dir="rtl">
+
 و این یکی همه‌ی خطوطی را که خالی هستند یا فقط شامل فاصله یا tab می‌باشند:
 </div>
 
@@ -619,6 +660,7 @@ MatchCollection blankLines = Regex.Matches (s, "^[ \t]*(?=\r?$)",
 ```
 
 <div dir="rtl">
+
 از آنجا که یک anchor یک **موقعیت** را تطبیق می‌دهد و نه یک کاراکتر، مشخص کردن یک anchor به‌تنهایی باعث تطبیق با یک رشته‌ی خالی می‌شود:
 </div>
 
@@ -627,6 +669,7 @@ Console.WriteLine (Regex.Match ("x", "$").Length);   // 0
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 🔠 Word Boundaries (مرزهای کلمه)
@@ -645,6 +688,7 @@ foreach (Match m in Regex.Matches ("Wedding in Sarajevo", @"\b\w+\b"))
 ```
 
 <div dir="rtl">
+
 📤 خروجی:
 </div>
 
@@ -655,6 +699,7 @@ Sarajevo
 ```
 
 <div dir="rtl">
+
 ---
 
 این دستورات اثر `\b` را روشن‌تر می‌کنند:
@@ -666,6 +711,7 @@ int two = Regex.Matches ("Wedding in Sarajevo", @"in").Count;     // 2
 ```
 
 <div dir="rtl">
+
 ---
 
 در این مثال، یک **positive lookahead** استفاده شده تا کلماتی را برگرداند که بعد از آن‌ها "(sic)" آمده است:
@@ -677,6 +723,7 @@ Console.Write (Regex.Match (text, @"\b\w+\b\s(?=\(sic\))"));  // loose
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 🧩 Groups (گروه‌ها)
@@ -691,6 +738,7 @@ Console.Write (Regex.Match (text, @"\b\w+\b\s(?=\(sic\))"));  // loose
 ```
 
 <div dir="rtl">
+
 فرض کنید می‌خواهیم آن را به دو گروه تقسیم کنیم: **کد منطقه** و **شماره محلی**.
 می‌توانیم با استفاده از پرانتزها این کار را انجام دهیم:
 </div>
@@ -700,6 +748,7 @@ Console.Write (Regex.Match (text, @"\b\w+\b\s(?=\(sic\))"));  // loose
 ```
 
 <div dir="rtl">
+
 سپس گروه‌ها را به‌صورت برنامه‌نویسی بازیابی می‌کنیم:
 </div>
 
@@ -710,6 +759,7 @@ Console.WriteLine (m.Groups[2]);   // 465-1918
 ```
 
 <div dir="rtl">
+
 🔹 گروه صفر، کل تطبیق را نمایش می‌دهد. یعنی همان مقداری که در `Value` وجود دارد:
 </div>
 
@@ -719,6 +769,7 @@ Console.WriteLine (m);             // 206-465-1918
 ```
 
 <div dir="rtl">
+
 ---
 
 گروه‌ها بخشی از خود زبان Regular Expressions هستند. این یعنی می‌توانید به یک گروه در داخل یک عبارت اشاره کنید.
@@ -736,6 +787,7 @@ foreach (Match m in Regex.Matches ("pop pope peep", @"\b(\w)\w+\1\b"))
 ```
 
 <div dir="rtl">
+
 🔎 پرانتزهای اطراف `\w` به موتور Regular Expressions می‌گویند که این زیربخش (در اینجا یک حرف) را در یک گروه ذخیره کند تا بعداً استفاده شود.
 ما بعداً با `\1` به آن گروه اشاره می‌کنیم، یعنی گروه اول در عبارت.
 ## 🏷 Named Groups (گروه‌های نام‌گذاری‌شده)
@@ -757,6 +809,7 @@ foreach (Match m in Regex.Matches ("bob pope peep", regEx))
 ```
 
 <div dir="rtl">
+
 ### چگونگی نامگذاری گروه‌ها:
 </div>
 
@@ -765,6 +818,7 @@ foreach (Match m in Regex.Matches ("bob pope peep", regEx))
 ```
 
 <div dir="rtl">
+
 ### چگونگی ارجاع به یک گروه:
 </div>
 
@@ -773,6 +827,7 @@ foreach (Match m in Regex.Matches ("bob pope peep", regEx))
 ```
 
 <div dir="rtl">
+
 ---
 
 مثال بعدی، تطبیق یک عنصر ساده‌ی XML/HTML (غیرتو درتو) با جستجوی تگ آغاز و پایان با نام مشابه است:
@@ -790,6 +845,7 @@ Console.WriteLine (m.Groups ["text"]);         // hello
 ```
 
 <div dir="rtl">
+
 📌 توجه: تطبیق تمام حالات ممکن در ساختار XML، مانند عناصر تو در تو، پیچیده‌تر است. موتور Regular Expressions در .NET از ویژگی پیشرفته‌ای به نام **matched balanced constructs** پشتیبانی می‌کند که می‌تواند در این موارد کمک کند.
 
 ---
@@ -810,6 +866,7 @@ Console.WriteLine (Regex.Replace ("catapult the cat", find, replace));
 ```
 
 <div dir="rtl">
+
 📤 خروجی:
 </div>
 
@@ -818,6 +875,7 @@ catapult the dog
 ```
 
 <div dir="rtl">
+
 ---
 
 می‌توان از `$0` برای ارجاع به تطبیق اصلی استفاده کرد. مثال زیر اعداد داخل رشته را در `< >` قرار می‌دهد:
@@ -829,6 +887,7 @@ Console.WriteLine (Regex.Replace (text, @"\d+", @"<$0>"));
 ```
 
 <div dir="rtl">
+
 📤 خروجی:
 </div>
 
@@ -837,6 +896,7 @@ Console.WriteLine (Regex.Replace (text, @"\d+", @"<$0>"));
 ```
 
 <div dir="rtl">
+
 🔹 می‌توان به گروه‌های گرفته‌شده با `$1, $2, $3` یا `${name}` برای گروه‌های نام‌گذاری‌شده دسترسی داشت.
 
 مثال قبل با XML ساده را می‌توان با جابه‌جایی گروه‌ها جایگزین کرد تا محتوای عنصر به یک **attribute** منتقل شود:
@@ -853,6 +913,7 @@ Console.Write (Regex.Replace ("<msg>hello</msg>", regFind, regReplace));
 ```
 
 <div dir="rtl">
+
 📤 خروجی:
 </div>
 
@@ -861,6 +922,7 @@ Console.Write (Regex.Replace ("<msg>hello</msg>", regFind, regReplace));
 ```
 
 <div dir="rtl">
+
 ---
 
 ### MatchEvaluator Delegate
@@ -874,6 +936,7 @@ Console.WriteLine (Regex.Replace ("5 is less than 10", @"\d+",
 ```
 
 <div dir="rtl">
+
 📤 خروجی:
 </div>
 
@@ -882,6 +945,7 @@ Console.WriteLine (Regex.Replace ("5 is less than 10", @"\d+",
 ```
 
 <div dir="rtl">
+
 در کتاب **Cookbook Regular Expressions** صفحه 1023، نمونه‌ای از استفاده‌ی MatchEvaluator برای **Escape کردن کاراکترهای Unicode مناسب HTML** ارائه شده است.
 
 ---
@@ -899,6 +963,7 @@ foreach (string s in Regex.Split ("a5b7c", @"\d"))
 ```
 
 <div dir="rtl">
+
 در اینجا جداکننده‌ها در خروجی نیستند. برای شامل کردن جداکننده‌ها، می‌توان از **positive lookahead** استفاده کرد:
 </div>
 
@@ -908,6 +973,7 @@ foreach (string s in Regex.Split ("oneTwoThree", @"(?=[A-Z])"))
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 📖 Cookbook Regular Expressions (دستورالعمل‌ها)
@@ -929,6 +995,7 @@ Console.WriteLine (Regex.IsMatch ("(123) 456-7890", phone));   // True
 ```
 
 <div dir="rtl">
+
 ## 🔹 استخراج زوج‌های "name = value" (یک مورد در هر خط)
 
 توجه داشته باشید که این مثال با **multiline directive** شروع می‌شود:
@@ -946,6 +1013,7 @@ foreach (Match m in Regex.Matches (text, r))
 ```
 
 <div dir="rtl">
+
 📤 خروجی:
 </div>
 
@@ -956,6 +1024,7 @@ timeout is 30
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 🔐 اعتبارسنجی پسورد قوی
@@ -971,6 +1040,7 @@ Console.WriteLine (Regex.IsMatch ("ab88yz", r));    // True
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 📏 خطوط حداقل ۸۰ کاراکتری
@@ -985,6 +1055,7 @@ Console.WriteLine (Regex.Matches (text, r).Count);   // 2
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 📅 تجزیه تاریخ/زمان (N/N/N H:M:S AM/PM)
@@ -1008,6 +1079,7 @@ foreach (Group g in Regex.Match (text, r).Groups)
 ```
 
 <div dir="rtl">
+
 📤 خروجی:
 </div>
 
@@ -1016,6 +1088,7 @@ foreach (Group g in Regex.Match (text, r).Groups)
 ```
 
 <div dir="rtl">
+
 *(البته این بررسی نمی‌کند که تاریخ/زمان درست باشد)*
 
 ---
@@ -1035,6 +1108,7 @@ Console.WriteLine (Regex.IsMatch ("MCMLXXXIV", r));   // True
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 🔁 حذف کلمات تکراری
@@ -1049,6 +1123,7 @@ Console.WriteLine (Regex.Replace (text, r, "${dupe}"));
 ```
 
 <div dir="rtl">
+
 📤 خروجی:
 </div>
 
@@ -1057,6 +1132,7 @@ In the beginning
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 🔢 شمارش کلمات
@@ -1069,6 +1145,7 @@ Console.WriteLine (Regex.Matches (text, r).Count);   // 5
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 🧩 تطبیق GUID
@@ -1089,6 +1166,7 @@ Console.WriteLine (Regex.Match (text, r).Index);                    // 12
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 🏷 تجزیه تگ XML/HTML
@@ -1109,6 +1187,7 @@ Console.WriteLine (m.Groups ["text"]);      // hello
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 🐫 تقسیم کلمات CamelCase
@@ -1123,6 +1202,7 @@ foreach (string s in Regex.Split ("oneTwoThree", r))
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 🗂 به‌دست آوردن نام فایل معتبر
@@ -1137,6 +1217,7 @@ Console.WriteLine (valid);
 ```
 
 <div dir="rtl">
+
 📤 خروجی:
 </div>
 
@@ -1145,6 +1226,7 @@ My good recipes.txt
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 🌐 Escape کردن کاراکترهای Unicode برای HTML
@@ -1158,6 +1240,7 @@ Console.WriteLine (result);        // &#169; 2007
 ```
 
 <div dir="rtl">
+
 ## 🔓 تبدیل کاراکترهای Escape شده در یک **HTTP query string**
 </div>
 
@@ -1173,6 +1256,7 @@ Console.WriteLine (result);   // C# rocks
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 🔍 استخراج عبارت‌های جستجوی Google از یک **web stats log**
@@ -1193,6 +1277,7 @@ foreach (string keyword in keywords)
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 📚 مرجع زبان **Regular Expressions**

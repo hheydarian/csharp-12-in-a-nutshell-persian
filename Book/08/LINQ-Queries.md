@@ -1,5 +1,6 @@
 
 <div dir="rtl">
+
 # فصل هشتم: پرس‌وجوهای LINQ
 
 **LINQ** یا **Language Integrated Query** مجموعه‌ای از ویژگی‌های زبان و زمان اجراست که برای نوشتن پرس‌وجوهای ساختاریافته و نوع-ایمن (**type-safe**) روی مجموعه‌های محلی از اشیا و منابع داده راه دور استفاده می‌شود.
@@ -24,6 +25,7 @@ string[] names = { "Tom", "Dick", "Harry" };
 ```
 
 <div dir="rtl">
+
 در این مثال، `names` یک دنباله است و `"Tom"`, `"Dick"`, و `"Harry"` عناصر آن هستند.
 به این دنباله **محلی (local sequence)** گفته می‌شود چون مجموعه‌ای از اشیا در حافظه محلی را نمایش می‌دهد.
 
@@ -54,6 +56,7 @@ foreach (string n in filteredNames)
 ```
 
 <div dir="rtl">
+
 خروجی:
 </div>
 
@@ -63,6 +66,7 @@ Harry
 ```
 
 <div dir="rtl">
+
 از آنجا که عملگرهای استاندارد پرس‌وجو به‌صورت **extension methods** پیاده‌سازی شده‌اند، می‌توانیم **Where** را مستقیماً روی `names` فراخوانی کنیم، انگار که یک متد نمونه است:
 </div>
 
@@ -71,6 +75,7 @@ IEnumerable<string> filteredNames = names.Where(n => n.Length >= 4);
 ```
 
 <div dir="rtl">
+
 برای اینکه این کد کامپایل شود، باید فضای نام **System.Linq** را وارد کنید. مثال کامل:
 </div>
 
@@ -86,6 +91,7 @@ foreach (string name in filteredNames)
 ```
 
 <div dir="rtl">
+
 خروجی:
 </div>
 
@@ -95,6 +101,7 @@ Harry
 ```
 
 <div dir="rtl">
+
 می‌توانیم کد را با **نوع‌دهی ضمنی (implicit typing)** کوتاه‌تر کنیم:
 </div>
 
@@ -103,6 +110,7 @@ var filteredNames = names.Where(n => n.Length >= 4);
 ```
 
 <div dir="rtl">
+
 اما این کار می‌تواند خوانایی کد را در خارج از محیط IDE کاهش دهد، زیرا ابزارهای راهنما وجود ندارند. به همین دلیل در این فصل کمتر از نوع‌دهی ضمنی استفاده می‌کنیم.
 
 ---
@@ -119,6 +127,7 @@ n => n.Length >= 4
 ```
 
 <div dir="rtl">
+
 آرگومان ورودی `n` نشان‌دهنده هر عنصر در دنباله است و نوع آن **string** است. عملگر **Where** نیاز دارد که عبارت لامبدا یک مقدار **bool** بازگرداند؛ اگر **true** باشد، عنصر در دنباله خروجی قرار می‌گیرد.
 
 امضای آن:
@@ -132,6 +141,7 @@ public static IEnumerable<TSource> Where<TSource>(
 ```
 
 <div dir="rtl">
+
 مثال بعدی، استخراج تمام نام‌هایی که شامل حرف "a" هستند:
 </div>
 
@@ -142,6 +152,7 @@ foreach (string name in filteredNames)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ترکیب پرس‌وجوها و **Fluent Syntax** 🌊
@@ -158,6 +169,7 @@ IEnumerable<string> filteredNames = from n in names
 ```
 
 <div dir="rtl">
+
 **Fluent Syntax** و **Query Syntax** مکمل یکدیگر هستند. در دو بخش بعدی، هر کدام را با جزئیات بیشتری بررسی خواهیم کرد.
 
 ### نحو Fluent 🔗
@@ -189,6 +201,7 @@ foreach (string name in query)
 ```
 
 <div dir="rtl">
+
 خروجی:
 </div>
 
@@ -199,6 +212,7 @@ HARRY
 ```
 
 <div dir="rtl">
+
 ---
 
 ### محدوده متغیرهای لامبدا 🔹
@@ -216,6 +230,7 @@ void Test()
 ```
 
 <div dir="rtl">
+
 ---
 
 ### عملکرد عملگرهای استاندارد پرس‌وجو ⚙️
@@ -253,6 +268,7 @@ public static IEnumerable<TResult> Select<TSource,TResult>(
 ```
 
 <div dir="rtl">
+
 ---
 
 وقتی عملگرهای پرس‌وجو به‌صورت زنجیره‌ای استفاده می‌شوند، دنباله خروجی یک عملگر، دنباله ورودی عملگر بعدی است. پرس‌وجوی کامل شبیه یک **خط تولید با نوار نقاله** است، همان‌طور که در شکل ۸-۱ نشان داده شده است.
@@ -272,6 +288,7 @@ IEnumerable<string> finalQuery = sorted  .Select  (n => n.ToUpper());
 ```
 
 <div dir="rtl">
+
 `finalQuery` از نظر ترکیبی **کاملاً مشابه** پرس‌وجویی است که قبلاً ساخته‌ایم.
 
 علاوه بر این، هر مرحله میانی نیز یک پرس‌وجوی معتبر است که می‌توانیم اجرا کنیم:
@@ -291,6 +308,7 @@ foreach (string name in finalQuery)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### اهمیت **extension methods** ⭐
@@ -305,6 +323,7 @@ IEnumerable<string> finalQuery = Enumerable.Select(sorted, n => n.ToUpper());
 ```
 
 <div dir="rtl">
+
 در واقع، **کامپایلر** همین ترجمه را برای فراخوانی متدهای توسعه‌ای انجام می‌دهد.
 
 اما اگر بخواهید پرس‌وجو را در یک **عبارت واحد** بنویسید، استفاده نکردن از **extension methods** هزینه‌بر خواهد بود.
@@ -321,6 +340,7 @@ IEnumerable<string> query = names.Where(n => n.Contains("a"))
 ```
 
 <div dir="rtl">
+
 شکل طبیعی و خطی آن جریان داده از **چپ به راست** را نشان می‌دهد و همچنین عبارات لامبدا را کنار عملگرهای پرس‌وجو نگه می‌دارد (**infix notation**).
 
 بدون **extension methods**، روانی پرس‌وجو از بین می‌رود:
@@ -338,6 +358,7 @@ IEnumerable<string> query =
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ترکیب عبارات لامبدا 🔹
@@ -350,6 +371,7 @@ n => n.Contains("a")   // نوع ورودی = string، نوع خروجی = bool
 ```
 
 <div dir="rtl">
+
 یک عبارت لامبدا که یک مقدار می‌گیرد و **bool** برمی‌گرداند، **predicate** نامیده می‌شود.
 
 هدف عبارت لامبدا به عملگر پرس‌وجو بستگی دارد:
@@ -384,6 +406,7 @@ public static IEnumerable<TSource> Where<TSource>(
 ```
 
 <div dir="rtl">
+
 ---
 
 ### عبارات لامبدا و امضای **Func** ✍️
@@ -422,6 +445,7 @@ public static IEnumerable<TResult> Select<TSource,TResult>(
 ```
 
 <div dir="rtl">
+
 عبارت لامبدا **Func\<TSource,TResult>** با لامبدا **TSource => TResult** مطابقت دارد: عنصری از نوع ورودی را به عنصری از نوع خروجی نگاشت می‌کند. **TSource** و **TResult** می‌توانند نوع‌های متفاوتی داشته باشند، بنابراین لامبدا می‌تواند نوع هر عنصر را تغییر دهد. علاوه بر این، نوع دنباله خروجی توسط لامبدا تعیین می‌شود.
 
 مثال زیر از **Select** برای تبدیل عناصر رشته‌ای به عناصر عدد صحیح استفاده می‌کند:
@@ -436,6 +460,7 @@ foreach (int length in query)
 ```
 
 <div dir="rtl">
+
 کامپایلر نوع **TResult** را از مقدار بازگشتی لامبدا استنتاج می‌کند. در این مثال، `n.Length` یک مقدار **int** برمی‌گرداند، بنابراین **TResult** برابر با **int** است.
 
 ---
@@ -451,6 +476,7 @@ public static IEnumerable<TSource> Where<TSource>(
 ```
 
 <div dir="rtl">
+
 ---
 
 ### امضای عملگر **OrderBy** 🔑
@@ -465,6 +491,7 @@ public static IEnumerable<TSource> OrderBy<TSource,TKey>(
 ```
 
 <div dir="rtl">
+
 عبارت لامبدا **Func\<TSource,TKey>** یک عنصر ورودی را به **کلید مرتب‌سازی (sorting key)** نگاشت می‌کند. **TKey** از روی لامبدا استنتاج می‌شود و از نوع عنصر ورودی و خروجی جداست.
 
 برای مثال، می‌توانیم لیست نام‌ها را بر اساس طول (**کلید int**) یا به‌صورت الفبایی (**کلید string**) مرتب کنیم:
@@ -479,6 +506,7 @@ sortedAlphabetically = names.OrderBy(n => n);          // string key
 ```
 
 <div dir="rtl">
+
 می‌توان عملگرهای پرس‌وجو در **Enumerable** را با **delegateهای سنتی** که به متدها اشاره دارند، فراخوانی کرد. این روش برای ساده کردن برخی پرس‌وجوهای محلی، به‌ویژه در **LINQ to XML** مفید است و در فصل ۱۰ نشان داده شده است.
 
 اما این روش در دنباله‌های مبتنی بر **IQueryable<T>** (مثلاً هنگام پرس‌وجو از پایگاه داده) کار نمی‌کند، زیرا عملگرهای **Queryable** نیاز به عبارات لامبدا دارند تا بتوانند **expression tree** تولید کنند. این موضوع بعداً در بخش «پرس‌وجوهای تفسیر شده» صفحه ۴۴۸ توضیح داده می‌شود.
@@ -498,6 +526,7 @@ IEnumerable<int> firstThree = numbers.Take(3);   // {10, 9, 8}
 ```
 
 <div dir="rtl">
+
 * **Skip**: x عنصر اول را نادیده می‌گیرد و بقیه را خروجی می‌دهد:
 </div>
 
@@ -506,6 +535,7 @@ IEnumerable<int> lastTwo = numbers.Skip(3);     // {7, 6}
 ```
 
 <div dir="rtl">
+
 * **Reverse**: عناصر را برعکس می‌کند:
 </div>
 
@@ -514,6 +544,7 @@ IEnumerable<int> reversed = numbers.Reverse();  // {6, 7, 8, 9, 10}
 ```
 
 <div dir="rtl">
+
 در پرس‌وجوهای محلی (**LINQ-to-objects**)، عملگرهایی مانند **Where** و **Select** ترتیب اصلی دنباله ورودی را حفظ می‌کنند (همچنین همه عملگرهای دیگر، مگر آن‌هایی که صراحتاً ترتیب را تغییر می‌دهند).
 
 ---
@@ -534,6 +565,7 @@ int secondLowest = numbers.OrderBy(n => n).Skip(1).First(); // 7
 ```
 
 <div dir="rtl">
+
 این عملگرها معمولاً خروجی خود را برای اجرای عملگرهای دیگر فراخوانی نمی‌کنیم، مگر آن عنصر خودش یک مجموعه باشد.
 
 * **عملگرهای تجمیع (aggregation operators)** یک مقدار اسکالر، معمولاً عددی، برمی‌گردانند:
@@ -545,6 +577,7 @@ int min   = numbers.Min();     // 6
 ```
 
 <div dir="rtl">
+
 * **عملگرهای کمی (quantifiers)** مقدار **bool** برمی‌گردانند:
 </div>
 
@@ -555,6 +588,7 @@ bool hasAnOddElement      = numbers.Any(n => n % 2 != 0); // true
 ```
 
 <div dir="rtl">
+
 * برخی عملگرها دو دنباله ورودی می‌گیرند، مانند **Concat** که یک دنباله را به دیگری اضافه می‌کند و **Union** که مشابه آن است اما مقادیر تکراری را حذف می‌کند:
 </div>
 
@@ -566,6 +600,7 @@ IEnumerable<int> union  = seq1.Union(seq2);   // {1, 2, 3, 4, 5}
 ```
 
 <div dir="rtl">
+
 * **عملگرهای اتصال (joining operators)** نیز در همین دسته قرار می‌گیرند. فصل ۹ تمام عملگرهای پرس‌وجو را به‌تفصیل پوشش می‌دهد.
 
 
@@ -598,6 +633,7 @@ foreach (string name in query)
 ```
 
 <div dir="rtl">
+
 خروجی:
 </div>
 
@@ -608,6 +644,7 @@ HARRY
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ساختار عبارات پرس‌وجو 🏗️
@@ -641,6 +678,7 @@ IEnumerable<string> query = names.Where(n => n.Contains("a"))
 ```
 
 <div dir="rtl">
+
 عملگرهای **Where**، **OrderBy** و **Select** همان قواعدی را دنبال می‌کنند که اگر پرس‌وجو را با **fluent syntax** نوشته بودید، اعمال می‌شد. در این مثال، آن‌ها به **extension methods** در کلاس **Enumerable** متصل می‌شوند، زیرا فضای نام **System.Linq** وارد شده و `names` پیاده‌سازی‌کننده `IEnumerable<string>` است.
 
 کامپایلر هنگام ترجمه عبارات پرس‌وجو، به‌طور خاص کلاس **Enumerable** را ترجیح نمی‌دهد. می‌توان تصور کرد که کامپایلر کلمات **“Where”**، **“OrderBy”** و **“Select”** را به‌صورت مکانیکی در عبارت وارد کرده و آن را به‌عنوان متدهای عادی کامپایل می‌کند. این انعطاف‌پذیری باعث می‌شود که عملگرهای پرس‌وجوی پایگاه داده، در بخش‌های بعدی، به **extension methods** در کلاس **Queryable** متصل شوند.
@@ -664,6 +702,7 @@ select  n.ToUpper()          // n = پس از مرتب‌سازی
 ```
 
 <div dir="rtl">
+
 این موضوع با ترجمه مکانیکی کامپایلر به **fluent syntax** واضح می‌شود:
 </div>
 
@@ -674,6 +713,7 @@ names.Where(n => n.Contains("a"))   // n با دامنه محلی
 ```
 
 <div dir="rtl">
+
 همان‌طور که می‌بینید، هر نمونه از `n` **به‌صورت خصوصی** در لامبدا خود محدوده‌بندی شده است.
 
 ---
@@ -726,6 +766,7 @@ GroupBy, Join, GroupJoin
 ```
 
 <div dir="rtl">
+
 ---
 
 ### پرس‌وجوهای ترکیبی (Mixed-Syntax) ⚙️
@@ -740,6 +781,7 @@ string[] names = { "Tom", "Dick", "Harry", "Mary", "Jay" };
 ```
 
 <div dir="rtl">
+
 مثال ترکیبی زیر تعداد نام‌هایی که شامل حرف "a" هستند را می‌شمارد:
 </div>
 
@@ -750,6 +792,7 @@ int matches = (from n in names
 ```
 
 <div dir="rtl">
+
 همچنین اولین نام به ترتیب الفبایی را می‌گیرد:
 </div>
 
@@ -760,6 +803,7 @@ string first = (from n in names
 ```
 
 <div dir="rtl">
+
 در پرس‌وجوهای ساده، می‌توان کل کار را با Fluent syntax انجام داد:
 </div>
 
@@ -769,6 +813,7 @@ string first = names.OrderBy(n => n).First();              // Dick
 ```
 
 <div dir="rtl">
+
 گاهی پرس‌وجوهای ترکیبی بالاترین **کارایی و سادگی** را ارائه می‌دهند. بنابراین مهم است که همیشه به‌طور یک‌جانبه فقط یک نحو را ترجیح ندهید، تا هنگام نیاز بتوانید از پرس‌وجوی ترکیبی بهره ببرید.
 
 ---
@@ -791,6 +836,7 @@ foreach (int n in query)
 ```
 
 <div dir="rtl">
+
 عنصر اضافه‌شده پس از ساخت پرس‌وجو در نتیجه لحاظ می‌شود، زیرا **هیچ فیلتر یا مرتب‌سازی تا زمان اجرای `foreach` انجام نمی‌شود**. به این ویژگی **deferred یا lazy execution** گفته می‌شود، مشابه آنچه با **delegates** رخ می‌دهد:
 </div>
 
@@ -801,6 +847,7 @@ a();  // اجرای به تعویق‌افتاده!
 ```
 
 <div dir="rtl">
+
 تمام **standard query operators** اجرای به تعویق‌افتاده دارند، به جز موارد زیر:
 
 * عملگرهایی که **یک عنصر یا مقدار scalar** برمی‌گردانند، مثل `First` یا `Count`
@@ -816,6 +863,7 @@ int matches = numbers.Where(n => n <= 2).Count();   // اجرا فوراً ان�
 ```
 
 <div dir="rtl">
+
 **اهمیت اجرای به تعویق‌افتاده** در این است که **ساخت پرس‌وجو را از اجرای آن جدا می‌کند**. این امکان را می‌دهد که پرس‌وجو را در چند مرحله بسازید و همچنین پرس‌وجوهای پایگاه داده را ممکن می‌سازد.
 
 ---
@@ -837,6 +885,7 @@ foreach (int n in query) Console.Write(n + "|");  // <چیزی نمایش داد
 ```
 
 <div dir="rtl">
+
 گاهی ارزیابی مجدد ممکن است **مزاحمت‌آفرین** باشد:
 
 * وقتی می‌خواهید نتایج را در یک نقطه زمانی مشخص **ذخیره یا freeze** کنید
@@ -855,6 +904,7 @@ Console.WriteLine(timesTen.Count);  // هنوز 2
 ```
 
 <div dir="rtl">
+
 ---
 
 ### متغیرهای گرفته‌شده (Captured Variables) ⚠️
@@ -872,6 +922,7 @@ foreach (int n in query) Console.Write(n + "|");  // 20|40|
 ```
 
 <div dir="rtl">
+
 این می‌تواند **یک تله در حلقه‌ها** ایجاد کند. مثال حذف حروف صدادار از یک رشته:
 </div>
 
@@ -887,6 +938,7 @@ foreach (char c in query) Console.Write(c);  // Nt wht y mght xpct
 ```
 
 <div dir="rtl">
+
 اگر بخواهیم از **for loop** استفاده کنیم:
 </div>
 
@@ -900,6 +952,7 @@ foreach (char c in query) Console.Write(c);
 ```
 
 <div dir="rtl">
+
 یک **IndexOutOfRangeException** رخ می‌دهد، زیرا متغیر حلقه `i` در closure گرفته شده و هنگام شمارش مقدار آن برابر ۵ است.
 
 راه حل‌ها:
@@ -916,6 +969,7 @@ for (int i = 0; i < vowels.Length; i++)
 ```
 
 <div dir="rtl">
+
 2. یا استفاده از **foreach**:
 </div>
 
@@ -925,6 +979,7 @@ foreach (char vowel in vowels)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### نحوه کار Deferred Execution 🔧
@@ -945,6 +1000,7 @@ IEnumerable<int> lessThanTen = new int[] { 5, 12, 3 }.Where(n => n < 10);
 ```
 
 <div dir="rtl">
+
 این ساختار همانند شکل ۸-۳ ترکیب می‌شود.
 <div align="center">
     
@@ -966,6 +1022,7 @@ public static IEnumerable<TResult> MySelect<TSource,TResult>
 ```
 
 <div dir="rtl">
+
 این متد به دلیل استفاده از **`yield return`** یک **iterator** است. از نظر عملکرد، معادل کوتاه‌شده‌ی کد زیر است:
 </div>
 
@@ -978,6 +1035,7 @@ public static IEnumerable<TResult> MySelect<TSource,TResult>
 ```
 
 <div dir="rtl">
+
 که در آن `SelectSequence` یک **کلاس نوشته‌شده توسط کامپایلر** است که **enumerator آن منطق موجود در iterator را encapsulate می‌کند**.
 
 بنابراین، وقتی عملیاتی مانند `Select` یا `Where` را فراخوانی می‌کنید، در واقع **تنها یک کلاس enumerable ایجاد می‌کنید که دنباله ورودی را decorate می‌کند**. 🎁
@@ -997,6 +1055,7 @@ IEnumerable<int> query = new int[] { 5, 12, 3 }
 ```
 
 <div dir="rtl">
+
 هر **query operator** یک decorator جدید ایجاد می‌کند که **دنباله قبلی را می‌پوشاند** (مانند **عروسک‌های روسی تو در تو**). 🪆
 
 شکل ۸-۴ **مدل شیء (object model)** این پرس‌وجو را نشان می‌دهد. توجه کنید که **این مدل شیء کاملاً قبل از هر شمارش ساخته می‌شود** و هیچ داده‌ای هنوز پردازش نشده است.
@@ -1027,6 +1086,7 @@ IEnumerable<int>
 ```
 
 <div dir="rtl">
+
 <div align="center">
     
 ![Conventions-UsedThis-Book](../../assets/image/08/Table-8-6.jpeg) 
@@ -1042,6 +1102,7 @@ foreach (int n in query) Console.WriteLine(n);
 ```
 
 <div dir="rtl">
+
 خروجی:
 </div>
 
@@ -1051,6 +1112,7 @@ foreach (int n in query) Console.WriteLine(n);
 ```
 
 <div dir="rtl">
+
 ---
 
 در پشت صحنه، `foreach` متد **`GetEnumerator`** را روی decorator `Select` (آخرین یا بیرونی‌ترین عملگر) فراخوانی می‌کند و این **تمام عملیات را آغاز می‌کند**. 🔄
@@ -1080,6 +1142,7 @@ IEnumerable<string> query = musos.OrderBy(m => m.Split().Last());
 ```
 
 <div dir="rtl">
+
 * `m.Split` هر رشته را به یک مجموعه از کلمات تبدیل می‌کند، سپس **عملگر `Last`** روی آن فراخوانی می‌شود.
 * `m.Split().Last` همان **زیرپرس‌وجو** است؛ و `query` پرس‌وجوی بیرونی را نشان می‌دهد.
 
@@ -1103,6 +1166,7 @@ IEnumerable<string> outerQuery = names
 ```
 
 <div dir="rtl">
+
 همان مثال به صورت query expression:
 </div>
 
@@ -1115,6 +1179,7 @@ IEnumerable<string> outerQuery =
 ```
 
 <div dir="rtl">
+
 * **توجه:** چون **range variable بیرونی (n)** در محدوده زیرپرس‌وجو در دسترس است، نمی‌توان از همان نام `n` برای زیرپرس‌وجو استفاده کرد.
 
 ---
@@ -1144,6 +1209,7 @@ IEnumerable<string> query =
 ```
 
 <div dir="rtl">
+
 با استفاده از **تابع تجمیعی `Min`** می‌توان پرس‌وجو را حتی ساده‌تر کرد:
 </div>
 
@@ -1155,6 +1221,7 @@ IEnumerable<string> query =
 ```
 
 <div dir="rtl">
+
 ---
 
 در بخش **“Interpreted Queries”** در صفحه 448، توضیح داده‌ایم که چگونه می‌توان از منابع راه‌دور مانند جداول SQL پرس‌وجو گرفت. مثال بالا برای **پرس‌وجوی پایگاه داده** ایده‌آل است، زیرا به صورت یک واحد پردازش می‌شود و فقط یک بار نیاز به ارسال به سرور پایگاه داده دارد. 🖥️
@@ -1173,6 +1240,7 @@ IEnumerable<string> query =
 ```
 
 <div dir="rtl">
+
 <div align="center">
     
 ![Conventions-UsedThis-Book](../../assets/image/08/Table-8-9.jpeg) 
@@ -1208,6 +1276,7 @@ var query    = sorted.Select(n => n.ToUpper());
 ```
 
 <div dir="rtl">
+
 هر عملگر پرس‌وجو یک **decorator sequence** بازمی‌گرداند و در نتیجه پرس‌وجو همان **زنجیره‌ی لایه‌لایه‌ای از دکوریتورها** را دارد که در یک پرس‌وجوی تک‌عبارتی ایجاد می‌شود.
 
 **مزایای ساخت تدریجی پرس‌وجو:**
@@ -1222,6 +1291,7 @@ if (includeFilter)
 ```
 
 <div dir="rtl">
+
 این روش **بهینه‌تر از نوشتن شرط داخل پرس‌وجو** است:
 </div>
 
@@ -1230,6 +1300,7 @@ query = query.Where(n => !includeFilter || <expression>);
 ```
 
 <div dir="rtl">
+
 زیرا اگر `includeFilter` برابر `false` باشد، یک عملگر اضافه اضافه نمی‌شود.
 
 ---
@@ -1253,6 +1324,7 @@ IEnumerable<string> query = names
 ```
 
 <div dir="rtl">
+
 به جای پنج بار فراخوانی `Replace` می‌توان از **Regular Expression** هم استفاده کرد:
 </div>
 
@@ -1261,6 +1333,7 @@ n => Regex.Replace(n, "[aeiou]", "")
 ```
 
 <div dir="rtl">
+
 مزیت `Replace` این است که در **پرس‌وجوهای پایگاه داده** نیز کار می‌کند.
 
 ---
@@ -1287,6 +1360,7 @@ IEnumerable<string> query =
 ```
 
 <div dir="rtl">
+
 ---
 
 ### **راه حل: پرس‌وجوی تدریجی در Query Syntax**
@@ -1310,6 +1384,7 @@ query = from n in query
 ```
 
 <div dir="rtl">
+
 با این روش، نتیجه همانند پرس‌وجوی فلونت باقی می‌ماند و **خوانایی و انعطاف بیشتری** دارد.
 ### **کلمه کلیدی `into` در LINQ**
 
@@ -1330,6 +1405,7 @@ IEnumerable<string> query =
 ```
 
 <div dir="rtl">
+
 * **محدوده استفاده**: تنها بعد از یک `select` یا `group` می‌توان از `into` استفاده کرد.
 * `into` پرس‌وجو را «ریستارت» می‌کند و اجازه می‌دهد که **clauses جدید** مثل `where`، `orderby` و `select` اضافه شوند.
 * از دید **fluent syntax**، تمام پرس‌وجو یک پرس‌وجوی واحد است و استفاده از `into` **هیچ هزینه عملکردی اضافی** ندارد.
@@ -1353,6 +1429,7 @@ var query =
 ```
 
 <div dir="rtl">
+
 **توضیح:** در fluent syntax معادل:
 </div>
 
@@ -1363,6 +1440,7 @@ var query = names
 ```
 
 <div dir="rtl">
+
 ---
 
 ### **پیچاندن پرس‌وجوها (Wrapping Queries)**
@@ -1376,6 +1454,7 @@ var finalQuery = from ... in tempQuery ...
 ```
 
 <div dir="rtl">
+
 معادل **فرم بدون متغیر واسط**:
 </div>
 
@@ -1385,6 +1464,7 @@ var finalQuery = from ... in (tempQueryExpr)
 ```
 
 <div dir="rtl">
+
 **مثال عملی:**
 
 پرس‌وجوی تدریجی:
@@ -1403,6 +1483,7 @@ query = from n in query
 ```
 
 <div dir="rtl">
+
 همان پرس‌وجو به صورت **wrapped**:
 </div>
 
@@ -1420,6 +1501,7 @@ IEnumerable<string> query =
 ```
 
 <div dir="rtl">
+
 در **fluent syntax**، نتیجه همان زنجیره خطی عملگرها است:
 </div>
 
@@ -1432,6 +1514,7 @@ IEnumerable<string> query = names
 ```
 
 <div dir="rtl">
+
 > کامپایلر **آخرین `Select` را حذف می‌کند** چون اضافه و تکراری است.
 
 ---
@@ -1467,6 +1550,7 @@ class TempProjectionItem
 ```
 
 <div dir="rtl">
+
 سپس در پرس‌وجو می‌توانیم projection کنیم:
 </div>
 
@@ -1484,6 +1568,7 @@ IEnumerable<TempProjectionItem> temp =
 ```
 
 <div dir="rtl">
+
 نتیجه نوع `IEnumerable<TempProjectionItem>` خواهد بود و می‌توانیم پرس‌وجوی بعدی روی آن انجام دهیم:
 </div>
 
@@ -1500,6 +1585,7 @@ IEnumerable<string> query =
 ```
 
 <div dir="rtl">
+
 ---
 
 ## **Anonymous Types**
@@ -1524,6 +1610,7 @@ IEnumerable<string> query =
 ```
 
 <div dir="rtl">
+
 * نتیجه همانند نمونه قبلی است.
 * نوع `intermediate` توسط کامپایلر ساخته می‌شود و نام مشخصی ندارد، بنابراین تنها با `var` می‌توان آن را نگه داشت.
 
@@ -1545,6 +1632,7 @@ var query =
 ```
 
 <div dir="rtl">
+
 ---
 
 ## **کلمه کلیدی `let`**
@@ -1567,6 +1655,7 @@ IEnumerable<string> query =
 ```
 
 <div dir="rtl">
+
 **ویژگی‌های let:**
 
 1. projection عناصر جدید همراه با عناصر موجود.
@@ -1625,6 +1714,7 @@ INSERT Customer VALUES (5, 'Jay');
 ```
 
 <div dir="rtl">
+
 پرس‌وجوی LINQ:
 </div>
 
@@ -1646,6 +1736,7 @@ foreach (string name in query)
 ```
 
 <div dir="rtl">
+
 * کلاس `Customer`:
 </div>
 
@@ -1658,6 +1749,7 @@ public class Customer
 ```
 
 <div dir="rtl">
+
 * کلاس `DbContext`:
 </div>
 
@@ -1677,6 +1769,7 @@ public class NutshellContext : DbContext
 ```
 
 <div dir="rtl">
+
 EF Core این پرس‌وجو را به SQL زیر ترجمه می‌کند:
 </div>
 
@@ -1688,6 +1781,7 @@ ORDER BY CAST(LEN([c].[Name]) AS int)
 ```
 
 <div dir="rtl">
+
 نتیجه:
 </div>
 
@@ -1698,6 +1792,7 @@ HARRY
 ```
 
 <div dir="rtl">
+
 ---
 
 ## **نحوه کار Interpreted Queries**
@@ -1714,6 +1809,7 @@ IQueryable<string> query = dbContext.Customers
 ```
 
 <div dir="rtl">
+
 2. **انتخاب متد مناسب**:
 
    * `dbContext.Customers` نوع `DbSet<T>` دارد که `IQueryable<T>` است.
@@ -1793,6 +1889,7 @@ public static IEnumerable<string> Pair(this IEnumerable<string> source)
 ```
 
 <div dir="rtl">
+
 ترکیب با EF Core:
 </div>
 
@@ -1814,6 +1911,7 @@ foreach (string element in q)
 ```
 
 <div dir="rtl">
+
 > وقتی یک operator فقط برای `IEnumerable<T>` تعریف شده باشد، query به local query تبدیل می‌شود و ادامه پردازش روی client انجام می‌شود.
 
 ---
@@ -1831,6 +1929,7 @@ public static IEnumerable<TSource> AsEnumerable<TSource>(this IEnumerable<TSourc
 ```
 
 <div dir="rtl">
+
 * کاربرد:
 
   * بعد از `AsEnumerable()`، تمام query operators بعدی روی **Enumerable class** اجرا می‌شوند.
@@ -1851,6 +1950,7 @@ var query = dbContext.MedicalArticles
 ```
 
 <div dir="rtl">
+
 > نکته: اجرای بخشی از query روی client می‌تواند performance را کاهش دهد، زیرا ممکن است تعداد ردیف‌های بیشتری از پایگاه داده دریافت شود.
 
 ### EF Core ⚡
@@ -1876,6 +1976,7 @@ public class Customer
 ```
 
 <div dir="rtl">
+
 ---
 
 ### DbContext 📦
@@ -1893,6 +1994,7 @@ public class NutshellContext : DbContext
 ```
 
 <div dir="rtl">
+
 یک **شیء DbContext** سه کار انجام می‌دهد:
 
 * 🔹 به‌عنوان **factory** برای تولید اشیاء DbSet<> که می‌توانید روی آن‌ها query بنویسید.
@@ -1917,6 +2019,7 @@ public class NutshellContext : DbContext
 ```
 
 <div dir="rtl">
+
 در این مثال، **connection string** به‌صورت **string literal** مشخص شده است.
 در برنامه‌های واقعی، معمولاً آن را از یک فایل پیکربندی مانند **appsettings.json** می‌خوانند.
 
@@ -1936,6 +2039,7 @@ public NutshellContext(DbContextOptions<NutshellContext> options)
 ```
 
 <div dir="rtl">
+
 اگر بخواهید **OnConfiguring** را override کنید (مثلاً برای فراهم کردن پیکربندی در سناریوهای دیگر)، می‌توانید بررسی کنید که آیا گزینه‌ها از قبل پیکربندی شده‌اند یا خیر:
 </div>
 
@@ -1950,6 +2054,7 @@ protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 ```
 
 <div dir="rtl">
+
 در متد **OnConfiguring** می‌توانید گزینه‌های دیگری مانند **lazy loading** را نیز فعال کنید (نگاه کنید به “Lazy loading” در صفحه 464).
 ### پیکربندی مدل 🏗️
 
@@ -1966,6 +2071,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder) =>
 ```
 
 <div dir="rtl">
+
 بدون این کد، EF Core این entity را به جدولی با نام **“Customers”** نگاشت می‌کند، نه “Customer”، زیرا ما در **DbContext** خود یک property از نوع **DbSet<Customer>** داریم که نام آن **Customers** است:
 </div>
 
@@ -1974,6 +2080,7 @@ public DbSet<Customer> Customers { get; set; }
 ```
 
 <div dir="rtl">
+
 ---
 
 کد زیر تمام entityهای شما را به **نام کلاس entity** نگاشت می‌کند (که معمولاً مفرد است) نه به نام propertyهای **DbSet<T>** (که معمولاً جمع هستند):
@@ -1991,6 +2098,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### Fluent API برای ستون‌ها 📊
@@ -2014,6 +2122,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder) =>
 ```
 
 <div dir="rtl">
+
 جدول 8-1 برخی از مهم‌ترین متدهای **fluent API** را فهرست می‌کند.
 
 ---
@@ -2036,6 +2145,7 @@ dbContext.Database.EnsureCreated();
 ```
 
 <div dir="rtl">
+
 با این حال، روش بهتر استفاده از قابلیت **migrations** در EF Core است. این روش نه تنها پایگاه داده را ایجاد می‌کند، بلکه آن را طوری پیکربندی می‌کند که EF Core بتواند در آینده، هنگام تغییر کلاس‌های entity، **schema** را به‌صورت خودکار به‌روزرسانی کند.
 
 در **Visual Studio**، می‌توانید migrations را از **Package Manager Console** فعال کنید و پایگاه داده را با دستورات زیر ایجاد کنید:
@@ -2048,6 +2158,7 @@ Update-Database
 ```
 
 <div dir="rtl">
+
 * دستور اول ابزارهای مدیریت EF Core را در Visual Studio نصب می‌کند.
 * دستور دوم یک کلاس C# ویژه به نام **code migration** ایجاد می‌کند که شامل دستورالعمل‌های ایجاد پایگاه داده است.
 * دستور آخر آن دستورالعمل‌ها را روی connection string مشخص‌شده در فایل پیکربندی پروژه اجرا می‌کند.
@@ -2066,6 +2177,7 @@ Console.WriteLine(dbContext.Customers.Count());
 ```
 
 <div dir="rtl">
+
 همچنین می‌توانید از **DbContext** برای نوشتن داده در پایگاه داده استفاده کنید:
 </div>
 
@@ -2080,6 +2192,7 @@ dbContext.SaveChanges();    // تغییرات را به پایگاه داده م
 ```
 
 <div dir="rtl">
+
 برای بازیابی رکوردی که تازه اضافه شده:
 </div>
 
@@ -2090,6 +2203,7 @@ Customer cust = dbContext.Customers
 ```
 
 <div dir="rtl">
+
 و برای به‌روزرسانی نام مشتری و ذخیره تغییرات:
 </div>
 
@@ -2099,6 +2213,7 @@ dbContext.SaveChanges();
 ```
 
 <div dir="rtl">
+
 > توجه: متد **Single** برای بازیابی یک رکورد با **primary key** مناسب است. بر خلاف **First**، اگر بیش از یک رکورد بازگردانده شود، خطا می‌دهد.
 
 ---
@@ -2117,6 +2232,7 @@ Customer b = dbContext.Customers.OrderBy(c => c.ID).First();
 ```
 
 <div dir="rtl">
+
 ### مدیریت منابع و DbContext 🗑️🧩
 
 اگرچه **DbContext** از **IDisposable** پیروی می‌کند، اما معمولاً می‌توانید بدون فراخوانی **Dispose** از نمونه‌ها استفاده کنید. فراخوانی **Dispose** باعث می‌شود که **connection** داخلی context هم بسته شود، اما این معمولاً ضروری نیست زیرا **EF Core** به‌طور خودکار پس از پایان دریافت نتایج از یک query، **connection** را می‌بندد.
@@ -2137,6 +2253,7 @@ foreach (Customer c in GetCustomers("a"))
 ```
 
 <div dir="rtl">
+
 این کد شکست می‌خورد، زیرا query زمانی ارزیابی می‌شود که آن را **enumerate** می‌کنیم—و این بعد از **Dispose** شدن **DbContext** است.
 
 چند نکته درباره عدم فراخوانی **Dispose** وجود دارد:
@@ -2166,6 +2283,7 @@ dbContext.Entry(myCustomer).Reload();
 ```
 
 <div dir="rtl">
+
 بهترین روش این است که برای هر **unit of work** یک **DbContext** جدید استفاده کنید تا نیاز به **Reload** دستی به حداقل برسد.
 
 ---
@@ -2190,6 +2308,7 @@ foreach (var e in dbContext.ChangeTracker.Entries())
 ```
 
 <div dir="rtl">
+
 هنگام فراخوانی **SaveChanges**، EF Core با استفاده از اطلاعات **ChangeTracker**، دستورات SQL ایجاد می‌کند:
 
 * **Insert** برای اضافه کردن رکورد جدید
@@ -2232,6 +2351,7 @@ public class Purchase
 ```
 
 <div dir="rtl">
+
 EF Core با توجه به نام **CustomerID**، آن را به عنوان **foreign key** به جدول **Customer** تشخیص می‌دهد. اگر EF Core نتواند رابطه را استنتاج کند، می‌توانید آن را صریحاً در **OnModelCreating** پیکربندی کنید:
 </div>
 
@@ -2243,6 +2363,7 @@ modelBuilder.Entity<Purchase>()
 ```
 
 <div dir="rtl">
+
 با این navigation properties، می‌توان queries مانند زیر نوشت:
 </div>
 
@@ -2251,6 +2372,7 @@ var customersWithPurchases = Customers.Where(c => c.Purchases.Any());
 ```
 
 <div dir="rtl">
+
 در فصل بعد، نحوه نوشتن این نوع queryها را به تفصیل بررسی خواهیم کرد.
 ### افزودن و حذف موجودیت‌ها از مجموعه‌های Navigation 🛒❌
 
@@ -2267,6 +2389,7 @@ dbContext.SaveChanges();
 ```
 
 <div dir="rtl">
+
 در این مثال، **EF Core** به‌صورت خودکار مقدار `1` را در ستون **CustomerID** هر خرید جدید می‌نویسد و **ID** تولیدشده توسط پایگاه داده را به **Purchase.ID** اختصاص می‌دهد.
 
 اگر موجودیتی را از یک **collection navigation property** حذف کرده و **SaveChanges** را فراخوانی کنید، EF Core بسته به نوع پیکربندی یا استنتاج رابطه، یکی از کارهای زیر را انجام می‌دهد:
@@ -2290,6 +2413,7 @@ Console.WriteLine(cust.Purchases.Count);    // همیشه 0
 ```
 
 <div dir="rtl">
+
 راه‌حل‌ها:
 
 1. **استفاده از Include:** این روش به EF Core دستور می‌دهد که navigation properties را eager load کند:
@@ -2303,6 +2427,7 @@ var cust = dbContext.Customers
 ```
 
 <div dir="rtl">
+
 2. **استفاده از Projection:** این تکنیک زمانی مفید است که فقط بخشی از propertyهای entity نیاز باشد، زیرا حجم انتقال داده کاهش می‌یابد:
 </div>
 
@@ -2318,6 +2443,7 @@ var custInfo = dbContext.Customers
 ```
 
 <div dir="rtl">
+
 هر دو روش به EF Core اطلاع می‌دهند که چه داده‌ای نیاز دارید تا بتواند آن را در یک query به‌دست آورد.
 
 3. **Explicit Loading:** می‌توانید EF Core را به‌صورت دستی وادار به populate کردن navigation property کنید:
@@ -2329,6 +2455,7 @@ dbContext.Entry(cust).Collection(b => b.Purchases).Load();
 ```
 
 <div dir="rtl">
+
 این روش یک round trip اضافی به پایگاه داده ایجاد می‌کند.
 
 ---
@@ -2354,6 +2481,7 @@ protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 ```
 
 <div dir="rtl">
+
 > توجه: باید بسته **Microsoft.EntityFrameworkCore.Proxies** را هم اضافه کنید.
 
 هزینه lazy loading این است که هر بار که به navigation property بارگذاری‌نشده دسترسی پیدا کنید، یک درخواست اضافی به پایگاه داده ارسال می‌شود. اگر تعداد زیادی از این درخواست‌ها وجود داشته باشد، کارایی کاهش می‌یابد.
@@ -2369,6 +2497,7 @@ Console.WriteLine(cust.GetType());
 ```
 
 <div dir="rtl">
+
 ### اجرای به تأخیر افتاده (Deferred Execution) ⏳
 
 کوئری‌های **EF Core** نیز مانند کوئری‌های محلی از مدل **deferred execution** پیروی می‌کنند. این ویژگی به شما اجازه می‌دهد کوئری‌ها را به‌تدریج بسازید. با این حال، یک نکته ویژه در **EF Core** وجود دارد و آن زمانی است که **subquery** داخل یک **Select expression** قرار گیرد.
@@ -2392,6 +2521,7 @@ foreach (var customerPurchaseResults in query)
 ```
 
 <div dir="rtl">
+
 تمام **navigation properties** که به‌صورت صریح projection شده‌اند، در یک round trip کامل پر می‌شوند:
 </div>
 
@@ -2405,6 +2535,7 @@ foreach (var row in query)
 ```
 
 <div dir="rtl">
+
 اما اگر یک navigation property را بدون eager load یا projection شمارش کنید، قوانین deferred execution اعمال می‌شوند:
 </div>
 
@@ -2415,6 +2546,7 @@ foreach (Customer c in dbContext.Customers.ToArray())
 ```
 
 <div dir="rtl">
+
 این مدل زمانی مفید است که بخواهید اجرای حلقه داخلی را به‌صورت انتخابی انجام دهید:
 </div>
 
@@ -2426,6 +2558,7 @@ foreach (Customer c in dbContext.Customers.ToArray())
 ```
 
 <div dir="rtl">
+
 > توجه: استفاده از **ToArray** ضروری است، زیرا SQL Server به‌صورت پیش‌فرض نمی‌تواند یک کوئری جدید را در حالی که نتایج کوئری فعلی هنوز پردازش می‌شوند، آغاز کند.
 > می‌توان با اضافه کردن `;MultipleActiveResultSets=True` به connection string، امکان **MARS** را فعال کرد، اما با احتیاط استفاده کنید، زیرا ممکن است مشکلات طراحی دیتابیس که می‌توانند با eager loading یا projection بهبود یابند، پنهان شوند.
 
@@ -2449,6 +2582,7 @@ public class Product
 ```
 
 <div dir="rtl">
+
 ---
 
 ### Delegates در مقابل Expression Trees 🧩
@@ -2467,6 +2601,7 @@ public static IQueryable<TSource> Where<TSource>(this IQueryable<TSource> source
 ```
 
 <div dir="rtl">
+
 وقتی یک lambda expression درون یک کوئری قرار می‌گیرد، ظاهر آن شبیه هم است، چه به operatorهای Enumerable متصل شود و چه Queryable:
 </div>
 
@@ -2476,6 +2611,7 @@ IQueryable<Product>  q2 = sqlProducts.Where(p => !p.Discontinued);
 ```
 
 <div dir="rtl">
+
 اما اگر lambda را به یک متغیر میانی اختصاص دهید، باید مشخص کنید که **delegate** می‌خواهید یا **expression tree**. مثال:
 </div>
 
@@ -2488,6 +2624,7 @@ IQueryable<Product> q2 = sqlProducts.Where(predicate2);
 ```
 
 <div dir="rtl">
+
 > توجه: `predicate1` و `predicate2` قابل جایگزینی نیستند.
 
 ### کامپایل کردن Expression Treeها ⚙️
@@ -2508,6 +2645,7 @@ public class Product
 ```
 
 <div dir="rtl">
+
 این متد می‌تواند هم در کوئری‌های **interpreted** و هم **local** استفاده شود:
 </div>
 
@@ -2523,6 +2661,7 @@ void Test()
 ```
 
 <div dir="rtl">
+
 ---
 
 ### AsQueryable 🧵
@@ -2552,6 +2691,7 @@ void Test()
 ```
 
 <div dir="rtl">
+
 > **AsQueryable** دنباله محلی را به یک `IQueryable<T>` تبدیل می‌کند تا query operators بعدی به **expression tree**ها متصل شوند. وقتی بعداً روی نتیجه شمارش انجام شود، **expression tree**ها به‌صورت ضمنی کامپایل می‌شوند (با هزینه کوچک عملکردی)، و دنباله محلی مثل حالت عادی شمارش می‌شود.
 
 ---
@@ -2582,6 +2722,7 @@ LambdaExpression<Func<Customer,bool>> f = ...
 ```
 
 <div dir="rtl">
+
 کلاس پایه **Expression<T>** همان کلاس غیرجنریک **LambdaExpression** است. **LambdaExpression** نوع‌بندی یکنواخت برای **lambda expression tree**ها را فراهم می‌کند؛ به طوری که هر **Expression<T>** قابل تبدیل به **LambdaExpression** است.
 
 ویژگی متمایز **LambdaExpression** از **Expression**های معمولی این است که **lambda expression**ها دارای پارامتر هستند.
@@ -2596,6 +2737,7 @@ Expression<Func<string, bool>> f = s => s.Length < 5;
 ```
 
 <div dir="rtl">
+
 <div align="center">
     
 ![Conventions-UsedThis-Book](../../assets/image/08/Table-8-13.jpeg) 
@@ -2609,6 +2751,7 @@ Console.WriteLine(((BinaryExpression) f.Body).Right);   // 5
 ```
 
 <div dir="rtl">
+
 حال بیایید این **expression** را از صفر بسازیم. اصل این است که از پایین درخت شروع کرده و به سمت بالا پیش برویم. پایین‌ترین عنصر درخت ما یک **ParameterExpression** است، یعنی پارامتر **lambda expression** به نام `"s"` از نوع `string`:
 </div>
 
@@ -2617,6 +2760,7 @@ ParameterExpression p = Expression.Parameter(typeof(string), "s");
 ```
 
 <div dir="rtl">
+
 گام بعدی ساخت **MemberExpression** و **ConstantExpression** است. در مورد اول، باید به خاصیت `Length` پارامتر `"s"` دسترسی پیدا کنیم:
 </div>
 
@@ -2626,6 +2770,7 @@ ConstantExpression five = Expression.Constant(5);
 ```
 
 <div dir="rtl">
+
 گام بعدی مقایسه **LessThan** است:
 </div>
 
@@ -2634,6 +2779,7 @@ BinaryExpression comparison = Expression.LessThan(stringLength, five);
 ```
 
 <div dir="rtl">
+
 آخرین گام، ساخت **lambda expression** است که **expression Body** را به مجموعه‌ای از پارامترها متصل می‌کند:
 </div>
 
@@ -2643,6 +2789,7 @@ Expression<Func<string, bool>> lambda
 ```
 
 <div dir="rtl">
+
 راهی ساده برای تست **lambda** این است که آن را به یک **delegate** کامپایل کنیم:
 </div>
 
@@ -2653,6 +2800,7 @@ Console.WriteLine(runnable("dog"));        // True
 ```
 
 <div dir="rtl">
+
 ساده‌ترین روش برای تعیین اینکه کدام نوع **expression** را باید استفاده کرد، این است که یک **lambda expression** موجود را در **Visual Studio debugger** بررسی کنید.
 
 ما ادامه این بحث را آنلاین ارائه داده‌ایم در: [http://www.albahari.com/expressions](http://www.albahari.com/expressions) ✅

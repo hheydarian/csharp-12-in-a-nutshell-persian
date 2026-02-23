@@ -1,5 +1,6 @@
 
 <div dir="rtl">
+
 # فصل دهم:  LINQ to XML
 
 .NET تعداد زیادی API برای کار با داده‌های XML فراهم می‌کند. انتخاب اصلی برای پردازش عمومی اسناد XML، **LINQ to XML** است.
@@ -33,6 +34,7 @@ DOM مربوط به LINQ to XML بسیار خوب طراحی شده و از نظ
 ```
 
 <div dir="rtl">
+
 همان‌طور که در همه‌ی فایل‌های XML وجود دارد، ما با یک **اعلان (declaration)** شروع می‌کنیم و سپس یک عنصر ریشه (**root element**) داریم که نام آن `customer` است.
 عنصر `customer` دو ویژگی (**attribute**) دارد، هرکدام با یک نام (id و status) و مقدار ("123" و "archived").
 درون `customer`، دو عنصر فرزند (**child element**) وجود دارد: `firstname` و `lastname`، که هرکدام محتوای متنی ساده‌ای ("Joe" و "Bloggs") دارند.
@@ -84,6 +86,7 @@ XElement customer = XElement.Parse (xml);
 ```
 
 <div dir="rtl">
+
 <div align="center">
     
 ![Conventions-UsedThis-Book](../../assets/image/10/Table-10-2.jpeg) 
@@ -112,6 +115,7 @@ XElement customer = XElement.Parse (xml);
 ```
 
 <div dir="rtl">
+
 درون عنصر والد `<data>`، ابتدا یک **XText node** ("Hello world") قرار دارد، سپس یک **XElement node**، بعد یک **XComment node**، و در پایان یک **XElement node** دیگر.
 در مقابل، یک **XAttribute** تنها سایر XAttributeها را به‌عنوان هم‌سطح (peer) می‌پذیرد.
 
@@ -164,6 +168,7 @@ XElement config = XElement.Parse (
 ```
 
 <div dir="rtl">
+
 در بخش‌های بعدی، روش پیمایش و به‌روزرسانی یک X-DOM را توضیح می‌دهیم.
 به‌عنوان یک پیش‌نمایش سریع، در اینجا نحوه‌ی دست‌کاری عنصر `config` که همین الان ساختیم آمده است:
 </div>
@@ -189,6 +194,7 @@ Console.WriteLine (config);   // Implicitly call config.ToString()
 ```
 
 <div dir="rtl">
+
 نتیجه‌ی آخرین دستور `Console.WriteLine` به‌شکل زیر خواهد بود:
 </div>
 
@@ -202,6 +208,7 @@ Console.WriteLine (config);   // Implicitly call config.ToString()
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🧩 XNode.ReadFrom
@@ -242,6 +249,7 @@ Console.WriteLine(customer.ToString());
 ```
 
 <div dir="rtl">
+
 خروجی به این صورت است:
 </div>
 
@@ -253,6 +261,7 @@ Console.WriteLine(customer.ToString());
 ```
 
 <div dir="rtl">
+
 وقتی یک **XElement** می‌سازید، مقدار (value) اختیاری است — می‌توانید فقط نام عنصر را بدهید و بعداً محتوا اضافه کنید. توجه کنید که وقتی مقداری تعیین کردیم، یک رشته‌ی ساده کافی بود؛ لازم نبود که به‌طور صریح یک **XText** بسازیم و اضافه کنیم. X-DOM این کار را به‌طور خودکار انجام می‌دهد، بنابراین شما فقط با "مقدار" سروکار دارید.
 
 ---
@@ -273,6 +282,7 @@ XElement customer =
 ```
 
 <div dir="rtl">
+
 این روش دو مزیت دارد:
 
 1. کد شبیه ساختار XML می‌شود.
@@ -296,6 +306,7 @@ XElement query =
 ```
 
 <div dir="rtl">
+
 (این موضوع را بعداً در همین فصل در بخش «پروجکت کردن به داخل یک X-DOM» بررسی می‌کنیم.)
 
 ---
@@ -310,6 +321,7 @@ public XElement (XName name, params object[] content)
 ```
 
 <div dir="rtl">
+
 همین موضوع برای متد **Add** در **XContainer** نیز صدق می‌کند:
 </div>
 
@@ -318,6 +330,7 @@ public void Add (params object[] content)
 ```
 
 <div dir="rtl">
+
 بنابراین، هنگام ساخت یا اضافه کردن به یک X-DOM می‌توانید هر تعداد شیء با هر نوعی را به‌عنوان فرزند مشخص کنید. دلیل این کار این است که هر چیزی می‌تواند محتوای قانونی باشد. در اینجا تصمیماتی که **XContainer** برای پردازش هر شیء می‌گیرد آمده است:
 
 1. اگر شیء **null** باشد، نادیده گرفته می‌شود.
@@ -363,6 +376,7 @@ Console.WriteLine(
 ```
 
 <div dir="rtl">
+
 این تکثیر خودکار باعث می‌شود نمونه‌سازی X-DOM بدون **side effect** باشد — که یکی دیگر از ویژگی‌های کلیدی برنامه‌نویسی تابعی است. ✅
 
 پیمایش و کوئری‌گیری (Navigating and Querying)
@@ -414,6 +428,7 @@ foreach (XNode node in bench.Nodes())
 ```
 
 <div dir="rtl">
+
 🔹 خروجی کد بالا:
 </div>
 
@@ -424,6 +439,7 @@ foreach (XNode node in bench.Nodes())
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🟢 بازیابی عناصر (Retrieving elements)
@@ -439,6 +455,7 @@ foreach (XElement e in bench.Elements())
 ```
 
 <div dir="rtl">
+
 🔹 کوئری زیر جعبه‌ابزاری (**toolbox**) را پیدا می‌کند که درونش ابزار **Nailgun** وجود دارد:
 </div>
 
@@ -452,6 +469,7 @@ IEnumerable<string> query =
 ```
 
 <div dir="rtl">
+
 🔹 در مثال بعدی از **SelectMany** استفاده می‌کنیم تا ابزارهای دستی (**handtool**) همه‌ی جعبه‌ابزارها را به‌دست بیاوریم:
 </div>
 
@@ -466,6 +484,7 @@ IEnumerable<string> query =
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🟢 نکته درباره Elements
@@ -480,6 +499,7 @@ where ...
 ```
 
 <div dir="rtl">
+
 * متد **Elements** می‌تواند فقط عناصر با یک نام مشخص را هم برگرداند:
 </div>
 
@@ -488,6 +508,7 @@ int x = bench.Elements("toolbox").Count();    // 2
 ```
 
 <div dir="rtl">
+
 این کد معادل است با:
 </div>
 
@@ -496,6 +517,7 @@ int x = bench.Elements().Where (e => e.Name == "toolbox").Count();  // 2
 ```
 
 <div dir="rtl">
+
 * متد **Elements** به‌عنوان یک **extension method** هم تعریف شده که یک **IEnumerable<XContainer>** (یا دقیق‌تر: `IEnumerable<T> where T : XContainer`) می‌پذیرد.
   به همین دلیل، می‌تواند روی دنباله‌ای از عناصر هم کار کند.
 
@@ -508,6 +530,7 @@ select tool.Value;
 ```
 
 <div dir="rtl">
+
 🔹 در اینجا:
 
 * فراخوانی اول **Elements** به متد نمونه‌ای (instance method) در **XContainer** متصل می‌شود.
@@ -525,6 +548,7 @@ string cx = settings.Element("database").Element("connectString").Value;
 ```
 
 <div dir="rtl">
+
 متد **Element** معادل فراخوانی **Elements()** و سپس اعمال **FirstOrDefault** با یک predicate برای مطابقت نام است.
 اگر عنصر درخواست‌شده وجود نداشته باشد، **Element** مقدار **null** برمی‌گرداند.
 
@@ -537,6 +561,7 @@ Element("xyz")?.Value
 ```
 
 <div dir="rtl">
+
 یا عنصر **XElement** را مستقیماً به **string** تبدیل کنید:
 </div>
 
@@ -545,6 +570,7 @@ string xyz = (string)settings.Element("xyz");
 ```
 
 <div dir="rtl">
+
 این کار امکان‌پذیر است چون **XElement** یک تبدیل صریح به رشته (explicit string conversion) تعریف کرده است. ✅
 
 ---
@@ -562,6 +588,7 @@ Console.WriteLine(bench.Descendants("handtool").Count());  // 3
 ```
 
 <div dir="rtl">
+
 هم والدها و هم برگ‌ها شامل می‌شوند، همان‌طور که مثال زیر نشان می‌دهد:
 </div>
 
@@ -571,6 +598,7 @@ foreach (XNode node in bench.DescendantNodes())
 ```
 
 <div dir="rtl">
+
 🔹 خروجی:
 </div>
 
@@ -589,6 +617,7 @@ Nailgun
 ```
 
 <div dir="rtl">
+
 کوئری بعدی تمام **comment**های داخل X-DOM که شامل کلمه‌ی "careful" هستند را استخراج می‌کند:
 </div>
 
@@ -601,6 +630,7 @@ IEnumerable<string> query =
 ```
 
 <div dir="rtl">
+
 ---
 
 ### پیمایش والدین (Parent Navigation)
@@ -621,6 +651,7 @@ foreach (XNode child in x.Nodes())
 ```
 
 <div dir="rtl">
+
 با این حال، این موضوع در مورد **XDocument** صادق نیست. **XDocument** کمی متفاوت است: می‌تواند فرزند داشته باشد اما هرگز نمی‌تواند والد هیچ نودی باشد!
 
 برای دسترسی به **XDocument**، باید از خصوصیت **Document** استفاده کنید؛ این ویژگی روی هر شیء در درخت X-DOM کار می‌کند.
@@ -638,6 +669,7 @@ AncestorsAndSelf().Last();
 ```
 
 <div dir="rtl">
+
 * روش دیگر برای رسیدن به عنصر ریشه این است که از **Document.Root** استفاده کنید، البته این فقط زمانی کار می‌کند که یک **XDocument** موجود باشد.
 
 ---
@@ -706,6 +738,7 @@ Console.WriteLine(settings.ToString());  // <settings>blah</settings>
 ```
 
 <div dir="rtl">
+
 ---
 
 ### به‌روزرسانی نودهای فرزند و صفات (Updating Child Nodes and Attributes)
@@ -727,6 +760,7 @@ settings.SetElementValue("timeout", 60);  // به‌روزرسانی به 60
 ```
 
 <div dir="rtl">
+
 * متد **Add** یک نود فرزند به یک عنصر یا سند اضافه می‌کند.
 
 * متد **AddFirst** همین کار را انجام می‌دهد اما در ابتدای مجموعه اضافه می‌کند، نه در انتها.
@@ -743,6 +777,7 @@ e.ReplaceNodes(e.Nodes())
 ```
 
 <div dir="rtl">
+
 به‌طور مورد انتظار عمل می‌کند.
 
 ---
@@ -771,6 +806,7 @@ items.FirstNode.AddAfterSelf(new XElement("two"));
 ```
 
 <div dir="rtl">
+
 🔹 نتیجه:
 </div>
 
@@ -779,6 +815,7 @@ items.FirstNode.AddAfterSelf(new XElement("two"));
 ```
 
 <div dir="rtl">
+
 درج در یک موقعیت دلخواه در یک دنباله طولانی از عناصر **کارآمد** است زیرا نودها به‌صورت داخلی در یک **لیست پیوندی** ذخیره شده‌اند.
 
 * متد **Remove** نود جاری را از والد خود حذف می‌کند.
@@ -791,6 +828,7 @@ items.FirstNode.ReplaceWith(new XComment("One was here"));
 ```
 
 <div dir="rtl">
+
 🔹 نتیجه:
 </div>
 
@@ -799,6 +837,7 @@ items.FirstNode.ReplaceWith(new XComment("One was here"));
 ```
 
 <div dir="rtl">
+
 ---
 
 ### حذف یک دنباله از نودها یا صفات (Removing a Sequence of Nodes or Attributes)
@@ -820,6 +859,7 @@ XElement contacts = XElement.Parse(
 ```
 
 <div dir="rtl">
+
 * حذف تمام مشتریان:
 </div>
 
@@ -828,6 +868,7 @@ contacts.Elements("customer").Remove();
 ```
 
 <div dir="rtl">
+
 * حذف تمام عناصر آرشیو شده (Chris حذف می‌شود):
 </div>
 
@@ -838,6 +879,7 @@ contacts.Elements()
 ```
 
 <div dir="rtl">
+
 * اگر **Elements()** را با **Descendants()** جایگزین کنیم، تمام عناصر آرشیو شده در کل DOM حذف می‌شوند، و نتیجه این خواهد بود:
 </div>
 
@@ -849,6 +891,7 @@ contacts.Elements()
 ```
 
 <div dir="rtl">
+
 * مثال بعدی، حذف تمام تماس‌هایی که در هر جای درخت کامنت "confidential" دارند:
 </div>
 
@@ -861,6 +904,7 @@ contacts.Elements()
 ```
 
 <div dir="rtl">
+
 🔹 نتیجه:
 </div>
 
@@ -872,6 +916,7 @@ contacts.Elements()
 ```
 
 <div dir="rtl">
+
 * مقایسه با کوئری ساده‌تر که تمام نودهای کامنت را از درخت حذف می‌کند:
 </div>
 
@@ -880,6 +925,7 @@ contacts.DescendantNodes().OfType<XComment>().Remove();
 ```
 
 <div dir="rtl">
+
 > در سطح داخلی، متد **Remove** ابتدا همه عناصر مطابق را در یک لیست موقت می‌خواند و سپس روی همان لیست موقت پیمایش کرده و حذف را انجام می‌دهد.
 > این کار از خطاهایی جلوگیری می‌کند که ممکن است هنگام **حذف و پرس‌وجو همزمان** رخ دهند.
 ### کار با مقادیر (Working with Values)
@@ -907,6 +953,7 @@ Console.Write(e.Value);  // 2019-10-02T16:39:10.734375+09:00
 ```
 
 <div dir="rtl">
+
 می‌توانستیم به جای آن، مستقیماً **Value** را اختصاص دهیم، اما در این صورت مجبور بودیم **DateTime** را دستی به رشته تبدیل کنیم که پیچیده‌تر است و نیاز به استفاده از **XmlConvert** برای نتیجه سازگار با XML دارد.
 
 * هنگام ارسال مقدار به سازنده **XElement** یا **XAttribute**، تبدیل خودکار برای انواع غیررشته‌ای نیز انجام می‌شود. این اطمینان می‌دهد که:
@@ -931,6 +978,7 @@ double res = (double)a;
 ```
 
 <div dir="rtl">
+
 * عناصر یا صفات به‌طور بومی **DateTime** یا اعداد را ذخیره نمی‌کنند؛ همیشه به‌صورت متن ذخیره و در صورت نیاز تجزیه می‌شوند.
 * نوع اصلی ذخیره شده «به یاد نمی‌ماند»، بنابراین باید **cast** را به‌درستی انجام دهید تا از خطای زمان اجرا جلوگیری شود.
 * برای ایجاد کد مقاوم، می‌توانید **cast** را در بلوک **try/catch** قرار دهید و **FormatException** را مدیریت کنید.
@@ -956,6 +1004,7 @@ int? timeout = (int?)x.Element("timeout");    // درست؛ timeout = null
 ```
 
 <div dir="rtl">
+
 * می‌توانید مقدار پیش‌فرض را با عملگر **??** مشخص کنید:
 </div>
 
@@ -964,6 +1013,7 @@ double resolution = (double?)x.Attribute("resolution") ?? 1.0;
 ```
 
 <div dir="rtl">
+
 > توجه: cast به nullable شما را از خطا در صورتی که مقدار عنصر یا صفت خالی یا با فرمت نادرست باشد، نجات نمی‌دهد. در این موارد باید **FormatException** را مدیریت کنید.
 
 ---
@@ -987,6 +1037,7 @@ IEnumerable<string> query = from cust in data.Elements()
 ```
 
 <div dir="rtl">
+
 * استفاده از **nullable int** از بروز **NullReferenceException** برای مشتری‌ای مثل Anne که صفت credit ندارد جلوگیری می‌کند.
 * اصول مشابه برای پرس‌وجو روی مقادیر عناصر نیز اعمال می‌شود.
 
@@ -1002,6 +1053,7 @@ IEnumerable<string> query = from cust in data.Elements()
 ```
 
 <div dir="rtl">
+
 * عنصر **summary** سه فرزند دارد: **XText**، سپس **XElement**، سپس دوباره **XText**.
 
 ساخت آن:
@@ -1015,6 +1067,7 @@ XElement summary = new XElement("summary",
 ```
 
 <div dir="rtl">
+
 * جالب اینجاست که می‌توانیم هنوز **summary.Value** را کوئری کنیم بدون ایجاد استثنا؛ حاصل **ترکیب مقادیر همه فرزندان** است:
 </div>
 
@@ -1023,6 +1076,7 @@ An XAttribute is not an XNode
 ```
 
 <div dir="rtl">
+
 * می‌توان مقدار **Value** را دوباره اختصاص داد، اما همه فرزندان قبلی با یک نود **XText** جدید جایگزین می‌شوند.
 
 ---
@@ -1040,6 +1094,7 @@ var e2 = new XElement("test", "Hello", "World");
 ```
 
 <div dir="rtl">
+
 * هر دو **e1** و **e2** فقط یک فرزند **XText** دارند با مقدار `"HelloWorld"`.
 
 * اگر صریحاً چند نود **XText** بسازید، چند فرزند خواهید داشت:
@@ -1052,6 +1107,7 @@ Console.WriteLine(e.Nodes().Count()); // 2
 ```
 
 <div dir="rtl">
+
 * **XElement** نودهای **XText** را به هم متصل نمی‌کند، بنابراین **هویت اشیاء نودها حفظ می‌شود**.
 ### اسناد و اعلان‌ها (Documents and Declarations)
 
@@ -1090,6 +1146,7 @@ var doc = new XDocument(
 ```
 
 <div dir="rtl">
+
 * در مثال بالا **XDeclaration** وارد نشده است، اما هنگام فراخوانی **doc.Save**، یک اعلان XML به‌صورت پیش‌فرض تولید می‌شود.
 
 ---
@@ -1131,6 +1188,7 @@ doc.Save("test.html");
 ```
 
 <div dir="rtl">
+
 * محتوای **test.html** تولید شده:
 </div>
 
@@ -1151,6 +1209,7 @@ doc.Save("test.html");
 ```
 
 <div dir="rtl">
+
 ---
 
 #### دسترسی به ریشه و ارتباطات
@@ -1166,6 +1225,7 @@ Console.WriteLine(bodyNode.Document == doc);         // True
 ```
 
 <div dir="rtl">
+
 * فرزندان یک سند هیچ والد (Parent) ندارند:
 </div>
 
@@ -1176,6 +1236,7 @@ foreach (XNode node in doc.Nodes())
 ```
 
 <div dir="rtl">
+
 > توجه: **XDeclaration** یک **XNode** نیست و در مجموعه **Nodes** سند ظاهر نمی‌شود. فقط به خصوصیت **Declaration** اختصاص داده می‌شود. به همین دلیل در مثال بالا، مقدار "True" چهار بار تکرار شد و نه پنج بار.
 ### اعلان‌های XML (XML Declarations)
 
@@ -1187,6 +1248,7 @@ foreach (XNode node in doc.Nodes())
 ```
 
 <div dir="rtl">
+
 * اعلان XML تضمین می‌کند که فایل به درستی توسط خواننده (Reader) پردازش و درک شود.
 
 #### رفتار XElement و XDocument هنگام تولید اعلان XML:
@@ -1218,6 +1280,7 @@ doc.Save("test.xml");
 ```
 
 <div dir="rtl">
+
 * توجه: نسخه (version) همیشه به "1.0" نوشته می‌شود.
 * encoding باید یک کد IETF مانند `"utf-16"` باشد.
 
@@ -1244,6 +1307,7 @@ Console.WriteLine(output.ToString());
 ```
 
 <div dir="rtl">
+
 * خروجی:
 </div>
 
@@ -1253,6 +1317,7 @@ Console.WriteLine(output.ToString());
 ```
 
 <div dir="rtl">
+
 > دلیل UTF-16: رشته‌ها در حافظه داخلی به صورت UTF-16 ذخیره می‌شوند، بنابراین XmlWriter به‌درستی "utf-16" می‌نویسد تا اطلاعات نادرست تولید نشود.
 
 ---
@@ -1267,6 +1332,7 @@ File.WriteAllText("data.xml", doc.ToString());
 ```
 
 <div dir="rtl">
+
 * فایل **data.xml** بدون اعلان XML ذخیره می‌شود.
 * اگر ToString اعلان تولید می‌کرد، encoding نادرست (UTF-16) درج می‌شد که ممکن بود باعث عدم خوانده شدن فایل شود.
 
@@ -1288,6 +1354,7 @@ File.WriteAllText("data.xml", doc.ToString());
 ```
 
 <div dir="rtl">
+
 * `xmlns` نامعتبر است و دو کار انجام می‌دهد:
 
   1. namespace عنصر جاری را مشخص می‌کند
@@ -1305,6 +1372,7 @@ File.WriteAllText("data.xml", doc.ToString());
 ```
 
 <div dir="rtl">
+
 * عناصر `address` و `postcode` به طور پیش‌فرض در namespace `OReilly.Nutshell.CSharp` قرار دارند.
 
 #### حذف namespace برای عناصر فرزند
@@ -1319,6 +1387,7 @@ File.WriteAllText("data.xml", doc.ToString());
 ```
 
 <div dir="rtl">
+
 ### پیشوندها (Prefixes)
 
 یکی دیگر از روش‌های تعیین namespace استفاده از **پیشوند (prefix)** است.
@@ -1334,6 +1403,7 @@ File.WriteAllText("data.xml", doc.ToString());
 ```
 
 <div dir="rtl">
+
 * سمت راست: `xmlns:nut="..."` → پیشوند `nut` را تعریف می‌کند.
 * سمت چپ: `nut:customer` → پیشوند تعریف شده را به عنصر `customer` نسبت می‌دهد.
 
@@ -1352,6 +1422,7 @@ File.WriteAllText("data.xml", doc.ToString());
 ```
 
 <div dir="rtl">
+
 * می‌توانید پیشوند تعریف کنید بدون اینکه آن را به عنصر جاری اختصاص دهید، برای راحتی فرزندان:
 </div>
 
@@ -1363,6 +1434,7 @@ File.WriteAllText("data.xml", doc.ToString());
 ```
 
 <div dir="rtl">
+
 * پیشوندها مخصوصاً زمانی مفید هستند که عناصر از چند namespace استفاده کنند.
 * **همیشه از URIهای معتبر برای namespace استفاده کنید** تا یکتا باشند:
 </div>
@@ -1373,6 +1445,7 @@ File.WriteAllText("data.xml", doc.ToString());
 ```
 
 <div dir="rtl">
+
 ---
 
 ### namespace برای Attributes
@@ -1385,6 +1458,7 @@ File.WriteAllText("data.xml", doc.ToString());
 ```
 
 <div dir="rtl">
+
 * Attribute بدون پیشوند همیشه در **namespace خالی** است و فضای نام والد را به ارث نمی‌برد.
 * معمولاً Attributes نیازی به namespace ندارند مگر برای metadata یا کاربرد عمومی:
 </div>
@@ -1397,6 +1471,7 @@ File.WriteAllText("data.xml", doc.ToString());
 ```
 
 <div dir="rtl">
+
 ---
 
 ### تعیین namespace در X-DOM
@@ -1413,6 +1488,7 @@ Console.WriteLine(e.ToString());
 ```
 
 <div dir="rtl">
+
 خروجی:
 </div>
 
@@ -1421,6 +1497,7 @@ Console.WriteLine(e.ToString());
 ```
 
 <div dir="rtl">
+
 2. **استفاده از XNamespace و XName (روش بهینه‌تر):**
 </div>
 
@@ -1434,6 +1511,7 @@ var data = new XElement(ns + "data",
 ```
 
 <div dir="rtl">
+
 * **XNamespace** و **XName** کلاس‌هایی هستند که namespace و نام محلی (local name) را مدیریت می‌کنند.
 
 * همه متدها و سازنده‌های X-DOM، XName می‌پذیرند، ولی می‌توان رشته ساده نیز استفاده کرد به دلیل **تبدیل ضمنی (implicit cast)**.
@@ -1457,6 +1535,7 @@ Console.WriteLine(data.ToString());
 ```
 
 <div dir="rtl">
+
 **خروجی:**
 </div>
 
@@ -1468,6 +1547,7 @@ Console.WriteLine(data.ToString());
 ```
 
 <div dir="rtl">
+
 * اگر فرزندان بدون namespace ساخته شوند، فضای نام خالی (`xmlns=""`) به آن‌ها اعمال می‌شود:
 </div>
 
@@ -1480,6 +1560,7 @@ Console.WriteLine(data2.ToString());
 ```
 
 <div dir="rtl">
+
 خروجی:
 </div>
 
@@ -1491,6 +1572,7 @@ Console.WriteLine(data2.ToString());
 ```
 
 <div dir="rtl">
+
 ---
 
 ### هشدار در ناوبری X-DOM
@@ -1509,6 +1591,7 @@ XElement y = data.Element("customer");      // null
 ```
 
 <div dir="rtl">
+
 * اگر X-DOM بدون namespace ساخته شد، می‌توانید بعداً همه عناصر را به یک namespace واحد اختصاص دهید:
 </div>
 
@@ -1519,6 +1602,7 @@ foreach (XElement e in data.DescendantsAndSelf())
 ```
 
 <div dir="rtl">
+
 ---
 
 ### پیشوندها (Prefixes) در X-DOM
@@ -1541,6 +1625,7 @@ Console.WriteLine(mix.ToString());
 ```
 
 <div dir="rtl">
+
 خروجی بدون پیشوند:
 </div>
 
@@ -1553,6 +1638,7 @@ Console.WriteLine(mix.ToString());
 ```
 
 <div dir="rtl">
+
 * برای کاهش تکرار، می‌توان پیشوندها را به root اضافه کرد:
 </div>
 
@@ -1562,6 +1648,7 @@ mix.SetAttributeValue(XNamespace.Xmlns + "ns2", ns2);
 ```
 
 <div dir="rtl">
+
 خروجی بهینه:
 </div>
 
@@ -1575,6 +1662,7 @@ mix.SetAttributeValue(XNamespace.Xmlns + "ns2", ns2);
 ```
 
 <div dir="rtl">
+
 ---
 
 ### پیشوندها برای Attributes
@@ -1598,6 +1686,7 @@ var cust = new XElement("customers",
 ```
 
 <div dir="rtl">
+
 خروجی:
 </div>
 
@@ -1612,6 +1701,7 @@ var cust = new XElement("customers",
 ```
 
 <div dir="rtl">
+
 * یک attribute می‌تواند چند بار در X-DOM استفاده شود؛ X-DOM به طور خودکار آن را duplicate می‌کند.
 ### Annotations در LINQ to XML
 
@@ -1630,6 +1720,7 @@ public void RemoveAnnotations<T>() where T : class
 ```
 
 <div dir="rtl">
+
 #### بازیابی Annotations
 </div>
 
@@ -1639,6 +1730,7 @@ public IEnumerable<T> Annotations<T>() where T : class
 ```
 
 <div dir="rtl">
+
 * کلید هر annotation نوع داده‌ای آن است و باید **Reference Type** باشد.
 
 **مثال ساده با string:**
@@ -1651,6 +1743,7 @@ Console.WriteLine(e.Annotation<string>());   // Hello
 ```
 
 <div dir="rtl">
+
 * می‌توانید چند annotation از یک نوع اضافه کنید و با `Annotations<T>()` همه را دریافت کنید.
 
 ---
@@ -1675,6 +1768,7 @@ class X
 ```
 
 <div dir="rtl">
+
 * برای حذف annotation، باید به نوع آن دسترسی داشته باشید:
 </div>
 
@@ -1683,6 +1777,7 @@ e.RemoveAnnotations<CustomData>();
 ```
 
 <div dir="rtl">
+
 ---
 
 ### Projection به X-DOM با LINQ
@@ -1709,6 +1804,7 @@ var customers =
 ```
 
 <div dir="rtl">
+
 **خروجی نمونه:**
 </div>
 
@@ -1726,6 +1822,7 @@ var customers =
 ```
 
 <div dir="rtl">
+
 #### توضیح دو مرحله‌ای:
 
 1. ابتدا projection به `XElement`:
@@ -1741,6 +1838,7 @@ IEnumerable<XElement> sqlQuery =
 ```
 
 <div dir="rtl">
+
 2. سپس ریشه را می‌سازیم:
 </div>
 
@@ -1749,6 +1847,7 @@ var customers = new XElement("customers", sqlQuery);
 ```
 
 <div dir="rtl">
+
 * `sqlQuery` یک `IEnumerable<XElement>` است، بنابراین هر عنصر به طور خودکار به عنوان child اضافه می‌شود.
 
 ---
@@ -1785,6 +1884,7 @@ var customers =
 ```
 
 <div dir="rtl">
+
 * اگر مشتری **خرید با ارزش بالا نداشته باشد**، به جای تولید یک `XElement` خالی، **null** قرار داده می‌شود.
 * X-DOM هنگام ساختن XML، محتوای **null را نادیده می‌گیرد** و عنصر تولید نمی‌شود. ✅
 
@@ -1816,6 +1916,7 @@ customers.Save("data.xml");
 ```
 
 <div dir="rtl">
+
 * پرس‌وجوها **تا زمان فراخوانی Save یا ToString** ارزیابی نمی‌شوند؛ بنابراین کل X-DOM به حافظه بارگذاری نمی‌شود.
 * توجه: XStreamingElement قابلیت پیمایش ندارد و فقط برای **تولید خروجی XML** مناسب است.
 </div>

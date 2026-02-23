@@ -1,5 +1,6 @@
 
 <div dir="rtl">
+
 # فصل بیست  و سوم:  Span<T> و Memory<T>
 
 ساختارهای `Span<T>` و `Memory<T>` به‌عنوان نمایه‌های سطح پایین روی یک آرایه، رشته یا هر بلوک پیوسته‌ای از حافظه مدیریت‌شده یا غیرمدیریت‌شده عمل می‌کنند. هدف اصلی آن‌ها کمک به برخی انواع میکروبهینه‌سازی‌ها است—به‌ویژه نوشتن کد با تخصیص حداقل حافظه که تخصیص‌های حافظه مدیریت‌شده را به حداقل می‌رساند (و در نتیجه فشار روی **garbage collector** را کاهش می‌دهد)، بدون اینکه نیاز باشد کد خود را برای انواع مختلف ورودی تکرار کنید.
@@ -52,6 +53,7 @@ int Sum (int[] numbers)
 ```
 
 <div dir="rtl">
+
 <div align="center">
     
 ![Conventions-UsedThis-Book](../../assets/image/23/Table-23-1.jpeg) 
@@ -77,6 +79,7 @@ int Sum (ReadOnlySpan<int> numbers)
 ```
 
 <div dir="rtl">
+
 ما از `ReadOnlySpan<T>` به جای `Span<T>` استفاده کردیم چون نیازی به تغییر آرایه نداریم. یک **تبدیل ضمنی** از `Span<T>` به `ReadOnlySpan<T>` وجود دارد، بنابراین می‌توانید یک `Span<T>` را به متدی بدهید که انتظار یک `ReadOnlySpan<T>` دارد.
 
 می‌توانیم این متد را به شکل زیر تست کنیم:
@@ -89,6 +92,7 @@ int total = Sum(numbers);
 ```
 
 <div dir="rtl">
+
 می‌توانیم `Sum` را با آرایه صدا بزنیم زیرا **تبدیل ضمنی** از `T[]` به `Span<T>` و `ReadOnlySpan<T>` وجود دارد. گزینه دیگر استفاده از **متد extension** `AsSpan` است:
 </div>
 
@@ -97,6 +101,7 @@ var span = numbers.AsSpan();
 ```
 
 <div dir="rtl">
+
 شاخص‌گذار (`indexer`) برای `ReadOnlySpan<T>` از ویژگی **ref readonly** در C# استفاده می‌کند تا مستقیماً به داده‌های زیرین دسترسی پیدا کند. این امکان باعث می‌شود متد ما تقریباً به همان خوبی نسخه اصلی که از آرایه استفاده می‌کرد عمل کند. اما مزیت آن این است که حالا می‌توانیم آرایه را **slice** کنیم و فقط بخشی از عناصر را جمع بزنیم، به‌صورت زیر:
 </div>
 
@@ -106,6 +111,7 @@ int total = Sum(numbers.AsSpan(250, 500));
 ```
 
 <div dir="rtl">
+
 اگر از قبل یک `Span<T>` یا `ReadOnlySpan<T>` دارید، می‌توانید آن را با متد `Slice` برش دهید:
 </div>
 
@@ -115,6 +121,7 @@ int total = Sum(span.Slice(250, 500));
 ```
 
 <div dir="rtl">
+
 همچنین می‌توانید از **indices و ranges در C# 8** استفاده کنید:
 </div>
 
@@ -127,6 +134,7 @@ Console.WriteLine(Sum(span[^5..]));   // ۵ عنصر آخر
 ```
 
 <div dir="rtl">
+
 اگرچه `Span<T>` `IEnumerable<T>` را پیاده‌سازی نمی‌کند (چون یک **ref struct** است و نمی‌تواند اینترفیس‌ها را پیاده‌سازی کند)، اما الگویی را پیاده می‌کند که اجازه می‌دهد **foreach** در C# روی آن کار کند (به صفحه ۲۰۳ مراجعه کنید).
 
 ---
@@ -143,6 +151,7 @@ x.CopyTo(y);
 ```
 
 <div dir="rtl">
+
 توجه کنید که `x` با یک **collection expression** مقداردهی شده است. **Collection expressions** (از C# 12) نه تنها یک میانبر مفید هستند، بلکه در مورد spanها اجازه می‌دهند **کامپایلر نوع زیرین را انتخاب کند**. وقتی تعداد عناصر کم است، کامپایلر ممکن است حافظه را روی **stack** تخصیص دهد (به جای ایجاد آرایه) تا از سربار تخصیص روی heap جلوگیری کند.
 
 **Slicing** این متد را بسیار کاربردی‌تر می‌کند. در مثال بعد، نصف اول `span x` را در نصف دوم `span y` کپی می‌کنیم:
@@ -155,6 +164,7 @@ x[..2].CopyTo(y[2..]);   // y اکنون [10, 20, 1, 2]
 ```
 
 <div dir="rtl">
+
 اگر فضای کافی در مقصد وجود نداشته باشد، `CopyTo` **exception** پرتاب می‌کند، در حالی که `TryCopyTo` **false** برمی‌گرداند (بدون کپی کردن عناصر).
 
 ساختارهای span همچنین متدهایی برای **Clear** و **Fill** و همچنین متد `IndexOf` برای جستجوی عنصر در span ارائه می‌دهند.
@@ -177,6 +187,7 @@ Console.WriteLine(span.IndexOfAny(vowels));   // 2
 ```
 
 <div dir="rtl">
+
 `SearchValues<T>` عملکرد را بهبود می‌دهد وقتی که نمونه در جستجوهای متعدد دوباره استفاده شود.
 
 می‌توانید از این متدها هنگام کار با آرایه‌ها یا رشته‌ها نیز استفاده کنید، کافی است `AsSpan()` روی آرایه یا رشته فراخوانی شود.
@@ -197,6 +208,7 @@ int CountWhitespace(ReadOnlySpan<char> s)
 ```
 
 <div dir="rtl">
+
 می‌توانید چنین متدی را با یک رشته صدا بزنید (به لطف **عملگر تبدیل ضمنی**):
 </div>
 
@@ -205,6 +217,7 @@ int x = CountWhitespace("Word1 Word2");   // درست است
 ```
 
 <div dir="rtl">
+
 یا با یک **substring**:
 </div>
 
@@ -213,6 +226,7 @@ int y = CountWhitespace(someString.AsSpan(20, 10));
 ```
 
 <div dir="rtl">
+
 متد `ToString()` یک `ReadOnlySpan<char>` را به رشته تبدیل می‌کند.
 
 متدهای توسعه (**Extension Methods**) تضمین می‌کنند که برخی از متدهای پرکاربرد کلاس رشته نیز برای `ReadOnlySpan<char>` در دسترس باشند:
@@ -225,6 +239,7 @@ Console.WriteLine(span.Trim().Length);        // 4
 ```
 
 <div dir="rtl">
+
 > توجه کنید که متدهایی مانند `StartsWith` از **ordinal comparison** استفاده می‌کنند، در حالی که متدهای معادل در کلاس رشته به‌طور پیش‌فرض از **culture-sensitive comparison** استفاده می‌کنند.
 
 متدهایی مانند `ToUpper` و `ToLower` در دسترس هستند، اما باید یک **destination span** با طول مناسب بدهید (این امکان را می‌دهد که تصمیم بگیرید حافظه را چگونه و کجا تخصیص دهید).
@@ -260,6 +275,7 @@ async void Foo(Span<int> notAllowed)   // خطای زمان کامپایل!
 ```
 
 <div dir="rtl">
+
 (به یاد داشته باشید که کامپایلر متدهای async و iterator را با نوشتن یک **private state machine** پردازش می‌کند، بنابراین هر پارامتر و متغیر محلی به فیلد تبدیل می‌شود. همین موضوع در lambdaهایی که روی متغیرها بسته می‌شوند نیز صادق است.)
 
 ساختارهای `Memory<T>` و `ReadOnlyMemory<T>` این محدودیت را دور می‌زنند، و مانند span عمل می‌کنند اما نمی‌توانند حافظه stack را پوشش دهند، که امکان استفاده از آن‌ها در فیلدها، lambdaها، متدهای async و غیره را فراهم می‌کند.
@@ -273,6 +289,7 @@ var mem2 = new int[] { 1, 2, 3 }.AsMemory();
 ```
 
 <div dir="rtl">
+
 می‌توان به‌سادگی یک `Memory<T>` یا `ReadOnlyMemory<T>` را به `Span<T>` یا `ReadOnlySpan<T>` تبدیل کرد (از طریق **Span property**) تا مانند یک span با آن تعامل داشته باشید. این تبدیل کارآمد است و هیچ کپی انجام نمی‌دهد:
 </div>
 
@@ -285,6 +302,7 @@ async void Foo(Memory<int> memory)
 ```
 
 <div dir="rtl">
+
 همچنین می‌توانید مستقیماً یک `Memory<T>` یا `ReadOnlyMemory<T>` را با متد `Slice` یا با استفاده از **C# range** برش دهید و طول آن را با `Length` بررسی کنید.
 
 راه دیگر برای بدست آوردن `Memory<T>`، اجاره آن از **MemoryPool** است، با استفاده از کلاس `System.Buffers.MemoryPool<T>`. این روش مانند **array pooling** عمل می‌کند و استراتژی دیگری برای کاهش فشار روی **garbage collector** ارائه می‌دهد.
@@ -309,6 +327,7 @@ IEnumerable<ReadOnlyMemory<char>> Split(ReadOnlyMemory<char> input)
 ```
 
 <div dir="rtl">
+
 این روش به‌مراتب کارآمدتر از متد `Split` رشته است: به جای ایجاد رشته‌های جدید برای هر کلمه، برش‌هایی از رشته اصلی را بازمی‌گرداند:
 </div>
 
@@ -320,6 +339,7 @@ foreach (var slice in Split("The quick brown fox jumps over the lazy dog"))
 ```
 
 <div dir="rtl">
+
 می‌توان به‌سادگی یک `Memory<T>` را به `Span<T>` تبدیل کرد (از طریق **Span property**) اما برعکس این کار امکان‌پذیر نیست. به همین دلیل، بهتر است متدهایی بنویسید که `Span<T>` و `ReadOnlySpan<T>` را به جای `Memory<T>` و `ReadOnlyMemory<T>` بپذیرند.
 ### ⏩ Forward-Only Enumerators
 
@@ -344,6 +364,7 @@ Range[] Split(ReadOnlySpan<char> input)
 ```
 
 <div dir="rtl">
+
 سپس فراخوان می‌تواند از این ranges برای **slice کردن** span اصلی استفاده کند:
 </div>
 
@@ -357,6 +378,7 @@ foreach (Range range in Split(source))
 ```
 
 <div dir="rtl">
+
 این پیشرفت است، اما هنوز کامل نیست. یکی از دلایل استفاده از spans اجتناب از تخصیص حافظه است. توجه کنید که متد `Split` ما یک `List<Range>` ایجاد می‌کند، آیتم‌ها را به آن اضافه می‌کند و سپس لیست را به آرایه تبدیل می‌کند. این حداقل دو تخصیص حافظه و یک عملیات کپی حافظه ایجاد می‌کند.
 
 راه‌حل این است که از **forward-only enumerator** به جای لیست و آرایه استفاده کنیم. یک enumerator کمی دست و پاگیر است، اما می‌توان با استفاده از **struct** آن را بدون تخصیص حافظه ساخت:
@@ -406,6 +428,7 @@ public static class CharSpanExtensions
 ```
 
 <div dir="rtl">
+
 و نحوه فراخوانی آن:
 </div>
 
@@ -418,6 +441,7 @@ foreach (var word in span.Split())
 ```
 
 <div dir="rtl">
+
 با تعریف **Current** و **MoveNext**، enumerator ما می‌تواند با دستور `foreach` در C# کار کند. نیازی به پیاده‌سازی `IEnumerable<T>` یا `IEnumerator<T>` نداریم (در واقع نمی‌توانیم؛ ref structها نمی‌توانند اینترفیس‌ها را پیاده‌سازی کنند). در اینجا ما **abstraction** را فدای **micro optimization** کرده‌ایم.
 
 ---
@@ -439,6 +463,7 @@ unsafe int Sum(int* numbers, int length)
 ```
 
 <div dir="rtl">
+
 و سپس:
 </div>
 
@@ -448,6 +473,7 @@ int total = Sum(numbers, 1000);
 ```
 
 <div dir="rtl">
+
 `Span` این مشکل را حل می‌کند: می‌توان یک `Span<T>` یا `ReadOnlySpan<T>` را مستقیماً از یک اشاره‌گر ساخت:
 </div>
 
@@ -457,6 +483,7 @@ var span = new Span<int>(numbers, 1000);
 ```
 
 <div dir="rtl">
+
 یا در یک مرحله:
 </div>
 
@@ -465,6 +492,7 @@ Span<int> numbers = stackalloc int[1000];
 ```
 
 <div dir="rtl">
+
 (توجه: این نیازی به استفاده از `unsafe` ندارد.)
 
 متد قبلی `Sum` با `ReadOnlySpan<int>` نیز برای spanهای تخصیص‌یافته روی stack به همان خوبی کار می‌کند:
@@ -481,6 +509,7 @@ int Sum(ReadOnlySpan<int> numbers)
 ```
 
 <div dir="rtl">
+
 این روش سه مزیت دارد:
 
 * همان متد برای آرایه‌ها و حافظه تخصیص‌یافته روی stack کار می‌کند
@@ -511,6 +540,7 @@ finally
 ```
 
 <div dir="rtl">
+
 یک مزیت جانبی: **indexer** `Span<T>` بررسی محدوده انجام می‌دهد و از overflow جلوگیری می‌کند. این محافظت تنها در صورتی اعمال می‌شود که `Span<T>` را به‌درستی مقداردهی کرده باشید؛ مثلاً اگر اشتباهاً طول span را دو برابر کنید، این محافظت از بین می‌رود:
 </div>
 
@@ -519,6 +549,7 @@ var span = new Span<char>((char*)ptr, source.Length * 2); // خطرناک!
 ```
 
 <div dir="rtl">
+
 همچنین هیچ محافظتی در برابر **dangling pointer** وجود ندارد، بنابراین باید مراقب باشید پس از آزاد کردن حافظه unmanaged با `Marshal.FreeHGlobal` به span دسترسی نداشته باشید.
 </div>
 

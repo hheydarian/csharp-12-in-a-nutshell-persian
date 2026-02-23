@@ -1,5 +1,6 @@
 
 <div dir="rtl">
+
 # فصل نوزدهم:  برنامه‌نویسی پویا (Dynamic Programming)
 
 فصل ۴ توضیح داد که **dynamic binding** در زبان C# چگونه کار می‌کند.
@@ -51,6 +52,7 @@ public dynamic Foo (dynamic x, dynamic y)
 ```
 
 <div dir="rtl">
+
 متغیرهای `x` و `y` می‌توانند هر چیزی باشند:
 
 * یک شیء **CLR**
@@ -84,6 +86,7 @@ public object Foo ([Dynamic] object x, [Dynamic] object y)
 ```
 
 <div dir="rtl">
+
 همان‌طور که می‌بینید، **call site** در یک **static field** ذخیره می‌شود تا هزینه‌ی ساخت مجدد آن در هر بار فراخوانی اجتناب شود.
 همچنین، DLR نتیجه‌ی **binding phase** و **method targets** واقعی را cache می‌کند. (ممکن است چندین target بسته به نوع‌های `x` و `y` وجود داشته باشد.)
 
@@ -133,6 +136,7 @@ class Employee : Person { public decimal Salary { get; set; } }
 ```
 
 <div dir="rtl">
+
 فرض کنید می‌خواهیم متدی بنویسیم که جزئیات یک **Person** را به‌صورت برنامه‌نویسی به یک **XElement** در XML صادر کند.
 واضح‌ترین راه این است که در کلاس **Person** یک متد مجازی (virtual) به نام **ToXElement()** تعریف کنیم که یک **XElement** شامل propertyهای یک **Person** برگرداند.
 سپس در کلاس‌های **Customer** و **Employee** آن را override کنیم تا **XElement** به ترتیب شامل **CreditLimit** و **Salary** هم باشد.
@@ -177,6 +181,7 @@ class ToXElementPersonVisitor
 ```
 
 <div dir="rtl">
+
 متد **DynamicVisit** یک **dynamic dispatch** انجام می‌دهد—یعنی در زمان اجرا، دقیق‌ترین نسخه‌ی متد **Visit** را فراخوانی می‌کند.
 
 به خطی که در آن متد **DynamicVisit** روی هر **Person** در مجموعه‌ی **Friends** صدا زده می‌شود توجه کنید. این تضمین می‌کند که اگر یک دوست از نوع **Customer** یا **Employee** باشد، overload صحیح فراخوانی شود.
@@ -200,6 +205,7 @@ Console.WriteLine (new ToXElementPersonVisitor().DynamicVisit (cust));
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 📤 خروجی
@@ -219,6 +225,7 @@ Console.WriteLine (new ToXElementPersonVisitor().DynamicVisit (cust));
 ```
 
 <div dir="rtl">
+
 ### 🔀 گونه‌ها (Variations)
 
 اگر قصد داشته باشید بیش از یک کلاس Visitor بنویسید، یک تغییر مفید این است که یک کلاس پایه‌ی انتزاعی (**abstract base class**) برای Visitorها تعریف کنید:
@@ -236,6 +243,7 @@ abstract class PersonVisitor<T>
 ```
 
 <div dir="rtl">
+
 در این حالت، کلاس‌های فرزند نیازی ندارند که متد **DynamicVisit** خودشان را تعریف کنند؛ تنها کاری که باید انجام دهند این است که نسخه‌های **Visit** را که می‌خواهند منطق اختصاصی برایشان بنویسند، override کنند.
 
 این روش دو مزیت دارد:
@@ -276,6 +284,7 @@ class ToXElementPersonVisitor : PersonVisitor<XElement>
 ```
 
 <div dir="rtl">
+
 حتی می‌توانید از روی **ToXElementPersonVisitor** هم کلاس فرزند بسازید.
 
 ---
@@ -297,6 +306,7 @@ public class Foo<T> { public T Value; }
 ```
 
 <div dir="rtl">
+
 فرض کنید متدی به شکل زیر داریم:
 </div>
 
@@ -309,6 +319,7 @@ static void Write (object obj)
 ```
 
 <div dir="rtl">
+
 این کد کامپایل نمی‌شود: چون نمی‌توانید اعضای یک نوع generic غیرمتحد (unbound) را فراخوانی کنید.
 
 ---
@@ -327,6 +338,7 @@ static void Write (dynamic obj)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🐾 Multiple Dispatch
@@ -347,6 +359,7 @@ animal.Walk (owner);
 ```
 
 <div dir="rtl">
+
 نتیجه: توانایی انجام **virtual calls** به نام **single dispatch** شناخته می‌شود. چرا؟
 
 چون تصمیم زمان اجرا برای اینکه متد **Walk** سگ صدا زده شود یا متد **Walk** گربه، فقط به نوع دریافت‌کننده (**receiver type**)، یعنی `animal` بستگی دارد (به همین دلیل "single").
@@ -365,6 +378,7 @@ animal.Walk ((dynamic) owner);
 ```
 
 <div dir="rtl">
+
 این بار انتخاب نهایی اینکه کدام متد **Walk** فراخوانی شود به نوع‌های هر دو یعنی `animal` و `owner` بستگی دارد.
 به همین دلیل به آن **multiple dispatch** می‌گویند: چون نوع‌های زمان اجرا (**runtime types**) آرگومان‌ها علاوه بر **receiver type**، در تصمیم‌گیری دخالت دارند.
 
@@ -398,6 +412,7 @@ static object GetFooValue (object foo) => null;
 ```
 
 <div dir="rtl">
+
 اینجا ما متد **GetFooValue** را overload کردیم تا یک پارامتر از نوع `object` هم بگیرد، که نقش fallback را دارد.
 
 در زمان اجرا، **C# dynamic binder** بهترین overload را انتخاب می‌کند. اگر شیء داده‌شده از نوع `Foo<T>` نباشد، نسخه‌ی **object-parameter** انتخاب می‌شود و به‌جای پرتاب exception مقدار null برمی‌گرداند.
@@ -447,6 +462,7 @@ public static string ToStringEx (object value)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ▶️ اجرای کد
@@ -457,6 +473,7 @@ Console.WriteLine (ToStringEx ("xyyzzz".GroupBy (c => c) ));
 ```
 
 <div dir="rtl">
+
 🔽 خروجی:
 </div>
 
@@ -467,6 +484,7 @@ Group with key=z: z z z
 ```
 
 <div dir="rtl">
+
 ---
 
 در اینجا از **dynamic member overload resolution** برای حل مسئله استفاده کردیم.
@@ -481,6 +499,7 @@ catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException) {...}
 ```
 
 <div dir="rtl">
+
 این روش شکست می‌خورد. چرا؟ چون عملگر **GroupBy** در LINQ یک نوعی را برمی‌گرداند که **IGrouping<,>** را پیاده‌سازی می‌کند و خودش **internal** است:
 </div>
 
@@ -493,6 +512,7 @@ internal class Grouping : IGrouping<TKey,TElement>, ...
 ```
 
 <div dir="rtl">
+
 حتی اگر property **Key** به‌صورت public تعریف شده باشد، کلاس حاوی آن **internal** است و بنابراین فقط از طریق **IGrouping<,>** قابل دسترسی است.
 و همان‌طور که در فصل ۴ توضیح دادیم، هیچ راهی وجود ندارد که به DLR بگوییم هنگام صدا زدن dynamic member، به آن interface bind شود.
 
@@ -521,6 +541,7 @@ public class Duck : DynamicObject
 ```
 
 <div dir="rtl">
+
 ---
 
 ### DynamicObject 🛠️
@@ -574,6 +595,7 @@ static class XExtensions
 ```
 
 <div dir="rtl">
+
 📌 نحوه‌ی استفاده:
 </div>
 
@@ -587,6 +609,7 @@ Console.WriteLine (x.ToString()); // <Label Text="Foo" Id="5" />
 ```
 
 <div dir="rtl">
+
 ---
 
 ### نمونه با `System.Data.IDataRecord` 📊
@@ -622,6 +645,7 @@ using (IDataReader reader = someDbCommand.ExecuteReader())
 ```
 
 <div dir="rtl">
+
 ---
 
 ### نمونه با `TryBinaryOperation` و `TryInvoke` ➕🔔
@@ -653,6 +677,7 @@ public class Duck : DynamicObject
 ```
 
 <div dir="rtl">
+
 ---
 
 ### متدهای تکمیلی برای زبان‌های پویا 🌐
@@ -678,6 +703,7 @@ Console.WriteLine (x.FavoriteNumber);  // 7
 ```
 
 <div dir="rtl">
+
 🔑 در واقع، **ExpandoObject** اینترفیس **IDictionary\<string, object>** را پیاده‌سازی می‌کند. بنابراین می‌توانیم مثال بالا را این‌طور ادامه دهیم:
 </div>
 
@@ -689,6 +715,7 @@ Console.WriteLine (dict.Count);              // 2
 ```
 
 <div dir="rtl">
+
 ---
 
 ### تعامل با زبان‌های پویا 🌍
@@ -702,6 +729,7 @@ string expr = "2 * 3";
 ```
 
 <div dir="rtl">
+
 علت این است که ترجمه‌ی یک رشته به یک **expression tree** نیازمند یک **lexical parser** و **semantic parser** است که در کامپایلر C# وجود دارند، اما به‌صورت سرویس در زمان اجرا در دسترس نیستند. در زمان اجرا، C# فقط یک **binder** فراهم می‌کند که به **DLR** می‌گوید چگونه یک expression tree از قبل ساخته‌شده را تفسیر کند.
 
 👨‍💻 در زبان‌های واقعاً پویا مثل **IronPython** و **IronRuby**، می‌توان رشته‌ها را به‌صورت مستقیم اجرا کرد. این موضوع برای کارهایی مثل **اسکریپت‌نویسی**، ساخت **سیستم‌های پیکربندی پویا**، و پیاده‌سازی **rules engine** بسیار مفید است. بنابراین، اگرچه می‌توانید بیشتر برنامه را در C# بنویسید، اما ممکن است برای برخی وظایف خاص، به استفاده از یک زبان پویا نیاز داشته باشید.
@@ -740,6 +768,7 @@ object Calculate (string expression)
 ```
 
 <div dir="rtl">
+
 ✅ توجه کنید: چون رشته به **Python** پاس داده می‌شود، عبارت بر اساس قوانین Python ارزیابی خواهد شد، نه C#.
 
 برای مثال، می‌توان از امکانات زبان Python مثل **لیست‌ها** استفاده کرد:
@@ -751,6 +780,7 @@ foreach (int n in list) Console.Write (n);  // 12345
 ```
 
 <div dir="rtl">
+
 ---
 
 ### عبور وضعیت بین C# و اسکریپت 🔄
@@ -776,6 +806,7 @@ Console.WriteLine (auditRequired);   // True
 ```
 
 <div dir="rtl">
+
 📥 همچنین می‌توانید متغیرها را از اسکریپت به C# برگردانید:
 </div>
 
@@ -795,6 +826,7 @@ Console.WriteLine (scope.GetVariable ("result"));   // 6
 ```
 
 <div dir="rtl">
+
 در این مثال دوم، از **SourceCodeKind.SingleStatement** به‌جای **Expression** استفاده کردیم تا به موتور بگوییم قصد اجرای یک **statement** را داریم.
 
 ---

@@ -1,5 +1,6 @@
 
 <div dir="rtl">
+
 # فصل سیزدهم: تشخیص (Diagnostics) 
 
 وقتی چیزی اشتباه پیش می‌رود، خیلی مهم است که اطلاعات لازم برای کمک به **تشخیص (diagnosing) مشکل** در دسترس باشد. یک **محیط توسعه یکپارچه (Integrated Development Environment – IDE)** یا یک **دیباگر (debugger)** می‌تواند در این زمینه بسیار کمک‌کننده باشد—اما معمولاً فقط در طول توسعه موجود است.
@@ -49,6 +50,7 @@ class Program
 ```
 
 <div dir="rtl">
+
 اگر خط اول (یعنی `#define TESTMODE`) را حذف کنیم، برنامه بدون خط `Console.WriteLine` کامپایل خواهد شد—انگار که کلاً کامنت شده باشد.
 
 👉 دستور `#else` مشابه دستور `else` در C# است و `#elif` هم معادل `#else` به همراه یک `#if` است.
@@ -62,6 +64,7 @@ class Program
 ```
 
 <div dir="rtl">
+
 اما یادتان باشد: این یک عبارت معمولی C# نیست و symbolهایی که روی آن‌ها عمل می‌کنید هیچ ارتباطی به متغیرها—چه استاتیک و چه غیر از آن—ندارند.
 
 ---
@@ -80,6 +83,7 @@ class Program
 ```
 
 <div dir="rtl">
+
 اگر یک symbol را در سطح assembly تعریف کرده باشید و بخواهید آن را برای یک فایل خاص **لغو (undefine)** کنید، می‌توانید از دستور `#undef` استفاده کنید.
 
 ---
@@ -98,6 +102,7 @@ static void Main()
 ```
 
 <div dir="rtl">
+
 این روش مزیت **پیکربندی در زمان اجرا (runtime configuration)** را دارد.
 پس چرا باید کامپایل شرطی را انتخاب کنیم؟
 
@@ -120,6 +125,7 @@ using TestType =
 ```
 
 <div dir="rtl">
+
 شما حتی می‌توانید **رفکتورینگ‌های بزرگ** را زیر یک دستور کامپایل شرطی قرار دهید، طوری که بتوانید بلافاصله بین نسخه‌ی قدیمی و جدید جابه‌جا شوید. همچنین می‌توانید کتابخانه‌هایی بنویسید که در برابر چند نسخه‌ی مختلف runtime کامپایل شوند و هر جا که امکان دارد، از قابلیت‌های جدید بهره ببرند.
 
 یکی دیگر از مزایای کامپایل شرطی این است که **کدهای دیباگ می‌توانند به انواع (types) در assemblyهایی اشاره کنند که در نسخه‌ی نهایی (deployment) گنجانده نمی‌شوند.** 🔍
@@ -140,6 +146,7 @@ static void LogStatus (string msg)
 ```
 
 <div dir="rtl">
+
 حالا تصور کنید می‌خواهید این متد فقط زمانی اجرا شود که symbol به نام **LOGGINGMODE** تعریف شده باشد.
 
 راه‌حل اول این است که همه‌ی فراخوانی‌های `LogStatus` را داخل یک دستور `#if` قرار دهید:
@@ -152,6 +159,7 @@ LogStatus("Message Headers: " + GetMsgHeaders());
 ```
 
 <div dir="rtl">
+
 این کار نتیجه‌ی ایده‌آل می‌دهد، اما خسته‌کننده و وقت‌گیر است.
 راه‌حل دوم این است که دستور `#if` را داخل خود متد `LogStatus` قرار دهیم. اما این مشکل دارد؛ چرا که اگر این‌طور فراخوانی شود:
 </div>
@@ -161,6 +169,7 @@ LogStatus("Message Headers: " + GetComplexMessageHeaders());
 ```
 
 <div dir="rtl">
+
 در این حالت، متد `GetComplexMessageHeaders` همیشه فراخوانی خواهد شد—که ممکن است باعث افت کارایی (performance hit) شود.
 
 ---
@@ -179,6 +188,7 @@ static void LogStatus (string msg)
 ```
 
 <div dir="rtl">
+
 این کار به کامپایلر دستور می‌دهد که تمام فراخوانی‌های `LogStatus` را طوری در نظر بگیرد که گویی داخل یک دستور `#if LOGGINGMODE` قرار دارند.
 اگر symbol تعریف نشده باشد، **هرگونه فراخوانی به `LogStatus` کلاً از خروجی نهایی کامپایل حذف خواهد شد**—از جمله **evaluation** آرگومان‌ها.
 بنابراین هر عبارتی که اثر جانبی (side effect) داشته باشد نیز کلاً اجرا نمی‌شود. ✨
@@ -220,6 +230,7 @@ class Program
 ```
 
 <div dir="rtl">
+
 با استفاده از **lambda expression**، می‌توانیم این متد را بدون شلوغی اضافی سینتکس فراخوانی کنیم:
 </div>
 
@@ -228,6 +239,7 @@ LogStatus(() => "Message Headers: " + GetComplexMessageHeaders());
 ```
 
 <div dir="rtl">
+
 اگر مقدار `EnableLogging` برابر `false` باشد، متد `GetComplexMessageHeaders` هیچ‌وقت اجرا نخواهد شد. 🚀
 
 ---
@@ -269,6 +281,7 @@ Debug.WriteIf(x > y, "x is greater than y");
 ```
 
 <div dir="rtl">
+
 کلاس **Trace** علاوه بر این‌ها، متدهای زیر را هم دارد:
 
 * `TraceInformation`
@@ -289,6 +302,7 @@ Debug.Fail("File data.txt does not exist!");
 ```
 
 <div dir="rtl">
+
 * متد **Assert** در صورتی که آرگومان بولی آن `false` باشد، متد Fail را فراخوانی می‌کند. این عمل را **assertion** می‌نامند و اگر نقض شود، نشان‌دهنده‌ی وجود **باگ** در کد است. مشخص کردن پیام خطا اختیاری است:
 </div>
 
@@ -299,6 +313,7 @@ Debug.Assert(result != null);
 ```
 
 <div dir="rtl">
+
 متدهای **Write**، **Fail** و **Assert** همگی overloadهایی دارند که علاوه بر پیام، یک **category string** هم می‌پذیرند—چیزی که می‌تواند در پردازش خروجی مفید باشد.
 
 ---
@@ -318,6 +333,7 @@ public void ShowMessage(string message)
 ```
 
 <div dir="rtl">
+
 اما تفاوت‌ها:
 
 * این نوع «assertion» بدون قید و شرط کامپایل می‌شود و انعطاف‌پذیری کمتری دارد (چون نتیجه‌ی شکست assertion را نمی‌توانید با **TraceListeners** کنترل کنید).
@@ -391,6 +407,7 @@ Trace.Listeners.Add(new EventLogTraceListener("DemoApp"));
 ```
 
 <div dir="rtl">
+
 🔹 در مورد **Windows Event Log**:
 
 * پیام‌هایی که با **Write**، **Fail** یا **Assert** می‌نویسید، همیشه به عنوان پیام **Information** در Event Viewer نمایش داده می‌شوند.
@@ -427,6 +444,7 @@ Trace.TraceWarning("Orange alert");
 ```
 
 <div dir="rtl">
+
 خروجی:
 </div>
 
@@ -439,6 +457,7 @@ DiagTest.vshost.exe Warning: 0 : Orange alert
 ```
 
 <div dir="rtl">
+
 ### 🚦 پاک‌سازی و بستن Listeners
 
 برخی از **listeners**‌ها مثل `TextWriterTraceListener` در نهایت خروجی را درون یک **stream** می‌نویسند که تحت **cache** قرار دارد. این موضوع دو پیامد دارد:
@@ -531,6 +550,7 @@ void DoWork() {...}   // متد اصلی
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ⚙️ پردازش‌ها (Processes) و Threadهای پردازش
@@ -572,6 +592,7 @@ using (p)
 ```
 
 <div dir="rtl">
+
 * `Process.GetCurrentProcess` پردازش فعلی را برمی‌گرداند.
 * برای پایان دادن به یک پردازش می‌توانید از متد `Kill` استفاده کنید.
 
@@ -600,6 +621,7 @@ public void EnumerateThreads (Process p)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 📚 StackTrace و StackFrame
@@ -667,6 +689,7 @@ static void C()
 ```
 
 <div dir="rtl">
+
 ---
 
 #### 🖥️ خروجی
@@ -685,6 +708,7 @@ Call stack:
 ```
 
 <div dir="rtl">
+
 🔑 نکته‌ها:
 
 * **IL Offset** محل دستور بعدی را نشان می‌دهد، نه دستور در حال اجرا.
@@ -712,6 +736,7 @@ at DebugTest.Program.Main() in C:\Test\Program.cs:line 10
 ```
 
 <div dir="rtl">
+
 ---
 
 #### ⚠️ StackTrace روی Exception
@@ -771,6 +796,7 @@ EventLog.WriteEntry(SourceName,
 ```
 
 <div dir="rtl">
+
 🔸 مقدار **EventLogEntryType** می‌تواند یکی از موارد زیر باشد:
 
 * **Information** ℹ️
@@ -805,6 +831,7 @@ Console.WriteLine("Message: " + last.Message);
 ```
 
 <div dir="rtl">
+
 🔹 همچنین می‌توانید همه‌ی لاگ‌ها را برای کامپیوتر فعلی (یا یک سیستم دیگر) با متد **EventLog.GetEventLogs** پیمایش کنید (برای دسترسی کامل نیاز به دسترسی مدیریتی دارید):
 </div>
 
@@ -814,6 +841,7 @@ foreach (EventLog log in EventLog.GetEventLogs())
 ```
 
 <div dir="rtl">
+
 این معمولاً حداقل شامل **Application**، **Security** و **System** خواهد بود.
 
 ---
@@ -846,6 +874,7 @@ void DisplayEntry(object sender, EntryWrittenEventArgs e)
 ```
 
 <div dir="rtl">
+
 ### ⚡ **Performance Counters**
 
 **Performance Counters** یک قابلیت اختصاصی **Windows** است و برای استفاده از آن باید پکیج **NuGet** با نام
@@ -930,6 +959,7 @@ foreach (PerformanceCounterCategory cat in cats)
 ```
 
 <div dir="rtl">
+
 📌 خروجی این کد بیش از **۱۰٬۰۰۰ خط** خواهد بود!
 همچنین اجرای آن کمی طول می‌کشد، چون متد **PerformanceCounterCategory.InstanceExists** پیاده‌سازی کارآمدی ندارد.
 در یک سیستم واقعی، بهتر است اطلاعات جزئی‌تر را فقط در صورت نیاز دریافت کنید.
@@ -969,6 +999,7 @@ x.Save("counters.xml");
 ```
 
 <div dir="rtl">
+
 ### 📊 **خواندن داده‌های Performance Counter**
 
 برای گرفتن مقدار یک **performance counter** باید یک شیء از کلاس **PerformanceCounter** بسازید و سپس یکی از متدهای زیر را فراخوانی کنید:
@@ -999,6 +1030,7 @@ Console.WriteLine(pc.NextValue());
 ```
 
 <div dir="rtl">
+
 ---
 
 #### 💾 نمونه: نمایش مصرف واقعی حافظه‌ی خصوصی پردازش جاری
@@ -1016,6 +1048,7 @@ Console.WriteLine(pc.NextValue());
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔄 مانیتورینگ تغییرات (Polling)
@@ -1057,6 +1090,7 @@ static void Monitor(string category, string counter, string instance,
 ```
 
 <div dir="rtl">
+
 ---
 
 #### ⚙️ اجرای همزمان برای CPU و دیسک
@@ -1080,6 +1114,7 @@ stopper.Set();
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🛠️ ایجاد کانتر و نوشتن داده در Performance Counter
@@ -1121,6 +1156,7 @@ if (!PerformanceCounterCategory.Exists(category))
 ```
 
 <div dir="rtl">
+
 📌 این کانترها بعد از ایجاد، در ابزار مانیتورینگ Windows Performance ظاهر می‌شوند (گزینه‌ی **Add Counters**).
 اگر بخواهید بعدها کانترهای بیشتری اضافه کنید، باید اول **کل category را حذف** کنید (`PerformanceCounterCategory.Delete`).
 
@@ -1150,6 +1186,7 @@ using (PerformanceCounter pc = new PerformanceCounter(category, eatenPerMin, "")
 ```
 
 <div dir="rtl">
+
 ---
 
 ✨ به این ترتیب می‌توانیم هم مقادیر **performance counters** را بخوانیم و هم کانترهای اختصاصی خودمان را ایجاد و مقداردهی کنیم.
@@ -1173,6 +1210,7 @@ Console.WriteLine(s.Elapsed);    // 00:00:01.4322661
 ```
 
 <div dir="rtl">
+
 🔹 ویژگی‌های دیگر:
 
 * `ElapsedTicks` → تعداد تیک‌های گذشته (long).
@@ -1208,6 +1246,7 @@ dotnet tool install --global dotnet-counters
 ```
 
 <div dir="rtl">
+
 #### مانیتور کردن یک پروسه:
 </div>
 
@@ -1216,6 +1255,7 @@ dotnet-counters monitor System.Runtime --process-id <<ProcessID>>
 ```
 
 <div dir="rtl">
+
 * `System.Runtime` یعنی همه‌ی کانترهای دسته **System.Runtime** را مانیتور کنیم.
 * می‌توانید دسته یا نام کانتر خاصی بدهید.
 * دستور `dotnet-counters list` همه دسته‌ها و کانترهای موجود را لیست می‌کند.
@@ -1253,6 +1293,7 @@ Press p to pause, r to resume, q to quit.
 ```
 
 <div dir="rtl">
+
 **همه‌ی دستورات موجود:**
 <div align="center">
     
@@ -1277,6 +1318,7 @@ dotnet tool install --global dotnet-trace
 ```
 
 <div dir="rtl">
+
 برای شروع ضبط رویدادهای یک برنامه، دستور زیر را اجرا کنید:
 </div>
 
@@ -1285,6 +1327,7 @@ dotnet-trace collect --process-id <<ProcessId>>
 ```
 
 <div dir="rtl">
+
 این دستور dotnet-trace را با پروفایل پیش‌فرض اجرا می‌کند که رویدادهای CPU و زمان اجرای .NET را جمع‌آوری کرده و در فایلی به نام `trace.nettrace` ذخیره می‌کند. می‌توانید با گزینه `--profile` پروفایل‌های دیگر را مشخص کنید:
 
 * `gc-verbose` ردیابی جمع‌آوری زباله و تخصیص نمونه‌ای اشیا را انجام می‌دهد.
@@ -1325,6 +1368,7 @@ public sealed class MyEventSource : EventSource
 ```
 
 <div dir="rtl">
+
 متد **WriteEvent** دارای چند نسخه (Overload) است و می‌تواند ترکیب‌های مختلفی از انواع ساده (به‌ویژه رشته‌ها و اعداد صحیح) را بپذیرد. سپس می‌توانید به این صورت از آن استفاده کنید:
 </div>
 
@@ -1333,6 +1377,7 @@ MyEventSource.Instance.Log("Something", 123);
 ```
 
 <div dir="rtl">
+
 هنگام استفاده از **dotnet-trace**، باید نام هر منبع رویداد سفارشی که می‌خواهید ثبت شود را مشخص کنید:
 </div>
 
@@ -1341,6 +1386,7 @@ dotnet-trace collect --process-id <<ProcessId>> --providers MyTestSource
 ```
 
 <div dir="rtl">
+
 ---
 
 ### dotnet-dump 💾
@@ -1357,6 +1403,7 @@ ulimit -c unlimited
 ```
 
 <div dir="rtl">
+
 (مراحل ممکن است بسته به توزیع لینوکس متفاوت باشد)
 
 #### در ویندوز:
@@ -1369,6 +1416,7 @@ SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps
 ```
 
 <div dir="rtl">
+
 زیر این مسیر، یک کلید با نام همان فایل اجرایی خود اضافه کنید (مثلاً `foo.exe`) و سپس کلیدهای زیر را اضافه نمایید:
 
 * **DumpFolder (REG\_EXPAND\_SZ):** مسیر ذخیره فایل‌های Dump
@@ -1383,6 +1431,7 @@ dotnet tool install --global dotnet-dump
 ```
 
 <div dir="rtl">
+
 پس از نصب، می‌توانید یک Dump به‌صورت دستی ایجاد کنید (بدون توقف پردازش):
 </div>
 
@@ -1391,6 +1440,7 @@ dotnet-dump collect --process-id <<YourProcessId>>
 ```
 
 <div dir="rtl">
+
 برای شروع یک **Interactive Shell** جهت تحلیل فایل Dump:
 </div>
 
@@ -1399,6 +1449,7 @@ dotnet-dump analyze <<dumpfile>>
 ```
 
 <div dir="rtl">
+
 اگر یک Exception باعث کرش برنامه شده باشد، می‌توانید از دستور **printexceptions** (یا کوتاه شده آن **pe**) برای نمایش جزئیات Exception استفاده کنید.
 Shell ابزار **dotnet-dump** دستورات متعددی دارد که می‌توانید با دستور **help** لیست کامل آن‌ها را مشاهده کنید.
 </div>

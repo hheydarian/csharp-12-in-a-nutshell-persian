@@ -1,5 +1,6 @@
 
 <div dir="rtl">
+
 # فصل بیست و دوم:  برنامه‌نویسی موازی (Parallel Programming)
 
 در این فصل، ما به **APIها** و ساختارهای چندنخی (multithreading) می‌پردازیم که با هدف بهره‌برداری از پردازنده‌های چند‌هسته‌ای طراحی شده‌اند:
@@ -164,6 +165,7 @@ int[] primes = parallelQuery.ToArray();
 ```
 
 <div dir="rtl">
+
 🔍 متد **AsParallel** یک **extension method** در **System.Linq.ParallelEnumerable** است. این متد ورودی را در یک توالی بر پایه‌ی **ParallelQuery<TSource>** می‌پیچد. همین موضوع باعث می‌شود عملگرهای پرس‌وجوی LINQ که در ادامه فراخوانی می‌کنید، به مجموعه‌ای جایگزین از متدهای توسعه‌یافته در **ParallelEnumerable** متصل شوند.
 
 این متدها پیاده‌سازی‌های موازی از هر یک از عملگرهای استاندارد پرس‌وجو را فراهم می‌کنند. اساس کار آن‌ها این است که توالی ورودی را به بخش‌هایی تقسیم می‌کنند تا روی نخ‌های مختلف اجرا شوند و سپس نتایج را دوباره در یک توالی خروجی واحد گردآوری کنند (مطابق شکل 22-2).
@@ -195,6 +197,7 @@ mySequence.AsParallel()           // توالی را به ParallelQuery<int> م�
 ```
 
 <div dir="rtl">
+
 ---
 
 ### محدودیت‌ها و نکات PLINQ ⚠️
@@ -258,6 +261,7 @@ myCollection.AsParallel().AsOrdered()...
 ```
 
 <div dir="rtl">
+
 استفاده از `AsOrdered` هنگام کار با مجموعه‌های بزرگ باعث کاهش کارایی می‌شود، چون PLINQ باید موقعیت اصلی هر عنصر را دنبال کند.
 
 می‌توانید اثر `AsOrdered` را در ادامه‌ی پرس‌وجو با استفاده از `AsUnordered` خنثی کنید. این کار یک “نقطه‌ی تصادفی در ترتیب” ایجاد می‌کند که به پرس‌وجو اجازه می‌دهد از آن نقطه به بعد کارایی بهتری داشته باشد.
@@ -275,6 +279,7 @@ inputSequence.AsParallel().AsOrdered()
 ```
 
 <div dir="rtl">
+
 🔹 دلیل اینکه `AsOrdered` پیش‌فرض نیست این است که در بیشتر پرس‌وجوها، ترتیب اولیه اهمیتی ندارد. اگر قرار بود `AsOrdered` پیش‌فرض باشد، برای اکثر پرس‌وجوهای موازی باید `AsUnordered` اضافه می‌کردید تا بهترین کارایی حاصل شود، و این باعث پیچیدگی و بار اضافی می‌شد.
 
 ---
@@ -301,6 +306,7 @@ inputSequence.AsParallel().AsOrdered()
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 📝 مثال: بررسی املا (Spellchecker) موازی
@@ -322,6 +328,7 @@ var wordLookup = new HashSet<string>(
 ```
 
 <div dir="rtl">
+
 🔹 مرحله‌ی دوم: ایجاد یک “سند آزمایشی” شامل یک میلیون کلمه‌ی تصادفی، سپس ایجاد چند غلط املایی عمدی:
 </div>
 
@@ -338,6 +345,7 @@ wordsToTest[23456] = "wubsie";
 ```
 
 <div dir="rtl">
+
 🔹 مرحله‌ی سوم: اجرای بررسی موازی با PLINQ:
 </div>
 
@@ -357,6 +365,7 @@ foreach (var mistake in query)
 ```
 
 <div dir="rtl">
+
 متد `wordLookup.Contains` در predicate به پرس‌وجو **حجم پردازشی مناسبی** می‌دهد و ارزش موازی‌سازی را ایجاد می‌کند.
 
 ---
@@ -387,6 +396,7 @@ string[] wordsToTest = Enumerable.Range(0, 1000000)
 ```
 
 <div dir="rtl">
+
 اما مشکل اینجاست که فراخوانی `random.Next` **Thread-Safe** نیست؛ بنابراین به‌سادگی نمی‌توانیم `AsParallel()` را در پرس‌وجو وارد کنیم.
 
 راه‌حل احتمالی این است که متدی بنویسیم که دور `random.Next` قفل بگذارد؛ اما این باعث محدود شدن هم‌زمانی (Concurrency) می‌شود.
@@ -405,6 +415,7 @@ string[] wordsToTest = Enumerable.Range(0, 1000000).AsParallel()
 ```
 
 <div dir="rtl">
+
 در تابع کارخانه‌ای که برای ایجاد یک شیء `Random` نوشتیم، از هش (`HashCode`) یک `Guid` استفاده کردیم تا مطمئن شویم اگر دو شیء `Random` در یک بازه‌ی زمانی کوتاه ساخته شوند، دنباله‌ی اعداد تصادفی‌شان متفاوت خواهد بود. 🎲
 
 ---
@@ -445,6 +456,7 @@ var query = from n in Enumerable.Range(0,999).AsParallel()
 ```
 
 <div dir="rtl">
+
 حتی اگر افزایش `i` را با قفل ایمن کنیم، باز هم مشکل باقی می‌ماند چون `i` لزوماً با موقعیت عنصر ورودی تطابق ندارد.
 افزودن `AsOrdered` هم مشکل را حل نمی‌کند؛ چون فقط تضمین می‌کند خروجی به‌ترتیب عناصر پردازش‌شده باشد، نه اینکه واقعاً پردازش ترتیبی انجام شود.
 
@@ -457,6 +469,7 @@ var query = Enumerable.Range(0,999).AsParallel()
 ```
 
 <div dir="rtl">
+
 🔹 برای بهترین کارایی، متدهایی که در عملگرهای پرس‌وجو فراخوانی می‌شوند باید **Thread-Safe** باشند؛
 
 * یا به‌دلیل نداشتن اثر جانبی (خالص بودن تابع)
@@ -475,6 +488,7 @@ var query = Enumerable.Range(0,999).AsParallel()
 ```
 
 <div dir="rtl">
+
 🔹 نمونه: شاید بخواهید درجه‌ی موازی‌سازی را بالاتر از تعداد هسته‌ها افزایش دهید، وقتی کار **I/O-Bound** دارید (مثلاً دانلود هم‌زمان صفحات وب).
 بااین‌حال، **Task combinators** و **توابع Asynchronous** راه‌حل مشابه اما کارآمدتری ارائه می‌دهند.
 
@@ -496,6 +510,7 @@ var query = Enumerable.Range(0,999).AsParallel()
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ⏹ لغو (Cancellation)
@@ -533,6 +548,7 @@ catch (OperationCanceledException)
 ```
 
 <div dir="rtl">
+
 🔹 هنگام لغو، PLINQ منتظر می‌ماند هر نخ کاری روی عنصر جاری‌اش تمام کند، سپس پرس‌وجو پایان می‌یابد.
 این یعنی هر متد خارجی که پرس‌وجو فراخوانی کرده باشد، تا انتها اجرا خواهد شد.
 ### بهینه‌سازی PLINQ 🚀
@@ -549,6 +565,7 @@ foreach (int n in parallelQuery)
 ```
 
 <div dir="rtl">
+
 اگر چنین شرایطی داشته باشید—و برایتان مهم نباشد که عناصر به چه ترتیبی پردازش می‌شوند—می‌توانید با استفاده از متد **ForAll** در PLINQ کارایی را بهبود بدهید ✅.
 
 ---
@@ -568,6 +585,7 @@ foreach (int n in parallelQuery)
 ```
 
 <div dir="rtl">
+
 ---
 
 📊 **شکل 22-3** این فرآیند را نشان می‌دهد.
@@ -673,6 +691,7 @@ var parallelQuery =
 ```
 
 <div dir="rtl">
+
 * آرگومان دوم (`true`) مشخص می‌کند که می‌خواهید **load balancing** فعال باشد، یعنی Chunk Partitioning استفاده شود.
 
 ---
@@ -707,6 +726,7 @@ ParallelEnumerable.Range(1, 10_000_000).Sum(i => Math.Sqrt(i));
 ```
 
 <div dir="rtl">
+
 <div align="center">
     
 ![Conventions-UsedThis-Book](../../assets/image/22/Table-22-6.jpeg) 
@@ -738,6 +758,7 @@ int sum = numbers.Aggregate(0, (total, n) => total + n); // 6
 ```
 
 <div dir="rtl">
+
 * برای **aggregation بدون seed**، delegate ارائه‌شده باید **associative** و **commutative** باشد.
 * اگر این قانون رعایت نشود، PLINQ ممکن است نتایج اشتباه بدهد، زیرا چند seed از دنباله برای جمع‌بندی چند پارتیشن استفاده می‌کند.
 
@@ -772,6 +793,7 @@ numbers.AsParallel().Aggregate(
 ```
 
 <div dir="rtl">
+
 ---
 
 #### مثال واقعی‌تر: شمارش فرکانس حروف در متن
@@ -790,6 +812,7 @@ foreach (char c in text)
 ```
 
 <div dir="rtl">
+
 * برای متن‌های طولانی (مثل **gene sequencing**) این روش می‌تواند زمان‌بر باشد.
 * موازی‌سازی با `Parallel.ForEach` نیازمند مدیریت همزمانی روی آرایه مشترک است، و قفل کردن می‌تواند **پتانسیل موازی‌سازی** را از بین ببرد.
 
@@ -812,6 +835,7 @@ int[] result = text.AsParallel().Aggregate(
 ```
 
 <div dir="rtl">
+
 * توجه: تابع محلی `localFrequencies` عناصر را تغییر می‌دهد.
 * این بهینه‌سازی امکان‌پذیر است چون هر accumulator محلی **مختص هر thread** است.
 
@@ -842,6 +866,7 @@ public static void Invoke(params Action[] actions);
 ```
 
 <div dir="rtl">
+
 * مشابه PLINQ، متدهای `Parallel.*` برای کارهای **compute-bound** بهینه شده‌اند، نه I/O-bound.
 * مثال ساده با دانلود دو صفحه وب به صورت موازی:
 </div>
@@ -854,6 +879,7 @@ Parallel.Invoke(
 ```
 
 <div dir="rtl">
+
 **نکته مهم:**
 `Parallel.Invoke` حتی با یک میلیون delegate هم به‌صورت مؤثر کار می‌کند، زیرا عناصر را به **batch** تقسیم می‌کند و به چند Task اصلی اختصاص می‌دهد، به جای ایجاد یک Task برای هر delegate.
 
@@ -869,6 +895,7 @@ Parallel.Invoke(
 ```
 
 <div dir="rtl">
+
 * برای حل مشکل thread-unsafe، می‌توان از **locking** استفاده کرد، اما این کار در آرایه‌های بزرگ delegate باعث **bottleneck** می‌شود.
 * راه بهتر: استفاده از **Thread-Safe Collections**، مانند `ConcurrentBag`.
 
@@ -880,6 +907,7 @@ public static void Invoke(ParallelOptions options, params Action[] actions);
 ```
 
 <div dir="rtl">
+
 * با `ParallelOptions` می‌توان **CancellationToken** وارد کرد، حداکثر concurrency را محدود کرد، یا یک **task scheduler** سفارشی مشخص کرد.
 
 ---
@@ -897,6 +925,7 @@ public static ParallelLoopResult ForEach<TSource>(IEnumerable<TSource> source, A
 ```
 
 <div dir="rtl">
+
 مثال:
 
 حلقه `for` معمولی:
@@ -908,6 +937,7 @@ for (int i = 0; i < 100; i++)
 ```
 
 <div dir="rtl">
+
 معادل موازی:
 </div>
 
@@ -918,6 +948,7 @@ Parallel.For(0, 100, Foo);
 ```
 
 <div dir="rtl">
+
 حلقه `foreach` معمولی:
 </div>
 
@@ -927,6 +958,7 @@ foreach (char c in "Hello, world")
 ```
 
 <div dir="rtl">
+
 معادل موازی:
 </div>
 
@@ -935,6 +967,7 @@ Parallel.ForEach("Hello, world", Foo);
 ```
 
 <div dir="rtl">
+
 مثال عملی با رمزنگاری (`System.Security.Cryptography`):
 </div>
 
@@ -945,6 +978,7 @@ Parallel.For(0, keyPairs.Length,
 ```
 
 <div dir="rtl">
+
 * مشابه `Parallel.Invoke`، می‌توان تعداد زیادی work item به `Parallel.For` و `Parallel.ForEach` داد و آن‌ها به‌صورت مؤثر روی چند Task تقسیم می‌شوند.
 * همان کار را می‌توان با PLINQ انجام داد:
 </div>
@@ -956,6 +990,7 @@ string[] keyPairs = ParallelEnumerable.Range(0, 6)
 ```
 
 <div dir="rtl">
+
 ---
 
 #### حلقه‌های داخلی و خارجی
@@ -974,6 +1009,7 @@ Parallel.For(0, 100, i =>
 ```
 
 <div dir="rtl">
+
 ### Parallel.ForEach با اندیس و مدیریت توقف حلقه 🟢
 
 گاهی اوقات در **حلقه‌های موازی** لازم است که **اندیس iteration** را بدانیم.
@@ -990,6 +1026,7 @@ foreach (char c in "Hello, world")
 ```
 
 <div dir="rtl">
+
 اما در محیط موازی، **افزایش یک متغیر مشترک thread-safe نیست**.
 راه حل: استفاده از overload ای از `Parallel.ForEach` که اندیس loop را ارائه می‌دهد:
 </div>
@@ -1000,6 +1037,7 @@ public static ParallelLoopResult ForEach<TSource>(
 ```
 
 <div dir="rtl">
+
 * پارامتر سوم از نوع `long` اندیس هر عنصر را نشان می‌دهد.
 * مثال:
 </div>
@@ -1012,6 +1050,7 @@ Parallel.ForEach("Hello, world", (c, state, i) =>
 ```
 
 <div dir="rtl">
+
 ---
 
 #### مثال عملی: Spellchecker موازی
@@ -1042,6 +1081,7 @@ Parallel.ForEach(wordsToTest, (word, state, i) =>
 ```
 
 <div dir="rtl">
+
 > نکته: باید نتایج را در یک **collection ایمن برای Thread** جمع‌آوری کنید.
 > مزیت استفاده از indexed `ForEach` نسبت به PLINQ: اجرای **مستقیم بدون اعمال Select با اندیس** که کارایی بیشتری دارد.
 
@@ -1064,6 +1104,7 @@ Parallel.ForEach("Hello, world", (c, loopState) =>
 ```
 
 <div dir="rtl">
+
 **تفاوت Break و Stop:**
 
 * `Break()` → حلقه بعد از iteration فعلی پایان می‌یابد، حداقل عناصر قبل از توقف اجرا می‌شوند.
@@ -1109,6 +1150,7 @@ Parallel.For(1, 10000000, i =>
 ```
 
 <div dir="rtl">
+
 * هر iteration نیاز به **lock** دارد.
 * ۱۰ میلیون lock باعث **افت شدید کارایی** می‌شود.
 
@@ -1136,6 +1178,7 @@ Parallel.For(
 ```
 
 <div dir="rtl">
+
 * تنها lock با مقدار محلی انجام می‌شود، نه برای هر iteration.
 * **کارایی بسیار بهتر از نسخه قبل**.
 
@@ -1152,6 +1195,7 @@ ParallelEnumerable.Range(1, 10000000)
 ```
 
 <div dir="rtl">
+
 * استفاده از `ParallelEnumerable.Range` باعث **range partitioning** می‌شود، که برای توالی‌های با زمان پردازش برابر بسیار بهینه است.
 * برای الگوریتم‌های پیچیده‌تر، می‌توان از LINQ’s `Aggregate` با seed factory محلی استفاده کرد که مشابه همین مفهوم Local Value در Parallel.For عمل می‌کند.
 
@@ -1201,6 +1245,7 @@ void Greet(object state) { Console.Write(state); }  // خروجی: Hello
 ```
 
 <div dir="rtl">
+
 * همچنین می‌توان **نام معنی‌دار** برای task اختصاص داد:
 </div>
 
@@ -1212,6 +1257,7 @@ void Greet(string message) { Console.Write(message); }
 ```
 
 <div dir="rtl">
+
 ---
 
 #### TaskCreationOptions
@@ -1240,6 +1286,7 @@ Task parent = Task.Factory.StartNew(() =>
 ```
 
 <div dir="rtl">
+
 * **ویژگی مهم:** هنگام `Wait` روی parent، taskهای child هم منتظر می‌مانند و **استثناهای child به parent منتقل می‌شوند**.
 </div>
 
@@ -1255,6 +1302,7 @@ parent.Wait();  // NullReferenceException wrapped در AggregateException
 ```
 
 <div dir="rtl">
+
 ---
 
 #### انتظار برای چند task
@@ -1300,6 +1348,7 @@ catch (AggregateException ex)
 ```
 
 <div dir="rtl">
+
 * `TaskCanceledException` از `OperationCanceledException` مشتق شده است.
 * اگر بخواهید خودتان یک `OperationCanceledException` پرتاب کنید، **حتماً token را به سازنده بدهید** تا وضعیت task به Canceled تغییر کند و continuations با `OnlyOnCanceled` اجرا شوند.
 * اگر task قبل از شروع لغو شود، **فوری یک OperationCanceledException** تولید می‌شود و task برنامه‌ریزی نمی‌شود.
@@ -1324,6 +1373,7 @@ Task task = Task.Factory.StartNew(() =>
 ```
 
 <div dir="rtl">
+
 * فراخوانی `cancelSource.Cancel()` → لغو query و task.
 
 ---
@@ -1340,6 +1390,7 @@ Task task2 = task1.ContinueWith(ant => Console.Write("..continuation"));
 ```
 
 <div dir="rtl">
+
 * `ant` → ارجاع به task اصلی.
 * `ContinueWith` خود task جدیدی برمی‌گرداند و می‌توان **چند continuation زنجیره‌ای** ایجاد کرد.
 
@@ -1351,6 +1402,7 @@ task1.ContinueWith(ant => ..., TaskContinuationOptions.ExecuteSynchronously);
 ```
 
 <div dir="rtl">
+
 ---
 
 #### Continuations با Task<TResult>
@@ -1366,6 +1418,7 @@ Task.Factory.StartNew<int>(() => 8)
 ```
 
 <div dir="rtl">
+
 ---
 
 #### Continuations و Exception
@@ -1382,6 +1435,7 @@ continuation.Wait();  // exception پرتاب می‌شود
 ```
 
 <div dir="rtl">
+
 * می‌توان continuations مختلف برای **موارد خطا و غیرخطا** تعریف کرد:
 </div>
 
@@ -1394,6 +1448,7 @@ Task ok = task1.ContinueWith(ant => Console.Write("Success!"),
 ```
 
 <div dir="rtl">
+
 * برای صرف نظر از استثناها:
 </div>
 
@@ -1408,6 +1463,7 @@ Task.Factory.StartNew(() => { throw null; }).IgnoreExceptions();
 ```
 
 <div dir="rtl">
+
 ---
 
 #### Continuations و Child Tasks 👶
@@ -1430,6 +1486,7 @@ Task.Factory.StartNew(() =>
 ```
 
 <div dir="rtl">
+
 * این امکان را می‌دهد که **چند خطای همزمان را یکجا مدیریت** کنید.
 
  <div align="center">
@@ -1501,6 +1558,7 @@ Task t3_conditional = fault.ContinueWith(
 ```
 
 <div dir="rtl">
+
 * نکته کلیدی: **t3_conditional** تنها وقتی اجرا می‌شود که `fault` واقعاً اجرا شده باشد.
 * بدون شرط `NotOnCanceled`، حتی اگر `fault` اجرا نشود (لغو شود)، `t3` اجرا می‌شود.
 
@@ -1535,6 +1593,7 @@ var continuation = Task.Factory.ContinueWhenAll(
 ```
 
 <div dir="rtl">
+
 * همان نتیجه با **task combinator** `WhenAll`:
 </div>
 
@@ -1544,6 +1603,7 @@ var continuation = Task.WhenAll(task1, task2)
 ```
 
 <div dir="rtl">
+
 ---
 
 #### 2️⃣ چند continuation روی یک antecedent
@@ -1560,6 +1620,7 @@ t.ContinueWith(ant => Console.Write("Y"));
 ```
 
 <div dir="rtl">
+
 ---
 
 #### 3️⃣ Task Schedulers 🗂️
@@ -1580,6 +1641,7 @@ Task.Run(() => Foo())
 ```
 
 <div dir="rtl">
+
 * همچنین امکان نوشتن TaskScheduler سفارشی با subclassing وجود دارد، ولی بیشتر در سناریوهای خاص کاربرد دارد.
 
 ---
@@ -1609,6 +1671,7 @@ Task task2 = factory.StartNew(Method2);
 ```
 
 <div dir="rtl">
+
 * مزیت: ادامه‌ها و taskها به صورت یکپارچه با همان تنظیمات سفارشی اجرا می‌شوند.
 
 ### کار با AggregateException ⚠️
@@ -1630,6 +1693,7 @@ catch (DivideByZeroException)
 ```
 
 <div dir="rtl">
+
 اگر از PLINQ بخواهیم این کوئری را موازی‌سازی کند و رسیدگی به استثناها را نادیده بگیرد، احتمالاً **DivideByZeroException** در یک نخ (Thread) جداگانه رخ خواهد داد، بدون آن که بلاک `catch` ما اجرا شود و باعث کرش کردن برنامه خواهد شد.
 
 بنابراین، استثناها به‌طور خودکار گرفته شده و دوباره به فراخواننده پرتاب می‌شوند. اما متأسفانه موضوع به سادگی گرفتن یک **DivideByZeroException** نیست. چون این کتابخانه‌ها از چندین نخ استفاده می‌کنند، ممکن است دو یا چند استثنا همزمان پرتاب شوند. برای اطمینان از گزارش همه استثناها، آن‌ها داخل یک **AggregateException** قرار می‌گیرند که پراپرتی **InnerExceptions** آن شامل همه استثناهای گرفته شده است:
@@ -1651,6 +1715,7 @@ catch (AggregateException aex)
 ```
 
 <div dir="rtl">
+
 هر دو **PLINQ** و کلاس **Parallel** اجرای کوئری یا حلقه را با اولین استثنا خاتمه می‌دهند و عناصر یا بدنه حلقه‌های بعدی پردازش نمی‌شوند. ممکن است قبل از پایان چرخه جاری، استثناهای دیگری هم پرتاب شوند. اولین استثنا در **AggregateException** از طریق پراپرتی **InnerException** در دسترس است.
 
 ---
@@ -1673,6 +1738,7 @@ catch (AggregateException aex)
 ```
 
 <div dir="rtl">
+
 #### Handle
 
 گاهی لازم است فقط نوع خاصی از استثناها گرفته شوند و بقیه دوباره پرتاب شوند. متد **Handle** این کار را ساده می‌کند. این متد یک **predicate** از نوع `Func<Exception, bool>` می‌گیرد و روی هر استثنای داخلی اجرا می‌کند:
@@ -1683,6 +1749,7 @@ public void Handle(Func<Exception, bool> predicate)
 ```
 
 <div dir="rtl">
+
 اگر **predicate** مقدار `true` برگرداند، آن استثنا "مدیریت شده" محسوب می‌شود. پس از اجرای delegate روی همه استثناها:
 
 * اگر همه استثناها مدیریت شده باشند، دوباره پرتاب نمی‌شوند.
@@ -1722,6 +1789,7 @@ catch (AggregateException aex)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### مجموعه‌های همزمان (Concurrent Collections) 🗂️
@@ -1752,6 +1820,7 @@ for (int i = 0; i < 1000000; i++) d[i] = 123;
 ```
 
 <div dir="rtl">
+
 این کد **سه برابر کندتر** از حالت زیر اجرا می‌شود:
 </div>
 
@@ -1761,6 +1830,7 @@ for (int i = 0; i < 1000000; i++) lock (d) d[i] = 123;
 ```
 
 <div dir="rtl">
+
 (با این حال، **خواندن از ConcurrentDictionary** سریع است، زیرا بدون قفل انجام می‌شود.)
 
 ---
@@ -1795,6 +1865,7 @@ bool TryTake(out T item);
 ```
 
 <div dir="rtl">
+
 * **TryAdd** و **TryTake** بررسی می‌کنند که آیا می‌توان عملیات افزودن یا حذف را انجام داد؛ اگر ممکن باشد، آن را انجام می‌دهند. تست و عمل به‌صورت **اتمیک** انجام می‌شود، بنابراین نیاز به قفل مانند مجموعه‌های معمولی نیست:
 </div>
 
@@ -1804,6 +1875,7 @@ lock (myStack) if (myStack.Count > 0) result = myStack.Pop();
 ```
 
 <div dir="rtl">
+
 * **TryTake** اگر مجموعه خالی باشد، مقدار `false` برمی‌گرداند.
 * **TryAdd** در سه پیاده‌سازی ارائه‌شده همیشه موفق است و `true` برمی‌گرداند.
 * اگر شما مجموعه همزمان خود را پیاده‌سازی کنید که عناصر تکراری را اجازه ندهد، می‌توانید **TryAdd** را طوری پیاده‌سازی کنید که در صورت وجود عنصر، `false` برگرداند (مثلاً یک **Concurrent Set**).
@@ -1843,6 +1915,7 @@ Parallel.ForEach(wordsToTest, (word, state, i) =>
 ```
 
 <div dir="rtl">
+
 اما استفاده از **ConcurrentBag** برای یک **صف Producer/Consumer** مناسب نیست، زیرا عناصر توسط نخ‌های مختلف اضافه و حذف می‌شوند.
 
 ---
@@ -1921,6 +1994,7 @@ public class PCQueue : IDisposable
 ```
 
 <div dir="rtl">
+
 چون چیزی به سازنده **BlockingCollection** ارسال نکرده‌ایم، به‌صورت خودکار یک **ConcurrentQueue** ایجاد می‌شود. اگر یک **ConcurrentStack** می‌دادیم، صف به یک **Producer/Consumer Stack** تبدیل می‌شد.
 
 ---
@@ -1980,6 +2054,7 @@ public class PCQueue : IDisposable
 ```
 
 <div dir="rtl">
+
 در متد **Enqueue**، یک **Task** ایجاد می‌کنیم، آن را در صف قرار می‌دهیم و به فراخواننده برمی‌گردانیم بدون اینکه اجرا شود. در متد **Consume**، **Task** روی نخ مصرف‌کننده **به‌صورت هم‌زمان اجرا** می‌شود. با گرفتن **InvalidOperationException**، شرایط نادر لغو هم‌زمان Task مدیریت می‌شود.
 
 ---
@@ -1993,6 +2068,7 @@ string result = await pcQ.Enqueue(() => "That was easy!");
 ```
 
 <div dir="rtl">
+
 با این روش، **تمام مزایای Task** از جمله **انتشار استثناها، بازگشت مقادیر و لغو** را داریم، در حالی که **کنترل کامل روی زمان‌بندی اجرای کارها** نیز در اختیارمان است.
 </div>
 

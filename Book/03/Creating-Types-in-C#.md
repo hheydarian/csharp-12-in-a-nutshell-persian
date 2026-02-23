@@ -1,5 +1,6 @@
 
 <div dir="rtl">
+
 # فصل سوم : ایجاد Typeها در سی شارپ
 
 در این فصل، ما وارد مبحث **typeها** و **type memberها** می‌شویم.
@@ -18,6 +19,7 @@ class YourClassName
 ```
 
 <div dir="rtl">
+
 یک کلاس پیچیده‌تر می‌تواند شامل موارد زیر باشد:
 
 * **قبل از کلمه کلیدی class** → می‌تواند شامل **attributes** و **class modifiers** باشد.
@@ -61,6 +63,7 @@ class Octopus
 ```
 
 <div dir="rtl">
+
 ---
 
 #### 🔑 فیلدها می‌توانند شامل این modifiers باشند:
@@ -110,6 +113,7 @@ public int Age = 10;
 ```
 
 <div dir="rtl">
+
 مقداردهی اولیه می‌تواند شامل **عبارت‌ها** یا حتی **فراخوانی متدها** باشد:
 </div>
 
@@ -118,6 +122,7 @@ static readonly string TempFolder = System.IO.Path.GetTempPath();
 ```
 
 <div dir="rtl">
+
 ---
 
 #### 📍 اعلان چند فیلد همزمان (Declaring Multiple Fields Together)
@@ -132,6 +137,7 @@ static readonly int legs = 8,
 ```
 
 <div dir="rtl">
+
 ### 🌟 ثابت‌ها (Constants)
 
 یک **constant** در زمان **compile time** به‌صورت ایستا (statically) ارزیابی می‌شود و کامپایلر مقدار آن را در هر جایی که استفاده شود، جایگزین می‌کند (شبیه به **macro** در ++C).
@@ -161,6 +167,7 @@ public class Test
 ```
 
 <div dir="rtl">
+
 ---
 
 #### ⚖️ تفاوت با `static readonly`
@@ -180,6 +187,7 @@ public static double Circumference(double radius)
 ```
 
 <div dir="rtl">
+
 در زمان کامپایل به این تبدیل می‌شود:
 </div>
 
@@ -191,6 +199,7 @@ public static double Circumference(double radius)
 ```
 
 <div dir="rtl">
+
 🔹 بنابراین منطقی است که `PI` به‌صورت یک **constant** تعریف شود چون مقدار آن از قبل مشخص است.
 
 در مقابل:
@@ -201,6 +210,7 @@ static readonly DateTime StartupTime = DateTime.Now;
 ```
 
 <div dir="rtl">
+
 هر بار که برنامه اجرا شود، مقدار متفاوتی خواهد داشت.
 
 ---
@@ -215,6 +225,7 @@ public const decimal ProgramVersion = 2.3m;
 ```
 
 <div dir="rtl">
+
 و یک **assembly** دیگر (مثلاً Y) از آن استفاده کند، مقدار `2.3` هنگام کامپایل در assembly Y **ثابت‌سازی (baked in)** می‌شود.
 اگر بعدها X با مقدار جدید (مثلاً `2.4`) دوباره کامپایل شود، Y همچنان مقدار قدیمی `2.3` را استفاده می‌کند تا زمانی که Y هم دوباره کامپایل شود.
 
@@ -238,6 +249,7 @@ void Test()
 ```
 
 <div dir="rtl">
+
 ---
 
 #### 🔑 modifiers مجاز برای constantهای غیرمحلی
@@ -287,6 +299,7 @@ int Foo(int x) { return x * 2; }
 ```
 
 <div dir="rtl">
+
 می‌توان آن را به‌شکل کوتاه‌تری نوشت:
 </div>
 
@@ -295,6 +308,7 @@ int Foo(int x) => x * 2;
 ```
 
 <div dir="rtl">
+
 حتی اگر متد **`void`** باشد:
 </div>
 
@@ -303,6 +317,7 @@ void Foo(int x) => Console.WriteLine(x);
 ```
 
 <div dir="rtl">
+
 ---
 
 #### 📍 متدهای محلی (Local Methods)
@@ -322,6 +337,7 @@ void WriteCubes()
 ```
 
 <div dir="rtl">
+
 * متد محلی (`Cube`) فقط در همان متد والد (`WriteCubes`) قابل مشاهده است.
 * این کار باعث ساده‌تر شدن type می‌شود و سریعاً نشان می‌دهد که Cube جای دیگری استفاده نمی‌شود.
 * متدهای محلی می‌توانند به متغیرها و پارامترهای متد والد دسترسی داشته باشند.
@@ -354,6 +370,7 @@ void Foo() => Console.WriteLine(x);
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔄 Overloading متدها
@@ -374,6 +391,7 @@ void Foo(float x, int y) {...}
 ```
 
 <div dir="rtl">
+
 📌 اما مثال‌های زیر **خطای زمان کامپایل** دارند، چون `return type` و `params modifier` بخشی از **امضا** محسوب نمی‌شوند:
 </div>
 
@@ -386,6 +404,7 @@ void  Goo(params int[] x) {...}  // Compile-time error
 ```
 
 <div dir="rtl">
+
 ---
 
 #### 📌 پارامترهای ref و out در امضا
@@ -401,6 +420,7 @@ void Foo(ref int x) {...}   // OK
 ```
 
 <div dir="rtl">
+
 ❌ اما:
 </div>
 
@@ -409,6 +429,7 @@ void Foo(out int x) {...}   // Compile-time error
 ```
 
 <div dir="rtl">
+
 زیرا `ref` و `out` به‌طور هم‌زمان نمی‌توانند overload شوند.
 
 ---
@@ -434,6 +455,7 @@ public class Panda
 ```
 
 <div dir="rtl">
+
 ---
 
 #### 🔑 modifiers مجاز برای constructors
@@ -453,6 +475,7 @@ public Panda(string n) => name = n;
 ```
 
 <div dir="rtl">
+
 ---
 
 #### 📌 رفع ابهام با `this`
@@ -465,6 +488,7 @@ public Panda(string name) => this.name = name;
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔄 Overloading Constructors
@@ -487,6 +511,7 @@ public class Wine
 ```
 
 <div dir="rtl">
+
 📌 در این حالت، constructor فراخوانی‌شده **ابتدا** اجرا می‌شود.
 
 می‌توانید یک **عبارت** را نیز به constructor دیگر پاس دهید:
@@ -497,6 +522,7 @@ public Wine(decimal price, DateTime year) : this(price, year.Year) { }
 ```
 
 <div dir="rtl">
+
 ⚠️ در این مرحله، فقط می‌توان به **اعضای static کلاس** دسترسی داشت، نه اعضای instance؛ چون هنوز شیء توسط constructor مقداردهی نشده است.
 
 ---
@@ -515,6 +541,7 @@ public Wine(decimal price, int year = 0)
 ```
 
 <div dir="rtl">
+
 📌 راه‌حل دیگری نیز در بخش **Object Initializers** (صفحه ۱۱۱) معرفی خواهد شد.
 
 ---
@@ -540,6 +567,7 @@ class Player
 ```
 
 <div dir="rtl">
+
 📌 مقداردهی اولیه فیلدها **قبل از اجرای constructor** انجام می‌شود و به‌ترتیب اعلان فیلدها اجرا می‌گردد.
 
 ### 🔹 سازنده‌های غیرعمومی (Nonpublic constructors)
@@ -563,6 +591,7 @@ public class Class1
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 دیکانستراکتور (Deconstructor)
@@ -600,6 +629,7 @@ class Rectangle
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 فراخوانی دیکانستراکتور
@@ -612,6 +642,7 @@ Console.WriteLine(width + " " + height);   // 3 4
 ```
 
 <div dir="rtl">
+
 🔹 این فراخوانی معادل است با:
 </div>
 
@@ -621,6 +652,7 @@ rect.Deconstruct(out width, out height);
 ```
 
 <div dir="rtl">
+
 یا:
 </div>
 
@@ -629,6 +661,7 @@ rect.Deconstruct(out var width, out var height);
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 نکات مهم در دیکانستراکشن
@@ -642,6 +675,7 @@ rect.Deconstruct(out var width, out var height);
   ```
 
 <div dir="rtl">
+
 * اگر به یکی از متغیرها نیازی ندارید، می‌توانید از نماد **discard (`_`)** استفاده کنید:
 </div>
 
@@ -650,6 +684,7 @@ rect.Deconstruct(out var width, out var height);
   ```
 
 <div dir="rtl">
+
 * اگر متغیرها قبلاً تعریف شده باشند، می‌توانید **نوع‌ها را حذف کنید**:
 </div>
 
@@ -659,6 +694,7 @@ rect.Deconstruct(out var width, out var height);
   ```
 
 <div dir="rtl">
+
 * می‌توانید از دیکانستراکشن برای ساده‌سازی سازنده‌ها استفاده کنید:
 </div>
 
@@ -668,6 +704,7 @@ rect.Deconstruct(out var width, out var height);
   ```
 
 <div dir="rtl">
+
 * امکان **overload کردن متد Deconstruct** برای ارائه گزینه‌های بیشتر وجود دارد.
 * متد `Deconstruct` می‌تواند یک **extension method** هم باشد (برای دیکانستراکشن روی تایپ‌هایی که نویسنده‌ی آن نیستید).
 * از C# 10 به بعد، می‌توانید **متغیرهای موجود و جدید** را با هم ترکیب کنید:
@@ -679,6 +716,7 @@ rect.Deconstruct(out var width, out var height);
   ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 مقداردهی اولیه شیء (Object Initializers)
@@ -700,6 +738,7 @@ public class Bunny
 ```
 
 <div dir="rtl">
+
 📌 نمونه‌سازی با مقداردهی اولیه شیء:
 </div>
 
@@ -710,6 +749,7 @@ Bunny b2 = new Bunny("Bo") { LikesCarrots=true, LikesHumans=false };
 ```
 
 <div dir="rtl">
+
 این کد دقیقاً معادل موارد زیر است (کامپایلر متغیرهای موقت می‌سازد):
 </div>
 
@@ -727,6 +767,7 @@ Bunny b2 = temp2;
 ```
 
 <div dir="rtl">
+
 🔸 دلیل استفاده از متغیرهای موقت این است که اگر در طول مقداردهی اولیه **exception** رخ دهد، شیء **نیمه‌سازمان‌یافته (half-initialized)** باقی نماند.
 
 ### 🔹 مقایسه مقداردهی اولیه شیء با پارامترهای اختیاری (Object Initializers Versus Optional Parameters)
@@ -746,6 +787,7 @@ public Bunny (string name,
 ```
 
 <div dir="rtl">
+
 📌 این کار به ما اجازه می‌دهد شیء را به شکل زیر بسازیم:
 </div>
 
@@ -754,6 +796,7 @@ Bunny b1 = new Bunny(name: "Bo", likesCarrots: true);
 ```
 
 <div dir="rtl">
+
 ---
 
 #### ✅ مزیت تاریخی استفاده از سازنده‌ها
@@ -785,6 +828,7 @@ Bunny b1 = new Bunny("Bo", true, false);
 ```
 
 <div dir="rtl">
+
 اگر بعداً پارامتر جدیدی مانند `likesCats` اضافه شود، اسمبلی مصرف‌کننده که دوباره کامپایل نشده همچنان متدی با سه پارامتر را صدا می‌زند که دیگر وجود ندارد → خطا در زمان اجرا.
 
 حتی تغییر مقدار پیش‌فرض یکی از پارامترهای اختیاری نیز مشکل ایجاد می‌کند: مصرف‌کنندگان قدیمی تا زمان بازکامپایل از مقدار قدیمی استفاده می‌کنند.
@@ -820,6 +864,7 @@ public class Panda
 ```
 
 <div dir="rtl">
+
 همچنین `this` برای رفع ابهام میان فیلد و پارامتر/متغیر محلی استفاده می‌شود:
 </div>
 
@@ -832,6 +877,7 @@ public class Test
 ```
 
 <div dir="rtl">
+
 📌 مرجع `this` فقط در اعضای **nonstatic** کلاس یا struct معتبر است.
 
 ---
@@ -851,6 +897,7 @@ Console.WriteLine(msft.CurrentPrice);
 ```
 
 <div dir="rtl">
+
 در ظاهر معلوم نیست که `CurrentPrice` یک فیلد است یا property.
 
 🔸 تعریف property:
@@ -869,6 +916,7 @@ public class Stock
 ```
 
 <div dir="rtl">
+
 * **get accessor** وقتی property خوانده می‌شود اجرا می‌شود.
 * **set accessor** وقتی مقداردهی می‌شود اجرا می‌شود و پارامتر ضمنی `value` دارد.
 
@@ -904,6 +952,7 @@ public decimal Worth
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 ویژگی‌های Expression-Bodied
@@ -916,6 +965,7 @@ public decimal Worth => currentPrice * sharesOwned;
 ```
 
 <div dir="rtl">
+
 حتی setter هم می‌تواند expression-bodied باشد:
 </div>
 
@@ -928,6 +978,7 @@ public decimal Worth
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 ویژگی‌های خودکار (Automatic Properties)
@@ -945,6 +996,7 @@ public class Stock
 ```
 
 <div dir="rtl">
+
 * کامپایلر به طور خودکار یک **backing field خصوصی** تولید می‌کند.
 * می‌توان setter را **private** یا **protected** کرد تا property برای دیگران فقط‌خواندنی باشد.
 
@@ -962,6 +1014,7 @@ public decimal CurrentPrice { get; set; } = 123;
 ```
 
 <div dir="rtl">
+
 * اینجا مقدار اولیه‌ی `CurrentPrice` برابر با 123 است.
 * property با initializer می‌تواند **فقط‌خواندنی** هم باشد:
 </div>
@@ -971,6 +1024,7 @@ public int Maximum { get; } = 999;
 ```
 
 <div dir="rtl">
+
 مانند فیلدهای readonly، propertyهای خودکار readonly نیز می‌توانند در **constructor** مقداردهی شوند.
 این قابلیت برای ساختن **انواع immutable (فقط‌خواندنی)** بسیار کاربردی است.
 
@@ -996,6 +1050,7 @@ public class Foo
 ```
 
 <div dir="rtl">
+
 🔑 دقت کنید: property خودش سطح دسترسی بازتر (اینجا `public`) دارد، اما setter سطح دسترسی محدودتر (`private`).
 
 ---
@@ -1014,6 +1069,7 @@ public class Note
 ```
 
 <div dir="rtl">
+
 * این propertyها مانند read-only عمل می‌کنند، اما می‌توانند با **object initializer** مقداردهی شوند:
 </div>
 
@@ -1022,6 +1078,7 @@ var note = new Note { Pitch = 50 };
 ```
 
 <div dir="rtl">
+
 * بعد از آن دیگر نمی‌توان مقدار را تغییر داد:
 </div>
 
@@ -1030,6 +1087,7 @@ note.Pitch = 200;   // ❌ خطا – setter فقط-init
 ```
 
 <div dir="rtl">
+
 * حتی از داخل کلاس هم قابل تغییر نیستند (مگر در initializer، constructor یا یک accessor دیگر از نوع init).
 
 ---
@@ -1052,6 +1110,7 @@ public class Note
 ```
 
 <div dir="rtl">
+
 ❗ مشکل: اگر این کلاس در یک **کتابخانه عمومی** باشد، افزودن پارامتر اختیاری جدید به constructor باعث شکستن **سازگاری دودویی (binary compatibility)** می‌شود.
 اما افزودن یک **property فقط-init** هیچ مشکلی ایجاد نمی‌کند.
 
@@ -1072,6 +1131,7 @@ public class Note
 ```
 
 <div dir="rtl">
+
 💡 نکته: حتی می‌توان فیلدهای **readonly** را در setter فقط-init تغییر داد. این باعث می‌شود کلاس **immutable داخلی** باقی بماند.
 
 ⚠ تغییر یک accessor از `init` به `set` (یا برعکس) یک **تغییر سازگاری‌شکن (binary breaking change)** است. بنابراین اسمبلی‌های دیگر باید دوباره کامپایل شوند.
@@ -1089,6 +1149,7 @@ public void set_CurrentPrice (decimal value) {...}
 ```
 
 <div dir="rtl">
+
 * یک accessor از نوع `init` مثل `set` پردازش می‌شود، اما یک flag اضافه در متادیتا دارد.
 * propertyهای ساده و غیرمجازی توسط **JIT compiler** inline می‌شوند (یعنی فراخوانی متد با بدنه‌اش جایگزین می‌شود).
 * در نتیجه، دسترسی به property و فیلد از نظر کارایی **هیچ تفاوتی ندارد**.
@@ -1109,6 +1170,7 @@ Console.WriteLine(s[3]);  // l
 ```
 
 <div dir="rtl">
+
 * ایندکسرها مثل property هستند، اما به جای نام، با **اندیس (index argument)** صدا زده می‌شوند.
 * اندیس می‌تواند از هر نوعی باشد، نه فقط عدد صحیح.
 * همان modifierهای property را دارند (`public, private, static, ...`).
@@ -1121,6 +1183,7 @@ Console.WriteLine(s?[0]);  // چیزی چاپ نمی‌شود، خطایی هم 
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 پیاده‌سازی ایندکسر
@@ -1141,6 +1204,7 @@ class Sentence
 ```
 
 <div dir="rtl">
+
 مثال استفاده:
 </div>
 
@@ -1152,6 +1216,7 @@ Console.WriteLine(s[3]);   // kangaroo
 ```
 
 <div dir="rtl">
+
 * یک کلاس می‌تواند چندین ایندکسر با نوع پارامترهای متفاوت داشته باشد.
 * ایندکسر می‌تواند بیش از یک پارامتر بگیرد:
 </div>
@@ -1165,6 +1230,7 @@ public string this[int arg1, string arg2]
 ```
 
 <div dir="rtl">
+
 * اگر setter حذف شود → ایندکسر فقط‌خواندنی می‌شود.
 * می‌توان با **expression-bodied** نوشت:
 </div>
@@ -1174,6 +1240,7 @@ public string this[int wordNum] => words[wordNum];
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 پیاده‌سازی ایندکسر در CLR
@@ -1187,6 +1254,7 @@ public void set_Item(int wordNum, string value) {...}
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 استفاده از Indices و Ranges در ایندکسرها
@@ -1202,6 +1270,7 @@ public string[] this[Range range] => words[range];
 ```
 
 <div dir="rtl">
+
 مثال استفاده:
 </div>
 
@@ -1212,6 +1281,7 @@ string[] firstTwoWords = s[..2];   // (The, quick)
 ```
 
 <div dir="rtl">
+
 ### 🔹 سازنده‌های اصلی (Primary Constructors) در #C 12
 
 از نسخه‌ی **#C 12** می‌توانید یک لیست پارامتر را مستقیماً بعد از تعریف یک کلاس (یا struct) قرار دهید:
@@ -1225,6 +1295,7 @@ class Person (string firstName, string lastName)
 ```
 
 <div dir="rtl">
+
 این کار به کامپایلر دستور می‌دهد که به‌طور خودکار یک **سازنده‌ی اصلی (primary constructor)** با استفاده از پارامترهای `firstName` و `lastName` بسازد. در نتیجه می‌توانیم کلاس خود را به این شکل نمونه‌سازی کنیم:
 </div>
 
@@ -1234,6 +1305,7 @@ p.Print();    // Alice Jones
 ```
 
 <div dir="rtl">
+
 ⚡ سازنده‌های اصلی برای **نمونه‌سازی سریع (prototyping)** و سناریوهای ساده مفید هستند.
 روش جایگزین این است که فیلدها را تعریف کرده و یک سازنده معمولی بنویسید:
 </div>
@@ -1254,6 +1326,7 @@ class Person    // (بدون primary constructor)
 ```
 
 <div dir="rtl">
+
 سازنده‌ای که توسط #C ساخته می‌شود، **اصلی (primary)** نامیده می‌شود، زیرا هر سازنده دیگری که خودتان به‌طور صریح تعریف کنید، **باید آن را فراخوانی کند**:
 </div>
 
@@ -1269,6 +1342,7 @@ class Person (string firstName, string lastName)
 ```
 
 <div dir="rtl">
+
 این باعث می‌شود پارامترهای سازنده‌ی اصلی همیشه مقداردهی شوند ✅.
 
 ---
@@ -1308,6 +1382,7 @@ class Person
 ```
 
 <div dir="rtl">
+
 وقتی کد داخل سازنده تمام شد، پارامترها (`firstName` و `lastName`) از محدوده‌ی دید خارج می‌شوند و دیگر قابل دسترسی نیستند.
 
 اما در **primary constructor**، پارامترها از محدوده خارج نمی‌شوند و می‌توان آن‌ها را در کل بدنه‌ی کلاس و طول عمر شیء استفاده کرد.
@@ -1328,6 +1403,7 @@ class Person (string firstName, string lastName)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🎭 ماسک‌گذاری (Masking) پارامترها
@@ -1346,6 +1422,7 @@ class Person (string firstName, string lastName)
 ```
 
 <div dir="rtl">
+
 در این حالت، فیلد یا property بر پارامتر **اولویت دارد** (پارامتر را mask می‌کند)، مگر در سمت راست initializerها.
 
 ---
@@ -1366,6 +1443,7 @@ class Person (string firstName, string lastName)
 ```
 
 <div dir="rtl">
+
 مثال ذخیره‌ی مقدار uppercase برای `lastName`:
 </div>
 
@@ -1380,6 +1458,7 @@ class Person (string firstName, string lastName)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🚨 اعتبارسنجی با استثنا (Exception)
@@ -1399,6 +1478,7 @@ class Person (string firstName, string lastName)
 ```
 
 <div dir="rtl">
+
 (به یاد داشته باشید: initializerها هنگام ساخته شدن شیء اجرا می‌شوند، نه هنگام دسترسی به فیلد یا property.)
 
 ---
@@ -1414,6 +1494,7 @@ class Person (string firstName, string lastName)
 ```
 
 <div dir="rtl">
+
 اما در این حالت اعتبارسنجی ساده نیست، چون باید هم در **set accessor** و هم در **initializer** اعتبارسنجی را پیاده‌سازی کنید (همین مشکل برای init-only هم وجود دارد).
 در چنین شرایطی بهتر است از **سازنده‌های معمولی و فیلدهای پشتیبان (backing fields)** استفاده کنید.
 
@@ -1431,6 +1512,7 @@ class Test
 ```
 
 <div dir="rtl">
+
 زمان اجرا (runtime) این سازنده‌ی استاتیک را **به‌طور خودکار درست قبل از اولین استفاده از نوع** فراخوانی می‌کند. دو چیز این سازنده را فعال می‌کند:
 
 1. نمونه‌سازی از نوع 🆕
@@ -1456,6 +1538,7 @@ internal static void InitAssembly()
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 📌 سازنده‌های استاتیک و ترتیب مقداردهی فیلدها
@@ -1476,6 +1559,7 @@ class Foo
 ```
 
 <div dir="rtl">
+
 اگر جای این دو خط را عوض کنیم، هر دو برابر 3 می‌شوند.
 
 ---
@@ -1496,6 +1580,7 @@ class Foo
 ```
 
 <div dir="rtl">
+
 در اینجا ابتدا **0** و سپس **3** چاپ می‌شود.
 اگر جای دو خط پررنگ را عوض کنیم، خروجی **3 و 3** خواهد بود.
 
@@ -1531,6 +1616,7 @@ class Class1
 ```
 
 <div dir="rtl">
+
 این در واقع معادل بازنویسی متد `Finalize` از کلاس `Object` است:
 </div>
 
@@ -1543,6 +1629,7 @@ protected override void Finalize()
 ```
 
 <div dir="rtl">
+
 📌 توضیحات کامل درباره‌ی garbage collection و finalizerها در فصل 12 خواهد آمد.
 
 می‌توانید finalizer تک‌خطی هم بنویسید:
@@ -1553,6 +1640,7 @@ protected override void Finalize()
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🧩 Partial Types و Partial Methods
@@ -1574,6 +1662,7 @@ partial class PaymentForm { ... }
 ```
 
 <div dir="rtl">
+
 ⚠️ هر بخش باید `partial` باشد. این کد غیرقانونی است:
 </div>
 
@@ -1583,6 +1672,7 @@ class PaymentForm {}
 ```
 
 <div dir="rtl">
+
 * اعضای تکراری (مثلاً سازنده با همان پارامترها) مجاز نیستند.
 * **partial types** کاملاً در زمان کامپایل توسط کامپایلر ترکیب می‌شوند.
 * همه‌ی بخش‌ها باید در **یک assembly** باشند.
@@ -1613,6 +1703,7 @@ partial class PaymentForm    // فایل دستی
 ```
 
 <div dir="rtl">
+
 * یک partial method شامل **تعریف (definition)** و **پیاده‌سازی (implementation)** است.
 * تعریف معمولاً توسط generator نوشته می‌شود؛ پیاده‌سازی دستی اضافه می‌شود.
 * اگر پیاده‌سازی ارائه نشود، هم تعریف و هم تمام فراخوانی‌های آن حذف می‌شوند ➝ هیچ هزینه‌ای برای کد ندارد ✅.
@@ -1636,6 +1727,7 @@ public partial class Test
 ```
 
 <div dir="rtl">
+
 📌 اگر یک اعلان متد partial با یک **accessibility modifier** (مثل public یا private) آغاز شود، آن متد به‌عنوان یک متد partial توسعه‌یافته در نظر گرفته می‌شود.
 
 نکات مهم:
@@ -1656,6 +1748,7 @@ public partial class Test
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🏷️ عملگر nameof
@@ -1669,6 +1762,7 @@ string name = nameof (count);   // مقدار name برابر است با "count
 ```
 
 <div dir="rtl">
+
 📌 مزیت اصلی `nameof` نسبت به نوشتن مستقیم یک رشته این است که از **static type checking** پشتیبانی می‌کند.
 ابزارهایی مثل **Visual Studio** این ارجاع را می‌شناسند، بنابراین اگر شما نام symbol را تغییر دهید، تمام ارجاعات آن نیز به‌طور خودکار تغییر خواهند کرد.
 
@@ -1680,6 +1774,7 @@ string name = nameof (StringBuilder.Length);  // خروجی: "Length"
 ```
 
 <div dir="rtl">
+
 اگر بخواهید `"StringBuilder.Length"` را کامل برگردانید:
 </div>
 
@@ -1688,6 +1783,7 @@ nameof (StringBuilder) + "." + nameof (StringBuilder.Length);
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🏛️ وراثت (Inheritance)
@@ -1719,6 +1815,7 @@ public class House : Asset     // inherits from Asset
 ```
 
 <div dir="rtl">
+
 نحوه‌ی استفاده:
 </div>
 
@@ -1733,6 +1830,7 @@ Console.WriteLine (mansion.Mortgage); // 250000
 ```
 
 <div dir="rtl">
+
 📌 کلاس‌های `Stock` و `House` فیلد `Name` را از کلاس پایه‌ی `Asset` به ارث می‌برند.
 
 * کلاس مشتق‌شده = **subclass**
@@ -1762,6 +1860,7 @@ Display (mansion);  // OK
 ```
 
 <div dir="rtl">
+
 📌 دلیلش این است که کلاس‌های مشتق‌شده (`Stock` و `House`) همه‌ی ویژگی‌های کلاس پایه (`Asset`) را دارند.
 
 اما برعکس درست نیست:
@@ -1777,6 +1876,7 @@ public static void Display (House house)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🎭 Casting و Reference Conversions
@@ -1803,6 +1903,7 @@ Asset a = msft;     // Upcast
 ```
 
 <div dir="rtl">
+
 در اینجا، هر دو متغیر `a` و `msft` به همان شیء از نوع `Stock` اشاره می‌کنند:
 </div>
 
@@ -1813,6 +1914,7 @@ Console.WriteLine (a.SharesOwned); // خطای زمان کامپایل
 ```
 
 <div dir="rtl">
+
 📌 دلیل خطای آخر: متغیر `a` از نوع `Asset` است، بنابراین فقط می‌تواند اعضای `Asset` را ببیند.
 برای دسترسی به `SharesOwned` باید شیء را به `Stock` **downcast** کنید.
 
@@ -1831,6 +1933,7 @@ Console.WriteLine(s == msft);     // True
 ```
 
 <div dir="rtl">
+
 * مانند **Upcast**، فقط مرجع تغییر می‌کند و شیء اصلی تغییری نمی‌کند.
 * **Downcast** نیاز به cast صریح دارد، زیرا ممکن است در زمان اجرا شکست بخورد:
 </div>
@@ -1842,6 +1945,7 @@ Stock s = (Stock)a; // Downcast شکست می‌خورد، چون a از نوع 
 ```
 
 <div dir="rtl">
+
 ⚠️ اگر Downcast شکست بخورد، یک **InvalidCastException** پرتاب می‌شود.
 
 ---
@@ -1857,6 +1961,7 @@ Stock s = a as Stock; // s برابر null است، بدون Exception
 ```
 
 <div dir="rtl">
+
 * این مفید است وقتی می‌خواهید نتیجه را قبل از استفاده بررسی کنید:
 </div>
 
@@ -1866,6 +1971,7 @@ if (s != null)
 ```
 
 <div dir="rtl">
+
 💡 تفاوت با cast صریح:
 
 * `cast` → اطمینان از نوع دارید، اگر اشتباه باشد Exception پرتاب می‌شود.
@@ -1881,6 +1987,7 @@ long x = 3 as long; // خطای کامپایل
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 عملگر `is`
@@ -1894,6 +2001,7 @@ if (a is Stock)
 ```
 
 <div dir="rtl">
+
 * می‌توان همزمان با معرفی یک متغیر استفاده کرد:
 </div>
 
@@ -1903,6 +2011,7 @@ if (a is Stock s)
 ```
 
 <div dir="rtl">
+
 * این متغیر حتی خارج از شرط نیز در محدوده‌ی قابل دسترسی باقی می‌ماند:
 </div>
 
@@ -1916,6 +2025,7 @@ Console.WriteLine(s.SharesOwned); // هنوز در محدوده است
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 Virtual Function Members
@@ -1950,6 +2060,7 @@ Console.WriteLine(a.Liability);       // 250000
 ```
 
 <div dir="rtl">
+
 ⚠️ **توجه:** فراخوانی متد virtual از داخل constructor می‌تواند خطرناک باشد، زیرا کلاس مشتق ممکن است هنوز به طور کامل مقداردهی نشده باشد.
 
 ---
@@ -1974,6 +2085,7 @@ public class House : Asset
 ```
 
 <div dir="rtl">
+
 * قبل از C# 9، نوع بازگشتی باید دقیقاً همان نوع پایه می‌بود:
 </div>
 
@@ -1982,6 +2094,7 @@ public override Asset Clone() => new House { Name = Name, Mortgage = Mortgage };
 ```
 
 <div dir="rtl">
+
 * برای استفاده از ویژگی‌های House، Downcast لازم بود:
 </div>
 
@@ -1991,6 +2104,7 @@ House mansion2 = (House)mansion1.Clone();
 ```
 
 <div dir="rtl">
+
 ### 🔹 Abstract Classes and Abstract Members
 
 * یک کلاس **abstract** هیچ‌گاه نمی‌تواند نمونه‌سازی شود؛ تنها زیرکلاس‌های **concrete** می‌توانند نمونه ایجاد کنند.
@@ -2012,6 +2126,7 @@ public class Stock : Asset
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 Hiding Inherited Members
@@ -2025,6 +2140,7 @@ public class B : A { public int Counter = 2; }
 ```
 
 <div dir="rtl">
+
 * کامپایلر هشدار می‌دهد، اما می‌توان با **modifer `new`** به صورت عمدی مخفی‌سازی کرد:
 </div>
 
@@ -2033,6 +2149,7 @@ public class B : A { public new int Counter = 2; }
 ```
 
 <div dir="rtl">
+
 * `new` در این زمینه فقط هشدار کامپایلر را حذف می‌کند و قصد برنامه‌نویس را مشخص می‌کند.
 
 ---
@@ -2072,6 +2189,7 @@ b2.Foo();   // BaseClass.Foo
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 Sealing Functions and Classes
@@ -2084,6 +2202,7 @@ public sealed override decimal Liability { get { return Mortgage; } }
 ```
 
 <div dir="rtl">
+
 * همچنین می‌توان **یک کلاس را sealed** کرد تا امکان subclassing آن نباشد.
 
 ⚠️ نمی‌توان یک عضو را در برابر **مخفی شدن با `new`** مسدود کرد.
@@ -2107,6 +2226,7 @@ public class House : Asset
 ```
 
 <div dir="rtl">
+
 * با `base` به نسخه کلاس پایه دسترسی غیر virtual داریم و در صورت پنهان شدن عضو هم کار می‌کند.
 
 ---
@@ -2132,6 +2252,7 @@ public class Subclass : Baseclass
 ```
 
 <div dir="rtl">
+
 * **Base-class constructors همیشه اول اجرا می‌شوند** تا ابتدا مقداردهی کلاس پایه کامل شود.
 
 ### 🔹 Implicit Calling of the Parameterless Base-Class Constructor
@@ -2153,6 +2274,7 @@ public class Subclass : Baseclass
 ```
 
 <div dir="rtl">
+
 * اگر کلاس پایه **constructor بدون پارامتر نداشته باشد**، زیرکلاس مجبور است از `base` استفاده کند:
 </div>
 
@@ -2170,6 +2292,7 @@ public class Subclass : Baseclass
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 Required Members (C# 11)
@@ -2188,6 +2311,7 @@ Asset a2 = new Asset();                 // Error
 ```
 
 <div dir="rtl">
+
 * می‌توان با `[SetsRequiredMembers]` این محدودیت را در constructor دور زد:
 </div>
 
@@ -2202,6 +2326,7 @@ public class Asset
 ```
 
 <div dir="rtl">
+
 * این امکان اجازه می‌دهد که هم از **object initializer** و هم از constructor استفاده شود.
 
 ---
@@ -2237,6 +2362,7 @@ public class D : B
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 Inheritance with Primary Constructors
@@ -2250,6 +2376,7 @@ public class Subclass(int x, int y) : Baseclass(x) { ... }
 ```
 
 <div dir="rtl">
+
 * این همان کاری است که `base(x)` در constructor معمولی انجام می‌دهد.
 
 ---
@@ -2268,6 +2395,7 @@ Foo(h);  // فراخوانی Foo(House)
 ```
 
 <div dir="rtl">
+
 * اما **تعیین overload** بر اساس نوع **استاتیک** (compile-time) انجام می‌شود:
 </div>
 
@@ -2277,6 +2405,7 @@ Foo(a);  // فراخوانی Foo(Asset)
 ```
 
 <div dir="rtl">
+
 * با استفاده از `dynamic`، تصمیم‌گیری **تا زمان اجرا** به تعویق می‌افتد:
 </div>
 
@@ -2285,6 +2414,7 @@ Foo((dynamic)a);  // فراخوانی Foo(House) در زمان اجرا
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 The `object` Type
@@ -2313,6 +2443,7 @@ int three = (int)stack.Pop();    // boxing/unboxing
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 Boxing and Unboxing
@@ -2326,6 +2457,7 @@ object obj = x;  // boxing
 ```
 
 <div dir="rtl">
+
 * **Unboxing** → تبدیل object به value type (نیازمند cast صریح):
 </div>
 
@@ -2334,6 +2466,7 @@ int y = (int)obj;  // unboxing
 ```
 
 <div dir="rtl">
+
 ⚠️ نوع اعلام شده باید دقیقاً با نوع واقعی مطابقت داشته باشد، در غیر این صورت `InvalidCastException` رخ می‌دهد:
 </div>
 
@@ -2345,6 +2478,7 @@ long x2 = (int)obj; // صحیح: unboxing سپس تبدیل عددی
 ```
 
 <div dir="rtl">
+
 * **Boxing** و **Unboxing** به نوع سیستم **unified type system** اجازه می‌دهد تا value و reference type ها را با هم کار کند، اما فقط برای **reference conversions** در آرایه‌ها و genericها صادق است:
 </div>
 
@@ -2354,6 +2488,7 @@ object[] a2 = new int[3];    // Error
 ```
 
 <div dir="rtl">
+
 * **Copy semantics**: هنگام boxing/unboxing، مقدار کپی می‌شود، بنابراین تغییر value type اصلی تاثیری بر نسخه boxed ندارد:
 </div>
 
@@ -2365,6 +2500,7 @@ Console.WriteLine(boxed);  // 3
 ```
 
 <div dir="rtl">
+
 بررسی نوع به‌صورت **استاتیک و زمان اجرا** 🔍🖥️
 
 برنامه‌های C# هم در زمان **کامپایل** (به‌صورت استاتیک) و هم در زمان **اجرای برنامه** (توسط CLR) بررسی نوع می‌شوند.
@@ -2379,6 +2515,7 @@ int x = "5";  // خطا: نوع صحیح نیست
 ```
 
 <div dir="rtl">
+
 ### بررسی نوع زمان اجرا
 
 بررسی نوع در زمان اجرا توسط **CLR** انجام می‌شود، مثلاً وقتی که شما یک **downcast** با استفاده از تبدیل مرجع یا **unboxing** انجام می‌دهید:
@@ -2390,6 +2527,7 @@ int z = (int)y;  // خطای زمان اجرا، downcast ناموفق
 ```
 
 <div dir="rtl">
+
 این بررسی ممکن است، زیرا هر شیء در حافظه heap به‌صورت داخلی **یک توکن نوع کوچک** ذخیره می‌کند. می‌توانید این توکن را با فراخوانی متد `GetType` از شیء دریافت کنید.
 
 ---
@@ -2416,6 +2554,7 @@ public class Point { public int X, Y; }
 ```
 
 <div dir="rtl">
+
 `System.Type` همچنین متدهایی دارد که دروازه‌ای به **مدل Reflection زمان اجرا** هستند (که در فصل 18 توضیح داده شده است).
 
 ---
@@ -2431,6 +2570,7 @@ string s = x.ToString(); // s برابر با "1"
 ```
 
 <div dir="rtl">
+
 می‌توانید `ToString` را روی انواع سفارشی خود بازنویسی کنید:
 </div>
 
@@ -2446,6 +2586,7 @@ public class Panda
 ```
 
 <div dir="rtl">
+
 اگر `ToString` بازنویسی نشود، نام نوع را برمی‌گرداند.
 هنگام فراخوانی یک عضو بازنویسی‌شده مانند `ToString` روی نوع مقداری، **boxing رخ نمی‌دهد**، و تنها وقتی تبدیل انجام دهید، boxing اتفاق می‌افتد:
 </div>
@@ -2458,6 +2599,7 @@ string s2 = box.ToString();  // فراخوانی روی مقدار boxed
 ```
 
 <div dir="rtl">
+
 ---
 
 ### اعضای کلاس object 📦
@@ -2479,6 +2621,7 @@ public class Object
 ```
 
 <div dir="rtl">
+
 متدهای `Equals`، `ReferenceEquals` و `GetHashCode` در فصل "Equality Comparison" توضیح داده شده‌اند.
 
 ---
@@ -2515,6 +2658,7 @@ struct Point { int x, y; }
 ```
 
 <div dir="rtl">
+
 حتی اگر خودتان یک constructor بدون پارامتر تعریف کنید، constructor ضمنی همچنان وجود دارد و می‌توان با استفاده از **default keyword** به آن دسترسی پیدا کرد:
 </div>
 
@@ -2531,6 +2675,7 @@ struct Point
 ```
 
 <div dir="rtl">
+
 در این مثال، x با **field initializer** و y با **constructor بدون پارامتر** مقداردهی شده است، اما با `default` می‌توان نمونه‌ای ساخت که هر دو مقداردهی را نادیده بگیرد.
 
 ---
@@ -2553,6 +2698,7 @@ struct WebOptions
 ```
 
 <div dir="rtl">
+
 این روش باعث **سادگی و جلوگیری از رفتار گیج‌کننده** هنگام مقداردهی می‌شود. ✅
 
 ساختارهای **خواندنی (Read-Only Structs) و توابع** 📌🖊️
@@ -2568,6 +2714,7 @@ readonly struct Point
 ```
 
 <div dir="rtl">
+
 اگر نیاز دارید `readonly` را با جزئیات بیشتری اعمال کنید، از C# 8 به بعد می‌توانید **توابع struct** را با `readonly` علامت‌گذاری کنید. این کار باعث می‌شود اگر تابع تلاش کند فیلدی را تغییر دهد، **خطای زمان کامپایل** صادر شود:
 </div>
 
@@ -2580,6 +2727,7 @@ struct Point
 ```
 
 <div dir="rtl">
+
 اگر یک تابع `readonly`، تابع غیر-readonly دیگری را فراخوانی کند، کامپایلر **هشدار** صادر می‌کند و struct را به‌صورت محافظه‌کارانه کپی می‌کند تا احتمال تغییر ناخواسته جلوگیری شود.
 
 ---
@@ -2601,6 +2749,7 @@ struct Point { public int X, Y; }
 ```
 
 <div dir="rtl">
+
 * اگر value type به‌عنوان فیلد یک کلاس باشد، روی **heap** قرار می‌گیرد:
 </div>
 
@@ -2612,6 +2761,7 @@ class MyClass
 ```
 
 <div dir="rtl">
+
 * اضافه کردن `ref` به تعریف struct تضمین می‌کند که struct **تنها روی stack قرار گیرد**. اگر تلاش شود روی heap باشد، خطای زمان کامپایل رخ می‌دهد:
 </div>
 
@@ -2622,6 +2772,7 @@ class MyClass { Point P; }    // خطا: کامپایل نمی‌شود
 ```
 
 <div dir="rtl">
+
 Ref structها به دلیل محدودیت در زندگی روی stack، نمی‌توانند در ویژگی‌هایی شرکت کنند که ممکن است باعث قرارگیری روی heap شوند، مانند **lambda expressionها، iteratorها و توابع async**. همچنین نمی‌توانند در structهای غیر-ref باشند و نمی‌توانند interface پیاده‌سازی کنند (چون ممکن است boxing رخ دهد).
 
 ---
@@ -2663,6 +2814,7 @@ class Subclass : BaseClass
 ```
 
 <div dir="rtl">
+
 ---
 
 ### Friend Assemblies 🤝
@@ -2675,6 +2827,7 @@ class Subclass : BaseClass
 ```
 
 <div dir="rtl">
+
 اگر assembly دارای **strong name** باشد، باید کل کلید عمومی 160 بایتی آن را مشخص کنید:
 </div>
 
@@ -2683,6 +2836,7 @@ class Subclass : BaseClass
 ```
 
 <div dir="rtl">
+
 ---
 
 ### محدودیت‌ها و Capping دسترسی
@@ -2698,6 +2852,7 @@ class Subclass2 : BaseClass { public override void Foo() {} }     // خطا
 ```
 
 <div dir="rtl">
+
 کامپایلر از هرگونه **ناسازگاری در access modifiers** جلوگیری می‌کند. به طور مثال، یک subclass می‌تواند کمتر از base class دسترسی داشته باشد، اما نمی‌تواند بیشتر داشته باشد:
 </div>
 
@@ -2707,6 +2862,7 @@ public class B : A {}  // خطا
 ```
 
 <div dir="rtl">
+
 **Interfaces (رابطه‌ها) 🧩**
 
 یک **interface** شبیه یک کلاس است، اما تنها رفتار (Behavior) را مشخص می‌کند و **حالت (State)** یا داده نگه نمی‌دارد. بنابراین:
@@ -2730,6 +2886,7 @@ public interface IEnumerator
 ```
 
 <div dir="rtl">
+
 اعضای interface همیشه **ضمنی public** هستند و نمی‌توانند access modifier اعلام کنند. پیاده‌سازی یک interface یعنی **ارائه پیاده‌سازی public** برای تمام اعضای آن:
 </div>
 
@@ -2744,6 +2901,7 @@ internal class Countdown : IEnumerator
 ```
 
 <div dir="rtl">
+
 می‌توانید یک شیء را به هر interface که پیاده‌سازی می‌کند، **به‌صورت ضمنی cast کنید**:
 </div>
 
@@ -2754,6 +2912,7 @@ while (e.MoveNext())
 ```
 
 <div dir="rtl">
+
 حتی اگر Countdown یک کلاس internal باشد، اعضای آن که IEnumerator را پیاده‌سازی می‌کنند می‌توانند **به‌صورت public** فراخوانی شوند.
 
 ---
@@ -2769,6 +2928,7 @@ public interface IRedoable : IUndoable { void Redo(); }
 ```
 
 <div dir="rtl">
+
 در این مثال، IRedoable تمام اعضای IUndoable را «به ارث می‌برد». یعنی هر نوعی که IRedoable را پیاده‌سازی کند، باید اعضای IUndoable را نیز پیاده‌سازی کند.
 
 ---
@@ -2797,6 +2957,7 @@ public class Widget : I1, I2
 ```
 
 <div dir="rtl">
+
 * چون I1 و I2 دارای Foo با امضاهای متفاوت هستند، Widget **صریحاً I2.Foo** را پیاده‌سازی می‌کند.
 * تنها راه فراخوانی یک عضو پیاده‌سازی صریح، **cast به interface** است:
 </div>
@@ -2809,6 +2970,7 @@ w.Foo();         // Widget's implementation of I1.Foo
 ```
 
 <div dir="rtl">
+
 یکی دیگر از دلایل پیاده‌سازی صریح، **مخفی کردن اعضای تخصصی و گیج‌کننده** برای استفاده معمولی نوع است، مانند ISerializable.
 
 ---
@@ -2831,6 +2993,7 @@ public class RichTextBox : TextBox
 ```
 
 <div dir="rtl">
+
 فراخوانی عضو interface از طریق کلاس پایه یا interface، **پیاده‌سازی subclass** را صدا می‌زند:
 </div>
 
@@ -2842,6 +3005,7 @@ r.Undo();                // RichTextBox.Undo
 ```
 
 <div dir="rtl">
+
 یک عضو پیاده‌سازی صریح **نمی‌تواند virtual باشد** و نمی‌توان آن را به‌طور معمول override کرد، اما می‌توان آن را **reimplement** کرد.
 
 ---
@@ -2868,6 +3032,7 @@ public class RichTextBox : TextBox, IUndoable
 ```
 
 <div dir="rtl">
+
 * فراخوانی عضو reimplemented از طریق interface، پیاده‌سازی subclass را صدا می‌زند:
 </div>
 
@@ -2878,6 +3043,7 @@ r.Undo();                 // RichTextBox.Undo      Case 1
 ```
 
 <div dir="rtl">
+
 اگر TextBox عضو Undo را به‌صورت **ضمنی پیاده‌سازی** می‌کرد، فراخوانی از طریق کلاس پایه نیز ممکن بود و باعث **ناسازگاری** می‌شد:
 </div>
 
@@ -2886,6 +3052,7 @@ r.Undo();                 // RichTextBox.Undo      Case 1
 ```
 
 <div dir="rtl">
+
 ✅ نکته: پیاده‌سازی مجدد معمولاً **بهترین استراتژی برای override کردن اعضای صریح interface** است، زیرا تنها وقتی که عضو از طریق interface صدا زده شود، اثر می‌کند و از رفتار ناسازگار جلوگیری می‌کند.
 **جایگزین‌های پیاده‌سازی مجدد Interface 🔄**
 
@@ -2914,6 +3081,7 @@ public class RichTextBox : TextBox
 ```
 
 <div dir="rtl">
+
 اگر انتظار subclassing ندارید، می‌توانید کلاس را **sealed** علامت بزنید تا از پیاده‌سازی مجدد جلوگیری شود.
 
 ---
@@ -2934,6 +3102,7 @@ i.Foo();
 ```
 
 <div dir="rtl">
+
 ---
 
 ### Default Interface Members 🛠
@@ -2949,6 +3118,7 @@ interface ILogger
 ```
 
 <div dir="rtl">
+
 این ویژگی مفید است اگر بخواهید یک عضو جدید به interface‌ای که در یک کتابخانه پرکاربرد تعریف شده اضافه کنید، بدون اینکه پیاده‌سازی‌های موجود (احتمالاً هزاران مورد) خراب شوند.
 
 * پیاده‌سازی پیش‌فرض همیشه **explicit** است، بنابراین اگر کلاس پیاده‌سازی‌کننده ILogger متد Log را تعریف نکند، تنها راه فراخوانی آن از طریق interface است:
@@ -2960,6 +3130,7 @@ class Logger : ILogger { }
 ```
 
 <div dir="rtl">
+
 * این کار از مشکل **multiple implementation inheritance** جلوگیری می‌کند، یعنی اگر یک عضو پیش‌فرض در دو interface که یک کلاس پیاده‌سازی می‌کند اضافه شود، هیچ ابهامی درباره فراخوانی آن وجود ندارد.
 
 ---
@@ -2988,6 +3159,7 @@ ILogger.Prefix = "File log: ";
 ```
 
 <div dir="rtl">
+
 * اعضای instance هنوز در interface مجاز نیستند، زیرا هدف interface تعریف **رفتار، نه حالت** است.
 
 #### Static virtual/abstract interface members
@@ -3010,6 +3182,7 @@ class CustomerTest : ITypeDescribable
 ```
 
 <div dir="rtl">
+
 * علاوه بر متدها، properties، و events، operatorها و conversions نیز می‌توانند عضو static virtual interface باشند.
 * این اعضا از طریق **constrained type parameter** فراخوانی می‌شوند (در بخش Static Polymorphism و Generic Math توضیح داده خواهد شد).
 
@@ -3040,6 +3213,7 @@ class Flea    : Insect, Carnivore {}                // غیرقانونی
 ```
 
 <div dir="rtl">
+
 * کلاس‌های Eagle، Bee، و Flea کامپایل نمی‌شوند، زیرا **ارث‌بری چندگانه از کلاس‌ها مجاز نیست**.
 * راه حل: برخی از نوع‌ها را به interface تبدیل کنیم.
 
@@ -3055,6 +3229,7 @@ interface ICarnivore      {}
 ```
 
 <div dir="rtl">
+
 * مثال واقعی: Bird و Insect می‌توانند معادل Windows control و web control باشند. FlyingCreature و Carnivore می‌توانند معادل IPrintable و IUndoable باشند.
 **Enums 🔢**
 
@@ -3066,6 +3241,7 @@ public enum BorderSide { Left, Right, Top, Bottom }
 ```
 
 <div dir="rtl">
+
 می‌توانیم از این enum به این شکل استفاده کنیم:
 </div>
 
@@ -3075,6 +3251,7 @@ bool isTop = (topSide == BorderSide.Top);   // true
 ```
 
 <div dir="rtl">
+
 هر عضو enum دارای یک **مقدار عددی زمینه‌ای** است. به‌طور پیش‌فرض:
 
 * مقادیر زمینه‌ای از نوع `int` هستند.
@@ -3088,6 +3265,7 @@ public enum BorderSide : byte { Left, Right, Top, Bottom }
 ```
 
 <div dir="rtl">
+
 همچنین می‌توانید برای هر عضو مقدار زمینه‌ای صریح تعیین کنید:
 </div>
 
@@ -3096,6 +3274,7 @@ public enum BorderSide : byte { Left=1, Right=2, Top=10, Bottom=11 }
 ```
 
 <div dir="rtl">
+
 کامپایلر به شما اجازه می‌دهد تنها برخی از اعضا را مقداردهی کنید؛ اعضای بدون مقدار، از آخرین مقدار صریح افزایشی ادامه می‌یابند.
 
 ---
@@ -3112,6 +3291,7 @@ bool leftOrRight = (int) side <= 2;
 ```
 
 <div dir="rtl">
+
 همچنین می‌توانید یک enum را به enum دیگری تبدیل کنید:
 </div>
 
@@ -3129,6 +3309,7 @@ HorizontalAlignment h = (HorizontalAlignment)(int) BorderSide.Right;
 ```
 
 <div dir="rtl">
+
 * عدد 0 در یک عبارت enum به‌طور ویژه‌ای رفتار می‌کند و نیازی به cast ندارد:
 </div>
 
@@ -3138,6 +3319,7 @@ if (b == 0) ...
 ```
 
 <div dir="rtl">
+
 دلایل ویژه بودن 0:
 
 * عضو اول enum اغلب به عنوان مقدار **default** استفاده می‌شود.
@@ -3156,6 +3338,7 @@ enum BorderSides { None=0, Left=1, Right=2, Top=4, Bottom=8 }
 ```
 
 <div dir="rtl">
+
 یا:
 </div>
 
@@ -3164,6 +3347,7 @@ enum BorderSides { None=0, Left=1, Right=1<<1, Top=1<<2, Bottom=1<<3 }
 ```
 
 <div dir="rtl">
+
 برای کار با مقادیر ترکیبی از **عملگرهای بیتی** مانند `|` و `&` استفاده می‌کنیم:
 </div>
 
@@ -3182,6 +3366,7 @@ Console.WriteLine(s);                 // Left
 ```
 
 <div dir="rtl">
+
 * طبق convention، اگر اعضای enum قابل ترکیب هستند، همیشه **Flags attribute** را اضافه کنید.
 * نام enum ترکیبی معمولاً به **جمع** نام‌گذاری می‌شود.
 * می‌توانید **اعضای ترکیبی** را در خود declaration تعریف کنید:
@@ -3200,6 +3385,7 @@ enum BorderSides
 ```
 
 <div dir="rtl">
+
 ---
 
 ### عملگرهای Enum ⚙️
@@ -3213,6 +3399,7 @@ enum BorderSides
 ```
 
 <div dir="rtl">
+
 * عملگرهای بیتی، محاسباتی و مقایسه‌ای نتیجه را روی مقادیر عددی زمینه‌ای انجام می‌دهند.
 * جمع بین یک enum و نوع عددی مجاز است، اما بین دو enum مجاز نیست.
 
@@ -3228,6 +3415,7 @@ public enum BorderSide { Left, Right, Top, Bottom }
 ```
 
 <div dir="rtl">
+
 چون enum می‌تواند به نوع عددی و بالعکس تبدیل شود، ممکن است مقدار آن خارج از محدوده اعضای قانونی باشد:
 </div>
 
@@ -3237,6 +3425,7 @@ Console.WriteLine(b);  // 12345
 ```
 
 <div dir="rtl">
+
 عملگرهای بیتی و محاسباتی نیز می‌توانند مقادیر نامعتبر تولید کنند:
 </div>
 
@@ -3246,6 +3435,7 @@ b++;  // بدون خطا
 ```
 
 <div dir="rtl">
+
 * مقدار نامعتبر می‌تواند کد زیر را خراب کند:
 </div>
 
@@ -3260,6 +3450,7 @@ void Draw(BorderSide side)
 ```
 
 <div dir="rtl">
+
 راه حل‌ها:
 
 1. اضافه کردن یک else دیگر:
@@ -3272,6 +3463,7 @@ else throw new ArgumentException("Invalid BorderSide: " + side, "side");
 ```
 
 <div dir="rtl">
+
 2. بررسی صریح مقدار enum با `Enum.IsDefined`:
 </div>
 
@@ -3281,6 +3473,7 @@ Console.WriteLine(Enum.IsDefined(typeof(BorderSide), side));   // False
 ```
 
 <div dir="rtl">
+
 * متأسفانه، `Enum.IsDefined` برای **flagged enums** کار نمی‌کند. اما می‌توان از روش کمکی زیر استفاده کرد:
 </div>
 
@@ -3293,6 +3486,7 @@ bool IsFlagDefined(Enum e)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### Nested Types 🏗
@@ -3309,6 +3503,7 @@ public class TopLevel
 ```
 
 <div dir="rtl">
+
 ویژگی‌های nested type:
 
 * می‌تواند به **private members** نوع enclosing دسترسی داشته باشد.
@@ -3322,6 +3517,7 @@ TopLevel.Color color = TopLevel.Color.Red;
 ```
 
 <div dir="rtl">
+
 * همه نوع‌ها (class، struct، interface، delegate و enum) می‌توانند nested باشند.
 
 مثال دسترسی به member خصوصی از nested type:
@@ -3339,6 +3535,7 @@ public class TopLevel
 ```
 
 <div dir="rtl">
+
 مثال استفاده از `protected` روی nested type:
 </div>
 
@@ -3354,6 +3551,7 @@ public class SubTopLevel : TopLevel
 ```
 
 <div dir="rtl">
+
 Nested types توسط کامپایلر نیز برای ایجاد **کلاس‌های خصوصی** که state را برای iteratorها و anonymous methods ذخیره می‌کنند، استفاده می‌شوند.
 
 ---
@@ -3389,6 +3587,7 @@ public class Stack<T>
 ```
 
 <div dir="rtl">
+
 استفاده از Stack<T>:
 </div>
 
@@ -3401,6 +3600,7 @@ int y = stack.Pop();  // 5
 ```
 
 <div dir="rtl">
+
 * `Stack<int>` پارامتر نوعی `T` را با `int` جایگزین می‌کند و نوع بسته‌ای ایجاد می‌کند.
 * تلاش برای push کردن یک `string` روی `Stack<int>` باعث خطای compile-time می‌شود.
 </div>
@@ -3418,6 +3618,7 @@ public class ###
 ```
 
 <div dir="rtl">
+
 * `Stack<T>` یک **open type** است، و `Stack<int>` یک **closed type**.
 * در زمان اجرا، تمام نمونه‌های generic type بسته هستند و placeholderها پر می‌شوند.
 
@@ -3429,6 +3630,7 @@ var stack = new Stack<T>();   // غیرقانونی: T چیست؟
 ```
 
 <div dir="rtl">
+
 * اما اگر در یک کلاس یا متدی که خودش T را تعریف کرده باشد:
 </div>
 
@@ -3445,6 +3647,7 @@ public class Stack<T>
 ```
 
 <div dir="rtl">
+
 ### Why Generics Exist 🧩
 
 Generics در C# وجود دارند تا بتوانید کدی **قابل استفاده مجدد برای انواع مختلف** بنویسید.
@@ -3466,6 +3669,7 @@ public class ObjectStack
 ```
 
 <div dir="rtl">
+
 اما **ObjectStack** معایبی دارد:
 
 * نیاز به **boxing** و **downcasting** برای نوع‌های value type.
@@ -3479,6 +3683,7 @@ int i = (int)stack.Pop();  // Runtime error
 ```
 
 <div dir="rtl">
+
 راه حل: استفاده از **generics**.
 </div>
 
@@ -3487,6 +3692,7 @@ Stack<int> stack = new Stack<int>();
 ```
 
 <div dir="rtl">
+
 * مانند ObjectStack: یکبار نوشته شده و می‌تواند با هر نوع کار کند.
 * مانند IntStack: برای نوع خاص `T` تخصصی شده است.
 * مزیت: **ایمنی نوعی** و کاهش نیاز به cast و boxing.
@@ -3511,6 +3717,7 @@ static void Swap<T>(ref T a, ref T b)
 ```
 
 <div dir="rtl">
+
 استفاده:
 </div>
 
@@ -3520,6 +3727,7 @@ Swap(ref x, ref y);
 ```
 
 <div dir="rtl">
+
 * معمولاً نیازی به مشخص کردن نوع نیست، کامپایلر آن را استنتاج می‌کند.
 * اگر ابهام باشد:
 </div>
@@ -3529,6 +3737,7 @@ Swap<int>(ref x, ref y);
 ```
 
 <div dir="rtl">
+
 > یک متد در داخل generic type، مگر اینکه type parameter جدید معرفی کند، **متد generic** محسوب نمی‌شود.
 
 ---
@@ -3550,6 +3759,7 @@ var myDict = new Dictionary<int,string>();
 ```
 
 <div dir="rtl">
+
 * می‌توان چند پارامتر نوعی داشت: `Dictionary<TKey, TValue>`
 * نامگذاری: پارامتر تک نوعی → `T`، چند پارامتر → `TKey, TValue` و غیره.
 
@@ -3566,6 +3776,7 @@ Type a3 = typeof(A<int,int>); // Closed
 ```
 
 <div dir="rtl">
+
 ---
 
 ### Default Generic Value ⚙️
@@ -3585,6 +3796,7 @@ array[i] = default;
 ```
 
 <div dir="rtl">
+
 * مقدار پیش‌فرض **reference type** → `null`
 * مقدار پیش‌فرض **value type** → صفر بیت به بیت (bitwise-zero)
 
@@ -3607,6 +3819,7 @@ where T : notnull          // Non-nullable (C# 8+)
 ```
 
 <div dir="rtl">
+
 مثال:
 </div>
 
@@ -3623,6 +3836,7 @@ class GenericClass<T, U>
 ```
 
 <div dir="rtl">
+
 * هدف اصلی constraints: **امکان انجام عملیاتی که بدون آن غیرممکن است**.
 * مثال: `T:Foo` اجازه می‌دهد T را مثل Foo رفتار دهید، `T:new()` اجازه ساخت instance از T می‌دهد.
 
@@ -3644,6 +3858,7 @@ string last = Max("ant", "zoo");  // "zoo"
 ```
 
 <div dir="rtl">
+
 * C# 11: interface constraint اجازه فراخوانی **static virtual/abstract members** می‌دهد.
 
 ---
@@ -3664,6 +3879,7 @@ static void Initialize<T>(T[] array) where T : new()
 ```
 
 <div dir="rtl">
+
 * **naked type constraint**: یک type parameter باید از دیگری مشتق شود:
 </div>
 
@@ -3675,6 +3891,7 @@ class Stack<T>
 ```
 
 <div dir="rtl">
+
 ### Subclassing Generic Types 🧬
 
 یک کلاس generic می‌تواند مانند کلاس معمولی subclass شود. چند حالت وجود دارد:
@@ -3688,6 +3905,7 @@ class SpecialStack<T> : Stack<T> { ... }
 ```
 
 <div dir="rtl">
+
 2. **SubClass نوع پارامتر را به یک نوع مشخص می‌بندد**:
 </div>
 
@@ -3696,6 +3914,7 @@ class IntStack : Stack<int> { ... }
 ```
 
 <div dir="rtl">
+
 3. **SubClass می‌تواند پارامتر نوع جدید معرفی کند**:
 </div>
 
@@ -3705,6 +3924,7 @@ class KeyedList<T, TKey> : List<T> { ... }
 ```
 
 <div dir="rtl">
+
 * در واقع، تمام type argumentها در subclass **fresh** هستند و می‌توان نام‌های جدید و معنادارتری برای آنها انتخاب کرد:
 </div>
 
@@ -3713,6 +3933,7 @@ class KeyedList<TElement, TKey> : List<TElement> { ... }
 ```
 
 <div dir="rtl">
+
 ---
 
 ### Self-Referencing Generic Declarations 🔄
@@ -3736,6 +3957,7 @@ public class Balloon : IEquatable<Balloon>
 ```
 
 <div dir="rtl">
+
 همچنین این‌ها قانونی هستند:
 </div>
 
@@ -3745,6 +3967,7 @@ class Bar<T> where T : Bar<T> { ... }
 ```
 
 <div dir="rtl">
+
 ---
 
 ### Static Data in Generic Types 💾
@@ -3762,6 +3985,7 @@ Console.WriteLine(++Bob<object>.Count); // 1
 ```
 
 <div dir="rtl">
+
 ---
 
 ### Type Parameters and Conversions ⚖️
@@ -3787,6 +4011,7 @@ StringBuilder Foo<T>(T arg)
 ```
 
 <div dir="rtl">
+
 راه حل‌ها:
 
 1. استفاده از `as` (بی‌ابهام):
@@ -3798,6 +4023,7 @@ if (sb != null) return sb;
 ```
 
 <div dir="rtl">
+
 2. یا ابتدا cast به `object` و سپس به نوع مورد نظر:
 </div>
 
@@ -3806,6 +4032,7 @@ return (StringBuilder)(object)arg;
 ```
 
 <div dir="rtl">
+
 > Unboxing هم می‌تواند ابهام ایجاد کند:
 >
 >
@@ -3817,6 +4044,7 @@ return (StringBuilder)(object)arg;
 > ```
 
 <div dir="rtl">
+
 ---
 
 ### Covariance & Contravariance 🔁
@@ -3839,6 +4067,7 @@ animals.Push(new Camel());      // اگر مجاز بود، runtime error
 ```
 
 <div dir="rtl">
+
 راه حل‌ها:
 
 1. متد generic با constraint بنویسیم:
@@ -3855,6 +4084,7 @@ ZooCleaner.Wash(bears);
 ```
 
 <div dir="rtl">
+
 2. یا Stack<T> را روی interface با **covariant type parameter** تعریف کنیم.
 
 ---
@@ -3870,6 +4100,7 @@ Animal[] animals = bears;  // OK
 ```
 
 <div dir="rtl">
+
 * اما **assignments نادرست ممکن است runtime error بدهد**:
 </div>
 
@@ -3878,6 +4109,7 @@ animals[0] = new Camel();  // Runtime error
 ```
 
 <div dir="rtl">
+
 ### اعلام یک پارامتر نوع کوواریانت 📐
 
 پارامترهای نوع در **interfaces** و **delegates** می‌توانند با علامت‌گذاری با **modifer `out`** کوواریانت اعلام شوند. این **modifer** تضمین می‌کند که برخلاف آرایه‌ها، پارامترهای نوع کوواریانت کاملاً **ایمن از نظر نوع (type-safe)** هستند.
@@ -3890,6 +4122,7 @@ public interface IPoppable<out T> { T Pop(); }
 ```
 
 <div dir="rtl">
+
 علامت `out` روی `T` نشان می‌دهد که `T` تنها در **موقعیت‌های خروجی** (مثلاً نوع بازگشتی متدها) استفاده می‌شود. این علامت، پارامتر نوع را کوواریانت کرده و اجازه می‌دهد کارهای زیر را انجام دهیم:
 </div>
 
@@ -3902,6 +4135,7 @@ Animal a = animals.Pop();
 ```
 
 <div dir="rtl">
+
 تبدیل از `bears` به `animals` توسط کامپایلر مجاز است، زیرا **پارامتر نوع کوواریانت است**. این تبدیل **ایمن از نظر نوع** است، زیرا موقعیتی که کامپایلر می‌خواهد از آن جلوگیری کند—قرار دادن یک **Camel** در استک—امکان‌پذیر نیست، چرا که هیچ راهی برای فرستادن Camel به یک interface که `T` تنها در خروجی ظاهر می‌شود، وجود ندارد.
 
 💡 کوواریانس (و کانترکوواریانس) در interfaces معمولاً **مصرف می‌شود** و کمتر پیش می‌آید که نیاز باشد **interfaces کوواریانت بنویسید**.
@@ -3919,6 +4153,7 @@ public class ZooCleaner
 ```
 
 <div dir="rtl">
+
 💡 **interfaces `IEnumerator<T>` و `IEnumerable<T>`** که در فصل ۷ توضیح داده شده‌اند، دارای پارامتر نوع کوواریانت `T` هستند. این باعث می‌شود بتوانید، برای مثال، `IEnumerable<string>` را به `IEnumerable<object>` تبدیل کنید.
 
 کامپایلر **خطا ایجاد می‌کند** اگر پارامتر نوع کوواریانت را در یک **موقعیت ورودی** (مثلاً پارامتر متد یا property قابل نوشتن) استفاده کنید.
@@ -3944,6 +4179,7 @@ public interface IPushable<in T> { void Push(T obj); }
 ```
 
 <div dir="rtl">
+
 اکنون می‌توانیم قانونی عمل کنیم:
 </div>
 
@@ -3954,6 +4190,7 @@ bears.Push(new Bear());
 ```
 
 <div dir="rtl">
+
 هیچ عضوی در `IPushable` نوع `T` را خروجی نمی‌دهد، بنابراین نمی‌توانیم با تبدیل `animals` به `bears` دچار مشکل شویم (مثلاً راهی برای Pop کردن وجود ندارد).
 
 کلاس `Stack<T>` ما می‌تواند همزمان **`IPushable<T>` و `IPoppable<T>`** را پیاده‌سازی کند، حتی اگر `T` در دو interface با **annotaion‌های variance مخالف** باشد! این کار امکان‌پذیر است زیرا **variance باید از طریق interface اعمال شود، نه کلاس**؛ بنابراین، قبل از انجام تبدیل variant، باید از دیدگاه IPoppable یا IPushable متعهد شوید. این دیدگاه سپس شما را به عملیات قانونی تحت قوانین variance محدود می‌کند.
@@ -3976,6 +4213,7 @@ public interface IComparer<in T>
 ```
 
 <div dir="rtl">
+
 چون این interface دارای پارامتر نوع کانترکوواریانت `T` است، می‌توانیم از یک `IComparer<object>` برای مقایسه دو رشته استفاده کنیم:
 </div>
 
@@ -3986,6 +4224,7 @@ int result = stringComparer.Compare("Brett", "Jemaine");
 ```
 
 <div dir="rtl">
+
 همانند کوواریانس، کامپایلر **خطا گزارش می‌دهد** اگر پارامتر نوع کانترکوواریانت را در **موقعیت خروجی** (مثلاً مقدار بازگشتی یا property قابل خواندن) استفاده کنید.
 
 ---
@@ -4011,6 +4250,7 @@ static T Max<T>(T a, T b) where T : IComparable<T>
 ```
 
 <div dir="rtl">
+
 چرا نمی‌توانیم اینطور پیاده کنیم؟
 </div>
 
@@ -4020,6 +4260,7 @@ static T Max<T>(T a, T b)
 ```
 
 <div dir="rtl">
+
 چون Max باید **یک بار کامپایل شود و برای همه نوع‌های T کار کند**. کامپایل نمی‌تواند موفق شود زیرا عملگر `>` معنای یکنواختی برای همه نوع‌ها ندارد—در واقع، همه Tها حتی عملگر `>` ندارند.
 
 در مقابل، در C++:
@@ -4034,6 +4275,7 @@ T Max(T a, T b)
 ```
 
 <div dir="rtl">
+
 این کد **برای هر مقدار T جداگانه کامپایل می‌شود** و معنای `>` را برای نوع خاص خود می‌گیرد، و اگر نوعی از `>` پشتیبانی نکند، کامپایل خطا می‌دهد.
 </div>
 

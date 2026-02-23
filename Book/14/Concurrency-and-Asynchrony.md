@@ -1,5 +1,6 @@
 
 <div dir="rtl">
+
 # فصل چهاردهم: هم‌زمانی و ناهم‌زمانی
 
 بیشتر برنامه‌ها نیاز دارند با بیش از یک رویداد که به‌طور هم‌زمان رخ می‌دهد سروکار داشته باشند (هم‌زمانی یا **Concurrency**).
@@ -85,6 +86,7 @@ void WriteY()
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 📤 خروجی نمونه:
@@ -100,6 +102,7 @@ yyyyyyyyyyyyyyxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
 <div dir="rtl">
+
 ---
 
 رشته اصلی یک رشته جدید به نام `t` می‌سازد و روی آن متدی را اجرا می‌کند که کاراکتر `y` را به‌طور تکراری چاپ می‌کند.
@@ -145,6 +148,7 @@ Console.WriteLine (Thread.CurrentThread.Name);
 ```
 
 <div dir="rtl">
+
 ---
 
 ## ⏳ Join و Sleep
@@ -167,6 +171,7 @@ void Go()
 ```
 
 <div dir="rtl">
+
 این کد ابتدا ۱۰۰۰ بار `y` چاپ می‌کند و بلافاصله پس از آن متن `"Thread t has ended!"` نمایش داده می‌شود.
 
 همچنین می‌توانید هنگام فراخوانی **Join** یک **Timeout** مشخص کنید (برحسب میلی‌ثانیه یا یک **TimeSpan**). در این صورت متد مقدار **true** برمی‌گرداند اگر Thread پایان یافته باشد، یا **false** اگر زمان تمام شده باشد.
@@ -184,6 +189,7 @@ Thread.Sleep (500);                     // توقف برای ۵۰۰ میلی‌�
 ```
 
 <div dir="rtl">
+
 فراخوانی `Thread.Sleep(0)` بلافاصله **بُرش زمانی** (Time Slice) فعلی را آزاد کرده و داوطلبانه CPU را در اختیار سایر Threadها قرار می‌دهد.
 متد `Thread.Yield()` نیز همین کار را انجام می‌دهد، با این تفاوت که CPU را تنها به Threadهایی واگذار می‌کند که روی همان پردازنده در حال اجرا هستند.
 
@@ -207,6 +213,7 @@ bool blocked = (someThread.ThreadState & ThreadState.WaitSleepJoin) != 0;
 ```
 
 <div dir="rtl">
+
 ---
 
 ## ⚙️ ThreadState
@@ -232,6 +239,7 @@ public static ThreadState Simplify (this ThreadState ts)
 ```
 
 <div dir="rtl">
+
 🔎 ویژگی ThreadState برای مقاصد **Diagnostic** مفید است، اما برای **Synchronization** مناسب نیست، زیرا وضعیت یک Thread می‌تواند بین بررسی مقدار ThreadState و عمل‌کردن بر اساس آن تغییر کند.
 
 هنگامی‌که یک Thread **Block** یا **Unblock** می‌شود، سیستم‌عامل یک **Context Switch** انجام می‌دهد. این عمل هزینه‌ی اندکی دارد (معمولاً یک یا دو میکروثانیه).
@@ -269,6 +277,7 @@ while (DateTime.Now < nextStartTime)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔁 Spinning (چرخش مداوم)
@@ -281,6 +290,7 @@ while (DateTime.Now < nextStartTime);
 ```
 
 <div dir="rtl">
+
 این کار به‌شدت وقت CPU را تلف می‌کند. از دید **CLR** و سیستم‌عامل، Thread در حال انجام یک محاسبه مهم است، بنابراین منابع به آن اختصاص داده می‌شود. در عمل، ما یک عملیات I/O-bound را به یک عملیات **Compute-bound** تبدیل کرده‌ایم.
 
 ---
@@ -316,6 +326,7 @@ void Go()
 ```
 
 <div dir="rtl">
+
 برای هر Thread یک نسخه جداگانه از متغیر `cycles` روی پشته‌ی حافظه‌اش ساخته می‌شود. بنابراین، خروجی طبق انتظار ۱۰ علامت سؤال خواهد بود.
 
 ---
@@ -341,6 +352,7 @@ void Go()
 ```
 
 <div dir="rtl">
+
 در این مثال، هر دو Thread متغیر `_done` را به اشتراک می‌گذارند، پس خروجی `"Done"` فقط یک‌بار چاپ می‌شود.
 
 ---
@@ -366,6 +378,7 @@ action();
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 📌 اشتراک‌گذاری از طریق Fieldها
@@ -393,6 +406,7 @@ class ThreadTest
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 📌 اشتراک‌گذاری از طریق Static Field
@@ -423,6 +437,7 @@ class ThreadTest
 ```
 
 <div dir="rtl">
+
 ---
 
 ## ⚠️ مشکل Thread Safety
@@ -445,6 +460,7 @@ static void Go()
 ```
 
 <div dir="rtl">
+
 مشکل اینجاست که یک Thread ممکن است در حال بررسی شرط `if` باشد در همان لحظه‌ای که Thread دیگر دارد `WriteLine` را اجرا می‌کند—قبل از آنکه فرصت کند مقدار `_done` را برابر **true** کند.
 
 این مثال یکی از راه‌های متعدد را نشان می‌دهد که در آن **Shared Writable State** (وضعیت مشترک قابل‌نوشتن) می‌تواند خطاهای متناوبی ایجاد کند؛ همان خطاهایی که **Multithreading** به‌بدنامی برای آن‌ها مشهور است.
@@ -484,6 +500,7 @@ class ThreadSafe
 ```
 
 <div dir="rtl">
+
 وقتی دو Thread هم‌زمان برای گرفتن یک Lock (که می‌تواند روی هر شیء از نوع Reference باشد؛ در اینجا `_locker`) رقابت کنند، یکی از آن‌ها منتظر می‌ماند (Blocked) تا Lock آزاد شود.
 این کار تضمین می‌کند که فقط یک Thread می‌تواند هم‌زمان وارد بلوک کد شود، و `"Done"` فقط یک‌بار چاپ خواهد شد.
 
@@ -525,6 +542,7 @@ void Print (string message) => Console.WriteLine (message);
 ```
 
 <div dir="rtl">
+
 با این روش، می‌توانید هر تعداد آرگومان را به متد ارسال کنید.
 حتی می‌توانید کل پیاده‌سازی را در یک **Lambda چند‌دستوره‌ای** قرار دهید:
 </div>
@@ -538,6 +556,7 @@ new Thread (() =>
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔄 روش دیگر: استفاده از `Thread.Start`
@@ -557,6 +576,7 @@ void Print (object messageObj)
 ```
 
 <div dir="rtl">
+
 این روش کار می‌کند چون سازنده‌ی **Thread** برای دو نوع Delegate **Overload** شده است:
 </div>
 
@@ -566,6 +586,7 @@ public delegate void ParameterizedThreadStart (object obj);
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 🧩 Lambda Expressions و متغیرهای Captured
@@ -582,6 +603,7 @@ for (int i = 0; i < 10; i++)
 ```
 
 <div dir="rtl">
+
 خروجی **نامعین** است! مثالی از خروجی:
 </div>
 
@@ -590,6 +612,7 @@ for (int i = 0; i < 10; i++)
 ```
 
 <div dir="rtl">
+
 مشکل این است که متغیر `i` در طول اجرای حلقه به یک محل حافظه‌ی مشترک اشاره دارد.
 بنابراین هر Thread، متدی را روی متغیری فراخوانی می‌کند که ممکن است هم‌زمان در حال تغییر باشد!
 
@@ -605,6 +628,7 @@ for (int i = 0; i < 10; i++)
 ```
 
 <div dir="rtl">
+
 حالا هر عدد از **۰ تا ۹** دقیقاً یک‌بار چاپ می‌شود.
 (البته ترتیب هنوز مشخص نیست، چون Threadها می‌توانند در زمان‌های نامعین شروع شوند.)
 
@@ -625,6 +649,7 @@ t1.Start(); t2.Start();
 ```
 
 <div dir="rtl">
+
 چون هر دو Lambda متغیر `text` را Capture کرده‌اند، خروجی دوبار `"t2"` خواهد بود.
 
 ---
@@ -651,6 +676,7 @@ void Go() { throw null; }   // پرتاب NullReferenceException
 ```
 
 <div dir="rtl">
+
 در اینجا، Thread جدید با یک **Unhandled NullReferenceException** مواجه می‌شود.
 این رفتار منطقی است، چون هر Thread مسیر اجرای مستقل خود را دارد.
 
@@ -677,6 +703,7 @@ void Go()
 ```
 
 <div dir="rtl">
+
 در برنامه‌های واقعی، باید در تمام متدهای ورودی Thread **Exception Handler** داشته باشید—همان‌طور که در Thread اصلی برنامه هم نیاز دارید.
 چون یک Exception مدیریت‌نشده باعث بسته‌شدن کل برنامه و نمایش یک پنجره‌ی ناخوشایند می‌شود.
 
@@ -717,6 +744,7 @@ static void Main (string[] args)
 ```
 
 <div dir="rtl">
+
 * اگر برنامه بدون آرگومان اجرا شود، Thread به‌صورت **Foreground** خواهد بود و منتظر می‌ماند تا کاربر Enter بزند.
 * اگر برنامه با آرگومان اجرا شود، Thread به‌صورت **Background** است و برنامه تقریباً بلافاصله تمام می‌شود (و `ReadLine` قطع می‌گردد).
 
@@ -735,6 +763,7 @@ enum ThreadPriority { Lowest, BelowNormal, Normal, AboveNormal, Highest }
 ```
 
 <div dir="rtl">
+
 این موضوع زمانی اهمیت دارد که چندین Thread هم‌زمان فعال باشند.
 
 * بالا بردن اولویت می‌تواند باعث شود Threadهای دیگر **گرسنه** بمانند.
@@ -747,6 +776,7 @@ p.PriorityClass = ProcessPriorityClass.High;
 ```
 
 <div dir="rtl">
+
 این کار برای **پردازش‌های غیر-UI کوچک با نیاز به واکنش سریع** مناسب است. اما در برنامه‌های پرمصرف (مخصوصاً با UI)، افزایش اولویت Process می‌تواند کل سیستم را کند کند.
 
 ---
@@ -778,6 +808,7 @@ signal.Set();  // سیگنال باز شد
 ```
 
 <div dir="rtl">
+
 بعد از فراخوانی `Set`، سیگنال باز می‌ماند تا زمانی که دوباره `Reset` شود.
 CLR سازه‌های Signaling متنوعی دارد که در فصل ۲۱ بررسی می‌شوند.
 
@@ -834,6 +865,7 @@ partial class MyWindow : Window
 ```
 
 <div dir="rtl">
+
 🔹 پنجره فوراً پاسخ‌گو خواهد بود.
 🔹 بعد از ۵ ثانیه، TextBox به‌روزرسانی می‌شود.
 
@@ -849,6 +881,7 @@ void UpdateMessage (string message)
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 🪟 چندین UI Thread
@@ -893,6 +926,7 @@ partial class MyWindow : Window
 ```
 
 <div dir="rtl">
+
 🔑 این روش مفید است چون در همه‌ی APIهای رابط کاربری rich-client به یک شکل کار می‌کند.
 
 فراخوانی **Post** معادل فراخوانی **BeginInvoke** روی یک Dispatcher یا Control است. همچنین متدی به نام **Send** وجود دارد که معادل **Invoke** است.
@@ -928,6 +962,7 @@ Task.Run(() => Console.WriteLine("Hello from the thread pool"));
 ```
 
 <div dir="rtl">
+
 قبل از نسخه‌ی **.NET Framework 4.0** که Task وجود نداشت، روش رایج استفاده از **ThreadPool.QueueUserWorkItem** بود:
 </div>
 
@@ -936,6 +971,7 @@ ThreadPool.QueueUserWorkItem(notUsed => Console.WriteLine("Hello"));
 ```
 
 <div dir="rtl">
+
 همچنین استفاده‌های زیر به‌طور ضمنی از thread pool بهره می‌برند:
 
 * 🌐 سرورهای اپلیکیشن **ASP.NET Core** و **Web API**
@@ -1001,6 +1037,7 @@ Task.Run(() => Console.WriteLine("Foo"));
 ```
 
 <div dir="rtl">
+
 به‌طور پیش‌فرض، Taskها روی **Thread Pool** اجرا می‌شوند که **background thread** هستند.
 یعنی وقتی **main thread** تمام شود، همه Taskهایی که ساخته‌اید هم متوقف می‌شوند.
 
@@ -1013,6 +1050,7 @@ Console.ReadLine();
 ```
 
 <div dir="rtl">
+
 در **LINQPad** نیازی به `Console.ReadLine` نیست، چون پروسه‌ی LINQPad به‌طور خودکار background threadها را زنده نگه می‌دارد.
 
 فراخوانی **Task.Run** تقریباً شبیه به ایجاد یک Thread است:
@@ -1023,6 +1061,7 @@ new Thread(() => Console.WriteLine("Foo")).Start();
 ```
 
 <div dir="rtl">
+
 اما `Task.Run` یک **Task object** برمی‌گرداند که می‌توانیم وضعیت پیشرفت آن را مانیتور کنیم (مشابه Thread object).
 توجه کنید که بعد از `Task.Run` دیگر **Start** نمی‌زنیم چون این متد **Hot Task** ایجاد می‌کند. (می‌توانید با سازنده‌ی Task یک **Cold Task** بسازید، اما در عمل کم‌استفاده است.)
 
@@ -1046,6 +1085,7 @@ task.Wait();  // تا تکمیل Task بلاک می‌شود
 ```
 
 <div dir="rtl">
+
 متد Wait امکان تعیین **Timeout** و **CancellationToken** را هم می‌دهد (توضیح در بخش «Cancellation» صفحه 681).
 
 ---
@@ -1063,6 +1103,7 @@ Task task = Task.Factory.StartNew(() => ...,
 ```
 
 <div dir="rtl">
+
 اجرای یک تسک بلندمدت روی یک pooled thread مشکلی ندارد؛ اما اگر چندین تسک بلندمدت موازی اجرا شوند (خصوصاً آن‌هایی که Block می‌شوند)، عملکرد کاهش می‌یابد.
 
 راهکارهای بهتر در این حالت:
@@ -1090,6 +1131,7 @@ Console.WriteLine(result);  // 3
 ```
 
 <div dir="rtl">
+
 نمونه: محاسبه تعداد اعداد اول در سه میلیون عدد اول:
 </div>
 
@@ -1104,6 +1146,7 @@ Console.WriteLine("The answer is " + primeNumberTask.Result);
 ```
 
 <div dir="rtl">
+
 خروجی:
 </div>
 
@@ -1113,6 +1156,7 @@ The answer is 216816
 ```
 
 <div dir="rtl">
+
 ---
 
 ### مدیریت Exceptionها ⚠️
@@ -1143,6 +1187,7 @@ catch (AggregateException aex)
 ```
 
 <div dir="rtl">
+
 🧩 CLR Exception را در یک **AggregateException** بسته‌بندی می‌کند تا با سناریوهای برنامه‌نویسی موازی هم‌خوانی داشته باشد (توضیح در فصل 22).
 
 می‌توانید بدون پرتاب Exception بررسی کنید که آیا Task Faulted شده یا نه، با استفاده از ویژگی‌های:
@@ -1202,6 +1247,7 @@ awaiter.OnCompleted(() =>
 ```
 
 <div dir="rtl">
+
 فراخوانی `GetAwaiter` روی یک Task، یک **awaiter object** برمی‌گرداند که متد `OnCompleted` آن، به Task می‌گوید پس از پایان (یا خطا)، کدام delegate اجرا شود.
 حتی می‌توانید یک Continuation را روی Taskی که قبلاً کامل شده وصل کنید؛ در این صورت، Continuation بلافاصله زمان‌بندی و اجرا می‌شود.
 
@@ -1225,6 +1271,7 @@ var awaiter = primeNumberTask.ConfigureAwait(false).GetAwaiter();
 ```
 
 <div dir="rtl">
+
 اگر هیچ SynchronizationContextای وجود نداشته باشد—یا شما `ConfigureAwait(false)` استفاده کنید—Continuation به‌طور کلی روی یک **pooled thread** اجرا می‌شود.
 
 ---
@@ -1243,6 +1290,7 @@ primeNumberTask.ContinueWith(antecedent =>
 ```
 
 <div dir="rtl">
+
 🔹 `ContinueWith` خودش یک Task برمی‌گرداند، بنابراین می‌توانید چندین Continuation زنجیره‌ای بسازید.
 اما در این حالت باید به‌صورت مستقیم با `AggregateException` سروکار داشته باشید و برای اپلیکیشن‌های UI کد اضافی برای **marshal کردن** Continuation بنویسید.
 همچنین در محیط‌های غیر UI، اگر بخواهید Continuation روی همان نخ اجرا شود، باید گزینه‌ی `TaskContinuationOptions.ExecuteSynchronously` را مشخص کنید؛ در غیر این صورت به thread pool پرش خواهد کرد.
@@ -1277,6 +1325,7 @@ public class TaskCompletionSource<TResult>
 ```
 
 <div dir="rtl">
+
 فراخوانی هرکدام از این متدها Task را سیگنال می‌دهد و آن را در وضعیت **completed**، **faulted** یا **canceled** قرار می‌دهد.
 
 📌 انتظار این است که دقیقاً یکی از این متدها یک‌بار فراخوانی شود. اگر دوباره `SetResult`, `SetException` یا `SetCanceled` صدا زده شوند، استثنا پرتاب می‌کنند. درحالی‌که متدهای `Try*` فقط مقدار `false` برمی‌گردانند.
@@ -1296,6 +1345,7 @@ Console.WriteLine(task.Result);   // 42
 ```
 
 <div dir="rtl">
+
 ---
 
 ### نوشتن متد Run اختصاصی 🚀
@@ -1317,6 +1367,7 @@ Task<int> task = Run(() => { Thread.Sleep(5000); return 42; });
 ```
 
 <div dir="rtl">
+
 این کار معادل فراخوانی `Task.Factory.StartNew` با گزینه‌ی `TaskCreationOptions.LongRunning` است.
 
 ---
@@ -1339,6 +1390,7 @@ Task<int> GetAnswerToLife()
 ```
 
 <div dir="rtl">
+
 با وصل کردن یک Continuation به این Task:
 </div>
 
@@ -1348,6 +1400,7 @@ awaiter.OnCompleted(() => Console.WriteLine(awaiter.GetResult()));
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ساخت متد Delay عمومی ⏱️
@@ -1367,6 +1420,7 @@ Task Delay(int milliseconds)
 ```
 
 <div dir="rtl">
+
 📌 در .NET 5 به بعد، نسخه‌ی غیر generic از TaskCompletionSource معرفی شده است، بنابراین می‌توانید به‌جای `TaskCompletionSource<object>` از آن استفاده کنید.
 
 ---
@@ -1382,6 +1436,7 @@ for (int i = 0; i < 10000; i++)
 ```
 
 <div dir="rtl">
+
 تایمرها callbackهای خود را روی **pooled threads** اجرا می‌کنند. بنابراین بعد از ۵ ثانیه، thread pool درخواست‌های زیادی برای `SetResult(null)` دریافت می‌کند. اگر درخواست‌ها سریع‌تر از توان پردازش برسند، thread pool آن‌ها را در صف قرار می‌دهد و در سطح بهینه‌ی موازی‌سازی پردازش می‌کند.
 
 از آنجایی که کار نخ‌ها کوتاه است (فقط فراخوانی `SetResult` و اجرای continuation)، این روش بسیار بهینه عمل می‌کند.
@@ -1396,6 +1451,7 @@ Task.Delay(5000).GetAwaiter().OnCompleted(() => Console.WriteLine(42));
 ```
 
 <div dir="rtl">
+
 یا:
 </div>
 
@@ -1404,6 +1460,7 @@ Task.Delay(5000).ContinueWith(ant => Console.WriteLine(42));
 ```
 
 <div dir="rtl">
+
 **Task.Delay** معادل asynchronous برای **Thread.Sleep** است.
 
 ---
@@ -1512,6 +1569,7 @@ int GetPrimesCount (int start, int count)
 ```
 
 <div dir="rtl">
+
 این تابع اعداد اول را می‌شمارد و از همه هسته‌های CPU استفاده می‌کند. اجرای آن طولانی است.
 
 یک متد برای فراخوانی آن:
@@ -1528,6 +1586,7 @@ void DisplayPrimeCounts()
 ```
 
 <div dir="rtl">
+
 خروجی:
 </div>
 
@@ -1540,6 +1599,7 @@ void DisplayPrimeCounts()
 ```
 
 <div dir="rtl">
+
 در اینجا یک **call graph** داریم:
 
 * ‎`DisplayPrimeCounts` فراخوانی می‌کند ‎`GetPrimesCount` را.
@@ -1555,6 +1615,7 @@ Task.Run(() => DisplayPrimeCounts());
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ✅ **اجرای fine-grained concurrency (نسخه asynchronous)**
@@ -1570,6 +1631,7 @@ Task<int> GetPrimesCountAsync (int start, int count)
 ```
 
 <div dir="rtl">
+
 ### 🌟 **چرا پشتیبانی زبان مهم است**
 
 اکنون باید **DisplayPrimeCounts** را تغییر دهیم تا **GetPrimesCountAsync** را فراخوانی کند.
@@ -1589,6 +1651,7 @@ Console.WriteLine("Done");
 ```
 
 <div dir="rtl">
+
 * حلقه سریعاً ۱۰ بار تکرار می‌شود (زیرا متدها nonblocking هستند).
 * همه ۱۰ عملیات **همزمان** اجرا می‌شوند و پیام **Done** قبل از تمام شدن کارها چاپ می‌شود.
 
@@ -1621,6 +1684,7 @@ void DisplayPrimeCountsFrom(int i)
 ```
 
 <div dir="rtl">
+
 * اگر بخواهیم **DisplayPrimeCounts** خودش asynchronous باشد و یک Task بازگرداند، باید از **TaskCompletionSource** استفاده کنیم.
 
 ---
@@ -1641,6 +1705,7 @@ async Task DisplayPrimeCountsAsync()
 ```
 
 <div dir="rtl">
+
 * کلیدواژه‌های **async** و **await** امکان پیاده‌سازی asynchronous را بدون پیچیدگی زیاد فراهم می‌کنند.
 
 ---
@@ -1668,6 +1733,7 @@ statement(s);
 ```
 
 <div dir="rtl">
+
 * توسط کامپایلر به چیزی مشابه این گسترش می‌یابد:
 </div>
 
@@ -1681,6 +1747,7 @@ awaiter.OnCompleted(() =>
 ```
 
 <div dir="rtl">
+
 * کامپایلر همچنین برای **سرویس‌دهی سریع در صورت تکمیل همزمان** و مدیریت جزئیات دیگر، کد اضافه می‌کند.
 
 ---
@@ -1704,6 +1771,7 @@ async void DisplayPrimesCount()
 ```
 
 <div dir="rtl">
+
 * کلیدواژه **async** به کامپایلر می‌گوید که `await` در این متد، یک keyword است نه یک identifier.
 * async فقط روی **آنچه داخل متد رخ می‌دهد** تأثیر دارد و مشابه `unsafe`، تاثیری روی signature متد ندارد.
 * می‌تواند روی متدهای `void` یا `Task` و `Task<TResult>` اعمال شود.
@@ -1733,6 +1801,7 @@ void DisplayPrimesCount()
 ```
 
 <div dir="rtl">
+
 * Await می‌تواند روی taskهای generic (`Task<TResult>`) یا nongeneric (`Task`) استفاده شود.
 * نمونه nongeneric:
 </div>
@@ -1743,6 +1812,7 @@ Console.WriteLine("Five seconds passed!");
 ```
 
 <div dir="rtl">
+
 ### 🔹 **حفظ state محلی با await**
 
 یکی از قدرت‌های واقعی **await** این است که می‌تواند تقریباً در هر جایی از کد ظاهر شود (داخل یک تابع asynchronous)، به جز درون `lock` یا `unsafe context`.
@@ -1759,6 +1829,7 @@ async void DisplayPrimeCounts()
 ```
 
 <div dir="rtl">
+
 * با اولین اجرای `GetPrimesCountAsync`، کنترل به فراخواننده بازمی‌گردد.
 
 * پس از تکمیل (یا خطا) متد، اجرای کد از همان نقطه ادامه می‌یابد.
@@ -1787,6 +1858,7 @@ void Go()
 ```
 
 <div dir="rtl">
+
 * در این حالت، برنامه **برای مدتی قفل می‌شود** و UI پاسخگو نیست.
 
 #### نسخه asynchronous با Task.Run و await
@@ -1804,6 +1876,7 @@ async void Go()
 ```
 
 <div dir="rtl">
+
 * کد داخل `Go` بر روی **UI thread** اجرا می‌شود و تنها **GetPrimesCountAsync** روی worker thread.
 * اجرای `Go` به صورت **pseudo-concurrent** با message loop رخ می‌دهد.
 * **نقاط preemption تنها هنگام await** رخ می‌دهند، بنابراین thread safety ساده‌تر است.
@@ -1843,6 +1916,7 @@ async void Go()
 ```
 
 <div dir="rtl">
+
 * کد **شبیه نسخه synchronous** نوشته شده است.
 * پس از اولین await، کنترل به caller بازمی‌گردد، اما continuation تضمین می‌کند که تمام بلاک `finally` بعد از تکمیل method اجرا شود.
 
@@ -1887,6 +1961,7 @@ void Go()
 ```
 
 <div dir="rtl">
+
 ⚠️ مشکلات این روش:
 
 * کل call graph (Go + GetPrimesCount) روی worker thread اجرا می‌شود.
@@ -1910,6 +1985,7 @@ async Task PrintAnswerToLife()
 ```
 
 <div dir="rtl">
+
 * نیازی به return صریح Task نیست؛ کامپایلر **Task** را تولید می‌کند.
 * این امکان ایجاد **chained async calls** را فراهم می‌کند:
 </div>
@@ -1923,6 +1999,7 @@ async Task Go()
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 **توسعه متد با TaskCompletionSource**
@@ -1951,6 +2028,7 @@ Task PrintAnswerToLife()
 ```
 
 <div dir="rtl">
+
 * وقتی متد asynchronous تمام می‌شود، اجرای کد به **continuation** منتقل می‌شود.
 * در rich-client scenario، ادامه اجرا به **UI thread** باز می‌گردد.
 
@@ -1981,6 +2059,7 @@ async Task Go()
 ```
 
 <div dir="rtl">
+
 * این الگو مشابه برنامه‌نویسی synchronous است، اما بدون بلاک کردن thread.
 
 ---
@@ -2022,6 +2101,7 @@ async Task<int> GetAnswerToLife()
 ```
 
 <div dir="rtl">
+
 در اینجا، `Go` متد `PrintAnswerToLife` را فراخوانی می‌کند، که آن خود `GetAnswerToLife` را فراخوانی می‌کند، که در نهایت `Delay` را صدا می‌زند و منتظر می‌ماند. عبارت `await` باعث می‌شود اجرای کد به `PrintAnswerToLife` بازگردد، که آن نیز منتظر است و به `Go` بازمی‌گردد و در نهایت به فراخواننده بازمی‌گردد. همه این‌ها به صورت همزمان (synchronously) روی همان نخ (thread) که `Go` را فراخوانی کرده است اجرا می‌شود؛ این فاز کوتاه همزمان اجرای برنامه است.
 
 پس از پنج ثانیه، ادامه‌ی اجرای `Delay` فراخوانی می‌شود و اجرای کد به `GetAnswerToLife` برمی‌گردد، روی یک نخ موجود در pool. (اگر از یک نخ UI شروع کرده باشیم، اجرای کد به همان نخ بازمی‌گردد.) سپس بقیه دستورات در `GetAnswerToLife` اجرا می‌شوند، و پس از آن `Task<int>` این متد با نتیجه ۴۲ تکمیل می‌شود و ادامه‌ی اجرای `PrintAnswerToLife` اجرا می‌شود و دستورات باقی‌مانده در آن متد اجرا می‌شوند. این روند تا زمانی که `Go` تکمیل شود ادامه پیدا می‌کند.
@@ -2040,6 +2120,7 @@ _button.Click += (sender, args) => Go();
 ```
 
 <div dir="rtl">
+
 با وجود اینکه `Go` یک متد غیرهمزمان است، ما آن را `await` نکردیم و این همان چیزی است که همزمانی لازم برای حفظ پاسخگویی UI را فراهم می‌کند.
 
 می‌توانیم از همین اصل برای اجرای دو عملیات غیرهمزمان به صورت موازی استفاده کنیم:
@@ -2053,6 +2134,7 @@ await task2;
 ```
 
 <div dir="rtl">
+
 (با `await` کردن هر دو عملیات بعداً، در آن نقطه موازی‌سازی «به پایان می‌رسد». بعداً با ترکیب‌کننده `WhenAll` این الگو را توضیح می‌دهیم.)
 
 همزمانی ایجاد شده به این شکل، چه عملیات روی نخ UI آغاز شده باشد و چه نه، رخ می‌دهد، اگرچه تفاوتی در نحوه وقوع آن وجود دارد. در هر دو حالت، همان همزمانی واقعی در سطح پایین اتفاق می‌افتد (مثل `Task.Delay` یا کدی که به `Task.Run` سپرده شده است). متدهای بالاتر در call stack تنها در صورتی همزمانی واقعی خواهند داشت که عملیات بدون حضور `SynchronizationContext` آغاز شده باشد؛ در غیر این صورت، به همزمانی شبه‌واقعی (pseudo-concurrency) و ایمنی ساده‌شده نخ‌ها محدود می‌شوند، جایی که تنها نقطه‌ای که می‌توانیم متوقف شویم، عبارت `await` است. این اجازه می‌دهد که برای مثال، یک فیلد مشترک `_x` تعریف کرده و در `GetAnswerToLife` بدون قفل کردن آن را افزایش دهیم:
@@ -2068,6 +2150,7 @@ async Task<int> GetAnswerToLife()
 ```
 
 <div dir="rtl">
+
 (با این حال، نمی‌توانیم فرض کنیم که `_x` قبل و بعد از `await` مقدار یکسانی دارد.)
 
 ---
@@ -2086,6 +2169,7 @@ async Task NamedMethod()
 ```
 
 <div dir="rtl">
+
 همین‌طور می‌توان متدهای بدون نام (lambda و anonymous) را با پیشوند `async` نوشت:
 </div>
 
@@ -2098,6 +2182,7 @@ Func<Task> unnamed = async () =>
 ```
 
 <div dir="rtl">
+
 می‌توانیم آنها را فراخوانی و `await` کنیم:
 </div>
 
@@ -2107,6 +2192,7 @@ await unnamed();
 ```
 
 <div dir="rtl">
+
 همچنین می‌توان از Lambda غیرهمزمان هنگام attach کردن event handler استفاده کرد:
 </div>
 
@@ -2119,6 +2205,7 @@ myButton.Click += async (sender, args) =>
 ```
 
 <div dir="rtl">
+
 این کوتاه‌تر از روش زیر است که همان اثر را دارد:
 </div>
 
@@ -2133,6 +2220,7 @@ async void ButtonHandler(object sender, EventArgs args)
 ```
 
 <div dir="rtl">
+
 Lambda غیرهمزمان می‌تواند `Task<TResult>` نیز بازگرداند:
 </div>
 
@@ -2146,6 +2234,7 @@ int answer = await unnamed();
 ```
 
 <div dir="rtl">
+
 ---
 
 ### جریان‌های غیرهمزمان 🌊
@@ -2167,6 +2256,7 @@ public interface IAsyncEnumerator<out T> : IAsyncDisposable
 ```
 
 <div dir="rtl">
+
 `ValueTask<T>` یک struct است که `Task<T>` را بسته‌بندی می‌کند و از نظر رفتار مشابه آن است و در عین حال اجرای کارآمدتری زمانی که تسک به صورت همزمان کامل شود، ارائه می‌دهد. `IAsyncDisposable` نسخه غیرهمزمان `IDisposable` است و امکان cleanup غیرهمزمان را فراهم می‌کند:
 </div>
 
@@ -2178,6 +2268,7 @@ public interface IAsyncDisposable
 ```
 
 <div dir="rtl">
+
 اقدام به گرفتن هر عنصر از توالی (`MoveNextAsync`) یک عملیات غیرهمزمان است، بنابراین جریان‌های غیرهمزمان مناسب زمانی هستند که عناصر به صورت تدریجی (مثلاً از یک ویدیو استریم) می‌رسند.
 
 در مقابل، نوع زیر زمانی مناسب است که کل توالی تأخیر داشته باشد اما عناصر هنگام رسیدن همه با هم ارائه شوند:
@@ -2188,6 +2279,7 @@ Task<IEnumerable<T>>
 ```
 
 <div dir="rtl">
+
 برای ایجاد جریان غیرهمزمان، باید متدی نوشت که اصول iterator و متدهای غیرهمزمان را ترکیب کند. یعنی متد باید هم `yield return` و هم `await` داشته باشد و نوع بازگشتی آن `IAsyncEnumerable<T>` باشد:
 </div>
 
@@ -2203,6 +2295,7 @@ async IAsyncEnumerable<int> RangeAsync(int start, int count, int delay)
 ```
 
 <div dir="rtl">
+
 برای مصرف یک جریان غیرهمزمان، از `await foreach` استفاده کنید:
 </div>
 
@@ -2212,6 +2305,7 @@ await foreach (var number in RangeAsync(0, 10, 500))
 ```
 
 <div dir="rtl">
+
 توجه کنید که داده‌ها به صورت پیوسته هر ۵۰۰ میلی‌ثانیه (یا در واقعیت، به محض آماده شدن) می‌رسند. در مقایسه با همان ساختار با `Task<IEnumerable<T>>`، هیچ داده‌ای بازگردانده نمی‌شود تا آخرین عنصر آماده شود:
 </div>
 
@@ -2229,6 +2323,7 @@ static async Task<IEnumerable<int>> RangeTaskAsync(int start, int count, int del
 ```
 
 <div dir="rtl">
+
 برای مصرف آن با `foreach`:
 </div>
 
@@ -2238,6 +2333,7 @@ foreach (var data in await RangeTaskAsync(0, 10, 500))
 ```
 
 <div dir="rtl">
+
 ### پرس‌وجو روی IAsyncEnumerable<T> 🔍
 
 پکیج **System.Linq.Async**، عملگرهای LINQ را برای **IAsyncEnumerable<T>** تعریف می‌کند، که به شما امکان می‌دهد کوئری‌ها را تقریباً همانند **IEnumerable<T>** بنویسید.
@@ -2256,6 +2352,7 @@ await foreach (var number in query)
 ```
 
 <div dir="rtl">
+
 این کد خروجی‌هایی مانند `0, 20, 40, ...` تولید می‌کند.
 
 اگر با **Rx** آشنا هستید، می‌توانید از عملگرهای قوی‌تر آن نیز بهره ببرید، با فراخوانی متد **ToObservable** که یک **IAsyncEnumerable<T>** را به **IObservable<T>** تبدیل می‌کند. همچنین متد **ToAsyncEnumerable** برای تبدیل در جهت معکوس نیز وجود دارد.
@@ -2280,6 +2377,7 @@ public async IAsyncEnumerable<string> Get()
 ```
 
 <div dir="rtl">
+
 ---
 
 ### متدهای غیرهمزمان در WinRT ⚡
@@ -2296,6 +2394,7 @@ Task<StorageFile> fileTask = KnownFolders.DocumentsLibrary
 ```
 
 <div dir="rtl">
+
 یا مستقیماً `await` کنید:
 </div>
 
@@ -2305,6 +2404,7 @@ StorageFile file = await KnownFolders.DocumentsLibrary
 ```
 
 <div dir="rtl">
+
 به دلیل محدودیت‌های سیستم نوع COM، **IAsyncActionWithProgress<TProgress>** و **IAsyncOperationWithProgress\<TResult, TProgress>** بر اساس **IAsyncAction** نیستند، بلکه هر دو از نوع پایه مشترکی به نام **IAsyncInfo** ارث‌بری می‌کنند.
 
 متد **AsTask** همچنین می‌تواند یک **cancellation token** دریافت کند و می‌تواند با نوع **IProgress<T>** هنگام استفاده از نسخه‌های WithProgress ترکیب شود.
@@ -2331,6 +2431,7 @@ async void ButtonClick(object sender, RoutedEventArgs args)
 ```
 
 <div dir="rtl">
+
 وقتی دکمه کلیک می‌شود و handler اجرا می‌شود، پس از `await` اجرای برنامه به message loop بازمی‌گردد، و استثنایی که یک ثانیه بعد پرتاب می‌شود، توسط catch بلوک در message loop گرفته نمی‌شود.
 
 برای حل این مشکل، **AsyncVoidMethodBuilder** استثناهای بدون کنترل (در متدهای غیرهمزمان با بازگشت `void`) را می‌گیرد و آنها را در صورت وجود، به **SynchronizationContext** ارسال می‌کند تا رویدادهای مدیریت استثنا جهانی همچنان اجرا شوند.
@@ -2345,6 +2446,7 @@ async void Foo() { throw null; await Task.Delay(1000); }
 ```
 
 <div dir="rtl">
+
 استثنا به SynchronizationContext (اگر موجود باشد) ارسال می‌شود و هرگز به فراخواننده بازنمی‌گردد. اگر SynchronizationContext موجود نباشد، استثنا روی Thread Pool گسترش می‌یابد و برنامه خاتمه می‌یابد.
 
 این رفتار برای اطمینان از پیش‌بینی‌پذیری و سازگاری است. مشابه این، **InvalidOperationException** همیشه باعث Fault شدن Task می‌شود، بدون توجه به شرط‌ها:
@@ -2359,6 +2461,7 @@ async Task Foo()
 ```
 
 <div dir="rtl">
+
 Iteratorها نیز به همین شکل کار می‌کنند:
 </div>
 
@@ -2367,6 +2470,7 @@ IEnumerable<int> Foo() { throw null; yield return 123; }
 ```
 
 <div dir="rtl">
+
 در این مثال، استثنا تا زمان enumerating توالی به فراخواننده بازنمی‌گردد.
 
 ---
@@ -2395,6 +2499,7 @@ async Task<string> GetWebPageAsync(string uri)
 ```
 
 <div dir="rtl">
+
 اگر URI از قبل در کش موجود باشد، اجرای برنامه بدون هیچ `await` به فراخواننده بازمی‌گردد و متد یک **Task** از پیش تکمیل‌شده برمی‌گرداند. به این حالت **تکمیل همزمان (synchronous completion)** گفته می‌شود.
 
 وقتی یک **Task** که همزمان تکمیل شده را `await` می‌کنید، اجرا به جای بازگشت به فراخواننده و ادامه از طریق continuation، مستقیم به دستور بعدی می‌رود. کامپایلر این بهینه‌سازی را با بررسی خاصیت `IsCompleted` روی **awaiter** انجام می‌دهد:
@@ -2409,6 +2514,7 @@ else
 ```
 
 <div dir="rtl">
+
 `await` کردن یک متد که همزمان تکمیل شده، تنها بار کوچکی دارد—مثلاً حدود ۲۰ نانوثانیه روی یک کامپیوتر ۲۰۱۹. در مقابل، رفتن به **Thread Pool** هزینه یک **Context Switch** دارد—حدود ۱ تا ۲ میکروثانیه، و رفتن به **UI Message Loop** حداقل ۱۰ برابر بیشتر (بسیار بیشتر اگر نخ UI شلوغ باشد).
 
 ---
@@ -2423,6 +2529,7 @@ async Task<string> Foo() { return "abc"; }
 ```
 
 <div dir="rtl">
+
 این متدها برای **Override کردن متدهای virtual/abstract** مفیدند، حتی اگر نیاز به غیرهمزمانی نداشته باشید. روش دیگر استفاده از **Task.FromResult** است، که یک **Task** از پیش تکمیل‌شده برمی‌گرداند:
 </div>
 
@@ -2431,6 +2538,7 @@ Task<string> Foo() { return Task.FromResult("abc"); }
 ```
 
 <div dir="rtl">
+
 متد **GetWebPageAsync** اگر از نخ UI فراخوانی شود، به طور ضمنی **Thread-Safe** است، زیرا می‌توان چند بار پشت سر هم آن را فراخوانی کرد بدون نیاز به قفل کردن. اما اگر چند فراخوانی برای همان URI انجام شود، چند دانلود تکراری رخ می‌دهد که در نهایت آخرین دانلود کش را بروزرسانی می‌کند.
 
 راه حل بهینه: به جای ذخیره رشته‌ها، **کش “futures”** (یعنی Task<string>) ایجاد کنید:
@@ -2447,6 +2555,7 @@ Task<string> GetWebPageAsync(string uri)
 ```
 
 <div dir="rtl">
+
 توجه کنید که متد را `async` نکردیم، زیرا مستقیماً **Task** بدست آمده از **WebClient** را برمی‌گردانیم.
 
 اگر چند بار همان URI را فراخوانی کنیم، همان **Task<string>** برمی‌گردد و حتی اگر Task کامل شده باشد، `await` کردن آن ارزان است.
@@ -2465,6 +2574,7 @@ lock(_cache)
 ```
 
 <div dir="rtl">
+
 قفل فقط برای بررسی کش و ایجاد Task جدید است، نه برای طول زمان دانلود، تا همزمانی حفظ شود.
 
 ---
@@ -2486,6 +2596,7 @@ int answer = await Foo();   // (احتمالاً) بدون تخصیص
 ```
 
 <div dir="rtl">
+
 اگر عملیات همزمان کامل نشود، **ValueTask<T>** یک Task<T> معمولی می‌سازد و await را به آن منتقل می‌کند. می‌توان ValueTask<T> را به Task<T> با **AsTask** تبدیل کرد. نسخه غیرجنریک آن نیز وجود دارد، مشابه Task.
 
 ---
@@ -2507,6 +2618,7 @@ Task<int> task = Foo().AsTask();   // امن
 ```
 
 <div dir="rtl">
+
 ---
 
 #### جلوگیری از Bounce زیاد 🔄
@@ -2527,6 +2639,7 @@ async Task C() { ... }
 ```
 
 <div dir="rtl">
+
 در این حالت، مدل ساده thread-safety در اپ‌های UI از بین می‌رود، اما متد A اگر روی نخ UI شروع شده باشد، روی همان نخ باقی می‌ماند.
 
 این بهینه‌سازی برای **کتابخانه‌ها** بسیار مفید است، جایی که معمولاً با state مشترک فراخواننده کار نمی‌کنید و به کنترل‌های UI دسترسی ندارید. همچنین متدهایی که سریع اجرا می‌شوند، می‌توانند بدون تخصیص Task کامل شوند.
@@ -2551,6 +2664,7 @@ class CancellationToken
 ```
 
 <div dir="rtl">
+
 سپس می‌توانیم یک متد غیرهمزمان قابل لغو بنویسیم:
 </div>
 
@@ -2567,6 +2681,7 @@ async Task Foo(CancellationToken cancellationToken)
 ```
 
 <div dir="rtl">
+
 وقتی فراخواننده بخواهد عملیات را لغو کند، متد `Cancel` را روی **cancellation token** فراخوانی می‌کند. این باعث می‌شود `IsCancellationRequested` برابر با true شود و متد Foo با یک **OperationCanceledException** متوقف شود.
 
 CLR یک نوع مشابه به نام **CancellationToken** دارد، ولی **متد Cancel** ندارد؛ این متد روی **CancellationTokenSource** ارائه شده است. این تفکیک باعث امنیت بیشتر می‌شود: متدی که فقط دسترسی به CancellationToken دارد، می‌تواند لغو را چک کند ولی آن را آغاز نکند.
@@ -2582,6 +2697,7 @@ cancelSource.Cancel();
 ```
 
 <div dir="rtl">
+
 اکثر متدهای غیرهمزمان در CLR از **cancellation token** پشتیبانی می‌کنند، از جمله **Task.Delay**. اگر متد Foo **توکن** خود را به Delay بدهد، Task بلافاصله پس از درخواست لغو متوقف می‌شود:
 </div>
 
@@ -2597,6 +2713,7 @@ async Task Foo(CancellationToken cancellationToken)
 ```
 
 <div dir="rtl">
+
 دیگر نیاز به `ThrowIfCancellationRequested` نیست، زیرا **Task.Delay** این کار را انجام می‌دهد. **Cancellation tokens** به خوبی در طول call stack منتقل می‌شوند.
 
 ---
@@ -2624,6 +2741,7 @@ await Foo(progress);
 ```
 
 <div dir="rtl">
+
 این روش در **Console App** خوب کار می‌کند، ولی در **rich-client** مشکلات **thread-safety** ایجاد می‌کند، چون پیشرفت از یک **worker thread** گزارش می‌شود.
 
 CLR یک راه حل بهتر ارائه می‌دهد: **IProgress<T>** و کلاس **Progress<T>**. این کلاس‌ها **delegate** را کپسوله می‌کنند تا اپلیکیشن‌های UI بتوانند پیشرفت را به صورت ایمن از طریق **SynchronizationContext** گزارش کنند.
@@ -2637,6 +2755,7 @@ public interface IProgress<in T>
 ```
 
 <div dir="rtl">
+
 استفاده از IProgress<T> آسان است:
 </div>
 
@@ -2658,6 +2777,7 @@ await Foo(progress);
 ```
 
 <div dir="rtl">
+
 کلاس **Progress<T>** هنگام ایجاد، **SynchronizationContext** را ذخیره می‌کند. وقتی **Report** فراخوانی شود، delegate از طریق همان context اجرا می‌شود.
 
 ---
@@ -2685,6 +2805,7 @@ var task = someWinRTobject.FooAsync().AsTask(cancelToken, progress);
 ```
 
 <div dir="rtl">
+
 این روش به شما امکان می‌دهد تا از **رابط‌های COM پیچیده** صرف‌نظر کنید و به سادگی از **.NET API** برای لغو و گزارش پیشرفت استفاده نمایید.
 
 ### الگوی غیرهمزمان مبتنی بر Task (Task-Based Asynchronous Pattern – TAP) ⚡
@@ -2715,6 +2836,7 @@ async Task<int> Delay3() { await Task.Delay(3000); return 3; }
 ```
 
 <div dir="rtl">
+
 ---
 
 #### Task.WhenAny 🏁
@@ -2729,6 +2851,7 @@ Console.WriteLine(winningTask.Result);   // 1
 ```
 
 <div dir="rtl">
+
 بهتر است **winningTask** را نیز await کنیم تا هرگونه Exception بدون AggregateException بازنشانی شود:
 </div>
 
@@ -2737,6 +2860,7 @@ Console.WriteLine(await winningTask);   // 1
 ```
 
 <div dir="rtl">
+
 می‌توان این را در یک خط هم نوشت:
 </div>
 
@@ -2745,6 +2869,7 @@ int answer = await await Task.WhenAny(Delay1(), Delay2(), Delay3());
 ```
 
 <div dir="rtl">
+
 **کاربرد:** اعمال **Timeout** یا لغو روی عملیاتی که پشتیبانی نمی‌کنند:
 </div>
 
@@ -2756,6 +2881,7 @@ string result = await task;   // بازکردن نتیجه و پرتاب مجد�
 ```
 
 <div dir="rtl">
+
 ---
 
 #### Task.WhenAll 📦
@@ -2768,6 +2894,7 @@ await Task.WhenAll(Delay1(), Delay2(), Delay3());
 ```
 
 <div dir="rtl">
+
 تفاوت با await کردن Taskها یکی‌یکی این است که اگر task1 با خطا مواجه شود، دیگر task2 و task3 اجرا نمی‌شوند و Exceptionهای آن‌ها نادیده گرفته می‌شوند. اما **Task.WhenAll** منتظر می‌ماند تا همه Taskها تکمیل شوند و اگر چند خطا رخ دهد، همه Exceptionها در **AggregateException** ترکیب می‌شوند.
 
 استفاده از Task<TResult> با WhenAll نتیجه‌ای از نوع **Task\<TResult\[]>** برمی‌گرداند:
@@ -2780,6 +2907,7 @@ int[] results = await Task.WhenAll(task1, task2);   // {1, 2}
 ```
 
 <div dir="rtl">
+
 **مثال عملی:** دانلود چند URI به صورت موازی و جمع طول کل محتوا:
 </div>
 
@@ -2794,6 +2922,7 @@ async Task<int> GetTotalSize(string[] uris)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ترکیب‌کننده‌های سفارشی 🛠️
@@ -2816,6 +2945,7 @@ async static Task<TResult> WithTimeout<TResult>(this Task<TResult> task, TimeSpa
 ```
 
 <div dir="rtl">
+
 همچنین می‌توان Task را با **CancellationToken** ترک کرد:
 </div>
 
@@ -2839,6 +2969,7 @@ static Task<TResult> WithCancellation<TResult>(this Task<TResult> task, Cancella
 ```
 
 <div dir="rtl">
+
 **مزیت:** پیچیدگی مربوط به concurrency از منطق اصلی برنامه جدا می‌شود و در متدهای قابل استفاده مجدد نگهداری می‌شود.
 
 ---
@@ -2866,6 +2997,7 @@ async Task<TResult[]> WhenAllOrError<TResult>(params Task<TResult>[] tasks)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### قفل غیرهمزمان (Asynchronous Locking) 🔒
@@ -2891,6 +3023,7 @@ public int Read(byte[] buffer, int offset, int size);
 ```
 
 <div dir="rtl">
+
 * نسخه غیرهمزمان مبتنی بر Task:
 </div>
 
@@ -2899,6 +3032,7 @@ public Task<int> ReadAsync(byte[] buffer, int offset, int size);
 ```
 
 <div dir="rtl">
+
 * نسخه APM:
 </div>
 
@@ -2909,6 +3043,7 @@ public int EndRead(IAsyncResult asyncResult);
 ```
 
 <div dir="rtl">
+
 **نحوه کار:**
 
 1. فراخوانی `BeginRead` عملیات را شروع می‌کند و یک **IAsyncResult** برمی‌گرداند که مانند یک **توکن** عمل می‌کند.
@@ -2926,6 +3061,7 @@ Task<int> readChunk = Task<int>.Factory.FromAsync(
 ```
 
 <div dir="rtl">
+
 ---
 
 ## ۲. الگوی غیرهمزمان مبتنی بر رویداد (Event-Based Asynchronous Pattern – EAP) 🎉
@@ -2946,6 +3082,7 @@ public event DownloadProgressChangedEventHandler DownloadProgressChanged;
 ```
 
 <div dir="rtl">
+
 **نحوه کار:**
 
 * متدهای `*Async` عملیات را شروع می‌کنند.
@@ -2992,6 +3129,7 @@ worker.RunWorkerAsync();   // شروع عملیات و capture synchronization c
 ```
 
 <div dir="rtl">
+
 **ویژگی‌ها:**
 
 * `DoWork` روی **worker thread** اجرا می‌شود.

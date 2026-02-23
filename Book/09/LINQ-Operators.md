@@ -1,5 +1,6 @@
 
 <div dir="rtl">
+
 # فصل نهم:  LINQ Operators
 
 این فصل به بررسی تک‌تک **عملگرهای LINQ** می‌پردازد. علاوه بر اینکه به‌عنوان یک مرجع عمل می‌کند، دو بخش **«Projecting»** (در صفحه ۴۷۳) و **«Joining»** (در صفحه ۴۷۳) مفاهیم مهمی را پوشش می‌دهند:
@@ -20,6 +21,7 @@ string[] names = { "Tom", "Dick", "Harry", "Mary", "Jay" };
 ```
 
 <div dir="rtl">
+
 مثال‌هایی که مربوط به پایگاه‌داده هستند فرض می‌کنند شیء زیر ساخته شده است:
 </div>
 
@@ -28,6 +30,7 @@ var dbContext = new NutshellContext();
 ```
 
 <div dir="rtl">
+
 که کلاس `NutshellContext` به شکل زیر تعریف شده است:
 </div>
 
@@ -56,6 +59,7 @@ public class NutshellContext : DbContext
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🧑‍💻 تعریف کلاس‌ها:
@@ -82,6 +86,7 @@ public class Purchase
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🛠 ابزار LINQPad
@@ -110,6 +115,7 @@ CREATE TABLE Purchase (
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 🔎 مرور کلی (Overview)
@@ -359,6 +365,7 @@ where bool-expression
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔧 پیاده‌سازی Enumerable.Where
@@ -378,6 +385,7 @@ public static IEnumerable<TSource> Where<TSource>(
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 📌 توضیح
@@ -401,6 +409,7 @@ IEnumerable<string> query = names.Where(name => name.EndsWith("y"));
 ```
 
 <div dir="rtl">
+
 🔹 معادل در **Query Syntax**:
 </div>
 
@@ -412,6 +421,7 @@ IEnumerable<string> query =
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🌀 چند شرط Where در یک کوئری
@@ -432,6 +442,7 @@ select u;
 ```
 
 <div dir="rtl">
+
 🔸 قوانین **scoping** استاندارد #C اعمال می‌شوند. یعنی نمی‌توانید قبل از تعریف یک متغیر (با `range variable` یا `let`) به آن ارجاع دهید.
 
 ---
@@ -451,6 +462,7 @@ IEnumerable<string> query = names.Where((n, i) => i % 2 == 0);
 ```
 
 <div dir="rtl">
+
 ⚠️ در **EF Core** استفاده از این قابلیت باعث **Exception** می‌شود.
 
 ---
@@ -471,6 +483,7 @@ c.Name.Contains("abc")
 ```
 
 <div dir="rtl">
+
 به SQL معادل زیر تبدیل می‌شود:
 </div>
 
@@ -479,6 +492,7 @@ customer.Name LIKE '%abc%'
 ```
 
 <div dir="rtl">
+
 > (در واقع نسخه **پارامتری‌شده** ساخته می‌شود، نه رشته مستقیم.)
 
 🔹 برای مقایسه با **ستون دیگر** باید از متد `EF.Functions.Like` استفاده کنید:
@@ -489,6 +503,7 @@ where EF.Functions.Like(c.Description, "%" + c.Name + "%")
 ```
 
 <div dir="rtl">
+
 این متد امکان مقایسه‌های پیچیده‌تر را هم می‌دهد، مثل:
 </div>
 
@@ -497,6 +512,7 @@ LIKE 'abc%def%'
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔠 مقایسه رشته‌ای با < و > در EF Core
@@ -510,6 +526,7 @@ dbContext.Purchases
 ```
 
 <div dir="rtl">
+
 📌 این کد به عملگرهای `<` و `>` در SQL نگاشت می‌شود.
 
 ---
@@ -528,6 +545,7 @@ select c;
 ```
 
 <div dir="rtl">
+
 معادل SQL:
 </div>
 
@@ -536,6 +554,7 @@ WHERE customer.Name IN ("Tom", "Jay")
 ```
 
 <div dir="rtl">
+
 ⚠️ اگر مجموعه محلی آرایه‌ای از **entity** یا نوع غیر scalar باشد، EF Core ممکن است به‌جای آن **EXISTS** تولید کند.
 
 ---
@@ -580,6 +599,7 @@ IQueryable<Book> query = dbContext.Books
 ```
 
 <div dir="rtl">
+
 📌 برای گرفتن **کتاب‌های شماره ۲۱ تا ۴۰**:
 </div>
 
@@ -592,6 +612,7 @@ IQueryable<Book> query = dbContext.Books
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ⚙️ نحوه ترجمه در SQL
@@ -626,6 +647,7 @@ Take(..^5)
 ```
 
 <div dir="rtl">
+
 یعنی می‌تونی خیلی تمیزتر و کوتاه‌تر کد بزنی ✨
 
 ---
@@ -656,6 +678,7 @@ var takeWhileSmall = numbers.TakeWhile(n => n < 100); // خروجی: { 3, 5, 2 }
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ⚙️ SkipWhile
@@ -670,6 +693,7 @@ var skipWhileSmall = numbers.SkipWhile(n => n < 100); // خروجی: { 234, 4, 1
 ```
 
 <div dir="rtl">
+
 ⚠️ توجه:
 `TakeWhile` و `SkipWhile` هیچ معادل SQL ندارند و در کوئری‌های **EF Core** استفاده از آن‌ها باعث **Exception** می‌شود.
 
@@ -691,6 +715,7 @@ string s = new string(distinctLetters); // خروجی: "HeloWrd"
 ```
 
 <div dir="rtl">
+
 > می‌توانیم مستقیماً متدهای LINQ را روی `string` صدا بزنیم، چون `string` پیاده‌سازی‌کننده `IEnumerable<char>` است.
 
 ---
@@ -709,6 +734,7 @@ new[] { 1.0, 1.1, 2.0, 2.1, 3.0, 3.1 }
 ```
 
 <div dir="rtl">
+
 <div align="center">
     
 ![Conventions-UsedThis-Book](../../assets/image/09/Table-9-6.jpeg) 
@@ -750,6 +776,7 @@ select projection-expression
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔧 پیاده‌سازی Enumerable
@@ -768,6 +795,7 @@ public static IEnumerable<TResult> Select<TSource,TResult>(
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 توضیح کلی
@@ -789,6 +817,7 @@ foreach (string name in query)
 ```
 
 <div dir="rtl">
+
 🔹 معادل **Lambda Syntax**:
 </div>
 
@@ -797,6 +826,7 @@ IEnumerable<string> query = FontFamily.Families.Select(f => f.Name);
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 پروژه کردن به انواع ناشناس (Anonymous Types)
@@ -808,6 +838,7 @@ var query = from f in FontFamily.Families
 ```
 
 <div dir="rtl">
+
 * گاهی اوقات projection بدون هیچ تغییر خاصی انجام می‌شود، فقط برای اینکه کوئری با `select` یا `group` پایان یابد.
   مثال: انتخاب فونت‌هایی که **strikeout** را پشتیبانی می‌کنند:
 </div>
@@ -823,6 +854,7 @@ foreach (FontFamily ff in query)
 ```
 
 <div dir="rtl">
+
 > در این موارد، **کامپایلر هنگام تبدیل به Fluent Syntax**، projection را حذف می‌کند.
 
 ---
@@ -840,6 +872,7 @@ IEnumerable<string> query = names.Select((s, i) => i + "=" + s);
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 Subqueries و Object Hierarchies
@@ -872,6 +905,7 @@ foreach (var dirFiles in query)
 ```
 
 <div dir="rtl">
+
 * بخش داخلی این کوئری یک **correlated subquery** است، چون به شیء `d` در کوئری خارجی ارجاع می‌دهد.
 * یک subquery در `Select` امکان **نگاشت یک هرمشی شیء (Object Hierarchy) به هرمشی دیگر** یا نگاشت **Relational Object Model به Hierarchical Object Model** را می‌دهد.
 
@@ -913,6 +947,7 @@ foreach (var namePurchases in query)
 ```
 
 <div dir="rtl">
+
 > ⚠️ دقت کنید که استفاده از `ToList` در subquery ضروری است، زیرا EF Core 3 نمی‌تواند **queryable** بسازد اگر subquery مستقیماً به `DbContext` ارجاع دهد. این محدودیت ممکن است در نسخه‌های بعدی EF Core برطرف شود.
 
 ---
@@ -955,6 +990,7 @@ select new
 ```
 
 <div dir="rtl">
+
 > در EF Core 3، هنگام استفاده از Navigation Property **نیازی به ToList نیست**.
 
 * هر دو کوئری مانند **left outer join در SQL** هستند: همه مشتری‌ها در enumeration بیرونی لحاظ می‌شوند، حتی اگر خریدی نداشته باشند.
@@ -978,6 +1014,7 @@ select new {
 ```
 
 <div dir="rtl">
+
 * ⚠️ این روش کمی تکراری است (Price > 1000 دو بار نوشته می‌شود).
 
 * با استفاده از `let` می‌توان تکرار را حذف کرد:
@@ -993,6 +1030,7 @@ select new { c.Name, Purchases = highValueP };
 ```
 
 <div dir="rtl">
+
 * این سبک **انعطاف‌پذیر** است؛ برای مثال با تغییر `Any()` به `Count()` می‌توان فقط مشتری‌هایی با حداقل دو خرید با ارزش بالا را گرفت:
 </div>
 
@@ -1002,6 +1040,7 @@ select new { c.Name, Purchases = highValueP };
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 Projection به Types مشخص
@@ -1034,6 +1073,7 @@ List<CustomerEntity> result = query.ToList();
 ```
 
 <div dir="rtl">
+
 > کلاس‌های DTO معمولاً **هیچ منطق تجاری ندارند** و صرفاً برای انتقال داده بین لایه‌ها یا سیستم‌ها استفاده می‌شوند.
 
 ---
@@ -1069,6 +1109,7 @@ from identifier2 in enumerable-expression2
 ```
 
 <div dir="rtl">
+
 * در **query syntax**، وقتی از یک `from` اضافی استفاده می‌کنید، در واقع **SelectMany** فراخوانی می‌شود.
 
 ---
@@ -1088,6 +1129,7 @@ public static IEnumerable<TResult> SelectMany<TSource,TResult>
 ```
 
 <div dir="rtl">
+
 * `SelectMany` همه **subsequenceها را به یک دنباله‌ی تخت (flat)** ترکیب می‌کند.
 * **تفاوت با Select:**
 
@@ -1110,6 +1152,7 @@ foreach (string name in query)
 ```
 
 <div dir="rtl">
+
 * اگر به جای `SelectMany` از `Select` استفاده کنید، خروجی **سلسله‌مراتبی (nested arrays)** خواهد بود و نیاز به `foreach` تو در تو دارید:
 </div>
 
@@ -1121,6 +1164,7 @@ foreach (string[] stringArray in query)
 ```
 
 <div dir="rtl">
+
 * مزیت `SelectMany` این است که **یک دنباله‌ی تخت (flat)** تولید می‌کند.
 
 ---
@@ -1136,6 +1180,7 @@ IEnumerable<string> query =
 ```
 
 <div dir="rtl">
+
 * متغیر جدید `name` معرفی می‌شود، اما متغیر قدیمی `fullName` همچنان در دسترس است.
 * می‌توانیم از هر دو در projection نهایی استفاده کنیم:
 </div>
@@ -1148,6 +1193,7 @@ IEnumerable<string> query =
 ```
 
 <div dir="rtl">
+
 * خروجی نمونه:
 </div>
 
@@ -1159,6 +1205,7 @@ John came from John Fred Smith
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 مشکل در Fluent Syntax
@@ -1175,6 +1222,7 @@ select x.name + " came from " + x.fullName;
 ```
 
 <div dir="rtl">
+
 * معادل Fluent Syntax:
 </div>
 
@@ -1188,6 +1236,7 @@ IEnumerable<string> query = fullNames
 ```
 
 <div dir="rtl">
+
 * 🔹 نکته: این تکنیک مشابه **resolve کردن let clause** در query syntax است.
 
 ### 🤔 فکر کردن به سبک Query Syntax در LINQ
@@ -1212,6 +1261,7 @@ from name in fullName.Split()
 ```
 
 <div dir="rtl">
+
 * مثال مشابه در EF Core:
 </div>
 
@@ -1223,6 +1273,7 @@ IEnumerable<string> query =
 ```
 
 <div dir="rtl">
+
 * خروجی نمونه:
 </div>
 
@@ -1235,6 +1286,7 @@ Harry bought a Car
 ```
 
 <div dir="rtl">
+
 * 🔹 هر مشتری به یک **subsequence از خریدها** تبدیل شده است.
 
 ---
@@ -1256,6 +1308,7 @@ IEnumerable<string> query =
 ```
 
 <div dir="rtl">
+
 * این الگو پایه‌ای برای **SelectMany-style joins** است.
 
 ---
@@ -1279,6 +1332,7 @@ IEnumerable<string> query =
 ```
 
 <div dir="rtl">
+
 * 🔹 این یک **non-equi join** است چون شرط join از مقایسه نابرابری استفاده می‌کند.
 
 ---
@@ -1300,6 +1354,7 @@ var query =
 ```
 
 <div dir="rtl">
+
 #### مثال Equi-Join (SQL-style):
 </div>
 
@@ -1312,6 +1367,7 @@ var query =
 ```
 
 <div dir="rtl">
+
 * 🔹 این ترجمه خوبی به SQL دارد و اجرای outer joins نیز با تغییرات کوچک ممکن است.
 
 ---
@@ -1328,6 +1384,7 @@ select new { c.Name, p.Description };
 ```
 
 <div dir="rtl">
+
 * مزیت: **نیازی به شرط join نیست** و از فیلتر روی cross product خلاص می‌شویم.
 
 ---
@@ -1345,6 +1402,7 @@ select new { c.Name, p.Description };
 ```
 
 <div dir="rtl">
+
 * در EF Core، جابجایی where clause یک خط پایین‌تر هم کار می‌کند.
 * در local queries، بهتر است **ابتدا فیلتر کنید و بعد join کنید**.
 
@@ -1363,6 +1421,7 @@ select new { c.Name, p.Description, pi.Detail };
 ```
 
 <div dir="rtl">
+
 * هر `from` جدید یک **child table** اضافه می‌کند.
 
 ---
@@ -1378,6 +1437,7 @@ select new { Name = c.Name, SalesPerson = c.SalesPerson.Name };
 ```
 
 <div dir="rtl">
+
 * 🔹 اینجا SelectMany لازم نیست چون **subcollection برای flatten کردن وجود ندارد**.
 
 ### ↔️ Outer Joins با SelectMany در LINQ و EF Core
@@ -1400,6 +1460,7 @@ select new {
 ```
 
 <div dir="rtl">
+
 * 🔹 در اینجا **هر مشتری** در خروجی ظاهر می‌شود، حتی اگر خریدی نداشته باشد.
 * نتیجه یک **hierarchical result set** است.
 
@@ -1418,6 +1479,7 @@ select new { c.Name, p.Description, p.Price };
 ```
 
 <div dir="rtl">
+
 * 🔹 اینجا join **به inner join تبدیل می‌شود**:
   مشتریان فقط زمانی ظاهر می‌شوند که **یک یا چند خرید با ارزش بالا** داشته باشند.
 
@@ -1436,6 +1498,7 @@ select new { c.Name, p.Description, Price = (decimal?)p.Price };
 ```
 
 <div dir="rtl">
+
 * ✅ EF Core همه مشتریان را برمی‌گرداند، حتی اگر خریدی نداشته باشند.
 * ⚠️ در local query، اگر p null باشد، دسترسی به `p.Description` یا `p.Price` باعث NullReferenceException می‌شود.
 
@@ -1455,6 +1518,7 @@ select new {
 ```
 
 <div dir="rtl">
+
 * این نسخه در هر دو سناریو (EF Core و local query) امن است.
 
 ---
@@ -1476,6 +1540,7 @@ select new {
 ```
 
 <div dir="rtl">
+
 * ✅ EF Core این را به **left outer join** ترجمه می‌کند.
 * این یک **الگوی موثر برای نوشتن چنین queryهایی** است.
 
@@ -1500,6 +1565,7 @@ join inner-var in inner-enumerable on outer-key-expr equals inner-key-expr
 ```
 
 <div dir="rtl">
+
 ### 📖 مرور کلی (Overview)
 
 🔹 **Join** و **GroupJoin** دو توالی ورودی (input sequences) را به یک توالی خروجی (output sequence) ترکیب می‌کنند.
@@ -1537,6 +1603,7 @@ IQueryable<string> query =
 ```
 
 <div dir="rtl">
+
 📋 نتایج دقیقاً همان چیزی است که با یک کوئری به سبک **SelectMany** به دست می‌آید:
 </div>
 
@@ -1548,6 +1615,7 @@ Harry bought a Car
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ⚡ مزیت Join در برابر SelectMany
@@ -1572,6 +1640,7 @@ var fastQuery = from c in customers
 ```
 
 <div dir="rtl">
+
 هر دو کوئری نتیجه یکسانی برمی‌گردانند، اما کوئری با **Join** به‌مراتب سریع‌تر است. دلیلش این است که پیاده‌سازی در **Enumerable**، مجموعه داخلی (purchases) را ابتدا به‌صورت یک **keyed lookup** بارگذاری می‌کند.
 
 ---
@@ -1586,6 +1655,7 @@ join inner-var in inner-sequence on outer-key-expr equals inner-key-expr
 ```
 
 <div dir="rtl">
+
 اپراتورهای **Join** در LINQ بین توالی بیرونی (outer sequence) و توالی درونی (inner sequence) تمایز قائل می‌شوند.
 
 * ✅ **outer sequence** → همان توالی ورودی است (در این مثال، customers).
@@ -1602,6 +1672,7 @@ join c in customers on p.CustomerID equals c.ID    // c حالا inner است
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🧩 چندین Join در یک کوئری
@@ -1618,6 +1689,7 @@ join pi in purchaseItems on p.ID equals pi.PurchaseID     // second join
 ```
 
 <div dir="rtl">
+
 📌 در اینجا، `purchases` در اولین join به‌عنوان **inner sequence** عمل می‌کند و در دومین join به‌عنوان **outer sequence**.
 
 معادل ناکارآمد همین کار با **foreach** به شکل زیر است:
@@ -1633,6 +1705,7 @@ foreach (Customer c in customers)
 ```
 
 <div dir="rtl">
+
 در نحوۀ Query، متغیرهای joinهای قبلی همچنان در دسترس هستند—دقیقاً مثل کاری که در کوئری‌های به سبک **SelectMany** اتفاق می‌افتد.
 همچنین می‌توانید بین joinها، از **where** و **let** استفاده کنید.
 
@@ -1651,6 +1724,7 @@ join y in sequenceY on new { K1 = x.Prop1, K2 = x.Prop2 }
 ```
 
 <div dir="rtl">
+
 برای اینکه این کار درست انجام شود، دو **anonymous type** باید دقیقاً یک ساختار (structure) داشته باشند.
 کامپایلر هر دو را با یک نوع داخلی یکسان پیاده‌سازی می‌کند، بنابراین کلیدهای join با هم سازگار می‌شوند.
 
@@ -1666,6 +1740,7 @@ select new { c.Name, p.Description, p.Price };
 ```
 
 <div dir="rtl">
+
 به شکل **Fluent Syntax** این‌طور نوشته می‌شود:
 </div>
 
@@ -1680,6 +1755,7 @@ customers.Join(                // outer collection
 ```
 
 <div dir="rtl">
+
 📌 عبارت **result selector** در انتها، هر عنصر خروجی را می‌سازد.
 
 ---
@@ -1697,6 +1773,7 @@ select c.Name + " bought a " + p.Description;
 ```
 
 <div dir="rtl">
+
 در **Fluent Syntax** باید یک نوع ناشناس موقت (temporary anonymous type) بسازیم تا هر دو متغیر `c` و `p` پس از join در دسترس باشند:
 </div>
 
@@ -1711,6 +1788,7 @@ customers.Join(                  // outer collection
 ```
 
 <div dir="rtl">
+
 ✅ در عمل، نحوۀ Query برای join معمولاً ترجیح داده می‌شود، چون ساده‌تر و خواناتر است.
 
 ---
@@ -1742,6 +1820,7 @@ IEnumerable<IEnumerable<Purchase>> query =
 ```
 
 <div dir="rtl">
+
 📌 عبارت `into` تنها زمانی به **GroupJoin** تبدیل می‌شود که **بلافاصله بعد از یک join** بیاید.
 اگر بعد از **select** یا **group** بیاید، معنایش **query continuation** است.
 هر دو مورد یک ویژگی مشترک دارند: معرفی یک متغیر جدید (range variable).
@@ -1756,6 +1835,7 @@ foreach (IEnumerable<Purchase> purchaseSequence in query)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 👤 استفاده کاربردی‌تر از GroupJoin
@@ -1771,6 +1851,7 @@ select new { CustName = c.Name, custPurchases };
 ```
 
 <div dir="rtl">
+
 این معادل است با این کوئری (که ناکارآمد است):
 </div>
 
@@ -1784,6 +1865,7 @@ select new
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔄 Left Outer Join در GroupJoin
@@ -1801,6 +1883,7 @@ select ...
 ```
 
 <div dir="rtl">
+
 📌 عبارات بعد از **group-join into** روی **زیرتوالی‌ها (subsequences)** عمل می‌کنند، نه روی تک‌تک عناصر.
 پس اگر بخواهید روی خریدهای منفرد فیلتر کنید، باید قبل از join از **Where** استفاده کنید:
 </div>
@@ -1813,6 +1896,7 @@ into custPurchases ...
 ```
 
 <div dir="rtl">
+
 همچنین می‌توانید کوئری‌های **lambda** با **GroupJoin** درست مثل **Join** بسازید.
 
 ---
@@ -1839,6 +1923,7 @@ select new
 ```
 
 <div dir="rtl">
+
 ✅ اگر زیرتوالی خریدها خالی باشد، **DefaultIfEmpty** یک توالی با مقدار null تولید می‌کند.
 عبارت دوم **from** به **SelectMany** ترجمه می‌شود و همه زیرتوالی‌های خرید را گسترش داده و در یک توالی واحد از عناصر خرید مسطح می‌کند.
 
@@ -1870,6 +1955,7 @@ public interface ILookup<TKey, TElement> :
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ⏳ اجرای Lazy
@@ -1895,6 +1981,7 @@ ILookup<int?, Purchase> purchLookup =
 ```
 
 <div dir="rtl">
+
 * آرگومان اول → کلید (CustomerID).
 * آرگومان دوم → مقادیری که به‌عنوان value در lookup ذخیره می‌شوند.
 
@@ -1911,6 +1998,7 @@ foreach (Purchase p in purchLookup[1])
 ```
 
 <div dir="rtl">
+
 این کد تمام خریدهای مشتری با ID برابر 1 را نمایش می‌دهد.
 
 ---
@@ -1929,6 +2017,7 @@ select new { c.Name, p.Description, p.Price };
 ```
 
 <div dir="rtl">
+
 📋 خروجی:
 </div>
 
@@ -1941,6 +2030,7 @@ Dick Phone 300
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🪄 Outer Join با DefaultIfEmpty
@@ -1960,6 +2050,7 @@ select new
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🧩 GroupJoin معادل Lookup
@@ -1977,6 +2068,7 @@ select new
 ```
 
 <div dir="rtl">
+
 ---
 
 ## ⚙️ پیاده‌سازی Enumerable.Join
@@ -2002,6 +2094,7 @@ public static IEnumerable<TResult> Join
 ```
 
 <div dir="rtl">
+
 ---
 
 ## ⚙️ پیاده‌سازی Enumerable.GroupJoin
@@ -2028,6 +2121,7 @@ public static IEnumerable<TResult> GroupJoin
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 🔗 The Zip Operator
@@ -2038,6 +2132,7 @@ IEnumerable<TFirst>, IEnumerable<TSecond> → IEnumerable<TResult>
 ```
 
 <div dir="rtl">
+
 اپراتور **Zip** دو توالی را **گام‌به‌گام** (مثل زیپ) پیمایش می‌کند و با اعمال یک تابع روی هر جفت عنصر، یک توالی جدید می‌سازد.
 
 🔹 مثال:
@@ -2052,6 +2147,7 @@ IEnumerable<string> zip =
 ```
 
 <div dir="rtl">
+
 📋 خروجی:
 </div>
 
@@ -2062,6 +2158,7 @@ IEnumerable<string> zip =
 ```
 
 <div dir="rtl">
+
 📌 عناصر اضافه در هر یک از توالی‌ها نادیده گرفته می‌شوند.
 ⚠️ **Zip** در **EF Core** پشتیبانی نمی‌شود.
 
@@ -2073,6 +2170,7 @@ IEnumerable<TSource> → IOrderedEnumerable<TSource>
 ```
 
 <div dir="rtl">
+
 <div align="center">
     
 ![Conventions-UsedThis-Book](../../assets/image/09/Table-9-13.jpeg) 
@@ -2103,6 +2201,7 @@ orderby expression1 [descending] [, expression2 [descending] ... ]
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 📖 مرور کلی (Overview)
@@ -2116,6 +2215,7 @@ IEnumerable<string> query = names.OrderBy(s => s);
 ```
 
 <div dir="rtl">
+
 * مرتب‌سازی بر اساس طول نام:
 </div>
 
@@ -2125,6 +2225,7 @@ IEnumerable<string> query = names.OrderBy(s => s.Length);
 ```
 
 <div dir="rtl">
+
 * ترتیب نسبی عناصری که کلید مرتب‌سازی یکسان دارند (مثل Jay/Tom و Mary/Dick) مشخص نیست—مگر اینکه **ThenBy** اضافه کنید:
 </div>
 
@@ -2134,6 +2235,7 @@ IEnumerable<string> query = names.OrderBy(s => s.Length).ThenBy(s => s);
 ```
 
 <div dir="rtl">
+
 * **ThenBy** تنها عناصر با همان کلید مرتب‌سازی قبلی را دوباره مرتب می‌کند.
 * می‌توانید هر تعداد **ThenBy** را زنجیره‌ای استفاده کنید. مثال: ابتدا بر اساس طول، سپس کاراکتر دوم، و در نهایت کاراکتر اول:
 </div>
@@ -2143,6 +2245,7 @@ names.OrderBy(s => s.Length).ThenBy(s => s[1]).ThenBy(s => s[0]);
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔄 معادل در نحوۀ Query:
@@ -2155,6 +2258,7 @@ select s;
 ```
 
 <div dir="rtl">
+
 ⚠️ نمونه اشتباه: این در واقع ابتدا بر اساس `s[1]` و سپس `s.Length` مرتب می‌کند (یا در کوئری پایگاه داده فقط بر اساس `s[1]` مرتب می‌کند و ترتیب قبلی را نادیده می‌گیرد):
 </div>
 
@@ -2166,6 +2270,7 @@ orderby s[1]
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔽 OrderByDescending و ThenByDescending
@@ -2182,6 +2287,7 @@ dbContext.Purchases
 ```
 
 <div dir="rtl">
+
 معادل در نحوۀ Query:
 </div>
 
@@ -2192,6 +2298,7 @@ select p;
 ```
 
 <div dir="rtl">
+
 ### 📚 Comparers و Collations
 
 * در یک **کوئری محلی (local query)**، خودِ اشیاء انتخاب‌شده توسط **key selector** الگوریتم مرتب‌سازی را از طریق پیاده‌سازی پیش‌فرض **IComparable** تعیین می‌کنند (رجوع کنید به فصل ۷).
@@ -2203,6 +2310,7 @@ names.OrderBy(n => n, StringComparer.CurrentCultureIgnoreCase);
 ```
 
 <div dir="rtl">
+
 * ارسال **comparer** در نحوۀ Query یا توسط **EF Core** پشتیبانی نمی‌شود.
 * هنگام کوئری زدن روی پایگاه داده، الگوریتم مقایسه توسط **Collation** ستون مربوطه تعیین می‌شود.
 * اگر Collation حساس به حروف باشد، می‌توانید مرتب‌سازی غیرحساس به حروف بزرگ/کوچک را با فراخوانی `ToUpper` در **key selector** انجام دهید:
@@ -2215,6 +2323,7 @@ select p;
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 IOrderedEnumerable و IOrderedQueryable
@@ -2237,6 +2346,7 @@ IOrderedEnumerable<string> query2 = query1.ThenBy(s => s);
 ```
 
 <div dir="rtl">
+
 ⚠️ اگر `query1` از نوع `IEnumerable<string>` تعریف شود، خط دوم کامپایل نمی‌شود—چون **ThenBy** به ورودی از نوع `IOrderedEnumerable<string>` نیاز دارد.
 
 ---
@@ -2250,6 +2360,7 @@ var query2 = query1.ThenBy(s => s);
 ```
 
 <div dir="rtl">
+
 * تایپ ضمنی راحتی دارد اما می‌تواند مشکلاتی ایجاد کند:
 </div>
 
@@ -2259,6 +2370,7 @@ query = query.Where(n => n.Length > 3);  // خطای زمان کامپایل
 ```
 
 <div dir="rtl">
+
 * کامپایلر `query` را از نوع `IOrderedEnumerable<string>` استنتاج می‌کند، اما `Where` یک `IEnumerable<string>` برمی‌گرداند که نمی‌توان آن را دوباره به `query` اختصاص داد.
 
 ✅ راه‌حل‌ها:
@@ -2273,6 +2385,7 @@ query = query.Where(n => n.Length > 3);  // درست
 ```
 
 <div dir="rtl">
+
 * معادل در کوئری‌های **interpreted**، فراخوانی `AsQueryable()` است.
 ## Grouping
 
@@ -2289,6 +2402,7 @@ IEnumerable<TSource> → IEnumerable<IGrouping<TKey, TElement>>
 ```
 
 <div dir="rtl">
+
 <div align="center">
     
 ![Conventions-UsedThis-Book](../../assets/image/09/Table-9-17.jpeg) 
@@ -2302,6 +2416,7 @@ IEnumerable<TSource> → IEnumerable<IGrouping<TKey, TElement>>
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔍 نحوۀ Query (Query syntax)
@@ -2312,6 +2427,7 @@ group element-expression by key-expression
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 📖 مرور کلی (Overview)
@@ -2328,6 +2444,7 @@ IEnumerable<IGrouping<string, string>> query =
 ```
 
 <div dir="rtl">
+
 * یا با تایپ ضمنی:
 </div>
 
@@ -2336,6 +2453,7 @@ var query = files.GroupBy(file => Path.GetExtension(file));
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 پیمایش نتایج
@@ -2351,6 +2469,7 @@ foreach (IGrouping<string, string> grouping in query)
 ```
 
 <div dir="rtl">
+
 📋 خروجی نمونه:
 </div>
 
@@ -2365,6 +2484,7 @@ Extension: .doc
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🛠 پیاده‌سازی داخلی
@@ -2382,6 +2502,7 @@ public interface IGrouping<TKey, TElement> : IEnumerable<TElement>, IEnumerable
 ```
 
 <div dir="rtl">
+
 * به طور پیش‌فرض، عناصر هر گروه همان عناصر ورودی هستند مگر اینکه **elementSelector** مشخص کنید.
 * مثال: تبدیل عناصر ورودی به حروف بزرگ:
 </div>
@@ -2391,6 +2512,7 @@ files.GroupBy(file => Path.GetExtension(file), file => file.ToUpper());
 ```
 
 <div dir="rtl">
+
 * در این حالت، **Key** هر گروه هنوز در حالت اصلی خود باقی می‌ماند.
 
 📋 خروجی نمونه:
@@ -2405,6 +2527,7 @@ Extension: .doc
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ⚠️ نکات مهم
@@ -2419,6 +2542,7 @@ files.GroupBy(file => Path.GetExtension(file), file => file.ToUpper())
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 معادل در نحوۀ Query
@@ -2429,6 +2553,7 @@ group element-expr by key-expr
 ```
 
 <div dir="rtl">
+
 مثال:
 </div>
 
@@ -2438,6 +2563,7 @@ group file.ToUpper() by Path.GetExtension(file);
 ```
 
 <div dir="rtl">
+
 * مشابه **select**، `group` یک کوئری را پایان می‌دهد مگر اینکه **query continuation clause** اضافه کنید:
 </div>
 
@@ -2449,6 +2575,7 @@ select grouping;
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 ادامه‌ی کوئری‌ها (Query Continuations)
@@ -2464,6 +2591,7 @@ select grouping;
 ```
 
 <div dir="rtl">
+
 * یک `where` پس از `group by` معادل **HAVING** در SQL است.
 * این شرط روی کل زیرتوالی یا گروه اعمال می‌شود، نه روی عناصر فردی.
 
@@ -2486,6 +2614,7 @@ string winner = query.First();    // Dogs
 ```
 
 <div dir="rtl">
+
 ### 📑 GroupBy در EF Core
 
 * گروه‌بندی در **EF Core** به همان شکل روی پایگاه داده عمل می‌کند.
@@ -2501,6 +2630,7 @@ select c.Name + " has made " + c.Purchases.Count + " purchases";
 ```
 
 <div dir="rtl">
+
 * نمونه‌ای که نیاز به گروه‌بندی دارد: محاسبه کل فروش‌ها بر اساس سال:
 </div>
 
@@ -2514,6 +2644,7 @@ select new {
 ```
 
 <div dir="rtl">
+
 * **GroupBy** در LINQ از **GROUP BY** در SQL قدرتمندتر است، زیرا می‌توانید همه ردیف‌ها را بدون هیچ تجمیعی بازیابی کنید:
 </div>
 
@@ -2523,6 +2654,7 @@ group p by p.Date.Year
 ```
 
 <div dir="rtl">
+
 ⚠️ این روش در **EF Core** کار نمی‌کند.
 راه‌حل ساده: قبل از گروه‌بندی `.AsEnumerable()` فراخوانی کنید تا گروه‌بندی روی کلاینت انجام شود.
 
@@ -2543,6 +2675,7 @@ group n by new { FirstLetter = n[0], Length = n.Length };
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 مقایسه‌کننده‌های سفارشی (Custom equality comparers)
@@ -2557,6 +2690,7 @@ group n by n.ToUpper()
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 📑 Chunk
@@ -2567,6 +2701,7 @@ IEnumerable<TSource> → IEnumerable<TElement[]>
 ```
 
 <div dir="rtl">
+
 <div align="center">
     
 ![Conventions-UsedThis-Book](../../assets/image/09/Table-9-18.jpeg) 
@@ -2583,6 +2718,7 @@ foreach (int[] chunk in new[] { 1, 2, 3, 4, 5, 6, 7, 8 }.Chunk(3))
 ```
 
 <div dir="rtl">
+
 **خروجی:**
 </div>
 
@@ -2593,6 +2729,7 @@ foreach (int[] chunk in new[] { 1, 2, 3, 4, 5, 6, 7, 8 }.Chunk(3))
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔗 Set Operators
@@ -2603,6 +2740,7 @@ IEnumerable<TSource>, IEnumerable<TSource> → IEnumerable<TSource>
 ```
 
 <div dir="rtl">
+
 <div align="center">
     
 ![Conventions-UsedThis-Book](../../assets/image/09/Table-9-19.jpeg) 
@@ -2623,6 +2761,7 @@ IEnumerable<int>
 ```
 
 <div dir="rtl">
+
 * مشخص کردن **نوع آرگومان** مفید است وقتی توالی‌ها نوع متفاوتی دارند ولی عناصر یک **base type** مشترک دارند.
 * مثال با API بازتاب (Reflection API): متدها و پراپرتی‌ها با کلاس‌های `MethodInfo` و `PropertyInfo` نمایش داده می‌شوند که یک کلاس پایه مشترک به نام `MemberInfo` دارند.
 </div>
@@ -2634,6 +2773,7 @@ IEnumerable<MemberInfo> both = methods.Concat<MemberInfo>(props);
 ```
 
 <div dir="rtl">
+
 * مثال دیگر: فیلتر کردن متدها قبل از الحاق:
 </div>
 
@@ -2644,6 +2784,7 @@ var both    = methods.Concat<MemberInfo>(props);
 ```
 
 <div dir="rtl">
+
 * این مثال به **interface type parameter variance** وابسته است:
   `methods` از نوع `IEnumerable<MethodInfo>` است و نیاز به تبدیل **covariant** به `IEnumerable<MemberInfo>` دارد.
 
@@ -2659,6 +2800,7 @@ var union = seq1.UnionBy(seq2, x => x.ToUpperInvariant());
 ```
 
 <div dir="rtl">
+
 * این کار با **Union** هم قابل انجام است اگر یک **equality comparer** بدهیم:
 </div>
 
@@ -2667,6 +2809,7 @@ var union = seq1.Union(seq2, StringComparer.InvariantCultureIgnoreCase);
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 Intersect, IntersectBy, Except, ExceptBy
@@ -2685,6 +2828,7 @@ IEnumerable<int>
 ```
 
 <div dir="rtl">
+
 * پیاده‌سازی داخلی **Enumerable.Except**: تمام عناصر توالی اول در یک دیکشنری بارگذاری می‌شوند، سپس تمام عناصر موجود در توالی دوم از دیکشنری حذف می‌شوند.
 * معادل در SQL:
 </div>
@@ -2695,6 +2839,7 @@ WHERE number NOT IN (SELECT number FROM numbers2Table)
 ```
 
 <div dir="rtl">
+
 * **IntersectBy** و **ExceptBy** (از .NET 6) اجازه می‌دهند یک **key selector** مشخص کنید که قبل از مقایسه تساوی اعمال می‌شود (مشابه UnionBy).
 
 ---
@@ -2721,6 +2866,7 @@ IEnumerable<int> sequence1 = classicList.Cast<int>();
 ```
 
 <div dir="rtl">
+
 * تفاوت **Cast** و **OfType** زمانی است که با عنصری ناسازگار مواجه می‌شوند:
 
   * **Cast**: خطا می‌دهد.
@@ -2739,6 +2885,7 @@ IEnumerable<int>
 ```
 
 <div dir="rtl">
+
 * قوانین سازگاری عناصر دقیقاً مطابق **is operator** در C# است و تنها **reference conversion** و **unboxing conversion** را در نظر می‌گیرد.
 
 پیاده‌سازی داخلی **OfType**:
@@ -2754,6 +2901,7 @@ public static IEnumerable<TSource> OfType<TSource>(IEnumerable source)
 ```
 
 <div dir="rtl">
+
 پیاده‌سازی **Cast** مشابه است ولی تست سازگاری نوع را انجام نمی‌دهد:
 </div>
 
@@ -2766,6 +2914,7 @@ public static IEnumerable<TSource> Cast<TSource>(IEnumerable source)
 ```
 
 <div dir="rtl">
+
 * نتیجه: نمی‌توانید از **Cast** برای تبدیل‌های عددی یا سفارشی استفاده کنید. برای این کار باید از **Select** استفاده کنید.
 
 مثال:
@@ -2779,6 +2928,7 @@ IEnumerable<long> test2 = integers.Cast<long>();   // استثناء می‌ده
 ```
 
 <div dir="rtl">
+
 * دلیل:
 
   * در **OfType**: `(element is long)` برای int همیشه false است.
@@ -2792,6 +2942,7 @@ IEnumerable<long> castLong = integers.Select(s => (long)s);
 ```
 
 <div dir="rtl">
+
 * **OfType** و **Cast** برای **downcasting** عناصر در یک توالی جنریک نیز مفید هستند. مثال:
 
   * اگر توالی شما `IEnumerable<Fruit>` باشد، `OfType<Apple>` فقط سیب‌ها را بازمی‌گرداند.
@@ -2806,6 +2957,7 @@ from TreeNode node in myTreeView.Nodes
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🟢 ToArray, ToList, ToDictionary, ToHashSet, ToLookup
@@ -2843,6 +2995,7 @@ IEnumerable<TSource> → TSource
 ```
 
 <div dir="rtl">
+
 <div align="center">
     
 ![Conventions-UsedThis-Book](../../assets/image/09/Table-9-22.jpeg) 
@@ -2875,6 +3028,7 @@ int lastEven   = numbers.Last(n => n % 2 == 0);      // 4
 ```
 
 <div dir="rtl">
+
 مثال **First** در مقابل **FirstOrDefault**:
 </div>
 
@@ -2884,6 +3038,7 @@ int firstBigNumber = numbers.FirstOrDefault(n => n > 10); // 0
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 Single و SingleOrDefault
@@ -2903,6 +3058,7 @@ int divBy2Error = numbers.SingleOrDefault(n => n % 2 == 0); // خطا
 ```
 
 <div dir="rtl">
+
 * **Single** سخت‌گیرترین عضو خانواده element operators است.
 
 * **FirstOrDefault** و **LastOrDefault** بیشترین تحمل را دارند.
@@ -2915,6 +3071,7 @@ Customer cust = dataContext.Customers.Single(c => c.ID == 3);
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 ElementAt
@@ -2936,6 +3093,7 @@ int tenth      = numbers.ElementAtOrDefault(9); // 0
 ```
 
 <div dir="rtl">
+
 * اگر توالی ورودی **IList<T>** باشد، **ElementAt** از indexer آن استفاده می‌کند؛ در غیر این صورت، n بار شمارش می‌کند و سپس عنصر بعدی را برمی‌گرداند.
 * **ElementAt** در **EF Core** پشتیبانی نمی‌شود.
 
@@ -2952,6 +3110,7 @@ Console.WriteLine(names.MaxBy(n => n.Length));   // Harry
 ```
 
 <div dir="rtl">
+
 * در مقابل، **Min** و **Max** خود **مقدار کوچک‌ترین یا بزرگ‌ترین** را برمی‌گردانند:
 </div>
 
@@ -2960,6 +3119,7 @@ Console.WriteLine(names.Max(n => n.Length));    // 5
 ```
 
 <div dir="rtl">
+
 * اگر دو یا چند عنصر مقدار حداقل/حداکثر یکسان داشته باشند، **MinBy/MaxBy** اولین عنصر را بازمی‌گردانند:
 </div>
 
@@ -2968,6 +3128,7 @@ Console.WriteLine(names.MinBy(n => n.Length));  // Tom
 ```
 
 <div dir="rtl">
+
 * اگر توالی خالی باشد، **MinBy** و **MaxBy** مقدار **null** برمی‌گردانند اگر نوع عنصر nullable باشد؛ در غیر این صورت استثناء رخ می‌دهد.
 
 ---
@@ -2987,6 +3148,7 @@ IEnumerable<TSource> → scalar
 ```
 
 <div dir="rtl">
+
 <div align="center">
     
 ![Conventions-UsedThis-Book](../../assets/image/09/Table-9-25.jpeg) 
@@ -3008,6 +3170,7 @@ int fullCount = new int[] { 5, 6, 7 }.Count();   // 3
 ```
 
 <div dir="rtl">
+
 * پیاده‌سازی داخلی **Enumerable.Count** بررسی می‌کند که آیا توالی ورودی **ICollection<T>** را پیاده‌سازی کرده است یا خیر.
 
   * اگر پیاده‌سازی شده باشد، مستقیماً از **ICollection<T>.Count** استفاده می‌کند.
@@ -3021,6 +3184,7 @@ int digitCount = "pa55w0rd".Count(c => char.IsDigit(c));   // 3
 ```
 
 <div dir="rtl">
+
 * **LongCount** همان کار **Count** را انجام می‌دهد اما نتیجه را به صورت **int64 (long)** برمی‌گرداند و مناسب توالی‌هایی با بیش از دو میلیارد عنصر است.
 
 ---
@@ -3043,6 +3207,7 @@ int largest  = numbers.Max();  // 32
 ```
 
 <div dir="rtl">
+
 * اگر یک **selector** ارائه دهید، هر عنصر ابتدا به صورت دلخواه تبدیل می‌شود و سپس مقایسه انجام می‌شود:
 </div>
 
@@ -3051,6 +3216,7 @@ int smallestMod = numbers.Max(n => n % 10);  // 8
 ```
 
 <div dir="rtl">
+
 * اگر عناصر خودشان قابل مقایسه نباشند (**IComparable<T>** پیاده‌سازی نکرده باشند)، ارائه **selector** الزامی است:
 </div>
 
@@ -3060,6 +3226,7 @@ decimal? lowestPrice = dbContext.Purchases.Min(p => p.Price);  // صحیح
 ```
 
 <div dir="rtl">
+
 * **Selector** تعیین می‌کند که چگونه عناصر مقایسه شوند و همچنین نوع نتیجه نهایی چیست. در مثال بالا، نتیجه نهایی **decimal** است نه شیء **Purchase**.
 * برای به دست آوردن ارزان‌ترین خرید، باید از **subquery** استفاده کنید:
 </div>
@@ -3071,6 +3238,7 @@ Purchase cheapest = dbContext.Purchases
 ```
 
 <div dir="rtl">
+
 * در این حالت می‌توان بدون استفاده از تجمیع (**aggregation**) نیز پرس‌وجو را با **OrderBy** و سپس **FirstOrDefault** نوشت.
 
 ---
@@ -3093,6 +3261,7 @@ decimal average    = numbers.Average(); // 5  (میانگین)
 ```
 
 <div dir="rtl">
+
 * مثال دیگر: مجموع طول رشته‌ها در آرایه **names**:
 </div>
 
@@ -3101,6 +3270,7 @@ int combinedLength = names.Sum(s => s.Length);   // 19
 ```
 
 <div dir="rtl">
+
 * **Sum** و **Average** محدودیت‌هایی در نوع داده دارند و فقط برای انواع عددی (int, long, float, double, decimal و نسخه nullable آنها) تعریف شده‌اند.
 * در مقابل، **Min** و **Max** می‌توانند روی هر چیزی که **IComparable<T>** را پیاده‌سازی کرده باشد، مانند رشته‌ها، عمل کنند.
 * همچنین، **Average** همیشه نتیجه‌ای از نوع **decimal**، **float** یا **double** برمی‌گرداند، مطابق جدول زیر:
@@ -3120,6 +3290,7 @@ int avg = new int[] { 3, 4 }.Average(); // خطا: cannot convert double to int
 ```
 
 <div dir="rtl">
+
 * اما این نمونه کامپایل می‌شود:
 </div>
 
@@ -3128,6 +3299,7 @@ double avg = new int[] { 3, 4 }.Average(); // 3.5
 ```
 
 <div dir="rtl">
+
 * اگر نیاز باشد، می‌توانیم عنصر ورودی را به صراحت تبدیل کنیم:
 </div>
 
@@ -3136,6 +3308,7 @@ double avg = numbers.Average(n => (double)n);
 ```
 
 <div dir="rtl">
+
 * هنگام کوئری زدن به پایگاه داده، **Sum** و **Average** به عملیات تجمیعی استاندارد SQL ترجمه می‌شوند. مثال:
 </div>
 
@@ -3146,6 +3319,7 @@ select c.Name;
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 Aggregate
@@ -3159,6 +3333,7 @@ int sum = numbers.Aggregate(0, (total, n) => total + n); // 6
 ```
 
 <div dir="rtl">
+
 * پارامتر اول (**seed**) نقطه شروع تجمیع است و پارامتر دوم الگوریتم به‌روزرسانی مقدار تجمعی با دریافت هر عنصر جدید است.
 
 * می‌توان پارامتر سوم را هم ارائه داد تا نتیجه نهایی از مقدار تجمعی استخراج شود.
@@ -3178,6 +3353,7 @@ int sum = numbers.Aggregate((total, n) => total + n); // 6
 ```
 
 <div dir="rtl">
+
 * مثال دیگر با ضرب:
 </div>
 
@@ -3188,6 +3364,7 @@ int y = numbers.Aggregate((prod, n) => prod * n);   // 1*2*3 = 6
 ```
 
 <div dir="rtl">
+
 * تجمیع بدون **seed** مزیت اجرای موازی بدون overload خاص را دارد، اما نکات خطرناکی نیز دارد.
 
 ---
@@ -3204,6 +3381,7 @@ int sum = numbers.Aggregate((total, n) => total + n * n); // 27
 ```
 
 <div dir="rtl">
+
 * به جای محاسبه صحیح ۲*۲ + ۳*۳ + ۴\*۴ = ۲۹، مقدار ۲۷ محاسبه شد.
 
 * راه حل‌ها:
@@ -3216,6 +3394,7 @@ int[] numbers = { 0, 2, 3, 4 };
 ```
 
 <div dir="rtl">
+
 2. بازنویسی تابع تجمیع به صورت جابجایی و ترکیبی:
 </div>
 
@@ -3224,6 +3403,7 @@ int sum = numbers.Select(n => n * n).Aggregate((total, n) => total + n);
 ```
 
 <div dir="rtl">
+
 * در سناریوهای ساده، بهتر است از **Sum** و **Average** استفاده شود. مثال محاسبه **Root-Mean-Square**:
 </div>
 
@@ -3232,6 +3412,7 @@ Math.Sqrt(numbers.Average(n => n * n));
 ```
 
 <div dir="rtl">
+
 * مثال محاسبه انحراف معیار:
 </div>
 
@@ -3244,6 +3425,7 @@ double sdev = Math.Sqrt(numbers.Average(n => {
 ```
 
 <div dir="rtl">
+
 * این روش‌ها ایمن، کارآمد و کاملاً موازی‌پذیر هستند.
 
 ---
@@ -3270,6 +3452,7 @@ bool hasAThree = new int[] { 2, 3, 4 }.Any(n => n == 3);  // true
 ```
 
 <div dir="rtl">
+
 * **Any** می‌تواند همه‌ی کارهایی که **Contains** انجام می‌دهد را انجام دهد و حتی بیشتر:
 </div>
 
@@ -3278,6 +3461,7 @@ bool hasABigNumber = new int[] { 2, 3, 4 }.Any(n => n > 10); // false
 ```
 
 <div dir="rtl">
+
 * فراخوانی **Any** بدون شرط، بررسی می‌کند که آیا توالی حداقل یک عنصر دارد یا خیر:
 </div>
 
@@ -3286,6 +3470,7 @@ bool hasABigNumber = new int[] { 2, 3, 4 }.Where(n => n > 10).Any();
 ```
 
 <div dir="rtl">
+
 * **Any** در زیرکوئری‌ها و کوئری‌های پایگاه داده بسیار مفید است. مثال:
 </div>
 
@@ -3296,6 +3481,7 @@ select c
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 All و SequenceEqual
@@ -3308,6 +3494,7 @@ dbContext.Customers.Where(c => c.Purchases.All(p => p.Price < 100));
 ```
 
 <div dir="rtl">
+
 * **SequenceEqual** دو توالی را با هم مقایسه می‌کند. برای بازگرداندن `true`، هر دو توالی باید عناصر یکسان و با همان ترتیب داشته باشند. می‌توان از **equality comparer** دلخواه استفاده کرد؛ پیش‌فرض `EqualityComparer<T>.Default` است.
 
 ---
@@ -3338,6 +3525,7 @@ foreach (string s in Enumerable.Empty<string>())
 ```
 
 <div dir="rtl">
+
 در ترکیب با عملگر `??`، **Empty** عکس **DefaultIfEmpty** عمل می‌کند.
 
 مثال: فرض کنید یک آرایه‌ی jagged از اعداد صحیح داریم و می‌خواهیم همه‌ی اعداد را در یک لیست صاف جمع کنیم. کوئری **SelectMany** زیر در صورت وجود آرایه‌ی null داخلی با خطا مواجه می‌شود:
@@ -3355,6 +3543,7 @@ IEnumerable<int> flat = numbers.SelectMany(innerArray => innerArray);
 ```
 
 <div dir="rtl">
+
 استفاده از **Empty** همراه با `??` مشکل را حل می‌کند:
 </div>
 
@@ -3367,6 +3556,7 @@ foreach (int i in flat)
 ```
 
 <div dir="rtl">
+
 ---
 
 #### 🔹 Range و Repeat
@@ -3380,6 +3570,7 @@ foreach (int i in Enumerable.Range(5, 3))
 ```
 
 <div dir="rtl">
+
 * **Repeat**: عنصری برای تکرار و تعداد دفعات تکرار آن را می‌گیرد:
 </div>
 

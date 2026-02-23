@@ -1,5 +1,6 @@
 
 <div dir="rtl">
+
 # فصل چهارم: سی شارپ پیشرفته
 
 در این فصل، به سراغ مباحث پیشرفته زبان C# می‌رویم که بر پایه مفاهیمی بنا شده‌اند که در فصل‌های 2 و 3 بررسی کردیم.
@@ -19,6 +20,7 @@ delegate int Transformer(int x);
 ```
 
 <div dir="rtl">
+
 این delegate با هر متدی که بازگشتی از نوع int داشته باشد و یک پارامتر int بگیرد سازگار است. مثل این:
 </div>
 
@@ -27,6 +29,7 @@ int Square(int x) { return x * x; }
 ```
 
 <div dir="rtl">
+
 یا به صورت کوتاه‌تر (expression-bodied):
 </div>
 
@@ -35,6 +38,7 @@ int Square(int x) => x * x;
 ```
 
 <div dir="rtl">
+
 **ساختن و استفاده از یک delegate 🛠️**
 
 اختصاص یک متد به یک متغیر delegate، باعث ایجاد یک نمونه delegate می‌شود:
@@ -45,6 +49,7 @@ Transformer t = Square;
 ```
 
 <div dir="rtl">
+
 فراخوانی یک نمونه delegate دقیقاً مثل فراخوانی یک متد است:
 </div>
 
@@ -53,6 +58,7 @@ int answer = t(3);   // answer برابر با 9
 ```
 
 <div dir="rtl">
+
 مثال کامل:
 </div>
 
@@ -67,6 +73,7 @@ delegate int Transformer(int x);  // تعریف نوع delegate
 ```
 
 <div dir="rtl">
+
 **مفهوم اصلی delegate 🎯**
 
 یک نمونه delegate واقعاً به عنوان نماینده‌ی caller عمل می‌کند:
@@ -84,6 +91,7 @@ Transformer t = Square;
 ```
 
 <div dir="rtl">
+
 در واقع یک میان‌بُر (shorthand) برای این است:
 </div>
 
@@ -92,6 +100,7 @@ Transformer t = new Transformer(Square);
 ```
 
 <div dir="rtl">
+
 عبارت:
 </div>
 
@@ -100,6 +109,7 @@ t(3)
 ```
 
 <div dir="rtl">
+
 میان‌بُری است برای:
 </div>
 
@@ -108,6 +118,7 @@ t.Invoke(3)
 ```
 
 <div dir="rtl">
+
 از نظر فنی، وقتی به Square بدون پرانتز و آرگومان اشاره می‌کنیم، در حال مشخص کردن یک method group هستیم.
 اگر متد overload شده باشد، کامپایلر C# بر اساس امضای delegate انتخاب می‌کند که کدام overload مناسب است.
 
@@ -143,6 +154,7 @@ delegate int Transformer (int x);
 ```
 
 <div dir="rtl">
+
 🔹 در اینجا اگر در خط دوم به‌جای Square از Cube استفاده کنیم، تبدیل روی اعداد به‌صورت مکعب (توان سوم) انجام می‌شود.
 
 🔹 متد Transform یک higher-order function است، چون یک تابع (delegate) را به‌عنوان آرگومان می‌گیرد. (هر متدی که یک delegate را برگرداند نیز یک higher-order function محسوب می‌شود.)
@@ -167,6 +179,7 @@ delegate int Transformer (int x);
 ```
 
 <div dir="rtl">
+
 مثال یک متد instance به‌عنوان هدف delegate:
 </div>
 
@@ -184,6 +197,7 @@ delegate int Transformer (int x);
 ```
 
 <div dir="rtl">
+
 🔑 زمانی که یک متد instance به یک delegate اختصاص داده می‌شود، آن delegate فقط به خود متد اشاره نمی‌کند، بلکه نمونه‌ای از کلاس که متد به آن تعلق دارد را هم نگه‌داری می‌کند.
 
 **خاصیت Target در کلاس System.Delegate 🎯**
@@ -217,6 +231,7 @@ class MyReporter
 ```
 
 <div dir="rtl">
+
 ✅ چون نمونه (instance) در خاصیت Target ذخیره می‌شود، طول عمر آن حداقل به اندازه طول عمر delegate گسترش می‌یابد.
 
 🔖 جمع‌بندی:
@@ -241,6 +256,7 @@ d += SomeMethod2;
 ```
 
 <div dir="rtl">
+
 خط آخر از نظر عملکرد دقیقاً معادل این است:
 </div>
 
@@ -249,6 +265,7 @@ d = d + SomeMethod2;
 ```
 
 <div dir="rtl">
+
 اکنون وقتی d فراخوانی شود، هم SomeMethod1 و هم SomeMethod2 اجرا می‌شوند.
 ✅ توجه داشته باشید که متدها به ترتیبی که اضافه شده‌اند فراخوانی می‌شوند.
 
@@ -260,6 +277,7 @@ d -= SomeMethod1;
 ```
 
 <div dir="rtl">
+
 اکنون فراخوانی d باعث می‌شود فقط SomeMethod2 اجرا شود.
 
 📌 نکته مهم:
@@ -273,6 +291,7 @@ d += SomeMethod1;   // معادل با: d = SomeMethod1 وقتی d برابر nu
 ```
 
 <div dir="rtl">
+
 + به طور مشابه، اگر روی یک delegate که فقط یک متد را نگه داشته باشد عمل -= کنید، نتیجه‌اش معادل اختصاص مقدار null به آن متغیر خواهد بود.
 
 ⚡ یک نکته مهم دیگر:
@@ -307,6 +326,7 @@ public class Util
 ```
 
 <div dir="rtl">
+
 برای مانیتور کردن میزان پیشرفت، می‌توانیم یک نمونه‌ی Multicast Delegate به نام p بسازیم تا پیشرفت هم‌زمان توسط دو متد مستقل بررسی شود:
 </div>
 
@@ -325,6 +345,7 @@ void WriteProgressToFile(int percentComplete)
 ```
 
 <div dir="rtl">
+
 🔍 در اینجا چه اتفاقی می‌افتد؟
 
 1. ابتدا یک delegate از نوع ProgressReporter ساخته می‌شود و به متد WriteProgressToConsole اشاره می‌کند.
@@ -354,6 +375,7 @@ public delegate T Transformer<T>(T arg);
 ```
 
 <div dir="rtl">
+
 با چنین تعریفی می‌توانیم یک متد ابزار عمومی (Utility Method) بنویسیم که روی هر نوع داده‌ای کار کند:
 </div>
 
@@ -377,6 +399,7 @@ public class Util
 ```
 
 <div dir="rtl">
+
 ### Delegates آماده: Func و Action ✅
 
 با معرفی generic delegates، این امکان فراهم شد که مجموعه‌ای کوچک از delegateها طراحی شوند که آن‌قدر عمومی و انعطاف‌پذیر باشند که برای متدهایی با هر نوع خروجی و هر تعداد (معقول) آرگومان قابل استفاده باشند.
@@ -397,6 +420,7 @@ delegate void Action<in T1, in T2>(T1 arg1, T2 arg2);
 ```
 
 <div dir="rtl">
+
 📌 این‌ها بسیار عمومی و قدرتمند هستند.
 
 **جایگزینی Transformer با Func 🔄**
@@ -413,6 +437,7 @@ public static void Transform<T>(T[] values, Func<T, T> transformer)
 ```
 
 <div dir="rtl">
+
 در اینجا:
 
 + Func<T, T> یعنی یک delegate که یک ورودی از نوع T می‌گیرد و خروجی هم از همان نوع T برمی‌گرداند.
@@ -463,6 +488,7 @@ class Squarer : ITransformer
 ```
 
 <div dir="rtl">
+
 چه زمانی delegate انتخاب بهتری از interface است؟ ✅
 
 طراحی با delegate ممکن است انتخاب بهتری باشد اگر یک یا چند مورد زیر برقرار باشند:
@@ -507,6 +533,7 @@ class Cuber : ITransformer
 ```
 
 <div dir="rtl">
+
 📌 نتیجه:
 
 + با delegateها، پیاده‌سازی ساده‌تر و منعطف‌تر است (می‌توانیم به‌راحتی متدهای مختلفی مثل مربع یا مکعب را پاس بدهیم).
@@ -531,6 +558,7 @@ delegate void D2();
 ```
 
 <div dir="rtl">
+
 🔹 اما این حالت مجاز است:
 </div>
 
@@ -539,6 +567,7 @@ D2 d2 = new D2(d1);   // ✅ درست
 ```
 
 <div dir="rtl">
+
 **مقایسه‌ی برابری (Equality) ✅**
 
 دو نمونه‌ی delegate وقتی برابر محسوب می‌شوند که به یک متد یکسان اشاره کنند:
@@ -556,6 +585,7 @@ delegate void D();
 ```
 
 <div dir="rtl">
+
 🔹 در مورد multicast delegate‌ها هم، برابری وقتی برقرار است که به همان متدها و به همان ترتیب اشاره کنند.
 
 #### سازگاری پارامتر (Parameter Compatibility) 🔄
@@ -577,6 +607,7 @@ delegate void StringAction(string s);
 ```
 
 <div dir="rtl">
+
 🔹 در اینجا StringAction یک متد را با پارامتر string فراخوانی می‌کند.
 🔹 اما متدی که واقعا اجرا می‌شود (ActOnObject) پارامترش از نوع object است.
 🔹 در این حالت، آرگومان string به‌طور خودکار تبدیل به object (upcast) می‌شود.
@@ -626,6 +657,7 @@ delegate object ObjectRetriever();
 ```
 
 <div dir="rtl">
+
 🔹 اینجا ObjectRetriever انتظار دارد متدی که به آن متصل است، یک object برگرداند.
 🔹 اما در واقعیت، متد RetrieveString یک string برمی‌گرداند.
 🔹 چون string زیرکلاس object است، این مجاز است ✅.
@@ -653,6 +685,7 @@ delegate TResult Func<out TResult>();
 ```
 
 <div dir="rtl">
+
 این باعث می‌شود بتوانیم بنویسیم:
 </div>
 
@@ -662,6 +695,7 @@ Func<object> y = x;   // ✅ مجاز به خاطر covariance
 ```
 
 <div dir="rtl">
+
 🔹 یعنی می‌توانیم Func<string> را به Func<object> تبدیل کنیم چون string زیرکلاس object است.
 
 **مثال ۲: Contravariance در جنریک‌ها (با Action) 📥**
@@ -674,6 +708,7 @@ delegate void Action<in T>(T arg);
 ```
 
 <div dir="rtl">
+
 این باعث می‌شود:
 </div>
 
@@ -683,6 +718,7 @@ Action<string> y = x;   // ✅ مجاز به خاطر contravariance
 ```
 
 <div dir="rtl">
+
 🔹 یعنی می‌توانیم Action<object> را به Action<string> تبدیل کنیم چون متدی که انتظار دریافت object دارد، می‌تواند string هم بگیرد.
 
 📌 خلاصه:
@@ -722,6 +758,7 @@ public class Broadcaster
 ```
 
 <div dir="rtl">
+
 کدی که داخل نوع **Broadcaster** قرار دارد، دسترسی کامل به **PriceChanged** دارد و می‌تواند آن را مانند یک delegate معمولی مدیریت کند. کدهای خارج از **Broadcaster** تنها می‌توانند عملیات `+=` و `-=` را روی رویداد **PriceChanged** انجام دهند.
 
 ✅ ادامه‌ی متن را ارسال کنید تا ترجمه بعدی را آماده کنم.
@@ -740,6 +777,7 @@ public class Broadcaster
 ```
 
 <div dir="rtl">
+
 سه اتفاق در پشت صحنه رخ می‌دهد:
 
 1️⃣ ابتدا، **کامپایلر** تعریف رویداد را به چیزی شبیه به کد زیر ترجمه می‌کند:
@@ -756,6 +794,7 @@ public event PriceChangedHandler PriceChanged
 ```
 
 <div dir="rtl">
+
 کلیدواژه‌های **add** و **remove** نشان‌دهنده **accessorهای رویداد صریح** هستند—که عملکردی شبیه به **accessorهای property** دارند. بعداً درباره نحوه نوشتن این‌ها توضیح خواهیم داد.
 
 2️⃣ دوم، کامپایلر داخل کلاس **Broadcaster** به دنبال ارجاعات به **PriceChanged** می‌گردد که عملیات دیگری غیر از `+=` یا `-=` انجام می‌دهند و آن‌ها را به فیلد delegate زیرین یعنی **priceChanged** هدایت می‌کند.
@@ -792,6 +831,7 @@ public class Stock
 ```
 
 <div dir="rtl">
+
 اگر کلیدواژه **event** را حذف کنیم و **PriceChanged** به یک فیلد معمولی delegate تبدیل شود، باز هم مثال ما همان نتایج را خواهد داد. اما کلاس **Stock** کمتر مقاوم خواهد بود، زیرا subscribers می‌توانند با یکدیگر تداخل ایجاد کنند، مثلاً:
 
 * جایگزین کردن دیگر subscribers با انتساب مجدد **PriceChanged** به جای استفاده از عملگر `+=`.
@@ -820,6 +860,7 @@ public class PriceChangedEventArgs : System.EventArgs
 ```
 
 <div dir="rtl">
+
 برای استفاده مجدد، subclass EventArgs معمولاً بر اساس اطلاعاتی که شامل می‌شود نامگذاری می‌شود، نه بر اساس رویدادی که برای آن استفاده می‌شود. داده‌ها معمولاً به صورت property یا فیلد فقط‌خواندنی ارائه می‌شوند.
 
 ### انتخاب یا تعریف delegate برای رویداد 🎯
@@ -838,6 +879,7 @@ public delegate void EventHandler<TEventArgs>(object source, TEventArgs e);
 ```
 
 <div dir="rtl">
+
 قبل از وجود genericها در زبان (قبل از C# 2.0)، باید delegate سفارشی را به صورت زیر می‌نوشتیم:
 </div>
 
@@ -846,6 +888,7 @@ public delegate void PriceChangedHandler(object sender, PriceChangedEventArgs e)
 ```
 
 <div dir="rtl">
+
 به دلایل تاریخی، بیشتر رویدادها در کتابخانه‌های .NET از این روش استفاده می‌کنند.
 
 ### تعریف رویداد با delegate انتخاب‌شده 🔧
@@ -860,6 +903,7 @@ public class Stock
 ```
 
 <div dir="rtl">
+
 ### نوشتن متد محافظت‌شده و virtual برای فعال کردن رویداد
 
 نام این متد باید همان نام رویداد باشد، با پیشوند **On**، و یک آرگومان **EventArgs** دریافت کند:
@@ -879,6 +923,7 @@ public class Stock
 ```
 
 <div dir="rtl">
+
 برای عملکرد مقاوم در سناریوهای چندنخی (multithreaded)، بهتر است delegate را قبل از تست و فراخوانی به یک متغیر موقت انتساب دهید:
 </div>
 
@@ -888,6 +933,7 @@ if (temp != null) temp(this, e);
 ```
 
 <div dir="rtl">
+
 همچنین می‌توان با استفاده از **null-conditional operator** همان کار را بدون متغیر موقت انجام داد:
 </div>
 
@@ -896,6 +942,7 @@ PriceChanged?.Invoke(this, e);
 ```
 
 <div dir="rtl">
+
 این روش هم **thread-safe** و هم مختصر است و بهترین روش عمومی برای فراخوانی رویدادها محسوب می‌شود.
 
 ### مثال کامل 💻
@@ -955,6 +1002,7 @@ public class Stock
 ```
 
 <div dir="rtl">
+
 ### استفاده از EventHandler غیر عمومی
 
 وقتی رویداد نیاز به انتقال اطلاعات اضافی ندارد، می‌توان از **EventHandler** غیر generic استفاده کرد. در این مثال، کلاس **Stock** بازنویسی شده تا رویداد **PriceChanged** پس از تغییر قیمت فعال شود و تنها نیاز است بدانیم رویداد رخ داده است، بدون نیاز به اطلاعات اضافی. همچنین از **EventArgs.Empty** استفاده می‌کنیم تا از ایجاد غیرضروری یک نمونه EventArgs جلوگیری شود:
@@ -988,6 +1036,7 @@ public class Stock
 ```
 
 <div dir="rtl">
+
 **Accessorهای رویدادها 🔑**
 
 Accessorهای یک رویداد، پیاده‌سازی‌های عملگرهای `+=` و `-=` آن هستند. به طور پیش‌فرض، این accessors به صورت ضمنی توسط کامپایلر پیاده‌سازی می‌شوند. به مثال زیر توجه کنید:
@@ -998,6 +1047,7 @@ public event EventHandler PriceChanged;
 ```
 
 <div dir="rtl">
+
 کامپایلر این را به شکل زیر تبدیل می‌کند:
 
 * یک فیلد delegate خصوصی
@@ -1016,6 +1066,7 @@ public event EventHandler PriceChanged
 ```
 
 <div dir="rtl">
+
 این مثال از نظر عملکرد با پیاده‌سازی پیش‌فرض C# یکسان است (به جز اینکه C# همچنین ایمنی در برابر چندنخی را با الگوریتم lock-free compare-and-swap تضمین می‌کند). با تعریف دستی accessors، به C# می‌گوییم که منطق پیش‌فرض فیلد و accessor را تولید نکند.
 
 با استفاده از explicit event accessors، می‌توان استراتژی‌های پیچیده‌تری برای ذخیره و دسترسی به delegate زیرین اعمال کرد. سه سناریو که این کاربرد دارد:
@@ -1042,6 +1093,7 @@ class Foo : IFoo
 ```
 
 <div dir="rtl">
+
 بخش‌های **add** و **remove** یک رویداد به متدهای **add\_XXX** و **remove\_XXX** کامپایل می‌شوند.
 
 ---
@@ -1060,6 +1112,7 @@ public class Foo
 ```
 
 <div dir="rtl">
+
 ---
 
 **Lambda Expressions λ**
@@ -1079,6 +1132,7 @@ delegate int Transformer(int i);
 ```
 
 <div dir="rtl">
+
 کامپایلر lambdaهای این نوع را با نوشتن یک متد خصوصی و انتقال کد expression به آن متد حل می‌کند.
 
 فرم کلی یک lambda:
@@ -1089,6 +1143,7 @@ delegate int Transformer(int i);
 ```
 
 <div dir="rtl">
+
 اگر فقط یک پارامتر با نوع قابل استنتاج داشته باشیم، می‌توان پرانتزها را حذف کرد.
 
 مثال:
@@ -1099,6 +1154,7 @@ x => x * x;
 ```
 
 <div dir="rtl">
+
 هر پارامتر lambda متناظر با پارامتر delegate است و نوع expression (که ممکن است **void** باشد) متناظر با نوع بازگشتی delegate است.
 
 می‌توان expression را به صورت یک بلوک statement نیز نوشت:
@@ -1109,6 +1165,7 @@ x => { return x * x; };
 ```
 
 <div dir="rtl">
+
 اغلب lambdaها همراه با **Func** و **Action** استفاده می‌شوند:
 </div>
 
@@ -1117,6 +1174,7 @@ Func<int,int> sqr = x => x * x;
 ```
 
 <div dir="rtl">
+
 مثال با دو پارامتر:
 </div>
 
@@ -1126,6 +1184,7 @@ int total = totalLength("hello", "world");   // total = 10
 ```
 
 <div dir="rtl">
+
 اگر نیازی به استفاده از پارامترها نیست، می‌توان آن‌ها را با underscore دور انداخت (از C# 9):
 </div>
 
@@ -1134,6 +1193,7 @@ Func<string,string,int> totalLength = (_,_) => ...
 ```
 
 <div dir="rtl">
+
 مثال بدون آرگومان:
 </div>
 
@@ -1142,6 +1202,7 @@ Func<string> greeter = () => "Hello, world";
 ```
 
 <div dir="rtl">
+
 از C# 10 به بعد، می‌توان از **implicit typing** برای lambda استفاده کرد:
 </div>
 
@@ -1150,6 +1211,7 @@ var greeter = () => "Hello, world";
 ```
 
 <div dir="rtl">
+
 ### مشخص کردن صریح نوع پارامتر و نوع بازگشتی Lambda 🔧
 
 کامپایلر معمولاً می‌تواند نوع پارامترهای lambda را به صورت زمینه‌ای استنتاج کند. وقتی این امکان وجود نداشته باشد، باید نوع هر پارامتر را به صورت صریح مشخص کنید. به دو متد زیر توجه کنید:
@@ -1161,6 +1223,7 @@ void Bar<T>(Action<T> a) { }
 ```
 
 <div dir="rtl">
+
 کد زیر **کامپایل نمی‌شود**، زیرا کامپایلر نمی‌تواند نوع `x` را استنتاج کند:
 </div>
 
@@ -1169,6 +1232,7 @@ Bar(x => Foo(x));   // نوع x چیست؟
 ```
 
 <div dir="rtl">
+
 می‌توان با مشخص کردن صریح نوع `x` مشکل را حل کرد:
 </div>
 
@@ -1177,6 +1241,7 @@ Bar((int x) => Foo(x));
 ```
 
 <div dir="rtl">
+
 این مثال ساده را می‌توان به دو روش دیگر نیز اصلاح کرد:
 </div>
 
@@ -1186,6 +1251,7 @@ Bar<int>(Foo);          // همانند بالا، با استفاده از meth
 ```
 
 <div dir="rtl">
+
 مثالی دیگر از استفاده explicit برای نوع پارامتر (C# 10):
 </div>
 
@@ -1194,6 +1260,7 @@ var sqr = (int x) => x * x;
 ```
 
 <div dir="rtl">
+
 کامپایلر `sqr` را به نوع `Func<int,int>` استنتاج می‌کند. بدون مشخص کردن `int`، استنتاج نوع شکست می‌خورد: کامپایلر می‌داند که sqr باید از نوع `Func<T,T>` باشد، اما نمی‌داند T چیست.
 
 از C# 10 به بعد می‌توان نوع بازگشتی lambda را نیز مشخص کرد:
@@ -1204,6 +1271,7 @@ var sqr = int (int x) => x;
 ```
 
 <div dir="rtl">
+
 مشخص کردن نوع بازگشتی می‌تواند عملکرد کامپایلر را در lambdaهای پیچیده و تو در تو بهبود دهد.
 
 ---
@@ -1218,6 +1286,7 @@ void Print(string message = "") => Console.WriteLine(message);
 ```
 
 <div dir="rtl">
+
 lambdaها نیز می‌توانند پارامتر اختیاری داشته باشند:
 </div>
 
@@ -1228,6 +1297,7 @@ print();
 ```
 
 <div dir="rtl">
+
 این ویژگی برای کتابخانه‌هایی مانند **ASP.NET Minimal API** مفید است.
 
 ---
@@ -1244,6 +1314,7 @@ Console.WriteLine(multiplier(3));   // خروجی: 6
 ```
 
 <div dir="rtl">
+
 متغیرهایی که توسط lambda ارجاع می‌شوند، **captured variables** نامیده می‌شوند. lambda که متغیرها را capture می‌کند، **closure** نامیده می‌شود.
 
 متغیرهای capture شده هنگام فراخوانی delegate ارزیابی می‌شوند، نه هنگام capture شدن:
@@ -1257,6 +1328,7 @@ Console.WriteLine(multiplier(3));  // خروجی: 30
 ```
 
 <div dir="rtl">
+
 lambdaها می‌توانند خودشان متغیرهای capture شده را به‌روزرسانی کنند:
 </div>
 
@@ -1269,6 +1341,7 @@ Console.WriteLine(seed);       // 2
 ```
 
 <div dir="rtl">
+
 متغیرهای capture شده طول عمرشان تا طول عمر delegate ادامه پیدا می‌کند. مثال:
 </div>
 
@@ -1288,6 +1361,7 @@ static void Main()
 ```
 
 <div dir="rtl">
+
 اگر متغیر محلی را داخل خود lambda بسازیم، هر فراخوانی delegate یک متغیر جدید ایجاد می‌کند:
 </div>
 
@@ -1306,6 +1380,7 @@ static void Main()
 ```
 
 <div dir="rtl">
+
 پیاده‌سازی capture داخلی با **hoisting** انجام می‌شود: متغیرهای capture شده به فیلدهای یک کلاس خصوصی منتقل می‌شوند و هنگام فراخوانی متد، کلاس ایجاد شده و به delegate وابسته می‌شود.
 
 ---
@@ -1322,6 +1397,7 @@ Func<int, int> multiplier = static n => n * 2;
 ```
 
 <div dir="rtl">
+
 اگر بعداً lambda بخواهد متغیری را capture کند، کامپایلر خطا می‌دهد:
 </div>
 
@@ -1331,6 +1407,7 @@ Func<int, int> multiplier = static n => n * factor;  // کامپایل نمی‌
 ```
 
 <div dir="rtl">
+
 lambda بدون capture، یک instance delegate کش شده را مجدداً استفاده می‌کند و هزینه‌ای ندارد.
 
 lambdaهای استاتیک هنوز می‌توانند به متغیرها و ثابت‌های static دسترسی داشته باشند. **static** تنها نقش بررسی دارد و تاثیری بر IL تولیدشده ندارد؛ بدون آن، کامپایلر در صورت نیاز closure تولید می‌کند، اما حتی آن زمان ترفندهایی برای کاهش هزینه دارد.
@@ -1349,6 +1426,7 @@ foreach (Action a in actions) a();     // 333
 ```
 
 <div dir="rtl">
+
 هر **closure** (بخش پررنگ شده) همان متغیر `i` را می‌گیرد. این منطقی است، چون `i` متغیری است که مقدارش بین تکرارهای حلقه باقی می‌ماند؛ حتی می‌توانید داخل بدنه‌ی حلقه، مقدار `i` را تغییر دهید. نتیجه این است که وقتی **delegate**ها بعداً فراخوانی می‌شوند، همگی مقدار `i` در لحظه‌ی فراخوانی را می‌بینند، یعنی `3`. برای درک بهتر، حلقه را این‌طور بازنویسی کنید:
 </div>
 
@@ -1365,6 +1443,7 @@ foreach (Action a in actions) a();    // 333
 ```
 
 <div dir="rtl">
+
 راه‌حل برای نمایش `012` این است که متغیر تکرار را به یک **متغیر محلی جدید** که در همان محدوده‌ی حلقه قرار دارد، انتساب دهیم:
 </div>
 
@@ -1379,6 +1458,7 @@ foreach (Action a in actions) a();     // 012
 ```
 
 <div dir="rtl">
+
 چون در هر تکرار، یک متغیر جدید `loopScopedi` ساخته می‌شود، هر **closure** یک متغیر متفاوت را می‌گیرد. ✨
 
 > **نکته:** قبل از نسخه‌ی C# 5.0، حلقه‌های `foreach` هم همین رفتار را داشتند و باعث سردرگمی می‌شدند. چون متغیر در `foreach` تغییرناپذیر است، انتظار می‌رفت محلی باشد، ولی نبود. خوشبختانه این موضوع اصلاح شده و حالا می‌توانید متغیرهای `foreach` را بدون نگرانی Capture کنید. ✅
@@ -1403,6 +1483,7 @@ public void Foo(Func<int, bool> predicate) { ... }
 ```
 
 <div dir="rtl">
+
 (نمونه‌های بیشتری در فصل 8 خواهید دید.) در این مواقع، استفاده از **lambda** معمولاً کوتاه‌تر و تمیزتر است.
 
 ---
@@ -1425,6 +1506,7 @@ Console.WriteLine(sqr(3));  // 9
 ```
 
 <div dir="rtl">
+
 این معادل نوشتار زیر با lambda است:
 </div>
 
@@ -1435,6 +1517,7 @@ Transformer sqr = x => x * x;
 ```
 
 <div dir="rtl">
+
 متدهای ناشناس هم مثل lambdaها متغیرهای بیرونی را Capture می‌کنند و حتی می‌توانند با کلمه‌ی کلیدی `static` شبیه lambdaهای استاتیک رفتار کنند.
 
 ویژگی خاص آن‌ها این است که **می‌توان پارامترها را کاملاً حذف کرد**، حتی اگر delegate آن‌ها را انتظار داشته باشد. این برای تعریف event با handler خالی مفید است:
@@ -1445,6 +1528,7 @@ public event EventHandler Clicked = delegate { };
 ```
 
 <div dir="rtl">
+
 این کار باعث می‌شود قبل از صدا زدن event نیازی به بررسی null نداشته باشید. همچنین نوشتن زیر هم معتبر است:
 </div>
 
@@ -1454,6 +1538,7 @@ Clicked += delegate { Console.WriteLine("clicked"); };
 ```
 
 <div dir="rtl">
+
 ---
 
 ### دستورات try و مدیریت استثناها (try Statements and Exceptions) ⚠️
@@ -1488,6 +1573,7 @@ finally
 ```
 
 <div dir="rtl">
+
 برنامه‌ی زیر را در نظر بگیرید:
 </div>
 
@@ -1499,6 +1585,7 @@ int Calc(int x) => 10 / x;
 ```
 
 <div dir="rtl">
+
 چون `x` صفر است، خطای `DivideByZeroException` رخ می‌دهد و برنامه متوقف می‌شود. حالا با `try/catch`:
 </div>
 
@@ -1518,6 +1605,7 @@ int Calc(int x) => 10 / x;
 ```
 
 <div dir="rtl">
+
 خروجی:
 </div>
 
@@ -1527,6 +1615,7 @@ program completed
 ```
 
 <div dir="rtl">
+
 در عمل، بهتر است **خطاهای قابل پیشگیری را قبل از وقوع بررسی کنید**، مثلاً تقسیم بر صفر را چک کنید، چون **exceptionها هزینه‌بر هستند** (صدها سیکل پردازنده یا بیشتر).
 
 وقتی exception رخ می‌دهد، CLR بررسی می‌کند:
@@ -1579,6 +1668,7 @@ class Test
 ```
 
 <div dir="rtl">
+
 برای هر استثنا فقط یک **catch** اجرا می‌شود. اگر می‌خواهید یک هندلر کلی مثل **System.Exception** داشته باشید، باید هندلرهای خاص‌تر را قبل از آن قرار دهید.
 
 گاهی نیاز ندارید به ویژگی‌های استثنا دسترسی داشته باشید. در این حالت می‌توانید متغیر را حذف کنید:
@@ -1592,6 +1682,7 @@ catch (OverflowException)   // بدون متغیر
 ```
 
 <div dir="rtl">
+
 حتی می‌توانید هم متغیر و هم نوع را حذف کنید (به این معنی که همه استثناها گرفته می‌شوند):
 </div>
 
@@ -1600,6 +1691,7 @@ catch { ... }
 ```
 
 <div dir="rtl">
+
 ---
 
 ### Exception filters (فیلترهای استثنا) 🔍
@@ -1615,6 +1707,7 @@ catch (WebException ex) when (ex.Status == WebExceptionStatus.Timeout)
 ```
 
 <div dir="rtl">
+
 در این مثال، اگر **WebException** پرتاب شود، عبارت بولی بعد از **when** ارزیابی می‌شود. اگر نتیجه **false** باشد، این **catch** نادیده گرفته شده و به سراغ **catch**های بعدی می‌رود.
 
 با **exception filters** می‌توان یک نوع استثنا را چند بار با شرایط متفاوت گرفت:
@@ -1628,6 +1721,7 @@ catch (WebException ex) when (ex.Status == WebExceptionStatus.SendFailure)
 ```
 
 <div dir="rtl">
+
 عبارت بولی در **when** حتی می‌تواند شامل متدهایی باشد که عملیات جانبی انجام می‌دهند، مانند ثبت خطا برای اهداف عیب‌یابی.
 
 ---
@@ -1669,6 +1763,7 @@ void ReadFile()
 ```
 
 <div dir="rtl">
+
 در این مثال، فایل را با فراخوانی **Dispose** روی **StreamReader** بستیم. فراخوانی **Dispose** روی یک شیء در داخل **finally** یک روش استاندارد است و در #C با دستور **using** نیز پشتیبانی می‌شود.
 
 ---
@@ -1690,6 +1785,7 @@ using (StreamReader reader = File.OpenText("file.txt"))
 ```
 
 <div dir="rtl">
+
 این قطعه‌کد دقیقاً معادل زیر است:
 </div>
 
@@ -1707,6 +1803,7 @@ finally
 ```
 
 <div dir="rtl">
+
 ---
 
 ### اعلان‌های `using` (Using Declarations) ✍️
@@ -1726,6 +1823,7 @@ if (File.Exists("file.txt"))
 ```
 
 <div dir="rtl">
+
 در این حالت، **`reader`** زمانی Dispose می‌شود که اجرای برنامه از بلوک **`if`** خارج شود.
 
 ---
@@ -1751,6 +1849,7 @@ void Display(string name)
 ```
 
 <div dir="rtl">
+
 از آن‌جایی که بررسی آرگومان برای مقدار **null** و پرتاب **`ArgumentNullException`** بسیار رایج است، از **.NET 6** یک میان‌بر ارائه شده است:
 </div>
 
@@ -1763,6 +1862,7 @@ void Display(string name)
 ```
 
 <div dir="rtl">
+
 توجه کنید که در این روش، نیازی به مشخص کردن نام پارامتر نداریم. دلیل این موضوع در بخش **CallerArgumentExpression** (صفحه 247) توضیح داده خواهد شد.
 
 ---
@@ -1777,6 +1877,7 @@ public string Foo() => throw new NotImplementedException();
 ```
 
 <div dir="rtl">
+
 همچنین می‌تواند در یک **عبارت شرطی سه‌تایی (Ternary Conditional Expression)** ظاهر شود:
 </div>
 
@@ -1788,6 +1889,7 @@ string ProperCase(string value) =>
 ```
 
 <div dir="rtl">
+
 ---
 
 ### پرتاب دوباره استثنا (Rethrowing an Exception) 🔄
@@ -1809,6 +1911,7 @@ catch (Exception ex)
 ```
 
 <div dir="rtl">
+
 اگر به‌جای **`throw`** از **`throw ex`** استفاده کنیم، برنامه همچنان کار می‌کند اما خاصیت **`StackTrace`** دیگر مسیر خطای اصلی را نشان نمی‌دهد.
 
 پرتاب دوباره به شما اجازه می‌دهد خطا را **ثبت (Log)** کنید بدون اینکه آن را نادیده بگیرید، یا زمانی که شرایط فراتر از انتظار است، از ادامه مدیریت خطا صرف‌نظر کنید.
@@ -1828,6 +1931,7 @@ catch (FormatException ex)
 ```
 
 <div dir="rtl">
+
 دقت کنید که هنگام ساخت **`XmlException`**، استثنای اصلی **`ex`** را به‌عنوان آرگومان دوم پاس دادیم. این آرگومان خاصیت **`InnerException`** را مقداردهی می‌کند و در اشکال‌زدایی کمک زیادی می‌کند. تقریباً همه انواع استثنا چنین سازنده‌ای دارند.
 
 ---
@@ -1888,6 +1992,7 @@ throw null;
 ```
 
 <div dir="rtl">
+
 ---
 
 ### الگوی متدهای **TryXXX** 🔄
@@ -1903,6 +2008,7 @@ public bool TryParse(string input, out int returnValue);
 ```
 
 <div dir="rtl">
+
 اگر **Parse** شکست بخورد، یک استثنا پرتاب می‌کند؛ اما **TryParse** در این حالت مقدار **false** برمی‌گرداند.
 
 می‌توانید این الگو را با این روش پیاده‌سازی کنید که متد **XXX** در نهایت متد **TryXXX** را فراخوانی کند:
@@ -1919,6 +2025,7 @@ public return-type XXX(input-type input)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### جایگزین‌های استثناها 🛠️
@@ -1964,6 +2071,7 @@ class Enumerable   // معمولاً واسط IEnumerable یا IEnumerable<T> ر
 ```
 
 <div dir="rtl">
+
 **نمونه پیمایش سطح بالا** روی کاراکترهای کلمه `"beer"` با استفاده از `foreach`:
 </div>
 
@@ -1973,6 +2081,7 @@ foreach (char c in "beer")
 ```
 
 <div dir="rtl">
+
 **نمونه پیمایش سطح پایین** روی کاراکترهای `"beer"` بدون استفاده از `foreach`:
 </div>
 
@@ -1986,6 +2095,7 @@ using (var enumerator = "beer".GetEnumerator())
 ```
 
 <div dir="rtl">
+
 > اگر شمارش‌گر واسط `IDisposable` را پیاده‌سازی کند، عبارت `foreach` مانند یک عبارت `using` عمل کرده و **به‌طور ضمنی** شیء شمارش‌گر را آزاد (dispose) می‌کند.
 
 جزئیات بیشتر در مورد واسط‌های شمارش در **فصل 7** توضیح داده شده است.
@@ -2003,6 +2113,7 @@ var list = new List<int> { 1, 2, 3 };
 ```
 
 <div dir="rtl">
+
 از نسخه #C 12 به بعد، می‌توانید این کار را کوتاه‌تر انجام دهید (با استفاده از **براکت‌ها**):
 </div>
 
@@ -2012,6 +2123,7 @@ List<int> list = [1, 2, 3];
 ```
 
 <div dir="rtl">
+
 **عبارات مجموعه‌ای** **هدف‌نوعی (target-typed)** هستند؛ یعنی نوع `[1, 2, 3]` به نوع متغیری که به آن انتساب داده می‌شود بستگی دارد. مثال:
 </div>
 
@@ -2021,6 +2133,7 @@ Span<int> span = [1, 2, 3];
 ```
 
 <div dir="rtl">
+
 حتی می‌توانید هنگام فراخوانی متدها هم نوع را حذف کنید اگر کامپایلر بتواند آن را استنباط کند:
 </div>
 
@@ -2031,6 +2144,7 @@ void Foo(List<int> numbers) { ... }
 ```
 
 <div dir="rtl">
+
 کامپایلر این کد را به این شکل ترجمه می‌کند:
 </div>
 
@@ -2043,6 +2157,7 @@ list.Add(3);
 ```
 
 <div dir="rtl">
+
 این موضوع نیازمند این است که شیء شمارش‌پذیر واسط `System.Collections.IEnumerable` را پیاده‌سازی کند و یک متد `Add` با تعداد پارامتر مناسب داشته باشد. (در عبارات مجموعه‌ای، کامپایلر از الگوهای دیگر هم برای ایجاد مجموعه‌های فقط خواندنی پشتیبانی می‌کند.)
 
 همچنین می‌توانید دیکشنری‌ها را هم به همین شکل مقداردهی کنید (بخش **"Dictionaries"** در صفحه 394 را ببینید):
@@ -2057,6 +2172,7 @@ var dict = new Dictionary<int, string>()
 ```
 
 <div dir="rtl">
+
 یا به شکل کوتاه‌تر:
 </div>
 
@@ -2069,6 +2185,7 @@ var dict = new Dictionary<int, string>()
 ```
 
 <div dir="rtl">
+
 این روش نه تنها برای دیکشنری‌ها، بلکه برای هر نوعی که **Indexer** داشته باشد، معتبر است.
 
 ---
@@ -2098,6 +2215,7 @@ IEnumerable<int> Fibs(int fibCount)
 ```
 
 <div dir="rtl">
+
 **خروجی:**
 </div>
 
@@ -2106,6 +2224,7 @@ IEnumerable<int> Fibs(int fibCount)
 ```
 
 <div dir="rtl">
+
 در حالی که دستور `return` می‌گوید: **"این مقداری است که از این متد خواسته بودی"**، دستور `yield return` می‌گوید: **"این عنصر بعدی است که از این شمارش‌گر خواسته بودی"**.
 در هر دستور `yield`، کنترل به فراخواننده برمی‌گردد، اما **وضعیت متد حفظ می‌شود** تا وقتی فراخواننده عنصر بعدی را درخواست کرد، متد از همان‌جا ادامه یابد. این وضعیت به عمر شمارش‌گر وابسته است و بعد از اتمام پیمایش آزاد می‌شود.
 
@@ -2133,6 +2252,7 @@ System.Collections.Generic.IEnumerator<T>
 ```
 
 <div dir="rtl">
+
 **Iterator** بسته به اینکه یک رابط **Enumerable** یا **Enumerator** برمی‌گرداند، رفتار متفاوتی دارد. توضیح کامل این موضوع در فصل ۷ آمده است.
 
 ---
@@ -2155,6 +2275,7 @@ IEnumerable<string> Foo()
 ```
 
 <div dir="rtl">
+
 ---
 
 ### استفاده از `yield break`
@@ -2174,6 +2295,7 @@ IEnumerable<string> Foo(bool breakEarly)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### **Iteratorها** و بلوک‌های **try/catch/finally** ⚠️
@@ -2190,6 +2312,7 @@ IEnumerable<string> Foo()
 ```
 
 <div dir="rtl">
+
 * همچنین استفاده از `yield return` در بخش‌های `catch` یا `finally` نیز مجاز نیست.
   دلیل این محدودیت‌ها این است که کامپایلر باید **Iteratorها** را به کلاس‌های معمولی با متدهای `MoveNext`، `Current` و `Dispose` تبدیل کند و مدیریت بلاک‌های خطا پیچیدگی زیادی ایجاد می‌کند.
 
@@ -2205,6 +2328,7 @@ IEnumerable<string> Foo()
 ```
 
 <div dir="rtl">
+
 کد موجود در بلوک `finally` زمانی اجرا می‌شود که شمارنده (**Enumerator**) مصرف‌کننده به انتهای توالی برسد یا از بین برود. دستور `foreach` به‌صورت ضمنی شمارنده را Dispose می‌کند اگر زودتر از حلقه خارج شوید، بنابراین این روش امنی برای استفاده از شمارنده‌هاست.
 
 ---
@@ -2223,6 +2347,7 @@ using (var enumerator = sequence.GetEnumerator())
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ترکیب توالی‌ها (Composing Sequences) 🧩
@@ -2257,6 +2382,7 @@ IEnumerable<int> EvenNumbersOnly(IEnumerable<int> sequence)
 ```
 
 <div dir="rtl">
+
 نکته مهم این است که **هر عنصر دقیقاً زمانی محاسبه می‌شود که درخواست شود**، یعنی فقط هنگام فراخوانی متد `MoveNext()` مقدار جدید تولید می‌شود. (شکل ۴-۱ فرآیند درخواست و خروجی داده‌ها را در طول زمان نشان می‌دهد.)
 
 <div align="center">
@@ -2280,6 +2406,7 @@ string s = null;   // مشکلی ندارد، نوع مرجع
 ```
 
 <div dir="rtl">
+
 اما **Value Types** (انواع مقداری) به‌صورت عادی نمی‌توانند `null` باشند و اگر تلاش کنید، خطای کامپایل دریافت می‌کنید:
 </div>
 
@@ -2288,6 +2415,7 @@ int i = null;   // خطای کامپایل، نوع مقداری نمی‌توا
 ```
 
 <div dir="rtl">
+
 برای این‌که یک **Value Type** قابلیت داشتن مقدار تهی را داشته باشد، باید از یک ساختار خاص به نام **Nullable Type** استفاده کنید. برای تعریف یک نوع Nullable کافی است بعد از نوع داده از علامت `?` استفاده کنید:
 </div>
 
@@ -2297,6 +2425,7 @@ Console.WriteLine(i == null);   // خروجی True
 ```
 
 <div dir="rtl">
+
 ---
 
 ## ساختار Nullable<T> 🛠
@@ -2321,6 +2450,7 @@ public struct Nullable<T> where T : struct
 ```
 
 <div dir="rtl">
+
 نمونه کد:
 </div>
 
@@ -2330,6 +2460,7 @@ Console.WriteLine(i == null);  // True
 ```
 
 <div dir="rtl">
+
 این کد در پشت صحنه به شکل زیر ترجمه می‌شود:
 </div>
 
@@ -2339,6 +2470,7 @@ Console.WriteLine(!i.HasValue);   // True
 ```
 
 <div dir="rtl">
+
 > توجه: اگر مقدار **HasValue** برابر **false** باشد و شما بخواهید **Value** را بخوانید، یک **InvalidOperationException** رخ می‌دهد.
 > متد **GetValueOrDefault()** در صورتی که **HasValue = true** باشد مقدار **Value** را برمی‌گرداند، وگرنه مقدار پیش‌فرض یا مقداری که شما مشخص کرده‌اید را برمی‌گرداند.
 
@@ -2358,6 +2490,7 @@ int y = (int)x;     // تبدیل صریح
 ```
 
 <div dir="rtl">
+
 در واقع، تبدیل صریح دقیقاً معادل دسترسی به ویژگی **Value** است.
 بنابراین، اگر **HasValue = false** باشد و شما بخواهید Cast کنید، استثنای **InvalidOperationException** ایجاد می‌شود.
 
@@ -2377,6 +2510,7 @@ Console.WriteLine(x.HasValue);   // False
 ```
 
 <div dir="rtl">
+
 ### عملگرهای ارتقا (Operator Lifting) 🛠️
 
 ساختار **Nullable<T>** عملگرهایی مثل `<`، `>` یا حتی `==` را تعریف نمی‌کند. با این حال، کد زیر بدون هیچ مشکلی کامپایل و اجرا می‌شود:
@@ -2389,6 +2523,7 @@ bool b = x < y;      // true
 ```
 
 <div dir="rtl">
+
 این موضوع به این دلیل است که کامپایلر عملگر **کمتر از** را از نوع پایه (در اینجا `int`) قرض گرفته یا به اصطلاح **ارتقا داده** است. از نظر مفهومی، عبارت مقایسه بالا به شکل زیر ترجمه می‌شود:
 </div>
 
@@ -2397,6 +2532,7 @@ bool b = (x.HasValue && y.HasValue) ? (x.Value < y.Value) : false;
 ```
 
 <div dir="rtl">
+
 به عبارت دیگر، اگر هر دو متغیر `x` و `y` مقدار داشته باشند، مقایسه با استفاده از عملگر کمتر از نوع `int` انجام می‌شود؛ در غیر این صورت، نتیجه `false` خواهد بود.
 
 ارتقای عملگر به این معناست که شما می‌توانید به طور ضمنی از عملگرهای نوع `T` روی نوع `T?` استفاده کنید. همچنین می‌توانید عملگرهای مخصوص به `T?` تعریف کنید تا رفتار خاصی در برابر مقادیر `null` داشته باشند، اما در بیشتر مواقع بهتر است به کامپایلر اعتماد کنید تا به طور خودکار منطق مربوط به `nullable` را پیاده‌سازی کند. چند مثال:
@@ -2425,6 +2561,7 @@ Console.WriteLine (x + y);     // null (خط خالی چاپ می‌شود)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### رفتار عملگرها با مقادیر `null` در Nullable 🧩
@@ -2444,6 +2581,7 @@ Console.WriteLine ((bool?)null == (bool?)null);         // True
 ```
 
 <div dir="rtl">
+
 * اگر فقط یکی از عملوندها `null` باشد، برابر نیستند.
 * اگر هر دو مقدار داشته باشند، مقادیر آن‌ها مقایسه می‌شود.
 
@@ -2463,6 +2601,7 @@ bool b = (x.HasValue && y.HasValue)
 ```
 
 <div dir="rtl">
+
 ---
 
 #### 3. سایر عملگرها (`+`, `-`, `*`, `/`, `%`, `&`, `|`, `^`, `<<`, `>>`, `+`, `++`, `--`, `!`, `~`)
@@ -2479,6 +2618,7 @@ int? c = (x.HasValue && y.HasValue)
 ```
 
 <div dir="rtl">
+
 تنها استثنا زمانی است که عملگرهای `&` و `|` روی نوع `bool?` اعمال شوند که به‌زودی توضیح داده می‌شود.
 
 ---
@@ -2495,6 +2635,7 @@ int? c = a + b;   // c برابر null است - معادل a + (int?)b
 ```
 
 <div dir="rtl">
+
 ---
 
 ### نوع‌های Nullable و عملگرهای `&` و `|` برای `bool?` 🔹
@@ -2525,6 +2666,7 @@ Console.WriteLine (n & t);    // (null)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### Nullable Value Types و عملگرهای کمکی (`??` و Null-Conditional) ⚡
@@ -2541,6 +2683,7 @@ Console.WriteLine (a ?? b ?? c);  // 1 (اولین مقدار غیر-null)
 ```
 
 <div dir="rtl">
+
 استفاده از `??` روی یک مقدار nullable معادل فراخوانی متد `GetValueOrDefault` با یک مقدار پیش‌فرض است، با این تفاوت که اگر متغیر null نباشد، عبارت پیش‌فرض هرگز ارزیابی نمی‌شود.
 
 همچنین **Null-Conditional Operator (`?.`)** با نوع‌های nullable به خوبی کار می‌کند:
@@ -2552,6 +2695,7 @@ int? length = sb?.ToString().Length;  // length برابر null می‌شود
 ```
 
 <div dir="rtl">
+
 می‌توانیم این را با `??` ترکیب کنیم تا به جای null مقدار صفر برگردانیم:
 </div>
 
@@ -2560,6 +2704,7 @@ int length = sb?.ToString().Length ?? 0;  // اگر sb null باشد، نتیج�
 ```
 
 <div dir="rtl">
+
 ---
 
 ### سناریوهای استفاده از نوع‌های Nullable 💡
@@ -2579,6 +2724,7 @@ public class Customer
 ```
 
 <div dir="rtl">
+
 همچنین، نوع nullable می‌تواند برای نمایش **فیلد پشتیبان (backing field)** یک property محیطی (ambient property) استفاده شود. یک **ambient property** اگر null باشد، مقدار parent خود را بازمی‌گرداند:
 </div>
 
@@ -2598,6 +2744,7 @@ public class Row
 ```
 
 <div dir="rtl">
+
 ---
 
 ### جایگزین‌ها برای Nullable Value Types ⚖️
@@ -2620,6 +2767,7 @@ Console.WriteLine(Array.IndexOf(a, "c"));  // 0
 ```
 
 <div dir="rtl">
+
 مشکل انتخاب **magic value**:
 
 * هر نوع مقداری می‌تواند null را به شیوه متفاوت نمایش دهد. در مقابل، nullable value types یک الگوی یکنواخت برای همه نوع‌ها ارائه می‌کند.
@@ -2648,6 +2796,7 @@ Console.WriteLine(Array.IndexOf(a, "c"));  // 0
 ```
 
 <div dir="rtl">
+
 2. یا/و استفاده از دستورالعمل‌های زیر در کد، در مکان‌هایی که می‌خواهید اعمال شود:
 </div>
 
@@ -2658,6 +2807,7 @@ Console.WriteLine(Array.IndexOf(a, "c"));  // 0
 ```
 
 <div dir="rtl">
+
 ---
 
 ### تعریف نوع‌های Nullable Reference
@@ -2673,6 +2823,7 @@ string? s2 = null;  // صحیح ✅: s2 یک nullable reference type است
 ```
 
 <div dir="rtl">
+
 توجه کنید که **string و string?** در زمان اجرا تفاوتی ندارند، بر خلاف **nullable value types** که چیزی واقعی به سیستم نوع اضافه می‌کنند (`Nullable<T>`).
 
 ---
@@ -2687,6 +2838,7 @@ class Foo { string x; }   // هشدار: x مقداردهی نشده
 ```
 
 <div dir="rtl">
+
 هشدار با مقداردهی اولیه فیلد یا مقداردهی در سازنده حذف می‌شود.
 
 ---
@@ -2701,6 +2853,7 @@ void Foo(string? s) => Console.Write(s.Length);  // هشدار
 ```
 
 <div dir="rtl">
+
 برای حذف هشدار، می‌توان از **null-forgiving operator** استفاده کرد:
 </div>
 
@@ -2709,6 +2862,7 @@ void Foo(string? s) => Console.Write(s!.Length);
 ```
 
 <div dir="rtl">
+
 ⚠️ این روش خطرناک است و ممکن است همان **NullReferenceException** که می‌خواستیم جلوگیری کنیم را ایجاد کند. روش ایمن‌تر:
 </div>
 
@@ -2721,6 +2875,7 @@ void Foo(string? s)
 ```
 
 <div dir="rtl">
+
 کامپایلر با تحلیل جریان برنامه (static flow analysis) می‌تواند تشخیص دهد که دسترسی ایمن است و هشدارها را ندهد.
 
 ---
@@ -2736,6 +2891,7 @@ Console.WriteLine(strings[0].Length);  // هیچ هشداری تولید نمی�
 ```
 
 <div dir="rtl">
+
 ---
 
 ### تفکیک Annotation و Warning Contexts 🛠️
@@ -2754,6 +2910,7 @@ Console.WriteLine(strings[0].Length);  // هیچ هشداری تولید نمی�
 ```
 
 <div dir="rtl">
+
 یا در فایل پروژه:
 </div>
 
@@ -2764,6 +2921,7 @@ Console.WriteLine(strings[0].Length);  // هیچ هشداری تولید نمی�
 ```
 
 <div dir="rtl">
+
 فعال کردن فقط **annotation context** برای کلاس یا اسمبلی قدیمی می‌تواند اولین گام مناسب برای افزودن nullable reference types بدون مواجهه با هشدارها باشد.
 
 ---
@@ -2781,6 +2939,7 @@ Console.WriteLine(strings[0].Length);  // هیچ هشداری تولید نمی�
 ```
 
 <div dir="rtl">
+
 ### متدهای توسعه‌یافته (Extension Methods) ✨
 
 **متدهای توسعه‌یافته** امکان افزودن متدهای جدید به یک نوع موجود را بدون تغییر در تعریف اصلی آن نوع فراهم می‌کنند.
@@ -2804,6 +2963,7 @@ public static class StringHelper
 ```
 
 <div dir="rtl">
+
 این متد را می‌توان به صورت **متد نمونه (instance method)** روی رشته‌ها فراخوانی کرد:
 </div>
 
@@ -2812,6 +2972,7 @@ Console.WriteLine("Perth".IsCapitalized());  // True
 ```
 
 <div dir="rtl">
+
 کامپایلر این کد را به فراخوانی معمولی **static** تبدیل می‌کند:
 </div>
 
@@ -2820,6 +2981,7 @@ Console.WriteLine(StringHelper.IsCapitalized("Perth"));
 ```
 
 <div dir="rtl">
+
 ---
 
 ### گسترش اینترفیس‌ها
@@ -2839,6 +3001,7 @@ Console.WriteLine("Seattle".First());  // S
 ```
 
 <div dir="rtl">
+
 ---
 
 ### زنجیره‌سازی متدهای توسعه‌یافته (Extension Method Chaining)
@@ -2858,6 +3021,7 @@ string y = StringHelper.Capitalize(StringHelper.Pluralize("sausage")); // معا
 ```
 
 <div dir="rtl">
+
 ---
 
 ### حل ابهام و قواعد دسترسی
@@ -2871,6 +3035,7 @@ using Utils;  // کلاس StringHelper در namespace Utils قرار دارد
 ```
 
 <div dir="rtl">
+
 2. **Extension method vs Instance method**:
    هر متد نمونه‌ی سازگار، **اولویت بیشتری نسبت به extension method دارد**. برای فراخوانی extension method در این شرایط، باید از **فراخوانی static** استفاده کرد:
 </div>
@@ -2891,6 +3056,7 @@ Extensions.Foo(new Test(), 42);   // باید از روش static استفاده 
 ```
 
 <div dir="rtl">
+
 3. **Extension method vs Extension method**:
    اگر دو متد extension با امضای یکسان وجود داشته باشد، برای رفع ابهام باید به صورت **static** فراخوانی شود.
    اگر یکی از متدها آرگومان‌های خاص‌تری داشته باشد، متد خاص‌تر برنده است.
@@ -2910,6 +3076,7 @@ bool test1 = "Perth".IsCapitalized();  // فراخوانی StringHelper
 ```
 
 <div dir="rtl">
+
 ---
 
 ### کاهش سطح یک متد توسعه‌یافته (Demoting an Extension Method)
@@ -2938,6 +3105,7 @@ var dude = new { Name = "Bob", Age = 23 };
 ```
 
 <div dir="rtl">
+
 کامپایلر تقریباً این را به صورت زیر ترجمه می‌کند:
 </div>
 
@@ -2957,6 +3125,7 @@ internal class AnonymousGeneratedTypeName
 ```
 
 <div dir="rtl">
+
 > ⚠️ باید همیشه از `var` برای ارجاع به نوع ناشناس استفاده کرد، چون **نام ندارد**.
 
 ---
@@ -2975,6 +3144,7 @@ var dude = new { Name = "Bob", Age = Age, Length = Age.ToString().Length };
 ```
 
 <div dir="rtl">
+
 2. **برابر بودن نوع ناشناس:**
    دو نمونه ناشناس با **ویژگی‌های یکسان در همان اسمبلی**، نوع یکسان دارند:
 </div>
@@ -2986,6 +3156,7 @@ Console.WriteLine(a1.GetType() == a2.GetType());  // True
 ```
 
 <div dir="rtl">
+
 3. **مقایسه مقادیر:**
 
    * `Equals` → مقایسه داده‌ها (ساختاری)
@@ -2998,6 +3169,7 @@ Console.WriteLine(a1 == a2);       // False
 ```
 
 <div dir="rtl">
+
 4. **آرایه‌ای از نوع ناشناس:**
 </div>
 
@@ -3010,6 +3182,7 @@ var dudes = new[]
 ```
 
 <div dir="rtl">
+
 5. **غیر قابل تغییر بودن (Immutable)**
    از C# 10 به بعد می‌توان با `with` یک نسخه جدید با تغییرات ساخت بدون تخریب نسخه اصلی:
 </div>
@@ -3021,6 +3194,7 @@ Console.WriteLine(a2);  // { A = 1, B = 2, C = 3, D = 4, E = 10 }
 ```
 
 <div dir="rtl">
+
 > نوع‌های ناشناس بسیار کاربردی در **LINQ** هستند.
 
 ---
@@ -3039,6 +3213,7 @@ Console.WriteLine(bob.Item2);  // 23
 ```
 
 <div dir="rtl">
+
 * تاپل‌ها **Value Type** هستند و المان‌هایشان قابل تغییر است:
 </div>
 
@@ -3050,6 +3225,7 @@ Console.WriteLine(joe);  // (Joe, 23)
 ```
 
 <div dir="rtl">
+
 ### تعریف با نوع مشخص
 </div>
 
@@ -3058,6 +3234,7 @@ Console.WriteLine(joe);  // (Joe, 23)
 ```
 
 <div dir="rtl">
+
 * می‌توان تاپل را از متد بازگرداند:
 </div>
 
@@ -3069,6 +3246,7 @@ Console.WriteLine(person.Item2);  // 23
 ```
 
 <div dir="rtl">
+
 ### سازگاری با جنریک‌ها
 </div>
 
@@ -3079,6 +3257,7 @@ IEnumerable<(int id, string name)>   // امکان نام‌گذاری الما�
 ```
 
 <div dir="rtl">
+
 ---
 ### نام‌گذاری المان‌های تاپل و نکات پیشرفته 🟢
 
@@ -3096,6 +3275,7 @@ Console.WriteLine(tuple.age);   // 23
 ```
 
 <div dir="rtl">
+
 همین کار هنگام **مشخص کردن نوع تاپل** نیز ممکن است:
 </div>
 
@@ -3107,6 +3287,7 @@ Console.WriteLine(person.age);   // 23
 ```
 
 <div dir="rtl">
+
 ---
 
 ## ۲. استفاده از رکوردها (Records) برای نوع بازگشتی قوی‌تر
@@ -3124,6 +3305,7 @@ Console.WriteLine(person.Age);   // 23
 ```
 
 <div dir="rtl">
+
 مزایا:
 
 * نوع بازگشتی نام‌گذاری شده و قابل بازسازی/refactor است.
@@ -3144,6 +3326,7 @@ Console.WriteLine(tuple.Day);  // OK
 ```
 
 <div dir="rtl">
+
 > کامپایلر از نام فیلد یا پراپرتی برای المان‌ها استفاده می‌کند.
 
 ---
@@ -3162,6 +3345,7 @@ Console.WriteLine(bob2.sex);   // 23
 ```
 
 <div dir="rtl">
+
 > ⚠️ این می‌تواند منجر به نتایج گیج‌کننده شود.
 
 ---
@@ -3189,6 +3373,7 @@ Point p2 = (3, 4);
 ```
 
 <div dir="rtl">
+
 ---
 
 ## ۷. استفاده از ValueTuple.Create
@@ -3203,6 +3388,7 @@ ValueTuple<string,int> bob1 = ValueTuple.Create("Bob", 23);
 ```
 
 <div dir="rtl">
+
 ---
 ### تجزیه (Deconstructing) تاپل‌ها 🧩
 
@@ -3216,6 +3402,7 @@ int age = bob.Item2;
 ```
 
 <div dir="rtl">
+
 با استفاده از **deconstructor تاپل**، می‌توان کد را ساده‌تر نوشت:
 </div>
 
@@ -3228,6 +3415,7 @@ Console.WriteLine(age);
 ```
 
 <div dir="rtl">
+
 نحو (syntax) تجزیه شبیه به نحو اعلام تاپل با **عناصر نام‌گذاری‌شده** است، اما تفاوت دارد:
 </div>
 
@@ -3237,6 +3425,7 @@ Console.WriteLine(age);
 ```
 
 <div dir="rtl">
+
 مثال دیگری هنگام فراخوانی یک متد با **استفاده از استنتاج نوع (var)**:
 </div>
 
@@ -3250,6 +3439,7 @@ Console.WriteLine(sex);   // M
 ```
 
 <div dir="rtl">
+
 همچنین می‌توانید مستقیماً **مقداردهی به فیلدها و خصوصیات** (fields and properties) انجام دهید، که یک روش کوتاه برای مقداردهی چندین فیلد یا property در سازنده (constructor) فراهم می‌کند:
 </div>
 
@@ -3262,6 +3452,7 @@ class Point
 ```
 
 <div dir="rtl">
+
 ---
 
 ### مقایسه برابری (Equality Comparison) ⚖️
@@ -3276,6 +3467,7 @@ Console.WriteLine(t1.Equals(t2));  // True
 ```
 
 <div dir="rtl">
+
 علاوه بر این، **ValueTuple<>** عملگرهای `==` و `!=` را بازتعریف کرده است:
 </div>
 
@@ -3284,6 +3476,7 @@ Console.WriteLine(t1 == t2);  // True (از C# 7.3 به بعد)
 ```
 
 <div dir="rtl">
+
 تاپل‌ها همچنین **متد GetHashCode** را بازتعریف می‌کنند، بنابراین می‌توان از آن‌ها به‌عنوان **کلید در دیکشنری‌ها** استفاده کرد. مقایسه برابری را در بخش «Equality Comparison» صفحه ۳۴۴ و دیکشنری‌ها را در فصل ۷ به‌طور مفصل بررسی کرده‌ایم.
 
 نوع‌های **ValueTuple<>** همچنین رابط **IComparable** را پیاده‌سازی می‌کنند (رجوع کنید به «Order Comparison» صفحه ۳۵۵)، بنابراین می‌توان از آن‌ها به‌عنوان کلید مرتب‌سازی استفاده کرد.
@@ -3306,6 +3499,7 @@ Console.WriteLine(t.Item2);  // 23
 ```
 
 <div dir="rtl">
+
 ---
 
 ### رکوردها (Records) 📄
@@ -3342,6 +3536,7 @@ record Point { }   // Point یک کلاس است
 ```
 
 <div dir="rtl">
+
 از C# 10 به بعد، نوع زیرین رکورد می‌تواند struct نیز باشد:
 </div>
 
@@ -3350,6 +3545,7 @@ record struct Point { }   // Point یک struct است
 ```
 
 <div dir="rtl">
+
 (استفاده از `record class` نیز قانونی است و همان معنی `record` را دارد.)
 
 یک رکورد ساده ممکن است فقط تعدادی **property با init-only** داشته باشد و احتمالاً یک **سازنده**:
@@ -3365,6 +3561,7 @@ record Point
 ```
 
 <div dir="rtl">
+
 سازنده ما از یک **میانبر (shortcut)** استفاده می‌کند که در بخش قبل توضیح داده شد:
 </div>
 
@@ -3373,6 +3570,7 @@ record Point
 ```
 
 <div dir="rtl">
+
 این در واقع معادل است با:
 </div>
 
@@ -3381,6 +3579,7 @@ record Point
 ```
 
 <div dir="rtl">
+
 ---
 
 ### کارهای کامپایلر هنگام تعریف رکورد ⚙️
@@ -3415,6 +3614,7 @@ class Point
 ```
 
 <div dir="rtl">
+
 ---
 
 ### لیست پارامترها 📝
@@ -3436,6 +3636,7 @@ record Foo
 ```
 
 <div dir="rtl">
+
 مزیت این الگو این است که می‌توان **propertyهای init-only جدید** اضافه کرد بدون اینکه **سازگاری باینری با نسخه‌های قدیمی** را مختل کنید.
 
 ---
@@ -3453,6 +3654,7 @@ record Point(double X, double Y)
 ```
 
 <div dir="rtl">
+
 پارامترها می‌توانند شامل **modifiers** مانند `in` و `params` باشند، اما نه `out` یا `ref`. اگر لیست پارامتر مشخص شود، کامپایلر کارهای اضافی زیر را انجام می‌دهد:
 
 * نوشتن یک property **init-only** برای هر پارامتر
@@ -3467,6 +3669,7 @@ record Point(double X, double Y);
 ```
 
 <div dir="rtl">
+
 کامپایلر تقریباً همان کدی را تولید می‌کند که در بخش قبل دیدیم. تنها تفاوت جزئی این است که نام پارامترها در سازنده اصلی `X` و `Y` خواهد بود، نه `x` و `y`:
 </div>
 
@@ -3478,6 +3681,7 @@ public Point(double X, double Y)  // سازنده اصلی
 ```
 
 <div dir="rtl">
+
 ---
 
 ### قابلیت‌های اضافی لیست پارامترها
@@ -3494,6 +3698,7 @@ public void Deconstruct(out double X, out double Y)
 ```
 
 <div dir="rtl">
+
 * رکوردهایی با لیست پارامتر را می‌توان **به‌عنوان subclass** تعریف کرد:
 </div>
 
@@ -3502,6 +3707,7 @@ record Point3D(double X, double Y, double Z) : Point(X, Y);
 ```
 
 <div dir="rtl">
+
 که کامپایلر تولید می‌کند:
 </div>
 
@@ -3515,6 +3721,7 @@ class Point3D : Point
 ```
 
 <div dir="rtl">
+
 لیست پارامترها یک **میانبر عالی** برای کلاس‌هایی هستند که صرفاً **چند مقدار را گروه‌بندی می‌کنند (product type در برنامه‌نویسی تابعی)** و برای **نمونه‌سازی سریع (prototyping)** مفید هستند. البته هنگام نیاز به **اضافه کردن منطق به accessors init** (مثلاً اعتبارسنجی پارامتر) چندان مناسب نیستند.
 ### قابلیت تغییرپذیری در رکوردهای Struct 🔄
 
@@ -3526,6 +3733,7 @@ readonly record struct Point(double X, double Y);
 ```
 
 <div dir="rtl">
+
 دلیل این رفتار این است که در **سناریوهای معمولی**، مزایای ایمنی **غیرقابل تغییر بودن (immutability)** از این ناشی می‌شود که **خانه یا محیط نگهدارنده struct غیرقابل تغییر است**، نه خود struct.
 
 در مثال زیر، حتی اگر فیلد `X` قابل نوشتن باشد، قادر به تغییر آن نیستیم:
@@ -3546,6 +3754,7 @@ struct Mutable { public int X, Y; }
 ```
 
 <div dir="rtl">
+
 و اگر بخواهیم کاری مانند زیر انجام دهیم:
 </div>
 
@@ -3556,6 +3765,7 @@ m.X++;
 ```
 
 <div dir="rtl">
+
 تمام کاری که انجام می‌دهیم این است که یک **متغیر محلی (local variable)** را تغییر می‌دهیم، که نسخه‌ای کپی از `test.Prop` است. تغییر یک متغیر محلی می‌تواند یک **بهینه‌سازی مفید** باشد و مزایای **سیستم نوع غیرقابل تغییر** را نقض نمی‌کند.
 
 از طرف دیگر، اگر `Field` یک فیلد قابل نوشتن و `Prop` یک property قابل نوشتن باشد، می‌توانیم به راحتی **محتویات آن‌ها را جایگزین کنیم**—صرف‌نظر از اینکه struct `Mutable` چگونه تعریف شده است.
@@ -3573,6 +3783,7 @@ record Point(double X, double Y);
 ```
 
 <div dir="rtl">
+
 در این مثال، `p2` نسخه‌ای **کپی از `p1`** است، ولی با مقدار **Y = 4**. مزیت این روش وقتی واضح‌تر می‌شود که رکورد تعداد زیادی property داشته باشد:
 </div>
 
@@ -3585,6 +3796,7 @@ record Test(int A, int B, int C, int D, int E, int F, int G, int H);
 ```
 
 <div dir="rtl">
+
 خروجی به شکل زیر خواهد بود:
 </div>
 
@@ -3593,6 +3805,7 @@ Test { A = 10, B = 2, C = 30, D = 4, E = 5, F = 6, G = 7, H = 8 }
 ```
 
 <div dir="rtl">
+
 ### مراحل تغییر غیرمخرب 🛠️
 
 1️⃣ ابتدا، **کپی‌کننده** رکورد را clone می‌کند. به‌طور پیش‌فرض، هر یک از فیلدهای داخلی رکورد کپی می‌شوند، که یک **نسخه دقیق** ایجاد می‌کند و از اجرای منطق در accessorهای init جلوگیری می‌کند. تمام فیلدها شامل **عمومی، خصوصی و فیلدهای پنهان پشت propertyهای اتوماتیک** در کپی گنجانده می‌شوند.
@@ -3607,6 +3820,7 @@ Test t2 = t1 with { A = 10, C = 30 };
 ```
 
 <div dir="rtl">
+
 به چیزی شبیه به این تبدیل می‌کند:
 </div>
 
@@ -3617,6 +3831,7 @@ t2.C = 30;               // به‌روزرسانی property C
 ```
 
 <div dir="rtl">
+
 > ⚠️ همان‌طور که می‌بینید، نوشتن مستقیم این کد در حالت عادی **کامپایل نمی‌شود** چون A و C propertyهای **init-only** هستند. علاوه بر این، copy constructor **protected** است و C# برای دور زدن این محدودیت، آن را از طریق متد پنهان `<Clone>$` فراخوانی می‌کند.
 
 ### تعریف کپی‌کننده سفارشی ✍️
@@ -3633,6 +3848,7 @@ protected Point(Point original)
 ```
 
 <div dir="rtl">
+
 نوشتن کپی‌کننده سفارشی مفید است اگر رکورد شما حاوی **زیر-اشیاء یا مجموعه‌های قابل تغییر** باشد که باید clone شوند، یا فیلدهای محاسبه‌شده‌ای داشته باشید که می‌خواهید پاک شوند. ⚠️ توجه کنید که تنها می‌توانید **جایگزین** کنید، نه **بهبود دهید**.
 
 در **Subclass کردن رکورد دیگر**، copy constructor مسئول **کپی فقط فیلدهای خودش** است. برای کپی فیلدهای رکورد پایه، از **delegate به base** استفاده کنید:
@@ -3646,6 +3862,7 @@ protected Point(Point original) : base(original)
 ```
 
 <div dir="rtl">
+
 ### اعتبارسنجی propertyها ✅
 
 با propertyهای **صریح**، می‌توانید منطق اعتبارسنجی را در **init accessor** بنویسید. به عنوان مثال، مطمئن می‌شویم X هیچ‌گاه **NaN** نباشد:
@@ -3671,6 +3888,7 @@ record Point
 ```
 
 <div dir="rtl">
+
 با این طراحی، اعتبارسنجی هم **در زمان ساخت رکورد** و هم **در زمان تغییر غیرمخرب** انجام می‌شود:
 </div>
 
@@ -3680,6 +3898,7 @@ Point p2 = p1 with { X = double.NaN };   // پرتاب Exception
 ```
 
 <div dir="rtl">
+
 کپی‌کننده خودکار، **تمام فیلدها و propertyهای اتوماتیک** را کپی می‌کند:
 </div>
 
@@ -3692,6 +3911,7 @@ protected Point(Point original)
 ```
 
 <div dir="rtl">
+
 کپی کردن `_x` از طریق **accessor** انجام نمی‌شود، ولی مشکلی ایجاد نمی‌کند چون مقدار قبلاً با **init accessor** به‌صورت امن مقداردهی شده است.
 
 ### فیلدهای محاسبه‌شده و ارزیابی Lazy ⚡
@@ -3709,6 +3929,7 @@ record Point(double X, double Y)
 ```
 
 <div dir="rtl">
+
 برای بهینه‌سازی و جلوگیری از محاسبه مکرر، می‌توانیم مقدار آن را **lazy** در یک فیلد ذخیره کنیم:
 </div>
 
@@ -3723,6 +3944,7 @@ record Point
 ```
 
 <div dir="rtl">
+
 ✅ در این حالت، `_distance` تنها **یک بار محاسبه** می‌شود و تغییر `X` یا `Y` باعث پاک شدن مقدار کش شده می‌شود.
 </div>
 
@@ -3734,6 +3956,7 @@ Console.WriteLine(p2.DistanceFromOrigin);   // 4.47213595499958
 ```
 
 <div dir="rtl">
+
 مزیت دیگر این است که **copy constructor خودکار** نیز فیلد کش شده `_distance` را کپی می‌کند، بنابراین اگر propertyهای دیگری که در محاسبات دخیل نیستند، تغییر کنند، **مقدار کش شده از بین نمی‌رود**.
 
 اگر نخواهید این رفتار را داشته باشید، می‌توانید در **init accessor** مقدار کش را پاک کنید یا یک **copy constructor سفارشی** بنویسید که فیلد کش را نادیده بگیرد.
@@ -3755,6 +3978,7 @@ record Student(string ID, string LastName, string GivenName)
 ```
 
 <div dir="rtl">
+
 در این حالت، ما property **ID** را **به‌طور دستی مدیریت کردیم** و آن را به صورت **read-only** تعریف کردیم (به جای init-only)، بنابراین این property دیگر در **تغییر غیرمخرب (nondestructive mutation)** شرکت نمی‌کند.
 
 اگر هیچ‌وقت نیازی به تغییر غیرمخرب یک property ندارید، تعریف آن به صورت **read-only** اجازه می‌دهد داده‌های محاسبه‌شده را بدون نیاز به نوشتن مکانیسم تازه‌سازی ذخیره کنید.
@@ -3767,6 +3991,7 @@ public string ID { get; } = ID;
 ```
 
 <div dir="rtl">
+
 زمانی که **تعریف property را به عهده می‌گیرید**، مسئول مقداردهی آن هستید و **سازنده اولیه دیگر به‌صورت خودکار آن را مقداردهی نمی‌کند**. (این دقیقاً مشابه رفتار کلاس‌ها و structها با سازنده‌های اولیه است.) همچنین توجه کنید که **ID در اینجا به پارامتر سازنده اولیه اشاره دارد، نه به property.**
 
 ---
@@ -3784,6 +4009,7 @@ record struct Student(string ID)
 ```
 
 <div dir="rtl">
+
 طبق **معنای سازنده‌های اولیه در کلاس‌ها و structها**، پارامترهای سازنده اولیه (مثل ID، LastName و GivenName) **به‌طور جادویی در تمام initializerهای field و property قابل دسترس هستند**. مثال:
 </div>
 
@@ -3796,6 +4022,7 @@ record Student(string ID, string LastName, string FirstName)
 ```
 
 <div dir="rtl">
+
 در این مثال، `_enrollmentYear` از چهار رقم اول **ID** محاسبه شده است. چون property **ID read-only** است، می‌توان آن را امن در یک **field read-only** ذخیره کرد، بدون اینکه تغییر غیرمخرب مشکلی ایجاد کند.
 
 ⚠️ اما در دنیای واقعی، بدون **سازنده صریح**، هیچ مکان مرکزی برای اعتبارسنجی ID و پرتاب **exception معنی‌دار** وجود ندارد.
@@ -3820,6 +4047,7 @@ record Person(string Name)
 ```
 
 <div dir="rtl">
+
 ⚠️ چون **Name یک property اتوماتیک نیست**، نمی‌توان initializer تعریف کرد. بهترین کار این است که initializer را روی **field پشت property** قرار دهید، اما این باعث می‌شود که **check null نادیده گرفته شود**:
 </div>
 
@@ -3828,6 +4056,7 @@ var p = new Person(null);    // موفقیت‌آمیز! (check نادیده گ�
 ```
 
 <div dir="rtl">
+
 مشکل اصلی این است که **نمی‌توان بدون نوشتن سازنده، پارامتر سازنده اولیه را به property اختصاص داد**. راه‌حل ساده این است که **لیست پارامتر را حذف کرده و یک سازنده معمولی بنویسید**:
 </div>
 
@@ -3841,6 +4070,7 @@ record Person
 ```
 
 <div dir="rtl">
+
 ---
 
 ### رکوردها و مقایسه برابری (Equality) ⚖️
@@ -3857,6 +4087,7 @@ record Point(double X, double Y);
 ```
 
 <div dir="rtl">
+
 عملگر **==** نیز با رکوردها کار می‌کند (مانند tuples):
 </div>
 
@@ -3865,6 +4096,7 @@ Console.WriteLine(p1 == p2);         // True
 ```
 
 <div dir="rtl">
+
 ⚠️ اجرای پیش‌فرض برابری برای رکوردها ممکن است آسیب‌پذیر باشد، به‌خصوص اگر رکورد حاوی **مقادیر lazy، transient، آرایه‌ها یا collectionها** باشد که نیاز به مدیریت ویژه برای مقایسه دارند. خوشبختانه، اصلاح آن نسبتاً ساده است و نیاز به کار زیادی ندارد.
 
 ---
@@ -3884,6 +4116,7 @@ record Point(double X, double Y)
 ```
 
 <div dir="rtl">
+
 * متد **Equals** باید **virtual** باشد، نه override.
 * نوع پارامتر باید **نوع رکورد واقعی** باشد (در این مثال Point، نه object).
 * وقتی امضا درست باشد، کامپایلر به صورت خودکار متد شما را patch می‌کند.
@@ -3898,6 +4131,7 @@ public virtual bool Equals(Point other) => base.Equals(other) && ...
 ```
 
 <div dir="rtl">
+
 ✅ نکته مهم: اگر منطق برابری را خودتان پیاده کنید، باید **GetHashCode** را نیز override کنید. خوشبختانه در رکوردها نیازی به overload کردن **!= یا ==** و پیاده‌سازی **IEquatable<T>** نیست؛ همه این‌ها به‌صورت خودکار انجام می‌شود.
 
 موضوع **مقایسه برابری رکوردها** به صورت کامل در بخش «Equality Comparison» صفحه 344 پوشش داده شده است.
@@ -3912,6 +4146,7 @@ if (obj is string)
 ```
 
 <div dir="rtl">
+
 یا به شکل کوتاه‌تر:
 </div>
 
@@ -3921,6 +4156,7 @@ if (obj is string s)
 ```
 
 <div dir="rtl">
+
 این روش کوتاه، یکی از **الگوها (type pattern)** را به کار می‌گیرد. عملگر **is** همچنین از الگوهای دیگری پشتیبانی می‌کند که در نسخه‌های اخیر C# معرفی شده‌اند، مانند **property pattern**:
 </div>
 
@@ -3930,6 +4166,7 @@ if (obj is string { Length: 4 })
 ```
 
 <div dir="rtl">
+
 الگوها در زمینه‌های زیر پشتیبانی می‌شوند:
 
 * بعد از عملگر **is** `(variable is pattern)`
@@ -3957,6 +4194,7 @@ void Foo(object obj)
 ```
 
 <div dir="rtl">
+
 این عبارت با کد زیر معادل است:
 </div>
 
@@ -3965,6 +4203,7 @@ obj is int && (int)obj == 3
 ```
 
 <div dir="rtl">
+
 ⚠️ چون این یک عملگر **static** است، C# اجازه نمی‌دهد که مستقیماً با **==** یک object را با یک constant مقایسه کنید، زیرا کامپایلر باید نوع‌ها را از قبل بداند.
 
 به تنهایی، این الگو کاربرد محدودی دارد، زیرا جایگزین منطقی آن این است:
@@ -3975,6 +4214,7 @@ if (3.Equals(obj)) ...
 ```
 
 <div dir="rtl">
+
 به زودی خواهیم دید که **الگوی ثابت** با **pattern combinators** بسیار کاربردی‌تر می‌شود.
 
 ---
@@ -3989,6 +4229,7 @@ if (x is > 100) Console.WriteLine("x is greater than 100");
 ```
 
 <div dir="rtl">
+
 این الگو در **switch** بسیار مفید می‌شود:
 </div>
 
@@ -4003,6 +4244,7 @@ string GetWeightCategory(decimal bmi) => bmi switch
 ```
 
 <div dir="rtl">
+
 ⚠️ الگوهای رابطه‌ای حتی زمانی که متغیر از نوع **object** باشد کار می‌کنند، اما باید در استفاده از **ثابت‌های عددی** بسیار دقت کنید:
 </div>
 
@@ -4013,6 +4255,7 @@ Console.WriteLine(obj is < 3);    // False
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ترکیب‌کننده‌های الگو (Pattern Combinators) 🔗
@@ -4028,6 +4271,7 @@ bool IsLetter(char c) => c is >= 'a' and <= 'z' or >= 'A' and <= 'Z';
 ```
 
 <div dir="rtl">
+
 * مانند عملگرهای `&&` و `||`، **and** اولویت بالاتری نسبت به **or** دارد و می‌توان با پرانتز این ترتیب را تغییر داد.
 
 یک ترفند مفید این است که **not combinator** را با **type pattern** ترکیب کنید تا بررسی کنید آیا یک object **از نوع خاصی نیست**:
@@ -4038,6 +4282,7 @@ if (obj is not string) ...
 ```
 
 <div dir="rtl">
+
 این حالت زیباتر از نوشتن زیر است:
 </div>
 
@@ -4046,6 +4291,7 @@ if (!(obj is string)) ...
 ```
 
 <div dir="rtl">
+
 ### الگوی `var` 🟢
 
 الگوی **var** نوعی **type pattern** است که در آن به جای نام نوع، از کلمه کلیدی **var** استفاده می‌کنید. این تبدیل همیشه موفق است و هدف آن فقط **امکان استفاده مجدد از متغیری است که پس از آن می‌آید**:
@@ -4057,6 +4303,7 @@ bool IsJanetOrJohn(string name) =>
 ```
 
 <div dir="rtl">
+
 این معادل کد زیر است:
 </div>
 
@@ -4069,6 +4316,7 @@ bool IsJanetOrJohn(string name)
 ```
 
 <div dir="rtl">
+
 💡 توانایی **معرفی و استفاده مجدد یک متغیر میانی** (مثل `upper`) در یک متد با **expression-bodied** بسیار کاربردی است، به ویژه در **lambda expressions**.
 ⚠️ متأسفانه، این الگو عمدتاً زمانی مفید است که متد مورد نظر **نوع بازگشتی bool** داشته باشد.
 
@@ -4085,6 +4333,7 @@ Console.WriteLine(p is (2, 3));  // True
 ```
 
 <div dir="rtl">
+
 می‌توانید از آن برای **switch** روی چند مقدار استفاده کنید:
 </div>
 
@@ -4107,6 +4356,7 @@ enum Season { Spring, Summer, Fall, Winter };
 ```
 
 <div dir="rtl">
+
 ⚡ **Tuple pattern** در واقع یک **حالت ویژه از positional pattern** است (C# 8+) که با هر نوعی که متد **Deconstruct** ارائه دهد، کار می‌کند.
 
 مثال با **record Point** و **deconstructor تولید شده توسط کامپایلر**:
@@ -4119,6 +4369,7 @@ record Point(int X, int Y);      // دارای deconstructor تولید شده �
 ```
 
 <div dir="rtl">
+
 می‌توانید هنگام **match**، متغیرها را **deconstruct** کنید:
 </div>
 
@@ -4127,6 +4378,7 @@ Console.WriteLine(p is (var x, var y) && x == y);  // True
 ```
 
 <div dir="rtl">
+
 مثال **switch expression** که **type pattern** را با **positional pattern** ترکیب می‌کند:
 </div>
 
@@ -4140,6 +4392,7 @@ string Print(object obj) => obj switch
 ```
 
 <div dir="rtl">
+
 ---
 
 ### الگوهای Property 🏷️
@@ -4153,6 +4406,7 @@ if (obj is string { Length:4 }) ...
 ```
 
 <div dir="rtl">
+
 ⚠️ این تنها کمی از نوشتن کد زیر صرفه‌جویی می‌کند:
 </div>
 
@@ -4161,6 +4415,7 @@ if (obj is string s && s.Length == 4) ...
 ```
 
 <div dir="rtl">
+
 با **switch statements** و **expressions**، property patterns کاربرد بیشتری پیدا می‌کنند.
 
 مثال با کلاس **System.Uri**:
@@ -4178,6 +4433,7 @@ bool ShouldAllow(Uri uri) => uri switch
 ```
 
 <div dir="rtl">
+
 می‌توانید **propertyها را تو در تو (nested)** کنید، که از C# 10 به بعد می‌توان ساده‌سازی کرد:
 </div>
 
@@ -4186,6 +4442,7 @@ bool ShouldAllow(Uri uri) => uri switch
 ```
 
 <div dir="rtl">
+
 همچنین می‌توان از **الگوهای دیگر داخل property patterns** استفاده کرد، مثل **relational patterns**:
 </div>
 
@@ -4194,6 +4451,7 @@ bool ShouldAllow(Uri uri) => uri switch
 ```
 
 <div dir="rtl">
+
 شرایط پیچیده‌تر را می‌توان با **when clause** بیان کرد:
 </div>
 
@@ -4202,6 +4460,7 @@ bool ShouldAllow(Uri uri) => uri switch
 ```
 
 <div dir="rtl">
+
 می‌توانید **property pattern را با type pattern ترکیب کنید** و متغیر معرفی کنید:
 </div>
 
@@ -4210,6 +4469,7 @@ Uri { Scheme: "http", Port: 80 } httpUri => httpUri.Host.Length < 1000,
 ```
 
 <div dir="rtl">
+
 و همین متغیر را می‌توان در **when clause** استفاده کرد:
 </div>
 
@@ -4219,6 +4479,7 @@ Uri { Scheme: "http", Port: 80 } httpUri
 ```
 
 <div dir="rtl">
+
 نکته جالب: می‌توان متغیرها را در سطح property نیز معرفی کرد:
 </div>
 
@@ -4227,6 +4488,7 @@ Uri { Scheme: "http", Port: 80 } httpUri
 ```
 
 <div dir="rtl">
+
 تایپ ضمنی نیز مجاز است، یعنی می‌توانید **string** را با **var** جایگزین کنید:
 </div>
 
@@ -4242,6 +4504,7 @@ bool ShouldAllow(Uri uri) => uri switch
 ```
 
 <div dir="rtl">
+
 ⚠️ در بسیاری از موارد، صرفه‌جویی در تعداد کاراکترها زیاد نیست. جایگزین ساده‌تر می‌تواند این باشد:
 </div>
 
@@ -4250,6 +4513,7 @@ bool ShouldAllow(Uri uri) => uri switch
 ```
 
 <div dir="rtl">
+
 یا:
 </div>
 
@@ -4258,6 +4522,7 @@ bool ShouldAllow(Uri uri) => uri switch
 ```
 
 <div dir="rtl">
+
 ### الگوهای List 📋
 
 **List patterns** (معرفی‌شده در C# 11) روی هر نوع collection قابل شمارش (**Count** یا **Length**) و با **indexer عددی** کار می‌کنند.
@@ -4271,6 +4536,7 @@ Console.Write(numbers is [0, 1, 2, 3, 4]);   // True
 ```
 
 <div dir="rtl">
+
 * علامت **underscore `_`** برای مطابقت با یک عنصر با هر مقداری استفاده می‌شود:
 </div>
 
@@ -4279,6 +4545,7 @@ Console.Write(numbers is [0, 1, _, _, 4]);   // True
 ```
 
 <div dir="rtl">
+
 * می‌توانید از **var pattern** برای گرفتن یک عنصر استفاده کنید:
 </div>
 
@@ -4287,6 +4554,7 @@ Console.Write(numbers is [0, 1, var x, 3, 4] && x > 1);   // True
 ```
 
 <div dir="rtl">
+
 * **دو نقطه `..`** برای مشخص کردن یک **slice** استفاده می‌شود که صفر یا چند عنصر را مطابقت می‌دهد:
 </div>
 
@@ -4295,6 +4563,7 @@ Console.Write(numbers is [0, .., 4]);    // True
 ```
 
 <div dir="rtl">
+
 * با آرایه‌ها یا سایر انواعی که از **indices و ranges** پشتیبانی می‌کنند، می‌توان slice را با var pattern ترکیب کرد:
 </div>
 
@@ -4303,6 +4572,7 @@ Console.Write(numbers is [0, .. var mid, 4] && mid.Contains(2)); // True
 ```
 
 <div dir="rtl">
+
 ⚠️ یک **list pattern** می‌تواند حداکثر یک slice داشته باشد.
 
 ---
@@ -4321,6 +4591,7 @@ public class Foo {...}
 ```
 
 <div dir="rtl">
+
 ⚡ به دلیل اینکه convention تمام attributeها با `Attribute` ختم می‌شوند، می‌توان suffix را حذف کرد:
 </div>
 
@@ -4330,6 +4601,7 @@ public class Foo {...}
 ```
 
 <div dir="rtl">
+
 * پارامترهای attribute به دو دسته تقسیم می‌شوند:
 
   1. **Positional**: مربوط به پارامترهای public constructor attribute
@@ -4344,6 +4616,7 @@ public class CustomerEntity { ... }
 ```
 
 <div dir="rtl">
+
 * **Positional**: `"Customer"`
 * **Named**: `Namespace="http://oreilly.com"`
 
@@ -4359,6 +4632,7 @@ public class CustomerEntity { ... }
 ```
 
 <div dir="rtl">
+
 * برای اعمال attribute به **backing field** یک property خودکار:
 </div>
 
@@ -4368,6 +4642,7 @@ public int MyProperty { get; set; }
 ```
 
 <div dir="rtl">
+
 ---
 
 ### Attributes روی Lambda Expressions ⚡
@@ -4382,6 +4657,7 @@ Action<int> a = [Description("Method")]
 ```
 
 <div dir="rtl">
+
 * این ویژگی برای فریمورک‌هایی مثل **ASP.NET** مفید است و نیاز به تعریف method جداگانه را از بین می‌برد.
 * برای دسترسی به این attributeها:
 </div>
@@ -4393,6 +4669,7 @@ var returnAtt = a.GetMethodInfo().ReturnParameter.GetCustomAttributes();
 ```
 
 <div dir="rtl">
+
 ⚠️ برای جلوگیری از ابهام سینتکسی، **پارامتر lambda همیشه باید داخل پرانتز باشد**.
 ❌ اعمال attribute روی **expression-tree lambdas** مجاز نیست.
 ### مشخص کردن چند Attribute همزمان 🏷️
@@ -4408,6 +4685,7 @@ public class Bar { ... }
 ```
 
 <div dir="rtl">
+
 2. هر attribute در یک جفت براکت جداگانه:
 </div>
 
@@ -4419,6 +4697,7 @@ public class Bar { ... }
 ```
 
 <div dir="rtl">
+
 3. ترکیبی از دو روش بالا:
 </div>
 
@@ -4429,6 +4708,7 @@ public class Bar { ... }
 ```
 
 <div dir="rtl">
+
 همه مثال‌های بالا از نظر معنایی **یکسان** هستند. ✅
 
 ---
@@ -4465,6 +4745,7 @@ class Program
 ```
 
 <div dir="rtl">
+
 فرض کنید فایل در `c:\source\test\Program.cs` است، خروجی:
 </div>
 
@@ -4475,6 +4756,7 @@ c:\source\test\Program.cs
 ```
 
 <div dir="rtl">
+
 * این ویژگی برای **logging** و **INotifyPropertyChanged** بسیار مفید است.
 * مثال استفاده در کلاس با PropertyChanged:
 </div>
@@ -4502,6 +4784,7 @@ public class Foo : INotifyPropertyChanged
 ```
 
 <div dir="rtl">
+
 ---
 
 ### CallerArgumentExpression (C# 10) ✍️
@@ -4521,6 +4804,7 @@ void Print(double number,
 ```
 
 <div dir="rtl">
+
 * حتی کامنت‌ها هم در رشته قرار می‌گیرند:
 </div>
 
@@ -4530,6 +4814,7 @@ Print(Math.PI /*(π)*/ * 2);
 ```
 
 <div dir="rtl">
+
 کاربرد اصلی: **کتابخانه‌های validation و assertion**:
 </div>
 
@@ -4544,6 +4829,7 @@ void Assert(bool condition,
 ```
 
 <div dir="rtl">
+
 * نمونه دیگر: `ArgumentNullException.ThrowIfNull` در .NET 6:
 </div>
 
@@ -4552,6 +4838,7 @@ ArgumentNullException.ThrowIfNull(message);
 ```
 
 <div dir="rtl">
+
 ⚠️ می‌توان `[CallerArgumentExpression]` را چند بار استفاده کرد تا چند عبارت پارامتر ثبت شود.
 
 ---
@@ -4568,6 +4855,7 @@ d.Quack();  // کامپایلر بررسی نمی‌کند، اجرا در زم�
 ```
 
 <div dir="rtl">
+
 * در dynamic binding، کامپایلر **binding** را به runtime واگذار می‌کند، برخلاف **static binding** که در زمان کامپایل رخ می‌دهد.
 ### **Static Binding در مقابل Dynamic Binding ⚡**
 
@@ -4588,6 +4876,7 @@ d.Quack();  // کامپایلر بررسی می‌کند که کلاس Duck مت
 ```
 
 <div dir="rtl">
+
 * اگر نوع متغیر `object` باشد، دسترسی به متد ناموفق خواهد بود:
 </div>
 
@@ -4597,6 +4886,7 @@ d.Quack();  // خطای کامپایل
 ```
 
 <div dir="rtl">
+
 ---
 
 #### **Dynamic Binding (Binding پویا) 🌀**
@@ -4611,6 +4901,7 @@ d.Quack();  // بررسی و اتصال در زمان اجرا انجام می�
 ```
 
 <div dir="rtl">
+
 * اگر نوع واقعی متغیر متدی نداشته باشد، **RuntimeBinderException** پرتاب می‌شود:
 </div>
 
@@ -4620,6 +4911,7 @@ d.Hello();  // RuntimeBinderException
 ```
 
 <div dir="rtl">
+
 ---
 
 #### **انواع Dynamic Binding**
@@ -4651,6 +4943,7 @@ public class Duck : DynamicObject
 ```
 
 <div dir="rtl">
+
 2. **Language Binding** 📚
 
    * زمانی که شیء dynamic، `IDynamicMetaObjectProvider` را پیاده‌سازی نکند.
@@ -4665,6 +4958,7 @@ dynamic Mean(dynamic a, dynamic b) => (a + b) / 2;
 ```
 
 <div dir="rtl">
+
 ⚠️ **نکته:** در dynamic binding، امنیت نوع **compile-time** از بین می‌رود، ولی امنیت نوع **runtime** حفظ می‌شود.
 
 ---
@@ -4680,6 +4974,7 @@ Console.WriteLine(x.GetType().Name);  // Int32
 ```
 
 <div dir="rtl">
+
 * `dynamic` از نظر ساختاری با `object` یکسان است، فقط اجازه عملیات داینامیک می‌دهد.
 </div>
 
@@ -4691,6 +4986,7 @@ Console.WriteLine(o);  // hello
 ```
 
 <div dir="rtl">
+
 * در runtime، اعضای dynamic با Attribute مشخص می‌شوند:
 </div>
 
@@ -4708,6 +5004,7 @@ public class Test
 ```
 
 <div dir="rtl">
+
 ---
 
 #### **تبدیل‌های Dynamic 🔄**
@@ -4722,6 +5019,7 @@ long j = d;   // بدون نیاز به cast
 ```
 
 <div dir="rtl">
+
 * اگر تبدیل ضمنی ممکن نباشد، **RuntimeBinderException** پرتاب می‌شود:
 </div>
 
@@ -4730,6 +5028,7 @@ short k = d;  // RuntimeBinderException
 ```
 
 <div dir="rtl">
+
 ---
 
 #### **مقایسه var و dynamic**
@@ -4750,6 +5049,7 @@ int z = y;        // Runtime error
 ```
 
 <div dir="rtl">
+
 * `var` می‌گوید: "بگذار نوع توسط کامپایلر مشخص شود"
 * `dynamic` می‌گوید: "بگذار نوع توسط runtime مشخص شود"
 ### **Dynamic Expressions در C# 🌀**
@@ -4770,6 +5070,7 @@ var result = list.Add(5);  // RuntimeBinderException
 ```
 
 <div dir="rtl">
+
 ---
 
 #### **تأثیر cascading dynamic**
@@ -4783,6 +5084,7 @@ var y = x * 3;  // نوع static y: dynamic
 ```
 
 <div dir="rtl">
+
 * استثناها:
 
   1. **کست به نوع static**:
@@ -4794,6 +5096,7 @@ var y = (int)x;  // y از نوع int
 ```
 
 <div dir="rtl">
+
 2. **صدا زدن constructor** همیشه static است:
 </div>
 
@@ -4803,6 +5106,7 @@ var sb = new System.Text.StringBuilder(capacity);  // sb از نوع StringBuild
 ```
 
 <div dir="rtl">
+
 ---
 
 ### **Dynamic Calls بدون Dynamic Receiver**
@@ -4816,6 +5120,7 @@ x.Foo();  // x receiver است
 ```
 
 <div dir="rtl">
+
 * اما می‌توان **متدهای statically known** را با آرگومان‌های dynamic فراخوانی کرد.
 * مثال با overload resolution:
 </div>
@@ -4837,6 +5142,7 @@ class Program
 ```
 
 <div dir="rtl">
+
 * اگر نام متد یا تعداد پارامترها درست نباشد، **خطای کامپایل** دریافت می‌کنیم.
 
 ---
@@ -4864,6 +5170,7 @@ class Program
 ```
 
 <div dir="rtl">
+
 ---
 
 ### **توابع غیرقابل فراخوانی Dynamically ❌**
@@ -4891,6 +5198,7 @@ d.Test();  // Runtime exception
 ```
 
 <div dir="rtl">
+
 * cast به interface در زمان کامپایل مشخص می‌کند که binding باید روی IFoo انجام شود، اما در runtime این اطلاعات از دست می‌رود.
 
 ---
@@ -4908,6 +5216,7 @@ uf.Test();  // حالا کار می‌کند
 ```
 
 <div dir="rtl">
+
 * قابلیت‌های Uncapsulator:
 
   * Cast به base types و interfaces
@@ -4927,6 +5236,7 @@ uf.Test();  // حالا کار می‌کند
 ```
 
 <div dir="rtl">
+
 عملگرهای زیر نیز قابل بارگذاری مجدد هستند:
 
 * تبدیل‌های ضمنی و صریح (با کلمات کلیدی `implicit` و `explicit`)
@@ -4966,6 +5276,7 @@ public struct Note
 ```
 
 <div dir="rtl">
+
 این بارگذاری به ما اجازه می‌دهد یک `int` را به یک `Note` اضافه کنیم:
 </div>
 
@@ -4975,6 +5286,7 @@ Note CSharp = B + 2;
 ```
 
 <div dir="rtl">
+
 بارگذاری یک عملگر، به‌طور خودکار عملگر ترکیبی متناظر را نیز بارگذاری می‌کند. در مثال ما، چون `+` را بازنویسی کردیم، می‌توانیم از `+=` هم استفاده کنیم:
 </div>
 
@@ -4983,6 +5295,7 @@ CSharp += 2;
 ```
 
 <div dir="rtl">
+
 همانند متدها و پراپرتی‌ها، C# اجازه می‌دهد توابع عملگر که شامل یک عبارت هستند با **نحو بدنه-عبارتی (expression-bodied syntax)** کوتاه‌تر نوشته شوند:
 </div>
 
@@ -4992,6 +5305,7 @@ public static Note operator + (Note x, int semitones)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### عملگرهای Checked ✔️
@@ -5008,6 +5322,7 @@ public static Note operator checked + (Note x, int semitones)
 ```
 
 <div dir="rtl">
+
 نسخه‌ی `checked` داخل عبارت‌ها یا بلوک‌های `checked` فراخوانی می‌شود:
 </div>
 
@@ -5017,6 +5332,7 @@ Note other = checked (B + int.MaxValue);  // پرتاب OverflowException
 ```
 
 <div dir="rtl">
+
 ---
 
 ### بارگذاری عملگرهای برابری و مقایسه ⚖️
@@ -5063,6 +5379,7 @@ double x = n;           // تبدیل ضمنی
 ```
 
 <div dir="rtl">
+
 با توجه به راهنمایی‌های خود، این مثال ممکن است بهتر باشد با متد `ToFrequency` و متد استاتیک `FromFrequency` پیاده‌سازی شود، به جای استفاده از عملگرهای ضمنی و صریح.
 
 تبدیل‌های سفارشی توسط عملگرهای `as` و `is` نادیده گرفته می‌شوند:
@@ -5074,6 +5391,7 @@ Note n = 554.37 as Note;             // خطا
 ```
 
 <div dir="rtl">
+
 ### بارگذاری مجدد عملگرهای true و false ✅
 
 عملگرهای `true` و `false` به ندرت در نوع‌هایی بارگذاری می‌شوند که به لحاظ «روحی» بولی هستند ولی تبدیل به `bool` ندارند. نمونه‌ی آن نوعی است که منطق سه‌حالته (three-state logic) را پیاده‌سازی می‌کند. با بارگذاری این عملگرها، این نوع می‌تواند به‌طور یکپارچه با دستورات شرطی و عملگرها کار کند؛ مانند: `if`, `do`, `while`, `for`, `&&`, `||` و `?:`.
@@ -5092,6 +5410,7 @@ else
 ```
 
 <div dir="rtl">
+
 خروجی:
 </div>
 
@@ -5100,6 +5419,7 @@ Null
 ```
 
 <div dir="rtl">
+
 کد زیر بازپیاده‌سازی بخش‌های مورد نیاز `SqlBoolean` برای نشان دادن عملگرهای `true` و `false` است:
 </div>
 
@@ -5128,6 +5448,7 @@ public struct SqlBoolean
 ```
 
 <div dir="rtl">
+
 ---
 
 ### چندریختی ایستا (Static Polymorphism) 🌀
@@ -5147,6 +5468,7 @@ interface ICreateRandom<T>
 ```
 
 <div dir="rtl">
+
 فرض کنید می‌خواهیم این رابط را در رکورد زیر پیاده‌سازی کنیم:
 </div>
 
@@ -5155,6 +5477,7 @@ record Point(int X, int Y);
 ```
 
 <div dir="rtl">
+
 با کمک کلاس `System.Random` (که متد `Next` آن یک عدد صحیح تصادفی تولید می‌کند)، می‌توانیم متد ایستا `CreateRandom` را به این صورت پیاده‌سازی کنیم:
 </div>
 
@@ -5167,6 +5490,7 @@ record Point(int X, int Y) : ICreateRandom<Point>
 ```
 
 <div dir="rtl">
+
 برای فراخوانی این متد از طریق رابط، از پارامتر نوع محدود شده استفاده می‌کنیم. متد زیر یک آرایه داده‌ی تست با این روش ایجاد می‌کند:
 </div>
 
@@ -5181,6 +5505,7 @@ T[] CreateTestData<T>(int count) where T : ICreateRandom<T>
 ```
 
 <div dir="rtl">
+
 مثال استفاده:
 </div>
 
@@ -5189,6 +5514,7 @@ Point[] testData = CreateTestData<Point>(50);  // ایجاد ۵۰ نقطه تص�
 ```
 
 <div dir="rtl">
+
 فراخوانی متد ایستا `CreateRandom` در `CreateTestData` چندریختی است، زیرا نه‌تنها با `Point` بلکه با هر نوعی که `ICreateRandom<T>` را پیاده‌سازی کرده باشد، کار می‌کند. این با چندریختی نمونه‌ای متفاوت است، زیرا برای فراخوانی `CreateRandom` نیاز به نمونه‌ای از `ICreateRandom<T>` نداریم؛ بلکه آن را روی نوع خود فراخوانی می‌کنیم.
 
 ---
@@ -5206,6 +5532,7 @@ interface IAddable<T> where T : IAddable<T>
 ```
 
 <div dir="rtl">
+
 محدودیت نوع خودارجاعی (self-referencing type constraint) در این تعریف رابط برای رعایت قوانین کامپایلر در بارگذاری عملگر ضروری است. به خاطر بیاورید که هنگام تعریف تابع عملگر، حداقل یکی از عملوندها باید از نوعی باشد که تابع در آن تعریف شده است. در این مثال، عملوندها از نوع `T` هستند، در حالی که نوع شامل `IAddable<T>` است، بنابراین نیاز به محدودیت نوع خودارجاع داریم تا `T` بتواند به‌عنوان `IAddable<T>` در نظر گرفته شود.
 
 پیاده‌سازی رابط به این صورت است:
@@ -5220,6 +5547,7 @@ record Point(int X, int Y) : IAddable<Point>
 ```
 
 <div dir="rtl">
+
 با پارامتر نوع محدود شده، می‌توانیم متدی بنویسیم که عملگر جمع را به‌صورت چندریختی فراخوانی کند:
 </div>
 
@@ -5234,6 +5562,7 @@ T Sum<T>(params T[] values) where T : IAddable<T>
 ```
 
 <div dir="rtl">
+
 فراخوانی عملگر `+` (از طریق `+=`) چندریختی است، زیرا به `IAddable<T>` متصل می‌شود، نه `Point`. بنابراین متد `Sum` با تمام نوع‌هایی که `IAddable<T>` را پیاده‌سازی کرده‌اند کار می‌کند.
 
 البته، رابطی مانند `IAddable<T>` زمانی مفیدتر است که در runtime دات‌نت تعریف شود و همه نوع‌های عددی .NET آن را پیاده‌سازی کنند. خوشبختانه از .NET 7، فضای نام `System.Numerics` نسخه‌ای پیشرفته‌تر از `IAddable` را همراه با سایر رابط‌های ریاضی ارائه می‌دهد—که بیشتر آن‌ها تحت پوشش `INumber<TSelf>` هستند.
@@ -5254,6 +5583,7 @@ int Sum(params int[] numbers)   // فقط با int کار می‌کند
 ```
 
 <div dir="rtl">
+
 در .NET 7، رابط `INumber<TSelf>` معرفی شد تا عملیات حسابی را در تمامی نوع‌های عددی یکپارچه کند. این یعنی حالا می‌توان نسخه‌ی عمومی (generic) متد بالا را نوشت:
 </div>
 
@@ -5272,6 +5602,7 @@ decimal decimalSum = Sum(3.2m, 5.3m, 7.1m);
 ```
 
 <div dir="rtl">
+
 تمام نوع‌های عددی صحیح و اعشاری در .NET (و همچنین `char`) رابط `INumber<TSelf>` را پیاده‌سازی می‌کنند. این رابط را می‌توان به‌عنوان یک رابط کلی (umbrella interface) تصور کرد که شامل رابط‌های جزئی‌تر برای هر نوع عملیات حسابی (جمع، تفریق، ضرب، تقسیم، باقی‌مانده، مقایسه و غیره) و همچنین رابط‌هایی برای پارسینگ و قالب‌بندی است.
 
 مثالی از چنین رابطی:
@@ -5288,6 +5619,7 @@ public interface IAdditionOperators<TSelf, TOther, TResult>
 ```
 
 <div dir="rtl">
+
 عملگر ایستا و انتزاعی `+` همان چیزی است که باعث می‌شود عملگر `+=` داخل متد `Sum` کار کند. همچنین توجه کنید که استفاده از `static virtual` روی عملگر `checked`، رفتار پیش‌فرض برای پیاده‌سازانی که نسخه‌ی `checked` عملگر جمع را ارائه نمی‌کنند، فراهم می‌کند.
 
 فضای نام `System.Numerics` همچنین شامل رابط‌هایی است که بخشی از `INumber` نیستند و مخصوص عملیات نوع‌های خاصی از اعداد (مثل اعداد اعشاری) هستند.
@@ -5309,6 +5641,7 @@ T RMS<T>(params T[] values) where T : INumber<T>, IRootFunctions<T>
 ```
 
 <div dir="rtl">
+
 ---
 
 ### کد ناایمن و اشاره‌گرها (Unsafe Code and Pointers) ⚠️
@@ -5352,6 +5685,7 @@ unsafe void BlueFilter(int[,] bitmap)
 ```
 
 <div dir="rtl">
+
 کد ناایمن می‌تواند سریع‌تر از پیاده‌سازی امن مشابه اجرا شود. در این مثال، نسخه امن نیاز به حلقه‌ی تو در تو با اندیس‌دهی آرایه و بررسی حدود داشت. همچنین، متد ناایمن C# می‌تواند سریع‌تر از فراخوانی یک تابع C خارجی باشد، چون سربار ترک محیط اجرای مدیریت‌شده وجود ندارد.
 
 ---
@@ -5380,6 +5714,7 @@ class Test { public int X; }
 ```
 
 <div dir="rtl">
+
 توضیحات بیشتر درباره‌ی `fixed` در بخش «Mapping a Struct to Unmanaged Memory» صفحه ۹۹۷ آمده است.
 
 ---
@@ -5401,6 +5736,7 @@ struct Test { public int X; }
 ```
 
 <div dir="rtl">
+
 ---
 
 ### کلیدواژه stackalloc 📚
@@ -5415,6 +5751,7 @@ for (int i = 0; i < 10; ++i)
 ```
 
 <div dir="rtl">
+
 در فصل ۲۳، نشان داده می‌شود چگونه می‌توان با `Span<T>` حافظه اختصاص‌یافته روی استک را بدون استفاده از `unsafe` مدیریت کرد:
 </div>
 
@@ -5425,6 +5762,7 @@ for (int i = 0; i < 10; ++i)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### بافرهای با اندازه ثابت (Fixed-Size Buffers) 🧱
@@ -5456,6 +5794,7 @@ new UnsafeClass("Christian Troy");
 ```
 
 <div dir="rtl">
+
 نکات مهم:
 
 * بافرهای با اندازه ثابت آرایه نیستند؛ اگر `Buffer` آرایه بود، شامل مرجعی به شیء روی heap مدیریت‌شده می‌شد، نه ۳۰ بایت داخل خود `struct`.
@@ -5495,6 +5834,7 @@ unsafe void Zap(void* memory, int byteCount)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### اعداد با اندازه بومی (Native-Sized Integers) 🧮
@@ -5512,6 +5852,7 @@ checked
 ```
 
 <div dir="rtl">
+
 ویژگی‌ها:
 
 * می‌توان به آن‌ها مقادیر صحیح ۳۲ بیتی داد، اما نه ۶۴ بیتی (ممکن است در زمان اجرا سرریز رخ دهد).
@@ -5527,6 +5868,7 @@ unsafe nint AddressDif(char* x, char* y) => (nint)x - (nint)y;
 ```
 
 <div dir="rtl">
+
 یک مثال واقعی از کاربرد `nint` و `nuint` در کنار اشاره‌گرها، پیاده‌سازی `Buffer.MemoryCopy` است.
 
 ---
@@ -5557,6 +5899,7 @@ Console.WriteLine(y * y);   // خطای کامپایل: عملگر * پشتیب�
 ```
 
 <div dir="rtl">
+
 ---
 
 ### اشاره‌گرهای تابع (Function Pointers) 🔗
@@ -5578,6 +5921,7 @@ delegate*<int, char, string, void>   // void نوع بازگشتی است
 ```
 
 <div dir="rtl">
+
 مطابق تابع زیر:
 </div>
 
@@ -5586,6 +5930,7 @@ void SomeFunction(int x, char y, string z)
 ```
 
 <div dir="rtl">
+
 عملگر `&` یک اشاره‌گر تابع از گروه متد ایجاد می‌کند. مثال کامل:
 </div>
 
@@ -5599,6 +5944,7 @@ unsafe
 ```
 
 <div dir="rtl">
+
 نکات مهم:
 
 * `functionPointer` یک شیء نیست که بتوان روی آن `Invoke` فراخوانی کرد.
@@ -5610,6 +5956,7 @@ Console.WriteLine((IntPtr)functionPointer);
 ```
 
 <div dir="rtl">
+
 * مانند هر اشاره‌گر دیگری، بررسی نوع زمان اجرا ندارد.
 * نمونه زیر نتیجه تابع را به `decimal` تبدیل می‌کند و ممکن است حافظه تصادفی در خروجی دخیل شود:
 </div>
@@ -5620,6 +5967,7 @@ Console.WriteLine(pointer2("Hello, unsafe world"));
 ```
 
 <div dir="rtl">
+
 ### `[SkipLocalsInit]` ⚡
 
 وقتی C# یک متد را کامپایل می‌کند، یک flag تولید می‌کند که به runtime می‌گوید متغیرهای محلی متد را به مقادیر پیش‌فرضشان مقداردهی کند (با صفر کردن حافظه).
@@ -5633,6 +5981,7 @@ void Foo() ...
 ```
 
 <div dir="rtl">
+
 می‌توانید این attribute را روی یک نوع (type) اعمال کنید—که معادل اعمال آن روی همه متدهای آن نوع است—یا حتی روی کل یک ماژول (module) که محتوای یک assembly است:
 </div>
 
@@ -5641,6 +5990,7 @@ void Foo() ...
 ```
 
 <div dir="rtl">
+
 در سناریوهای امن معمولی، `[SkipLocalsInit]` تأثیر زیادی روی عملکرد یا کارکرد ندارد، چون **قانون تخصیص قطعی (definite assignment)** در C# نیاز دارد که متغیرهای محلی قبل از خوانده شدن مقداردهی شوند. این بدان معناست که JIT optimizer احتمالاً همان کد ماشین را تولید می‌کند، چه attribute اعمال شده باشد یا نه.
 
 اما در زمینه unsafe، استفاده از `[SkipLocalsInit]` می‌تواند بار CLR برای مقداردهی اولیه متغیرهای محلی از نوع value را کاهش دهد و باعث **افزایش جزئی عملکرد** شود، مخصوصاً در متدهایی که استفاده زیادی از استک دارند (مثلاً با stackalloc بزرگ). مثال زیر حافظه مقداردهی‌نشده را چاپ می‌کند وقتی `[SkipLocalsInit]` اعمال شده باشد (به جای صفر):
@@ -5660,6 +6010,7 @@ unsafe void Foo()
 ```
 
 <div dir="rtl">
+
 جالب این که می‌توان به همان نتیجه در محیط “ایمن” با استفاده از `Span<T>` رسید:
 </div>
 
@@ -5673,6 +6024,7 @@ void Foo()
 ```
 
 <div dir="rtl">
+
 بنابراین، استفاده از `[SkipLocalsInit]` نیاز دارد که پروژه شما با `<AllowUnsafeBlocks>` برابر `true` کامپایل شود—حتی اگر هیچ متدی unsafe علامت‌گذاری نشده باشد.
 
 ---
@@ -5699,6 +6051,7 @@ class MyClass
 ```
 
 <div dir="rtl">
+
 در این مثال، دستور داخل `Foo` مشروط به وجود سمبل `DEBUG` کامپایل می‌شود. اگر سمبل `DEBUG` حذف شود، دستور کامپایل نمی‌شود.
 
 می‌توان سمبل‌های پیش‌پردازنده را در فایل سورس تعریف کرد یا در سطح پروژه در فایل `.csproj`:
@@ -5711,6 +6064,7 @@ class MyClass
 ```
 
 <div dir="rtl">
+
 با دستورات `#if` و `#elif` می‌توان از عملگرهای `||`، `&&` و `!` برای انجام عملیات **or، and و not** روی چند سمبل استفاده کرد. مثال:
 </div>
 
@@ -5721,6 +6075,7 @@ class MyClass
 ```
 
 <div dir="rtl">
+
 توجه کنید که این یک عبارت معمولی C# نیست و سمبل‌ها هیچ ارتباطی با متغیرها—چه static و چه غیر—ندارند.
 
 ---
@@ -5760,6 +6115,7 @@ class Foo
 ```
 
 <div dir="rtl">
+
 کامپایلر تنها زمانی attributeهای `[Test]` را در فایل `file2.cs` وارد می‌کند که سمبل `DEBUG` در محدوده آن فایل تعریف شده باشد.
 
 ---
@@ -5785,6 +6141,7 @@ public class Foo
 ```
 
 <div dir="rtl">
+
 اگر شماره هشدار در دستور `#pragma warning` حذف شود، همه هشدارها غیرفعال یا فعال می‌شوند.
 با دقت در استفاده از این دستور، می‌توان پروژه را با سوئیچ `/warnaserror` کامپایل کرد—که باعث می‌شود هر هشدار باقیمانده به یک **خطا** تبدیل شود.
 
@@ -5801,6 +6158,7 @@ public void Cancel() { ... }
 ```
 
 <div dir="rtl">
+
 کامنت‌های چندخطی به این صورت هستند:
 </div>
 
@@ -5812,6 +6170,7 @@ public void Cancel() { ... }
 ```
 
 <div dir="rtl">
+
 یا به این شکل (با ستاره اضافی):
 </div>
 
@@ -5823,6 +6182,7 @@ public void Cancel() { ... }
 ```
 
 <div dir="rtl">
+
 اگر گزینه زیر به فایل `.csproj` اضافه شود:
 </div>
 
@@ -5833,6 +6193,7 @@ public void Cancel() { ... }
 ```
 
 <div dir="rtl">
+
 کامپایلر **کامنت‌های مستندسازی** را استخراج و در فایل XML مشخص شده جمع‌آوری می‌کند. کاربردها:
 
 * اگر در همان فولدر اسمبلی کامپایل‌شده قرار گیرد، ابزارهایی مثل **Visual Studio** و **LINQPad** به‌طور خودکار فایل XML را می‌خوانند و از آن برای ارائه IntelliSense استفاده می‌کنند.
@@ -5857,6 +6218,7 @@ public void Cancel() { ... }
   ```
 
 <div dir="rtl">
+
 * `<returns>`
   توضیح مقدار برگشتی یک متد.
 * `<exception>`
@@ -5868,6 +6230,7 @@ public void Cancel() { ... }
   ```
 
 <div dir="rtl">
+
 * `<example>`
   مثال عملی (شامل توضیح و کد نمونه):
 </div>
@@ -5879,6 +6242,7 @@ public void Cancel() { ... }
   ```
 
 <div dir="rtl">
+
 * `<c>` و `<code>`
 
   * `<c>`: قطعه کد خطی داخل مثال.
@@ -5892,6 +6256,7 @@ public void Cancel() { ... }
   ```
 
 <div dir="rtl">
+
 * `<seealso>`
   ارجاع متقابل به نوع یا عضو دیگر، معمولاً در بخش “See Also”.
 * `<paramref>`
@@ -5903,6 +6268,7 @@ public void Cancel() { ... }
   ```
 
 <div dir="rtl">
+
 * `<list>`
   ایجاد لیست بولت‌دار، شماره‌دار یا جدولی:
 </div>
@@ -5921,6 +6287,7 @@ public void Cancel() { ... }
   ```
 
 <div dir="rtl">
+
 * `<para>`
   ایجاد یک پاراگراف جدا:
 </div>
@@ -5930,6 +6297,7 @@ public void Cancel() { ... }
   ```
 
 <div dir="rtl">
+
 * `<include>`
   ادغام یک فایل XML خارجی که مستندات را دارد:
 </div>
@@ -5939,6 +6307,7 @@ public void Cancel() { ... }
   ```
 
 <div dir="rtl">
+
 ### User-Defined Tags 🏷️
 
 چیزی به‌خصوص در مورد تگ‌های پیش‌فرض XML که توسط کامپایلر C# شناخته می‌شوند وجود ندارد و شما آزاد هستید **تگ‌های خودتان** را تعریف کنید.
@@ -6018,6 +6387,7 @@ namespace NS
 ```
 
 <div dir="rtl">
+
 * `T:` پیش‌وند برای **Type**
 * `F:` پیش‌وند برای **Field**
 * `P:` پیش‌وند برای **Property**

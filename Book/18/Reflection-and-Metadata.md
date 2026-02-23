@@ -1,5 +1,6 @@
 
 <div dir="rtl">
+
 # فصل هجدهم:  بازتاب (Reflection) و متادیتا
 
 همان‌طور که در فصل ۱۷ دیدیم، یک برنامه‌ی C# به یک **Assembly** کامپایل می‌شود که شامل **متادیتا (Metadata)**، کد کامپایل‌شده و منابع (Resources) است. بررسی متادیتا و کد کامپایل‌شده در زمان اجرا را **Reflection (بازتاب)** می‌نامند.
@@ -40,6 +41,7 @@ Type t1 = DateTime.Now.GetType();     // Type بدست‌آمده در زمان 
 ```
 
 <div dir="rtl">
+
 ۲. استفاده از عملگر `typeof` در C#:
 </div>
 
@@ -48,6 +50,7 @@ Type t2 = typeof(DateTime);          // Type بدست‌آمده در زمان �
 ```
 
 <div dir="rtl">
+
 با استفاده از `typeof` می‌توانید Type آرایه‌ها و Typeهای جنریک را نیز بگیرید:
 </div>
 
@@ -59,6 +62,7 @@ Type t6 = typeof(Dictionary<,>);       // جنریک باز (Unbound Generic Typ
 ```
 
 <div dir="rtl">
+
 ۳. دریافت Type از طریق نام (Name):
 اگر یک مرجع به Assembly داشته باشید:
 </div>
@@ -68,6 +72,7 @@ Type t = Assembly.GetExecutingAssembly().GetType("Demos.TestProgram");
 ```
 
 <div dir="rtl">
+
 اگر Assembly را نداشته باشید، می‌توانید از **Assembly Qualified Name** استفاده کنید (نام کامل Type به‌همراه نام کامل یا جزئی Assembly). در این حالت Assembly به‌طور ضمنی بارگذاری می‌شود:
 </div>
 
@@ -76,6 +81,7 @@ Type t = Type.GetType("System.Int32, System.Private.CoreLib");
 ```
 
 <div dir="rtl">
+
 پس از در اختیار داشتن یک شیء `System.Type`، می‌توانید با استفاده از ویژگی‌های آن به اطلاعاتی مانند نام، Assembly، Base Type، سطح دسترسی (Visibility) و ... دسترسی داشته باشید:
 </div>
 
@@ -88,6 +94,7 @@ bool isPublic   = stringType.IsPublic;      // true
 ```
 
 <div dir="rtl">
+
 یک شیء از نوع `System.Type` در واقع پنجره‌ای به تمام متادیتای مربوط به آن Type و Assembly حاوی آن است.
 
 > `System.Type` یک کلاس **Abstract** است، بنابراین عملگر `typeof` در واقع یک زیرکلاس از Type را برمی‌گرداند. زیرکلاسی که CLR استفاده می‌کند داخلی (Internal) بوده و نام آن **RuntimeType** است.
@@ -110,6 +117,7 @@ bool isPublic = stringType.GetTypeInfo().IsPublic;
 ```
 
 <div dir="rtl">
+
 کلاس `TypeInfo` در **.NET Core 2 و 3** و **.NET 5+** (و همچنین در **.NET Framework 4.5+** و تمامی نسخه‌های **.NET Standard**) نیز وجود دارد. بنابراین کد بالا تقریباً به‌طور جهانی (Universal) قابل اجراست.
 
 همچنین `TypeInfo` ویژگی‌ها و متدهای اضافی برای بازتاب روی اعضا (Reflecting over Members) در اختیار قرار می‌دهد.
@@ -125,6 +133,7 @@ Console.WriteLine(simpleArrayType == typeof(int[]));  // True
 ```
 
 <div dir="rtl">
+
 برای ایجاد آرایه‌های چندبعدی، کافی است یک آرگومان عدد صحیح به `MakeArrayType` بدهید:
 </div>
 
@@ -134,6 +143,7 @@ Console.WriteLine(cubeType == typeof(int[,,])); // True
 ```
 
 <div dir="rtl">
+
 متد `GetElementType` عمل معکوس را انجام می‌دهد: نوع المنت یک آرایه را بازمی‌گرداند:
 </div>
 
@@ -142,6 +152,7 @@ Type e = typeof(int[]).GetElementType();   // e == typeof(int)
 ```
 
 <div dir="rtl">
+
 متد `GetArrayRank` تعداد ابعاد یک آرایه مستطیلی را برمی‌گرداند:
 </div>
 
@@ -150,6 +161,7 @@ int rank = typeof(int[,,]).GetArrayRank();  // 3
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 🧩 به‌دست‌آوردن نوع‌های تو در تو (Obtaining Nested Types)
@@ -163,6 +175,7 @@ foreach (Type t in typeof(System.Environment).GetNestedTypes())
 ```
 
 <div dir="rtl">
+
 **خروجی:**
 </div>
 
@@ -171,6 +184,7 @@ System.Environment+SpecialFolder
 ```
 
 <div dir="rtl">
+
 یا به روش دیگر:
 </div>
 
@@ -181,6 +195,7 @@ foreach (TypeInfo t in typeof(System.Environment)
 ```
 
 <div dir="rtl">
+
 ⚠️ تنها نکته این است که CLR یک نوع تو در تو را با سطوح دسترسی ویژه «Nested» در نظر می‌گیرد:
 </div>
 
@@ -191,6 +206,7 @@ Console.WriteLine(t.IsNestedPublic); // True
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 🏷 نام انواع (Type Names)
@@ -206,6 +222,7 @@ Console.WriteLine(t.FullName);   // System.Text.StringBuilder
 ```
 
 <div dir="rtl">
+
 🔑 دو استثنا وجود دارد:
 
 1. نوع‌های تو در تو (Nested Types)
@@ -228,6 +245,7 @@ Console.WriteLine(t.FullName);   // System.Environment+SpecialFolder
 ```
 
 <div dir="rtl">
+
 🔹 علامت `+` نوع حاوی را از فضای نام تو در تو جدا می‌کند.
 
 ---
@@ -246,6 +264,7 @@ Console.WriteLine(t.FullName); // System.Collections.Generic.Dictionary`2
 ```
 
 <div dir="rtl">
+
 * اگر جنریک بسته (Closed) باشد، تنها `FullName` یک بخش اضافی طولانی شامل نام کامل Assembly هر پارامتر نوع را دریافت می‌کند:
 </div>
 
@@ -254,6 +273,7 @@ Console.WriteLine(typeof(Dictionary<int,string>).FullName);
 ```
 
 <div dir="rtl">
+
 **خروجی:**
 </div>
 
@@ -265,6 +285,7 @@ System.Collections.Generic.Dictionary`2[
 ```
 
 <div dir="rtl">
+
 این تضمین می‌کند که `AssemblyQualifiedName` اطلاعات کافی برای شناسایی کامل نوع جنریک و پارامترهای آن دارد.
 
 ---
@@ -281,6 +302,7 @@ Console.WriteLine(typeof(int[,]).FullName);// System.Int32[,]
 ```
 
 <div dir="rtl">
+
 نوع‌های پوینتر مشابه هستند:
 </div>
 
@@ -289,6 +311,7 @@ Console.WriteLine(typeof(byte*).Name);     // Byte*
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔄 نام انواع پارامترهای ref و out
@@ -305,6 +328,7 @@ public void RefMethod(ref int p)
 ```
 
 <div dir="rtl">
+
 (جزئیات بیشتر در بخش «Reflecting and Invoking Members» در صفحه 813 توضیح داده می‌شود.)
 
 ---
@@ -322,6 +346,7 @@ Console.WriteLine(base2.Name);  // Stream
 ```
 
 <div dir="rtl">
+
 متد `GetInterfaces` رابط‌هایی (Interfaces) را که یک Type پیاده‌سازی می‌کند برمی‌گرداند:
 </div>
 
@@ -331,6 +356,7 @@ foreach (Type iType in typeof(Guid).GetInterfaces())
 ```
 
 <div dir="rtl">
+
 **خروجی:**
 </div>
 
@@ -342,6 +368,7 @@ IEquatable`1
 ```
 
 <div dir="rtl">
+
 (متد `GetInterfaceMap` یک ساختار بازمی‌گرداند که نشان می‌دهد هر عضو از یک Interface چگونه در یک کلاس یا Struct پیاده‌سازی شده است—نمونه‌ی آن در بخش «Calling Static Virtual/Abstract Interface Members» در صفحه 826 آمده است.)
 
 ---
@@ -365,6 +392,7 @@ bool alsoTrue = target.IsInstanceOfType(obj);   // معادل پویا
 ```
 
 <div dir="rtl">
+
 ### مثال ۲:
 </div>
 
@@ -374,6 +402,7 @@ Console.WriteLine(target.IsAssignableFrom(source));  // True
 ```
 
 <div dir="rtl">
+
 متد `IsSubclassOf` هم بر اساس همان اصل `IsAssignableFrom` کار می‌کند، با این تفاوت که Interfaceها را در نظر نمی‌گیرد.
 ## 🏗 ایجاد نمونه از انواع (Instantiating Types)
 
@@ -397,6 +426,7 @@ DateTime dt = (DateTime)Activator.CreateInstance(typeof(DateTime),
 ```
 
 <div dir="rtl">
+
 این متد گزینه‌های بیشتری نیز فراهم می‌کند، مانند مشخص‌کردن Assembly برای بارگذاری نوع یا امکان اتصال به سازنده‌های **Nonpublic**.
 اگر CLR نتواند سازنده‌ی مناسب پیدا کند، یک استثناء از نوع `MissingMethodException` پرتاب می‌شود. ⚠️
 
@@ -423,6 +453,7 @@ object foo = ci.Invoke(new object[] { null });
 ```
 
 <div dir="rtl">
+
 اگر هدف شما **.NET Core 1** یا پروفایل‌های قدیمی Windows Store باشد:
 </div>
 
@@ -434,6 +465,7 @@ ConstructorInfo ci = typeof(X).GetTypeInfo().DeclaredConstructors
 ```
 
 <div dir="rtl">
+
 برای گرفتن سازنده‌های **Nonpublic** باید از **BindingFlags** استفاده کنید (توضیح در بخش «Accessing Nonpublic Members» در صفحه 822).
 
 ---
@@ -479,6 +511,7 @@ class Program
 ```
 
 <div dir="rtl">
+
 برای فراخوانی Delegate ایجادشده، می‌توانید از `DynamicInvoke` استفاده کنید (همان‌طور که در مثال بالا دیدیم) یا آن را به نوع Delegate اصلی Cast کنید:
 </div>
 
@@ -488,6 +521,7 @@ Console.WriteLine(f(3));   // 9 (اما بسیار سریع‌تر!)
 ```
 
 <div dir="rtl">
+
 همچنین می‌توانید به‌جای نام متد، یک `MethodInfo` به `CreateDelegate` بدهید. جزئیات مربوط به `MethodInfo` در بخش **“Reflecting and Invoking Members”** در صفحه 813 آمده است، همراه با دلیل اینکه چرا بهتر است یک Delegate ایجادشده‌ی دینامیکی را دوباره به نوع Delegate ایستای خودش Cast کنیم.
 ## 🧩 انواع جنریک (Generic Types)
 
@@ -504,6 +538,7 @@ object anError = Activator.CreateInstance(unbound);            // خطای زم�
 ```
 
 <div dir="rtl">
+
 برای تبدیل یک نوع جنریک باز به بسته از متد `MakeGenericType` استفاده می‌کنیم:
 </div>
 
@@ -513,6 +548,7 @@ Type closed = unbound.MakeGenericType(typeof(int));
 ```
 
 <div dir="rtl">
+
 برعکس آن، متد `GetGenericTypeDefinition` یک نوع بسته را دوباره به شکل باز برمی‌گرداند:
 </div>
 
@@ -521,6 +557,7 @@ Type unbound2 = closed.GetGenericTypeDefinition();  // unbound == unbound2
 ```
 
 <div dir="rtl">
+
 🔎 ویژگی‌های کلیدی:
 
 * `IsGenericType` → بررسی می‌کند که آیا یک نوع، جنریک است یا نه.
@@ -537,6 +574,7 @@ Console.WriteLine(
 ```
 
 <div dir="rtl">
+
 همچنین، متد `GetGenericArguments` آرگومان‌های نوع را بازمی‌گرداند:
 </div>
 
@@ -547,6 +585,7 @@ Console.WriteLine(unbound.GetGenericArguments()[0]);  // T (پلا‌یس‌هو
 ```
 
 <div dir="rtl">
+
 📌 در زمان اجرا، تمام انواع جنریک یا **باز (Unbound)** هستند یا **بسته (Closed)**.
 
 * حالت باز فقط در موارد نادری مثل `typeof(Foo<>)` رخ می‌دهد.
@@ -564,6 +603,7 @@ class Foo<T>
 ```
 
 <div dir="rtl">
+
 ---
 
 ## 🔍 بازتاب اعضا (Reflecting and Invoking Members)
@@ -584,6 +624,7 @@ foreach (MemberInfo m in members)
 ```
 
 <div dir="rtl">
+
 نتیجه:
 </div>
 
@@ -597,6 +638,7 @@ Void .ctor()
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 TypeInfo و بازتاب اعضا
@@ -614,6 +656,7 @@ IEnumerable<MemberInfo> members =
 ```
 
 <div dir="rtl">
+
 نتیجه (برخلاف `GetMembers` که اعضای ارث‌برده‌شده را هم برمی‌گرداند):
 </div>
 
@@ -624,6 +667,7 @@ Boolean cracked
 ```
 
 <div dir="rtl">
+
 همچنین ویژگی‌های خاصی برای گرفتن نوع مشخصی از اعضا وجود دارد (مثل `DeclaredMethods`, `DeclaredProperties` و غیره).
 برای گرفتن یک متد خاص با نام (اما بدون امکان تعیین پارامترها)، از `GetDeclaredMethod` استفاده می‌شود.
 
@@ -637,6 +681,7 @@ MethodInfo method = typeof(int).GetTypeInfo().DeclaredMethods
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔹 جزئیات بیشتر در مورد GetMembers
@@ -651,6 +696,7 @@ Console.WriteLine(m[0]);   // Void Crack()
 ```
 
 <div dir="rtl">
+
 `MemberInfo.MemberType` یک enum از نوع `MemberTypes` است که مقادیر زیر را دارد:
 </div>
 
@@ -660,6 +706,7 @@ NestedType, Property, TypeInfo
 ```
 
 <div dir="rtl">
+
 می‌توان با استفاده از این enum نتیجه‌ی متد `GetMembers` را محدود کرد یا مستقیماً از متدهای اختصاصی مثل `GetMethods`, `GetFields`, `GetProperties` و ... استفاده کرد.
 
 ✅ توصیه: همیشه هنگام گرفتن اعضا، تا جای ممکن دقیق باشید. مثلاً هنگام گرفتن متدی با نام خاص، نوع همه‌ی پارامترها را مشخص کنید تا اگر بعداً متد overload شد، کد شما همچنان درست کار کند.
@@ -688,6 +735,7 @@ Console.WriteLine(test == obj);          // False
 ```
 
 <div dir="rtl">
+
 در اینجا، تفاوت فقط به خاطر Reflection API است؛ در حقیقت `Program` هیچ متد جدیدی به نام `ToString` ندارد.
 
 برای بررسی اینکه آیا دو متد واقعاً یکی هستند:
@@ -700,6 +748,7 @@ Console.WriteLine(test.MetadataToken == obj.MetadataToken
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 📝 نکات پایانی
@@ -734,6 +783,7 @@ Console.WriteLine (m.ReturnType); // System.Void
 ```
 
 <div dir="rtl">
+
 تمام نمونه‌های \*Info توسط Reflection API در اولین استفاده کش می‌شوند:
 </div>
 
@@ -744,6 +794,7 @@ Console.Write (method == member);   // True
 ```
 
 <div dir="rtl">
+
 این کش شدن علاوه بر حفظ هویت شیء، کارایی را هم در یک API نسبتاً کند بهبود می‌دهد.
 
 ### اعضای C# در برابر اعضای CLR ⚖️
@@ -780,6 +831,7 @@ void Demo()
 ```
 
 <div dir="rtl">
+
 برای شناسایی این متدها می‌توان از ویژگی `IsSpecialName` در `MethodInfo` استفاده کرد. مقدار آن برای متدهای پراپرتی، ایندکسر، رویداد و عملگرها **true** است. برای متدهای معمولی C# (و متد `Finalize` در صورت وجود finalizer) مقدار آن **false** خواهد بود.
 
 در ادامه، متدهای پشتیبانی که C# تولید می‌کند را خواهیم دید.
@@ -799,6 +851,7 @@ MethodInfo[] both = pi.GetAccessors();                   // Length==2
 ```
 
 <div dir="rtl">
+
 برای رویدادها (Event)، متدهای `GetAddMethod` و `GetRemoveMethod` کار مشابهی برای `EventInfo` انجام می‌دهند.
 
 برای حرکت در جهت عکس—یعنی رفتن از یک `MethodInfo` به `PropertyInfo` یا `EventInfo` مربوطه—باید یک کوئری انجام دهید. در اینجا LINQ برای این کار ایدئال است:
@@ -810,6 +863,7 @@ PropertyInfo p = mi.DeclaringType.GetProperties()
 ```
 
 <div dir="rtl">
+
 ---
 
 ### پراپرتی‌های Init-only 🛠️
@@ -830,6 +884,7 @@ bool IsInitOnly (PropertyInfo pi) => pi
 ```
 
 <div dir="rtl">
+
 ---
 
 ### NullabilityInfoContext ☑️
@@ -848,6 +903,7 @@ void PrintPropertyNullability (PropertyInfo pi)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### اعضای نوع جنریک 🔁
@@ -865,6 +921,7 @@ Console.WriteLine (closed.PropertyType.IsGenericParameter);   // False
 ```
 
 <div dir="rtl">
+
 شیءهای `MemberInfo` که از انواع جنریک باز و بسته بازگردانده می‌شوند همیشه متمایز هستند، حتی اگر امضای اعضا شامل پارامترهای نوع جنریک نباشد:
 </div>
 
@@ -879,6 +936,7 @@ Console.WriteLine (closed.DeclaringType.IsGenericTypeDefinition); // False
 ```
 
 <div dir="rtl">
+
 ❌ اعضای انواع جنریک باز (**unbound generic types**) را نمی‌توان به‌صورت داینامیک invoke کرد.
 ### فراخوانی پویا اعضا ⚡
 
@@ -895,6 +953,7 @@ int length = s.Length;
 ```
 
 <div dir="rtl">
+
 و همین کار با **late binding** پویا چنین خواهد بود:
 </div>
 
@@ -905,6 +964,7 @@ int length = (int) prop.GetValue (s, null);   // 5
 ```
 
 <div dir="rtl">
+
 متدهای `GetValue` و `SetValue` مقدار یک `PropertyInfo` یا `FieldInfo` را می‌گیرند یا تنظیم می‌کنند. آرگومان اول نمونه (instance) است، که برای اعضای `static` می‌تواند `null` باشد.
 
 برای دسترسی به **Indexer** نیز درست مثل پراپرتی‌ای به نام `"Item"` رفتار می‌شود، با این تفاوت که مقادیر indexer به‌عنوان آرگومان دوم به `GetValue` یا `SetValue` داده می‌شوند.
@@ -923,6 +983,7 @@ Console.WriteLine ("stamp".Substring(2));   // "amp"
 ```
 
 <div dir="rtl">
+
 معادل پویا با reflection و late binding:
 </div>
 
@@ -936,6 +997,7 @@ Console.WriteLine (returnValue);   // "amp"
 ```
 
 <div dir="rtl">
+
 از آنجا که متد `Substring` overload دارد، مجبور شدیم یک آرایه از نوع پارامترها بدهیم تا مشخص شود کدام نسخه‌ی متد را می‌خواهیم. در غیر این صورت، `GetMethod` خطای `AmbiguousMatchException` خواهد داد.
 
 متد `GetParameters` که در کلاس پایه‌ی `MethodBase` (برای `MethodInfo` و `ConstructorInfo`) تعریف شده، اطلاعات متادیتا درباره‌ی پارامترها را برمی‌گرداند:
@@ -951,6 +1013,7 @@ foreach (ParameterInfo x in paramList)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### برخورد با پارامترهای ref و out 🔄
@@ -964,6 +1027,7 @@ bool successfulParse = int.TryParse ("23", out x);
 ```
 
 <div dir="rtl">
+
 به شکل زیر خواهد بود:
 </div>
 
@@ -976,6 +1040,7 @@ Console.WriteLine (successfulParse + " " + args[1]);   // True 23
 ```
 
 <div dir="rtl">
+
 همین روش برای هر دو نوع `ref` و `out` کار می‌کند.
 
 ---
@@ -996,6 +1061,7 @@ public static IEnumerable<TSource> Where<TSource>
 ```
 
 <div dir="rtl">
+
 برای بازیابی یک overload خاص، باید همه‌ی متدها را بگیریم و سپس مورد دلخواه را دستی انتخاب کنیم. کوئری زیر overload اول را برمی‌گرداند:
 </div>
 
@@ -1013,6 +1079,7 @@ select m
 ```
 
 <div dir="rtl">
+
 فراخوانی `.Single()` روی این کوئری، شیء `MethodInfo` درست با پارامترهای نوع باز (unbound) را برمی‌گرداند. گام بعدی بستن پارامترهای نوعی است، با استفاده از `MakeGenericMethod`:
 </div>
 
@@ -1021,6 +1088,7 @@ var closedMethod = unboundMethod.MakeGenericMethod (typeof (int));
 ```
 
 <div dir="rtl">
+
 در این حالت، نوع `TSource` با `int` بسته شده و می‌توانیم `Enumerable.Where` را با منبعی از نوع `IEnumerable<int>` و شرطی از نوع `Func<int,bool>` صدا بزنیم:
 </div>
 
@@ -1033,6 +1101,7 @@ foreach (int element in query) Console.Write (element + "|");   // 3|5|7|
 ```
 
 <div dir="rtl">
+
 ---
 
 ### استفاده از System.Linq.Expressions 🎭
@@ -1052,6 +1121,7 @@ var callExpression = Expression.Call (
 ```
 
 <div dir="rtl">
+
 ### استفاده از Delegate برای بهبود عملکرد ⚡
 
 فراخوانی‌های داینامیک نسبتاً کم‌کارآمد هستند و معمولاً overhead آن‌ها در محدوده‌ی چند میکروثانیه است. اگر یک متد را بارها در یک حلقه فراخوانی می‌کنید، می‌توانید این overhead را به سطح نانوثانیه کاهش دهید، با ایجاد یک **delegate داینامیک** که به متد داینامیک شما اشاره می‌کند.
@@ -1070,6 +1140,7 @@ for (int i = 0; i < 1000000; i++)
 ```
 
 <div dir="rtl">
+
 این روش سریع‌تر است زیرا **late binding** پرهزینه فقط یک بار اتفاق می‌افتد.
 
 ---
@@ -1100,6 +1171,7 @@ Console.WriteLine(w);   // False
 ```
 
 <div dir="rtl">
+
 دسترسی به اعضای غیرعمومی با reflection قدرتمند است، اما خطرناک هم هست؛ زیرا می‌توانید **encapsulation** را دور بزنید و وابستگی به پیاده‌سازی داخلی ایجاد کنید.
 
 ---
@@ -1129,6 +1201,7 @@ members = typeof(object).GetMembers(nonPublicBinding);
 ```
 
 <div dir="rtl">
+
 پرچم `DeclaredOnly` اعضای ارث‌بری شده را کنار می‌گذارد، مگر اینکه override شده باشند. این flag کمی گیج‌کننده است زیرا **مجموعه نتیجه را محدود می‌کند**، در حالی که بقیه flagها مجموعه نتیجه را گسترش می‌دهند.
 
 ---
@@ -1152,6 +1225,7 @@ class Program
 ```
 
 <div dir="rtl">
+
 راه حل: ابتدا متد `MakeGenericMethod` را روی `MethodInfo` صدا بزنید و **نوع‌های جنریک مشخص** بدهید. این یک `MethodInfo` جدید برمی‌گرداند که می‌توان آن را فراخوانی کرد:
 </div>
 
@@ -1164,6 +1238,7 @@ Console.WriteLine(intEcho.Invoke(null, new object[] { 3 }));   // 3
 ```
 
 <div dir="rtl">
+
 گاهی لازم است تا یک عضو از **رابط جنریک** را فراخوانی کنیم ولی پارامترهای نوع آن تا زمان اجرا مشخص نیستند. این مورد در طراحی‌های ایده‌آل کمیاب است، اما در عمل کاربرد دارد.
 
 برای مثال، اگر بخواهیم نسخه‌ای قدرتمندتر از `ToString` بسازیم که نتایج LINQ را نیز گسترش دهد:
@@ -1174,6 +1249,7 @@ public static string ToStringEx<T>(IEnumerable<T> sequence) { ... }
 ```
 
 <div dir="rtl">
+
 اما این محدود است. اگر `sequence` شامل مجموعه‌های تو در تو باشد، باید overloadهای متعدد بسازیم که عملی نیست. راه حل بهتر، نوشتن متدی است که **هر شیء دلخواهی** را پردازش کند:
 </div>
 
@@ -1209,6 +1285,7 @@ public static string ToStringEx(object value)
 ```
 
 <div dir="rtl">
+
 * برای `List<>` می‌توان از `IList` غیرجنریک استفاده کرد، زیرا `List<>` این رابط را پیاده‌سازی کرده است.
 * برای `IGrouping<,>` باید از **نوع بسته (closed generic)** استفاده کنیم و سپس با reflection عضو `Key` را فراخوانی کنیم.
 
@@ -1223,6 +1300,7 @@ Console.WriteLine(ToStringEx("xyyzzz".GroupBy(c => c)));
 ```
 
 <div dir="rtl">
+
 خروجی:
 </div>
 
@@ -1234,6 +1312,7 @@ Group with key=z: z z z
 ```
 
 <div dir="rtl">
+
 برای بازتاب یک Assembly به‌صورت دینامیک، می‌توان از `GetType` یا `GetTypes` استفاده کرد.
 
 مثال دریافت نوع `Demos.TestProgram` از assembly جاری:
@@ -1244,6 +1323,7 @@ Type t = Assembly.GetExecutingAssembly().GetType("Demos.TestProgram");
 ```
 
 <div dir="rtl">
+
 یا از روی یک نوع موجود:
 </div>
 
@@ -1252,6 +1332,7 @@ typeof(Foo).Assembly.GetType("Demos.TestProgram");
 ```
 
 <div dir="rtl">
+
 لیست تمام انواع در یک Assembly خارجی:
 </div>
 
@@ -1262,6 +1343,7 @@ foreach (Type t in a.GetTypes())
 ```
 
 <div dir="rtl">
+
 یا با `TypeInfo`:
 </div>
 
@@ -1272,6 +1354,7 @@ foreach (Type t in a.ExportedTypes)
 ```
 
 <div dir="rtl">
+
 > توجه: `GetTypes` و `ExportedTypes` فقط انواع سطح بالا را برمی‌گردانند، انواع تو در تو را خیر.
 فراخوانی `GetTypes` روی یک اسمبلی چندماژوله، تمام نوع‌ها را در همه ماژول‌ها برمی‌گرداند. در نتیجه، می‌توانید وجود ماژول‌ها را نادیده بگیرید و یک اسمبلی را به‌عنوان **کانتینر نوع‌ها** در نظر بگیرید. با این حال، یک مورد وجود دارد که ماژول‌ها اهمیت پیدا می‌کنند—و آن زمانی است که با **توکن‌های متادیتا (metadata tokens)** کار می‌کنید.
 
@@ -1310,6 +1393,7 @@ static void Main()
 ```
 
 <div dir="rtl">
+
 نتیجه:
 </div>
 
@@ -1319,6 +1403,7 @@ PrivateScope, Private, Static, HideBySig
 ```
 
 <div dir="rtl">
+
 در مقابل، **custom attributes** به یک Blob در متادیتای اصلی نوع متصل می‌شوند. همه Custom attributes توسط یک زیرکلاس از `System.Attribute` نمایش داده می‌شوند و برخلاف Bit-mapped attributes، **قابل توسعه** هستند. این Blob کلاس Attribute را شناسایی می‌کند و همچنین مقادیر هر آرگومان موقعیتی یا نام‌گذاری‌شده‌ای که هنگام اعمال Attribute مشخص شده را ذخیره می‌کند. Custom attributes که خودتان تعریف می‌کنید، از نظر معماری کاملاً مشابه آن‌هایی هستند که در کتابخانه‌های .NET تعریف شده‌اند.
 
 در **فصل 4** توضیح داده شده است که چگونه می‌توان Custom attributes را به یک نوع یا عضو در C# متصل کرد. مثال زیر، Attribute از پیش تعریف‌شده `Obsolete` را به کلاس `Foo` اعمال می‌کند:
@@ -1329,6 +1414,7 @@ PrivateScope, Private, Static, HideBySig
 ```
 
 <div dir="rtl">
+
 این به کامپایلر دستور می‌دهد که یک نمونه از `ObsoleteAttribute` را در متادیتای `Foo` قرار دهد، که سپس می‌توان آن را در زمان اجرا با فراخوانی `GetCustomAttributes` روی یک `Type` یا `MemberInfo` بازیابی کرد.
 
 **Pseudocustom attributes** ظاهر و عملکردی شبیه custom attributes استاندارد دارند. آن‌ها توسط یک زیرکلاس از `System.Attribute` نمایش داده می‌شوند و به روش استاندارد متصل می‌شوند:
@@ -1340,6 +1426,7 @@ class SystemTime { ... }
 ```
 
 <div dir="rtl">
+
 تفاوت این است که کامپایلر یا CLR به‌صورت داخلی، Pseudocustom attributes را با تبدیل آن‌ها به Bit-mapped attributes بهینه می‌کند. نمونه‌ها شامل `StructLayout`، `In` و `Out` هستند (فصل 24). Reflection، Pseudocustom attributes را از طریق ویژگی‌های اختصاصی مانند `IsLayoutSequential` نمایش می‌دهد و در بسیاری از موارد، وقتی `GetCustomAttributes` فراخوانی شود، به‌عنوان شیء `System.Attribute` نیز برمی‌گردند.
 
 این بدان معناست که می‌توانید تقریباً تفاوت بین **pseudo-** و **non-pseudo custom attributes** را نادیده بگیرید (استثنای مهم، زمانی است که از `Reflection.Emit` برای تولید نوع‌ها به‌صورت داینامیک در زمان اجرا استفاده می‌کنید؛ نگاه کنید به فصل «Emitting Assemblies and Types» صفحه 841).
@@ -1357,6 +1444,7 @@ public sealed class AttributeUsageAttribute : Attribute
 ```
 
 <div dir="rtl">
+
 * `AllowMultiple` مشخص می‌کند که آیا Attribute تعریف‌شده می‌تواند بیش از یک بار روی همان هدف اعمال شود یا خیر.
 * `Inherited` مشخص می‌کند که آیا Attribute اعمال‌شده روی یک کلاس پایه، به کلاس‌های مشتق نیز اعمال شود (یا در مورد متدها، آیا Attribute اعمال‌شده روی متد virtual به متدهای overriding نیز منتقل شود).
 * `ValidOn` مجموعه اهدافی را تعیین می‌کند که Attribute می‌تواند به آن‌ها متصل شود، مانند کلاس‌ها، اینترفیس‌ها، Properties، متدها، پارامترها و غیره. این ویژگی هر ترکیبی از مقادیر enum `AttributeTargets` را می‌پذیرد، که شامل موارد زیر است:
@@ -1369,6 +1457,7 @@ Property, ReturnValue, Struct
 ```
 
 <div dir="rtl">
+
 مثال از نحوه استفاده توسعه‌دهندگان .NET از `AttributeUsage` روی `Serializable`:
 </div>
 
@@ -1381,6 +1470,7 @@ public sealed class SerializableAttribute : Attribute { }
 ```
 
 <div dir="rtl">
+
 این تقریباً کل تعریف Attribute `Serializable` است. نوشتن یک کلاس Attribute بدون property یا constructor ویژه، به همین سادگی است.
 
 ### تعریف Attribute سفارشی
@@ -1416,6 +1506,7 @@ public sealed class TestAttribute : Attribute
 ```
 
 <div dir="rtl">
+
 و کلاس `Foo` با متدهایی که با Test Attribute تزئین شده‌اند:
 </div>
 
@@ -1434,6 +1525,7 @@ class Foo
 ```
 
 <div dir="rtl">
+
 دو روش استاندارد برای بازیابی Attributes در زمان اجرا وجود دارد:
 
 * فراخوانی `GetCustomAttributes` روی هر شیء `Type` یا `MemberInfo`
@@ -1462,6 +1554,7 @@ foreach (MethodInfo mi in typeof(Foo).GetMethods())
 ```
 
 <div dir="rtl">
+
 یا به شکل زیر:
 </div>
 
@@ -1471,6 +1564,7 @@ foreach (MethodInfo mi in typeof(Foo).GetTypeInfo().DeclaredMethods)
 ```
 
 <div dir="rtl">
+
 خروجی:
 </div>
 
@@ -1481,6 +1575,7 @@ Method Method3 will be tested; reps=20; msg=Debugging Time!
 ```
 
 <div dir="rtl">
+
 برای تکمیل مثال و نشان دادن اینکه چگونه می‌توان از این روش برای نوشتن یک **سیستم Unit Testing خودکار** استفاده کرد، نسخه‌ای که متدها را واقعاً فراخوانی می‌کند:
 </div>
 
@@ -1502,6 +1597,7 @@ foreach (MethodInfo mi in typeof(Foo).GetMethods())
 ```
 
 <div dir="rtl">
+
 نمونه دیگر: فهرست کردن Attributes موجود روی یک نوع مشخص:
 </div>
 
@@ -1514,6 +1610,7 @@ class Test { }
 ```
 
 <div dir="rtl">
+
 خروجی:
 </div>
 
@@ -1523,6 +1620,7 @@ System.SerializableAttribute
 ```
 
 <div dir="rtl">
+
 فضای نام `System.Reflection.Emit` شامل کلاس‌هایی برای ایجاد **متادیتا و IL در زمان اجرا** است. تولید کد به‌صورت داینامیک برای برخی از انواع برنامه‌نویسی کاربرد دارد. به‌عنوان مثال:
 
 * API **Regular Expressions**، که انواع بهینه‌شده برای هر عبارت منظم تولید می‌کند.
@@ -1552,6 +1650,7 @@ public class Test
 ```
 
 <div dir="rtl">
+
 `OpCodes` شامل یک فیلد `static readonly` برای هر IL opcode است. بیشتر قابلیت‌ها از طریق این opcodes ارائه می‌شوند، اگرچه `ILGenerator` متدهای ویژه‌ای برای تولید **Labels**، **متغیرهای محلی** و **مدیریت استثناها** دارد.
 
 یک متد همیشه با `OpCodes.Ret` که به معنی "return" است یا نوعی دستور branching/throwing پایان می‌یابد. متد `EmitWriteLine` در `ILGenerator` یک **میان‌بر** برای تولید تعدادی opcode سطح پایین‌تر است. می‌توانیم همان نتیجه را با جایگزینی آن به شکل زیر به دست آوریم:
@@ -1564,6 +1663,7 @@ gen.Emit(OpCodes.Call, writeLineStr);   // فراخوانی متد
 ```
 
 <div dir="rtl">
+
 توجه کنید که `typeof(Test)` را به سازنده `DynamicMethod` دادیم. این دسترسی متد داینامیک به **متدهای غیر عمومی** آن نوع را فراهم می‌کند، مانند مثال زیر:
 </div>
 
@@ -1588,6 +1688,7 @@ public class Test
 ```
 
 <div dir="rtl">
+
 ### درک IL و Evaluation Stack
 
 درک IL نیازمند **سرمایه‌گذاری زمانی قابل توجه** است. به جای فهمیدن همه opcodes، آسان‌تر است که یک برنامه C# کامپایل کنید و سپس IL آن را بررسی، کپی و تغییر دهید. ابزارهایی مانند **LINQPad** IL هر متد یا قطعه کدی را نمایش می‌دهد و ابزارهایی مانند **ILSpy** برای بررسی Assemblyهای موجود مفید هستند.
@@ -1613,6 +1714,7 @@ dynMeth.Invoke(null, null); // 123
 ```
 
 <div dir="rtl">
+
 برای جمع دو عدد: ابتدا هر عدد را روی Stack بارگذاری کرده و سپس `Add` را فراخوانی می‌کنیم. `Add` دو مقدار را از Stack برمی‌دارد و نتیجه را روی Stack قرار می‌دهد:
 </div>
 
@@ -1624,6 +1726,7 @@ gen.Emit(OpCodes.Call, writeLineInt); // نمایش نتیجه
 ```
 
 <div dir="rtl">
+
 برای محاسبه `10 / 2 + 1` می‌توان یکی از این دو روش را انجام داد:
 </div>
 
@@ -1637,6 +1740,7 @@ gen.Emit(OpCodes.Call, writeLineInt);
 ```
 
 <div dir="rtl">
+
 یا:
 </div>
 
@@ -1650,6 +1754,7 @@ gen.Emit(OpCodes.Call, writeLineInt);
 ```
 
 <div dir="rtl">
+
 ### ارسال آرگومان‌ها به یک متد داینامیک
 
 Opcodeهای `Ldarg` و `Ldarg_XXX` آرگومان‌های **ارسال‌شده به متد** را روی Stack بارگذاری می‌کنند. برای بازگرداندن یک مقدار، در پایان **دقیقاً یک مقدار روی Stack** باقی بگذارید. برای این کار، هنگام ایجاد `DynamicMethod` باید **نوع بازگشتی** و **نوع آرگومان‌ها** را مشخص کنید.
@@ -1675,6 +1780,7 @@ int result = (int)dynMeth.Invoke(null, new object[] { 3, 4 }); // 7
 ```
 
 <div dir="rtl">
+
 اگر از قوانین Stack پیروی نکنید، CLR اجرای متد را رد می‌کند. برای حذف یک مقدار بدون پردازش آن می‌توان از `OpCodes.Pop` استفاده کرد.
 
 ### استفاده از Delegate
@@ -1688,6 +1794,7 @@ int result = func(3, 4);  // 7
 ```
 
 <div dir="rtl">
+
 این کار همچنین **overhead فراخوانی داینامیک** را حذف می‌کند و چند میکروثانیه صرفه‌جویی می‌کند.
 
 ### تعریف متغیرهای محلی
@@ -1705,6 +1812,7 @@ Console.WriteLine(x); // 42
 ```
 
 <div dir="rtl">
+
 ایجاد همان کد به صورت داینامیک:
 </div>
 
@@ -1733,6 +1841,7 @@ dynMeth.Invoke(null, null); // 42
 ```
 
 <div dir="rtl">
+
 ### شاخه‌بندی (Branching) 🔀
 
 در IL، حلقه‌های `while`، `do` و `for` وجود ندارند؛ همه با **Labels** و opcodeهای مشابه `goto` و شرطی انجام می‌شود:
@@ -1755,6 +1864,7 @@ while (x <= 10) Console.WriteLine(x++);
 ```
 
 <div dir="rtl">
+
 ایجاد همان حلقه به صورت IL:
 </div>
 
@@ -1788,6 +1898,7 @@ gen.Emit(OpCodes.Ret);
 ```
 
 <div dir="rtl">
+
 ### ساخت اشیاء
 
 معادل IL برای `new`، opcode **Newobj** است. این opcode یک **constructor** می‌گیرد و شیء ساخته‌شده را روی **evaluation stack** قرار می‌دهد.
@@ -1804,6 +1915,7 @@ gen.Emit(OpCodes.Newobj, ci);
 ```
 
 <div dir="rtl">
+
 ### فراخوانی متدهای نمونه
 
 پس از قرار دادن شیء روی **stack**، می‌توانید با opcodeهای **Call** یا **Callvirt** متدهای نمونه آن را فراخوانی کنید.
@@ -1821,6 +1933,7 @@ dynMeth.Invoke(null, null);  // 2147483647
 ```
 
 <div dir="rtl">
+
 * **Call** برای فراخوانی متدهای static و متدهای نمونه نوع مقدار (value type)
 * **Callvirt** برای فراخوانی متدهای نمونه نوع مرجع (reference type) حتی اگر virtual نباشند
 
@@ -1849,6 +1962,7 @@ dynMeth.Invoke(null, null);  // Hello, world!
 ```
 
 <div dir="rtl">
+
 توجه: اگر به‌طور غیرvirtual متد `ToString` از نوع `object` را فراخوانی می‌کردیم، نتیجه `System.Text.StringBuilder` می‌شد و بازنویسی `ToString` نادیده گرفته می‌شد.
 
 ### مدیریت استثناها (Exception Handling) ⚠️
@@ -1863,6 +1977,7 @@ finally { Console.WriteLine("Finally"); }
 ```
 
 <div dir="rtl">
+
 معادل IL:
 </div>
 
@@ -1887,6 +2002,7 @@ gen.EndExceptionBlock();
 ```
 
 <div dir="rtl">
+
 * می‌توانید چند catch block تعریف کنید.
 * برای پرتاب مجدد همان استثنا از opcode `Rethrow` استفاده می‌شود.
 * متد کمکی `ThrowException` فقط با **MethodBuilder** کار می‌کند و در DynamicMethod کاربرد ندارد.
@@ -1908,6 +2024,7 @@ ModuleBuilder modBuilder = assemBuilder.DefineDynamicModule("DynModule");
 ```
 
 <div dir="rtl">
+
 * نمی‌توان یک type را به assembly موجود اضافه کرد، زیرا **assembly پس از ایجاد، تغییرناپذیر است**.
 * assemblyهای داینامیک معمولاً توسط **garbage collector** پاک نمی‌شوند و تا پایان فرآیند در حافظه می‌مانند، مگر اینکه هنگام تعریف، گزینه **AssemblyBuilderAccess.RunAndCollect** را استفاده کنید.
 
@@ -1921,6 +2038,7 @@ TypeBuilder tb = modBuilder.DefineType("Widget", TypeAttributes.Public);
 ```
 
 <div dir="rtl">
+
 ویژگی‌های `TypeAttributes` شامل **modifierهای CLR**، **visibility member flags** و modifierهایی مانند `Abstract`، `Sealed` و `Interface` است. همچنین `Serializable` معادل \[Serializable] در C# و `Explicit` معادل \[StructLayout(LayoutKind.Explicit)] است. سایر attributeها را در بخش “Attaching Attributes” توضیح خواهیم داد.
 
 همچنین می‌توان base type اختیاری مشخص کرد:
@@ -1947,6 +2065,7 @@ gen.Emit(OpCodes.Ret);
 ```
 
 <div dir="rtl">
+
 ### نهایی‌سازی Type
 </div>
 
@@ -1955,6 +2074,7 @@ Type t = tb.CreateType();  // نهایی کردن Type
 ```
 
 <div dir="rtl">
+
 پس از ایجاد Type، می‌توان از **reflection معمولی** برای بازرسی و **late binding** استفاده کرد:
 </div>
 
@@ -1964,6 +2084,7 @@ t.GetMethod("SayHello").Invoke(o, null);  // Hello world
 ```
 
 <div dir="rtl">
+
 ### مدل شیء Reflection.Emit
 
 هر نوع در **System.Reflection.Emit** معادل یک ساختار CLR است و پایه آن در **System.Reflection** تعریف شده. این امکان را می‌دهد که از constructs داینامیک به جای constructs معمولی هنگام ساخت type استفاده کنید.
@@ -1977,6 +2098,7 @@ gen.Emit(OpCodes.Call, writeLine);
 ```
 
 <div dir="rtl">
+
 با استفاده از **MethodBuilder** نیز می‌توان متد داینامیک دیگری را فراخوانی کرد، که برای ایجاد تعامل بین متدهای داینامیک در یک type ضروری است.
 <div align="center">
     
@@ -2010,6 +2132,7 @@ gen1.Emit(OpCodes.Call, tb.GetMethod("Method2"));  // Wrong
 ```
 
 <div dir="rtl">
+
 پس از `CreateType`، می‌توان روی **Type واقعی** و حتی **TypeBuilder اولیه** بازتاب (reflect) و instantiate انجام داد. TypeBuilder به‌نوعی به proxy برای Type واقعی تبدیل می‌شود.
 
 ---
@@ -2027,6 +2150,7 @@ TypeBuilder tb = modBuilder.DefineType("Widget", TypeAttributes.Public);
 ```
 
 <div dir="rtl">
+
 برای ایجاد یک متد مانند:
 </div>
 
@@ -2035,6 +2159,7 @@ public static double SquareRoot(double value) => Math.Sqrt(value);
 ```
 
 <div dir="rtl">
+
 از **DefineMethod** و ILGenerator استفاده می‌کنیم:
 </div>
 
@@ -2059,6 +2184,7 @@ Console.WriteLine(x);  // 3.16227766016838
 ```
 
 <div dir="rtl">
+
 * فراخوانی **DefineParameter** اختیاری است و فقط برای دادن نام به پارامتر استفاده می‌شود (`__p1`, `__p2` به‌صورت پیش‌فرض).
 * **ParameterBuilder** برمی‌گرداند که می‌توان با `SetCustomAttribute` به آن attribute اضافه کرد.
 
@@ -2095,6 +2221,7 @@ Console.WriteLine(args[0]);  // 3.16227766016838
 ```
 
 <div dir="rtl">
+
 * `Ldind` و `Stind` به معنی **load/store indirectly** هستند و `R8` مربوط به **عدد شناور 8 بایتی** است.
 
 برای **out parameters** نیز روند مشابه است، تنها تفاوت این است که هنگام `DefineParameter` از `ParameterAttributes.Out` استفاده می‌کنید.
@@ -2113,6 +2240,7 @@ MethodBuilder mb = tb.DefineMethod(
 ```
 
 <div dir="rtl">
+
 نکات مهم:
 
 * در متدهای نمونه، **argument صفر (Ldarg\_0)** به `this` اشاره دارد.
@@ -2151,6 +2279,7 @@ FieldBuilder field = tb.DefineField(
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ایجاد Properties
@@ -2170,6 +2299,7 @@ PropertyBuilder prop = tb.DefineProperty(
 ```
 
 <div dir="rtl">
+
 2. ایجاد متدهای get و set:
 </div>
 
@@ -2205,6 +2335,7 @@ prop.SetSetMethod(setter);
 ```
 
 <div dir="rtl">
+
 3. تست property:
 </div>
 
@@ -2217,6 +2348,7 @@ Console.WriteLine(text);  // Good emissions!
 ```
 
 <div dir="rtl">
+
 نکات:
 
 * `SpecialName` باعث می‌شود این متدها به صورت مستقیم در کامپایلر قابل دسترسی نباشند و توسط ابزارهای reflection و IntelliSense به درستی شناسایی شوند.
@@ -2244,6 +2376,7 @@ class Widget
 ```
 
 <div dir="rtl">
+
 می‌توان یک سازنده به این شکل تعریف کرد:
 </div>
 
@@ -2264,6 +2397,7 @@ gen.Emit(OpCodes.Ret);            // بازگشت
 ```
 
 <div dir="rtl">
+
 ---
 
 ### فراخوانی سازنده‌های پایه 🏛️
@@ -2279,6 +2413,7 @@ class B : A { public B() {} }
 ```
 
 <div dir="rtl">
+
 کامپایلر در واقع خط دوم را به شکل زیر ترجمه می‌کند:
 </div>
 
@@ -2287,6 +2422,7 @@ class B : A { public B() : base() {} }
 ```
 
 <div dir="rtl">
+
 در IL تولیدی، شما **باید به‌صورت صریح سازنده‌ی پایه را فراخوانی کنید** تا اجرا شود (که تقریباً همیشه می‌خواهید این کار انجام شود). فرض کنید کلاس پایه **A** است، می‌توانید این‌گونه عمل کنید:
 </div>
 
@@ -2297,6 +2433,7 @@ gen.Emit(OpCodes.Call, baseConstr);
 ```
 
 <div dir="rtl">
+
 فراخوانی سازنده‌ها با پارامتر نیز دقیقاً مشابه متدها است. 🎯
 
 ---
@@ -2313,6 +2450,7 @@ gen.Emit(OpCodes.Call, baseConstr);
 ```
 
 <div dir="rtl">
+
 این ویژگی از سازنده‌ی **XmlElementAttribute** که یک رشته می‌پذیرد استفاده می‌کند. برای استفاده از **CustomAttributeBuilder**، ابتدا باید سازنده و همچنین دو پراپرتی اضافی که می‌خواهیم مقداردهی کنیم (**Namespace** و **Order**) را بازیابی کنیم:
 </div>
 
@@ -2339,6 +2477,7 @@ myFieldBuilder.SetCustomAttribute(att);
 ```
 
 <div dir="rtl">
+
 این روش به شما امکان می‌دهد ویژگی‌ها را به صورت داینامیک به فیلدها، پراپرتی‌ها و خود نوع‌ها اضافه کنید. 🛠️
 
 ### انتشار متدها و تایپ‌های جنریک 🧩
@@ -2354,6 +2493,7 @@ ModuleBuilder modBuilder = assemBuilder.DefineDynamicModule("MainModule");
 ```
 
 <div dir="rtl">
+
 ---
 
 #### تعریف متدهای جنریک 📝
@@ -2377,6 +2517,7 @@ public static T Echo<T>(T value)
 ```
 
 <div dir="rtl">
+
 می‌تواند به شکل زیر منتشر شود:
 </div>
 
@@ -2403,6 +2544,7 @@ gen.Emit(OpCodes.Ret);
 ```
 
 <div dir="rtl">
+
 ---
 
 تابع **DefineGenericParameters** هر تعداد آرگومان رشته‌ای را می‌پذیرد—این آرگومان‌ها نام‌های موردنظر برای نوع‌های جنریک هستند. در این مثال تنها یک نوع جنریک به نام **T** نیاز داشتیم.
@@ -2417,6 +2559,7 @@ genericParams[0].SetBaseTypeConstraint(typeof(Foo));
 ```
 
 <div dir="rtl">
+
 و محدودیت‌های رابط‌ها:
 </div>
 
@@ -2425,6 +2568,7 @@ genericParams[0].SetInterfaceConstraints(typeof(IComparable));
 ```
 
 <div dir="rtl">
+
 برای بازتولید این متد:
 </div>
 
@@ -2433,6 +2577,7 @@ public static T Echo<T>(T value) where T : IComparable<T>
 ```
 
 <div dir="rtl">
+
 می‌توانید بنویسید:
 </div>
 
@@ -2443,6 +2588,7 @@ genericParams[0].SetInterfaceConstraints(
 ```
 
 <div dir="rtl">
+
 برای انواع دیگر محدودیت‌ها، **SetGenericParameterAttributes** را فراخوانی کنید. این تابع یک عضو از **GenericParameterAttributes** می‌پذیرد که شامل مقادیر زیر است:
 
 * **DefaultConstructorConstraint**
@@ -2468,6 +2614,7 @@ public class Widget<T>
 ```
 
 <div dir="rtl">
+
 می‌توانید به شکل زیر عمل کنید:
 </div>
 
@@ -2480,6 +2627,7 @@ tb.DefineField("Value", genericParams[0], FieldAttributes.Public);
 ```
 
 <div dir="rtl">
+
 محدودیت‌های جنریک را می‌توان دقیقاً همانند متدها اضافه کرد. ✅
 
 ---
@@ -2503,6 +2651,7 @@ public class Widget
 ```
 
 <div dir="rtl">
+
 این کار نسبتاً ساده است:
 </div>
 
@@ -2521,6 +2670,7 @@ gen.Emit(OpCodes.Ret);
 ```
 
 <div dir="rtl">
+
 ---
 
 حالا فرض کنید به جای یک لیست از اعداد صحیح، می‌خواهیم لیستی از ویجت‌ها داشته باشیم:
@@ -2534,6 +2684,7 @@ public class Widget
 ```
 
 <div dir="rtl">
+
 در تئوری، این تغییر ساده است؛ فقط خط زیر را جایگزین می‌کنیم:
 </div>
 
@@ -2542,6 +2693,7 @@ Type variableType = typeof(List<int>);
 ```
 
 <div dir="rtl">
+
 با این خط:
 </div>
 
@@ -2550,6 +2702,7 @@ Type variableType = typeof(List<>).MakeGenericType(tb);
 ```
 
 <div dir="rtl">
+
 اما متأسفانه این باعث پرتاب **NotSupportedException** هنگام فراخوانی **GetConstructor** می‌شود. مشکل این است که نمی‌توان **GetConstructor** را روی یک تایپ جنریک بسته با **TypeBuilder** ایجاد نشده فراخوانی کرد. همین موضوع برای **GetField** و **GetMethod** نیز صادق است.
 
 ---
@@ -2566,6 +2719,7 @@ public static MethodInfo      GetMethod(Type, MethodInfo);
 ```
 
 <div dir="rtl">
+
 اگرچه به نظر نمی‌آید، این متدها دقیقاً برای گرفتن اعضای تایپ‌های جنریک بسته با **TypeBuilder** ایجاد نشده طراحی شده‌اند!
 
 پارامتر اول: تایپ جنریک بسته
@@ -2589,6 +2743,7 @@ gen.Emit(OpCodes.Ret);
 ```
 
 <div dir="rtl">
+
 ### وابستگی‌های دایره‌ای 🔄
 
 فرض کنید می‌خواهید دو تایپ بسازید که به یکدیگر ارجاع دارند، مانند این مثال:
@@ -2600,6 +2755,7 @@ class B { public A Aye; }
 ```
 
 <div dir="rtl">
+
 می‌توانید این را به صورت داینامیک به شکل زیر ایجاد کنید:
 </div>
 
@@ -2617,6 +2773,7 @@ Type realB = bBuilder.CreateType();
 ```
 
 <div dir="rtl">
+
 توجه کنید که ما **تا زمانی که هر دو تایپ پر نشده‌اند،** روی **aBuilder** یا **bBuilder** تابع **CreateType** را فراخوانی نکردیم. اصل موضوع این است: اول همه چیز را متصل کنید، سپس **CreateType** را روی هر **TypeBuilder** فراخوانی کنید. ✅
 
 ---
@@ -2644,6 +2801,7 @@ struct B { }
 ```
 
 <div dir="rtl">
+
 می‌توان با ایجاد اول **struct B** و سپس **struct A** مشکل را حل کرد.
 
 اما اگر رابطه دایره‌ای باشد:
@@ -2655,6 +2813,7 @@ struct B { public A Aye; }
 ```
 
 <div dir="rtl">
+
 ما نمی‌توانیم این را منتشر کنیم زیرا منطقی نیست که دو struct یکدیگر را شامل شوند (C# هنگام کامپایل خطا می‌دهد).
 
 اما نسخه زیر هم قانونی و هم مفید است:
@@ -2667,6 +2826,7 @@ class B { S<A> Aye; }
 ```
 
 <div dir="rtl">
+
 در ایجاد **A**، **TypeBuilder** اکنون باید اندازه حافظه **B** را بداند و بالعکس. فرض کنید **struct S** به صورت استاتیک تعریف شده باشد. کد انتشار کلاس‌های **A** و **B** به شکل زیر است:
 </div>
 
@@ -2683,6 +2843,7 @@ Type realB = bBuilder.CreateType();
 ```
 
 <div dir="rtl">
+
 اکنون **CreateType** یک **TypeLoadException** پرتاب می‌کند، فرقی نمی‌کند که به چه ترتیبی عمل کنید:
 
 * اگر اول **aBuilder.CreateType** را فراخوانی کنید، می‌گوید «نمی‌توان تایپ B را بارگذاری کرد».
@@ -2713,6 +2874,7 @@ AppDomain.CurrentDomain.TypeResolve -= handler;
 ```
 
 <div dir="rtl">
+
 رویداد **TypeResolve** هنگام فراخوانی **aBuilder.CreateType** فعال می‌شود، در نقطه‌ای که نیاز است شما **CreateType** را روی **bBuilder** فراخوانی کنید.
 
 ### تجزیه IL 🧩
@@ -2744,6 +2906,7 @@ IL_0106:  call         System.String.Concat
 ```
 
 <div dir="rtl">
+
 برای به دست آوردن این خروجی، باید **توکن‌های باینری تشکیل‌دهنده IL** را تجزیه کنیم.
 
 ---
@@ -2780,6 +2943,7 @@ public class Disassembler
 ```
 
 <div dir="rtl">
+
 * متد استاتیک **Disassemble** تنها عضو عمومی این کلاس خواهد بود.
 * بقیه اعضا خصوصی و مختص فرآیند دیس‌اسمبلی هستند.
 * متد **Dis** حلقه اصلی را شامل می‌شود که هر دستور را پردازش می‌کند.
@@ -2810,6 +2974,7 @@ static Disassembler()
 ```
 
 <div dir="rtl">
+
 * این کار در **سازنده استاتیک** انجام شده تا تنها یک بار اجرا شود. ✅
 
 ### نوشتن DisassembleNextInstruction 🛠️
@@ -2832,6 +2997,7 @@ void DisassembleNextInstruction()
 ```
 
 <div dir="rtl">
+
 ---
 
 #### خواندن یک Opcode 🔍
@@ -2856,6 +3022,7 @@ OpCode ReadOpCode()
 ```
 
 <div dir="rtl">
+
 ---
 
 #### خواندن عملوند ⚙️
@@ -2898,6 +3065,7 @@ string ReadOperand(OpCode c)
 ```
 
 <div dir="rtl">
+
 * اگر **FormatOperand** مقدار **null** برگرداند، یعنی عملوند نیازی به قالب‌بندی خاص ندارد و به صورت **هگزادسیمال** نوشته می‌شود.
 
 می‌توان دیس‌اسمبلر را در این مرحله تست کرد با یک **FormatOperand** که همیشه **null** برگرداند. خروجی شبیه به این خواهد بود:
@@ -2915,6 +3083,7 @@ IL_00C3:  call         91 00 00 0A
 ```
 
 <div dir="rtl">
+
 * در این حالت، **opcodes** درست هستند اما عملوندها به درد خیلی نمی‌خورند.
 * ما می‌خواهیم به جای اعداد هگزادسیمال، **نام اعضا و رشته‌ها** را ببینیم.
 
@@ -2941,6 +3110,7 @@ string FormatOperand(OpCode c, int operandLength)
 ```
 
 <div dir="rtl">
+
 ---
 
 با این روش، اکنون پایه برای **یک دیس‌اسمبلر IL کامل و قابل توسعه** آماده است. ✅
@@ -2996,6 +3166,7 @@ string Get4ByteOperand(OpCode c)
 ```
 
 <div dir="rtl">
+
 * نقطه‌ای که **ResolveMember** فراخوانی می‌شود، پنجره خوبی برای ابزارهای تحلیل کد است تا وابستگی‌های متدها را گزارش کنند.
 * برای سایر opcodes چهار بایتی، **null** برگردانده می‌شود تا **ReadOperand** عملوند را به صورت هگزادسیمال نمایش دهد.
 
@@ -3028,6 +3199,7 @@ string GetSwitchTarget(int operandLength)
 ```
 
 <div dir="rtl">
+
 ---
 
 با این کد، دیس‌اسمبلر کامل می‌شود.
@@ -3041,6 +3213,7 @@ Console.WriteLine(Disassembler.Disassemble(mi));
 ```
 
 <div dir="rtl">
+
 * این خروجی IL خوانا و مشابه **ildasm** تولید می‌کند. ✅
 </div>
 

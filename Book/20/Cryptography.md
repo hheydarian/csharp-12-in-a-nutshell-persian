@@ -1,5 +1,6 @@
 
 <div dir="rtl">
+
 # فصل بیستم:  رمزنگاری
 
 در این فصل، ما به بررسی APIهای اصلی **Cryptography** در .NET می‌پردازیم:
@@ -18,6 +19,7 @@ System.Security.Cryptography;
 ```
 
 <div dir="rtl">
+
 ---
 
 ### مروری کلی 📑
@@ -49,6 +51,7 @@ File.AppendAllText ("myfile.txt", "sensitive data");
 ```
 
 <div dir="rtl">
+
 🔑 در این حالت، رمزنگاری از کلیدی استفاده می‌کند که از **رمز عبور کاربر لاگین‌شده** استخراج شده است. شما می‌توانید همین کلید استخراج‌شده ضمنی را برای رمزنگاری یک **آرایه‌ی بایت** با استفاده از **Windows Data Protection API (DPAPI)** به‌کار بگیرید.
 
 DPAPI از طریق کلاس `ProtectedData` در دسترس قرار گرفته است؛ کلاسی ساده با دو متد **static**:
@@ -63,6 +66,7 @@ public static byte[] Unprotect
 ```
 
 <div dir="rtl">
+
 🔒 هر چیزی که در `optionalEntropy` قرار دهید به کلید اضافه می‌شود و امنیت آن را افزایش می‌دهد.
 پارامتر `DataProtectionScope` دو گزینه دارد:
 
@@ -85,6 +89,7 @@ byte[] decrypted = ProtectedData.Unprotect (encrypted, null, scope);
 ```
 
 <div dir="rtl">
+
 🛡 Windows Data Protection امنیت متوسطی در برابر مهاجمی که دسترسی کامل به رایانه دارد فراهم می‌کند؛ این موضوع بستگی به قدرت رمز عبور کاربر دارد.
 با **LocalMachine**، این روش فقط در برابر کسانی که دسترسی فیزیکی یا الکترونیکی محدود دارند مؤثر است.
 
@@ -116,6 +121,7 @@ using (Stream fs = File.OpenRead ("checkme.doc"))
 ```
 
 <div dir="rtl">
+
 متد `ComputeHash` همچنین یک **آرایه‌ی بایت** را می‌پذیرد که برای hash کردن رمزهای عبور بسیار کاربردی است (روش امن‌تر در بخش **“Hashing Passwords”** در صفحه ۸۷۸ توضیح داده شده است):
 </div>
 
@@ -125,6 +131,7 @@ byte[] hash = SHA256.Create().ComputeHash (data);
 ```
 
 <div dir="rtl">
+
 📌 متد `GetBytes` در یک شیء از نوع `Encoding`، یک رشته (string) را به آرایه‌ی بایت تبدیل می‌کند؛ متد `GetString` آن را برعکس برمی‌گرداند.
 اما یک شیء `Encoding` نمی‌تواند یک آرایه‌ی بایت رمزنگاری‌شده یا hash شده را به رشته برگرداند، چون داده‌ی scramble شده معمولاً قوانین encoding متنی را نقض می‌کند.
 
@@ -213,6 +220,7 @@ byte[] encrypted = KeyDerivation.Pbkdf2 (
 ```
 
 <div dir="rtl">
+
 📦 `KeyDerivation.Pbkdf2` نیازمند نصب بسته‌ی NuGet به نام:
 `Microsoft.AspNetCore.Cryptography.KeyDerivation` است.
 اگرچه این کلاس در **namespace** مربوط به ASP.NET Core قرار دارد، اما هر برنامه‌ی .NET می‌تواند از آن استفاده کند.
@@ -254,6 +262,7 @@ using (Stream c = new CryptoStream (f, encryptor, CryptoStreamMode.Write))
 ```
 
 <div dir="rtl">
+
 ---
 
 ### نمونه رمزگشایی 🔓
@@ -272,6 +281,7 @@ using (Stream c = new CryptoStream (f, decryptor, CryptoStreamMode.Read))
 ```
 
 <div dir="rtl">
+
 ➡️ در این مثال، یک کلید ۱۶ بایتی به‌طور تصادفی ساخته شده است. اگر کلید اشتباه برای رمزگشایی استفاده شود، `CryptoStream` یک استثناء از نوع `CryptographicException` ایجاد می‌کند. گرفتن این استثناء تنها راه برای بررسی درستی کلید است.
 
 ---
@@ -325,6 +335,7 @@ rand.GetBytes (iv);
 ```
 
 <div dir="rtl">
+
 از .NET 6 به بعد:
 </div>
 
@@ -334,6 +345,7 @@ byte[] iv = RandomNumberGenerator.GetBytes (16);
 ```
 
 <div dir="rtl">
+
 اگر کلید و IV مشخص نکنید، مقادیر تصادفی قوی به‌طور خودکار تولید می‌شوند.
 می‌توانید این مقادیر را از طریق ویژگی‌های `Key` و `IV` در شیء `Aes` دریافت کنید.
 
@@ -359,6 +371,7 @@ public static byte[] Decrypt (byte[] data, byte[] key, byte[] iv)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ⚙️ معادل سازگار با همه نسخه‌های .NET
@@ -391,6 +404,7 @@ static byte[] Crypt (byte[] data, ICryptoTransform cryptor)
 ```
 
 <div dir="rtl">
+
 > 🔎 توجه: حالت **CryptoStreamMode.Write** هم برای رمزنگاری و هم برای رمزگشایی مناسب است، زیرا در هر دو حالت داده‌ها را به داخل یک **MemoryStream** تازه "پوش" می‌کنیم.
 
 ---
@@ -413,6 +427,7 @@ public static string Decrypt (string data, byte[] key, byte[] iv)
 ```
 
 <div dir="rtl">
+
 **نمونه استفاده:**
 </div>
 
@@ -430,6 +445,7 @@ Console.WriteLine(decrypted);   // Yeah!
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ⛓️ زنجیره‌سازی استریم‌ها (Chaining Streams)
@@ -463,6 +479,7 @@ using (Aes algorithm = Aes.Create())
 ```
 
 <div dir="rtl">
+
 📌 در این مثال، همه متغیرهای یک‌حرفی بخشی از زنجیره هستند. اجزای اصلی مثل **algorithm**، **encryptor** و **decryptor** در واقع به **CryptoStream** کمک می‌کنند تا عملیات رمزنگاری و رمزگشایی انجام شود.
 
 ---
@@ -590,6 +607,7 @@ using (var rsa = new RSACryptoServiceProvider())
 ```
 
 <div dir="rtl">
+
 چون هیچ کلید عمومی یا خصوصی‌ای مشخص نکردیم، فراهم‌کننده رمزنگاری به‌طور خودکار یک جفت کلید (Key Pair) با طول پیش‌فرض **١٠٢٤ بیت** ساخت.
 می‌توانید کلیدهای بلندتر (در مضارب ٨ بایت) بخواهید. برای برنامه‌های امنیتی حساس، استفاده از **٢٠٤٨ بیت** توصیه می‌شود:
 </div>
@@ -599,6 +617,7 @@ var rsa = new RSACryptoServiceProvider(2048);
 ```
 
 <div dir="rtl">
+
 ساخت کلید محاسباتی سنگین است (حدود **١٠ میلی‌ثانیه** طول می‌کشد). به همین دلیل، پیاده‌سازی RSA تولید کلید را تا زمانی که واقعاً لازم باشد (مثلاً هنگام فراخوانی `Encrypt`) به تأخیر می‌اندازد. این فرصت را می‌دهد که اگر کلید موجودی دارید، آن را بارگذاری کنید.
 
 ---
@@ -622,6 +641,7 @@ using (var rsa = new RSACryptoServiceProvider())
 ```
 
 <div dir="rtl">
+
 چون کلیدی نداشتیم، اولین بار `ToXmlString` مجبور شد یک جفت کلید تازه بسازد.
 
 بارگذاری مجدد و استفاده از آن‌ها:
@@ -650,6 +670,7 @@ using (var rsaPublicPrivate = new RSACryptoServiceProvider())
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🖊️ امضای دیجیتال (Digital Signing)
@@ -689,6 +710,7 @@ using (var publicOnly = new RSACryptoServiceProvider())
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ⚙️ جزئیات عملکرد امضا
@@ -712,6 +734,7 @@ using (var rsa = new RSACryptoServiceProvider())
 ```
 
 <div dir="rtl">
+
 `SignHash` باید بداند از چه الگوریتمی برای هش استفاده کرده‌اید. متد `CryptoConfig.MapNameToOID` این اطلاعات را از یک نام ساده مثل `"SHA1"` فراهم می‌کند.
 
 📏 اندازه امضا: خروجی امضا با اندازه کلید برابر است. در حال حاضر الگوریتمی که امضای امنی کوچکتر از **١٢٨ بایت** تولید کند (برای مثال کد فعال‌سازی محصول) وجود ندارد.

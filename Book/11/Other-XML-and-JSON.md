@@ -1,5 +1,6 @@
 
 <div dir="rtl">
+
 # فصل یازدهم: سایر تکنولوژی‌های XML و JSON
 
 در **فصل ۱۰**، ما API مربوط به **LINQ-to-XML** و به‌طور کلی XML را بررسی کردیم.
@@ -25,6 +26,7 @@
 ```
 
 <div dir="rtl">
+
 برای ساختن یک شیء از نوع `XmlReader`، کافی است متد استاتیک `XmlReader.Create` را صدا بزنید و یک `Stream`، یا یک `TextReader`، یا یک رشته‌ی URI به آن بدهید:
 </div>
 
@@ -34,6 +36,7 @@ using XmlReader reader = XmlReader.Create("customer.xml");
 ```
 
 <div dir="rtl">
+
 از آن‌جایی که **XmlReader** می‌تواند داده‌ها را از منابعی کند (مثل `Stream`‌ها و URIها) بخواند، نسخه‌های **asynchronous** برای بیشتر متدهای خود ارائه می‌دهد تا بتوانید به‌سادگی کدهای **nonblocking** بنویسید.
 (ما موضوع **asynchrony** را به‌طور کامل در فصل ۱۴ بررسی می‌کنیم.)
 
@@ -48,6 +51,7 @@ using XmlReader reader = XmlReader.Create(
 ```
 
 <div dir="rtl">
+
 شما همچنین می‌توانید یک شیء از نوع `XmlReaderSettings` ارسال کنید تا گزینه‌های **Parsing** و **Validation** را کنترل کنید.
 
 سه ویژگی مهم این کلاس که برای پرش از محتوای اضافی بسیار مفید هستند:
@@ -60,6 +64,7 @@ bool IgnoreWhitespace                // پرش از روی فضاهای خالی
 ```
 
 <div dir="rtl">
+
 در مثال زیر، به Reader می‌گوییم که nodeهای فضای خالی را **نادیده بگیرد**، چون معمولاً در سناریوهای رایج مزاحم هستند:
 </div>
 
@@ -71,6 +76,7 @@ using XmlReader reader = XmlReader.Create("customer.xml", settings);
 ```
 
 <div dir="rtl">
+
 ---
 
 ویژگی مفید دیگر در `XmlReaderSettings`، گزینه‌ی **ConformanceLevel** است.
@@ -85,6 +91,7 @@ using XmlReader reader = XmlReader.Create("customer.xml", settings);
 ```
 
 <div dir="rtl">
+
 برای اینکه این قطعه بدون خطا خوانده شود، باید مقدار `ConformanceLevel` را روی **Fragment** قرار دهید.
 
 همچنین ویژگی دیگری به نام **CloseInput** در `XmlReaderSettings` وجود دارد که مشخص می‌کند وقتی Reader بسته می‌شود، آیا باید **Stream زیربنایی** هم بسته شود یا نه. (در `XmlWriterSettings` نیز ویژگی مشابهی به نام **CloseOutput** وجود دارد.)
@@ -145,6 +152,7 @@ while (reader.Read())
 ```
 
 <div dir="rtl">
+
 خروجی:
 </div>
 
@@ -161,6 +169,7 @@ EndElement Name=customer
 ```
 
 <div dir="rtl">
+
 🔎 توجه کنید که **Attributes** (ویژگی‌ها) در پیمایش مبتنی بر `Read` لحاظ نمی‌شوند. (برای این موضوع به بخش **Reading Attributes** در صفحه‌ی ۵۵۹ مراجعه کنید.)
 
 ---
@@ -210,6 +219,7 @@ EndElement Name=customer
 ```
 
 <div dir="rtl">
+
 می‌توانیم کد زیر را بنویسیم:
 </div>
 
@@ -221,6 +231,7 @@ reader.ReadEndElement();
 ```
 
 <div dir="rtl">
+
 ---
 
 ### متدهای خلاصه‌تر 🛠️
@@ -239,6 +250,7 @@ string firstName = reader.ReadElementContentAsString("firstname", "");
 ```
 
 <div dir="rtl">
+
 آرگومان دوم به **namespace** اشاره دارد که در این مثال خالی است.
 
 همچنین نسخه‌های تایپ‌شده‌ای از این متد وجود دارد، مثل `ReadElementContentAsInt`، که خروجی را مستقیماً به نوع موردنظر Parse می‌کنند.
@@ -260,6 +272,7 @@ string firstName = reader.ReadElementContentAsString("firstname", "");
 ```
 
 <div dir="rtl">
+
 و آن را این‌طور بخوانیم:
 </div>
 
@@ -280,6 +293,7 @@ r.ReadEndElement();     // خواندن تگ پایانی customer
 ```
 
 <div dir="rtl">
+
 ---
 
 ### متد MoveToContent ⚡
@@ -309,6 +323,7 @@ decimal creditLimit = r.ReadElementContentAsDecimal("creditlimit", "");
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ترتیب تصادفی Elementها 🔀
@@ -330,6 +345,7 @@ decimal creditLimit = r.ReadElementContentAsDecimal("creditlimit", "");
 ```
 
 <div dir="rtl">
+
 در XML، این معادل است با:
 </div>
 
@@ -338,6 +354,7 @@ decimal creditLimit = r.ReadElementContentAsDecimal("creditlimit", "");
 ```
 
 <div dir="rtl">
+
 اما `XmlReader` این دو را متفاوت تفسیر می‌کند.
 
 * در حالت اول، کد زیر به‌خوبی کار می‌کند:
@@ -349,6 +366,7 @@ reader.ReadEndElement();
 ```
 
 <div dir="rtl">
+
 * اما در حالت دوم، `ReadEndElement` یک استثنا پرتاب می‌کند چون از نظر XmlReader هیچ **end element** مجزایی وجود ندارد.
 
 راه‌حل: بررسی کنید که آیا Element خالی است یا خیر:
@@ -361,6 +379,7 @@ if (!isEmpty) reader.ReadEndElement();
 ```
 
 <div dir="rtl">
+
 در عمل، این مشکل فقط زمانی آزاردهنده است که Element موردنظر قرار است **child element**‌ها داشته باشد (مثل یک customer list).
 برای Elementهایی که تنها متن ساده دارند (مثل firstname)، می‌توانید کل این موضوع را با استفاده از متدهایی مثل `ReadElementContentAsString` نادیده بگیرید.
 متدهای `ReadElementXXX` هر دو نوع **Elementهای خالی** را به‌درستی مدیریت می‌کنند ✅.
@@ -411,6 +430,7 @@ if (!isEmpty) reader.ReadEndElement();
 ```
 
 <div dir="rtl">
+
 می‌توانیم Attributeهای آن را این‌طور بخوانیم:
 </div>
 
@@ -421,6 +441,7 @@ Console.WriteLine(reader["bogus"] == null);   // True
 ```
 
 <div dir="rtl">
+
 ⚠️ نکته: `XmlReader` باید **روی یک Start Element** قرار داشته باشد تا بتوان Attributeها را خواند.
 بعد از اینکه `ReadStartElement` فراخوانی شد، Attributeها برای همیشه از دست می‌روند!
 
@@ -437,6 +458,7 @@ Console.WriteLine(reader[1]);   // archived
 ```
 
 <div dir="rtl">
+
 همچنین Indexer این امکان را می‌دهد که **Namespace** مربوط به یک Attribute (اگر وجود داشته باشد) را مشخص کنید.
 
 ویژگی `AttributeCount` تعداد Attributeهای Node فعلی را بازمی‌گرداند.
@@ -465,6 +487,7 @@ Console.WriteLine(reader[1]);   // archived
 ```
 
 <div dir="rtl">
+
 می‌توانیم این‌طور عمل کنیم:
 </div>
 
@@ -477,6 +500,7 @@ int id = reader.ReadContentAsInt();
 ```
 
 <div dir="rtl">
+
 🔍 اگر Attribute مشخص‌شده وجود نداشته باشد، `MoveToAttribute` مقدار **false** برمی‌گرداند.
 
 ---
@@ -496,6 +520,7 @@ if (reader.MoveToFirstAttribute())
 ```
 
 <div dir="rtl">
+
 🔽 خروجی:
 </div>
 
@@ -505,6 +530,7 @@ status=archived
 ```
 
 <div dir="rtl">
+
 ---
 
 ## Namespaces و Prefixes 🌐
@@ -536,6 +562,7 @@ reader.ReadStartElement("customer");
 ```
 
 <div dir="rtl">
+
 اما برای رسیدگی به حالت سوم باید از کد زیر استفاده کنیم:
 </div>
 
@@ -544,6 +571,7 @@ reader.ReadStartElement("x:customer");
 ```
 
 <div dir="rtl">
+
 سیستم دوم از دو ویژگی حساس به نام‌فضا استفاده می‌کند: **NamespaceURI** و **LocalName**. این ویژگی‌ها پیشوندها و نام‌فضاهای پیش‌فرضی که توسط عناصر والد تعریف شده‌اند را در نظر می‌گیرند. پیشوندها به‌طور خودکار گسترش می‌یابند. این یعنی:
 
 * **NamespaceURI** همیشه نام‌فضای درست و معنایی عنصر جاری را بازتاب می‌دهد.
@@ -562,6 +590,7 @@ reader.ReadStartElement("x:customer");
 ```
 
 <div dir="rtl">
+
 می‌توانیم آن را این‌طور بخوانیم:
 </div>
 
@@ -572,6 +601,7 @@ reader.ReadStartElement("city",     "OtherNamespace");
 ```
 
 <div dir="rtl">
+
 ✅ انتزاع پیشوندها معمولاً همان چیزی است که می‌خواهید. اما اگر لازم باشد، می‌توانید ببینید چه پیشوندی استفاده شده است (از طریق ویژگی **Prefix**) و سپس آن را به یک نام‌فضا تبدیل کنید (با فراخوانی **LookupNamespace**).
 
 ---
@@ -596,6 +626,7 @@ writer.WriteEndElement();
 ```
 
 <div dir="rtl">
+
 این کد سند زیر را تولید می‌کند (همان فایلی که در اولین مثال XmlReader خواندیم):
 </div>
 
@@ -608,6 +639,7 @@ writer.WriteEndElement();
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ⚙️ تنظیمات XmlWriter
@@ -630,6 +662,7 @@ writer.WriteEndElement();
 ```
 
 <div dir="rtl">
+
 * در مقابل، اگر این‌طور بنویسیم:
 </div>
 
@@ -638,6 +671,7 @@ WriteElementString("birthdate", DateTime.Now.ToString());
 ```
 
 <div dir="rtl">
+
 خروجی ناسازگار با XML خواهد بود و امکان تفسیر نادرست دارد.
 
 * **WriteString** معادل فراخوانی **WriteValue** با یک رشته است.
@@ -657,6 +691,7 @@ writer.WriteAttributeString("status", "archived");
 ```
 
 <div dir="rtl">
+
 برای نوشتن مقادیر غیررشته‌ای، از این الگو استفاده کنید:
 </div>
 
@@ -667,6 +702,7 @@ WriteEndAttribute();
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🧩 نوشتن انواع دیگر Node
@@ -712,6 +748,7 @@ writer.WriteEndElement();
 ```
 
 <div dir="rtl">
+
 خروجی این خواهد بود:
 </div>
 
@@ -724,6 +761,7 @@ writer.WriteEndElement();
 ```
 
 <div dir="rtl">
+
 🔍 توجه کنید که برای اختصار، **XmlWriter** اعلام نام‌فضای عناصر فرزند را حذف می‌کند چون قبلاً توسط عنصر والد تعریف شده‌اند.
 
 ### 📌 الگوها برای استفاده از XmlReader/XmlWriter
@@ -746,6 +784,7 @@ public class Supplier { public string Name; }
 ```
 
 <div dir="rtl">
+
 فرض کنید می‌خواهیم از **XmlReader** و **XmlWriter** برای **سریال‌سازی (Serialization)** یک شیء `Contacts` به XML استفاده کنیم. خروجی مدنظر به این صورت است:
 </div>
 
@@ -767,6 +806,7 @@ public class Supplier { public string Name; }
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ✨ بهترین روش
@@ -811,6 +851,7 @@ public class Customer
 ```
 
 <div dir="rtl">
+
 🔍 دقت کنید:
 
 * `ReadXml` عناصر شروع و پایان بیرونی را می‌خواند. اگر این کار توسط Caller انجام می‌شد، کلاس Customer نمی‌توانست Attributeهای خودش را بخواند.
@@ -847,6 +888,7 @@ public class Supplier
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 📒 کلاس Contacts
@@ -891,6 +933,7 @@ public void WriteXml (XmlWriter w)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 📤 سریال‌سازی Contacts به XML
@@ -908,6 +951,7 @@ writer.WriteEndElement();
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 📥 دسریال‌سازی از همان فایل
@@ -926,6 +970,7 @@ cts.ReadXml(reader);
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔄 ترکیب XmlReader/XmlWriter با X-DOM
@@ -945,6 +990,7 @@ XNode.ReadFrom(XmlReader)
 ```
 
 <div dir="rtl">
+
 استفاده می‌کنیم. این متد فقط بخش جاری از زیردرخت را می‌خواند، نه کل سند را.
 
 مثال:
@@ -962,6 +1008,7 @@ XNode.ReadFrom(XmlReader)
 ```
 
 <div dir="rtl">
+
 اگر یک میلیون عنصر `<logentry>` داشته باشیم، بارگذاری کل آن در X-DOM حافظه زیادی مصرف می‌کند. راه‌حل بهتر: پیمایش تک‌به‌تک با XmlReader و پردازش هر عنصر به‌وسیله XElement:
 </div>
 
@@ -982,6 +1029,7 @@ r.ReadEndElement();
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🧩 استفاده از XElement در ReadXml
@@ -1002,6 +1050,7 @@ public void ReadXml (XmlReader r)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🌐 مدیریت نام‌فضاها در XElement
@@ -1018,6 +1067,7 @@ public void ReadXml (XmlReader r)
 ```
 
 <div dir="rtl">
+
 در این حالت، `XElement`هایی که در سطح `logentry` ساخته می‌شوند، نام‌فضای بیرونی را به‌درستی به ارث می‌برند. ✅
 
 ### 📄 استفاده از XmlWriter همراه با XElement
@@ -1040,6 +1090,7 @@ w.WriteEndElement ();
 ```
 
 <div dir="rtl">
+
 استفاده از **XElement** فقط اندکی سربار در اجرا ایجاد می‌کند. اگر همین مثال را طوری تغییر دهیم که در همه‌جا از **XmlWriter** استفاده کنیم، هیچ تفاوت محسوسی در زمان اجرا دیده نمی‌شود.
 
 ---
@@ -1083,6 +1134,7 @@ APIهای JSON مایکروسافت اما این مزیت را دارند که 
 ```
 
 <div dir="rtl">
+
 * آکولادها `{}` یک **شیء JSON** را نشان می‌دهند (که شامل propertyهایی مثل `"FirstName"` و `"LastName"` است).
 * براکت‌ها `[]` یک **آرایه JSON** را نشان می‌دهند (که شامل مقادیر تکراری است). در اینجا مقادیر تکراری رشته هستند، اما می‌توانند اشیاء یا حتی آرایه‌های دیگر هم باشند.
 
@@ -1135,6 +1187,7 @@ while (reader.Read())
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 📊 خروجی برنامه
@@ -1154,6 +1207,7 @@ End of object
 ```
 
 <div dir="rtl">
+
 ✅ از آنجایی که **Utf8JsonReader** مستقیماً با UTF-8 کار می‌کند، می‌تواند **گام‌به‌گام tokenها** را بدون تبدیل ورودی به UTF-16 (فرمت رشته‌های .NET) بخواند. تبدیل به UTF-16 فقط وقتی انجام می‌شود که متدی مثل **GetString()** فراخوانی شود.
 
 جالب است بدانید که سازنده **Utf8JsonReader** مستقیماً یک **آرایه بایت** نمی‌پذیرد، بلکه یک **ReadOnlySpan<byte>** دریافت می‌کند (به همین دلیل Utf8JsonReader به‌صورت یک **ref struct** تعریف شده است). شما می‌توانید یک آرایه بایت پاس دهید چون یک **تبدیل ضمنی** از `T[]` به `ReadOnlySpan<T>` وجود دارد.
@@ -1214,6 +1268,7 @@ using (var writer = new Utf8JsonWriter (stream, options))
 ```
 
 <div dir="rtl">
+
 📄 خروجی فایل تولیدشده به این صورت خواهد بود:
 </div>
 
@@ -1227,6 +1282,7 @@ using (var writer = new Utf8JsonWriter (stream, options))
 ```
 
 <div dir="rtl">
+
 از .NET 6 به بعد، متد **WriteRawValue** اضافه شد که به شما اجازه می‌دهد **یک رشته یا آرایه بایت** را مستقیماً داخل جریان JSON بنویسید. این قابلیت در موارد خاص مفید است؛ مثلاً وقتی می‌خواهید عددی همیشه همراه با **اعشار** ذخیره شود (مثل `1.0` به‌جای `1`).
 
 ---
@@ -1241,6 +1297,7 @@ using (var writer = new Utf8JsonWriter (stream, options))
 ```
 
 <div dir="rtl">
+
 گزینه‌های **JsonWriterOptions** همچنین شامل موارد زیر هستند:
 
 * **Encoder** → کنترل escape شدن رشته‌ها
@@ -1292,6 +1349,7 @@ using JsonDocument document = JsonDocument.Parse (jsonString);
 ```
 
 <div dir="rtl">
+
 هنگام فراخوانی `Parse` می‌توانید یک **JsonDocumentOptions** هم بدهید تا نحوه مدیریت **کاماهای اضافی**، **کامنت‌ها** و **حداکثر عمق تو در تو شدن (nesting depth)** کنترل شود (این موارد در بخش **JsonReaderOptions** صفحه 570 توضیح داده شدند).
 
 ---
@@ -1308,6 +1366,7 @@ Console.WriteLine (root.ValueKind);   // Number
 ```
 
 <div dir="rtl">
+
 یک **JsonElement** می‌تواند یک **مقدار JSON** (رشته، عدد، true/false، null)، یا یک **آرایه** یا یک **شیء** را نمایش دهد.
 ویژگی **ValueKind** مشخص می‌کند که نوع آن چیست.
 
@@ -1332,6 +1391,7 @@ int number = document.RootElement.GetInt32();
 ```
 
 <div dir="rtl">
+
 همچنین متدهایی برای تبدیل رشته‌های JSON به انواع رایج CLR مثل **DateTime** (و حتی داده‌های دودویی base-64) وجود دارد.
 نسخه‌های **TryGet**\* این متدها هم هستند که در صورت خطا، **استثنا پرتاب نمی‌کنند**.
 
@@ -1354,6 +1414,7 @@ int value  = document.RootElement[3].GetInt32();      // 4
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🗂️ خواندن اشیاء JSON
@@ -1374,6 +1435,7 @@ int age = root.GetProperty ("Age").GetInt32();
 ```
 
 <div dir="rtl">
+
 یا کشف ویژگی‌ها به‌صورت پویا:
 </div>
 
@@ -1386,6 +1448,7 @@ Console.WriteLine (value.GetInt32());   // 32
 ```
 
 <div dir="rtl">
+
 ### 🔎 JsonDocument و LINQ
 
 کلاس **JsonDocument** به‌خوبی با **LINQ** سازگار است. فرض کنید فایل JSON زیر را داریم:
@@ -1415,6 +1478,7 @@ Console.WriteLine (value.GetInt32());   // 32
 ```
 
 <div dir="rtl">
+
 می‌توانیم با استفاده از **JsonDocument** و **LINQ** داده‌ها را کوئری کنیم:
 </div>
 
@@ -1435,6 +1499,7 @@ var query =
 ```
 
 <div dir="rtl">
+
 ⚠️ توجه کنید: از آنجا که کوئری‌های **LINQ** به‌صورت **Lazy** اجرا می‌شوند، باید قبل از خارج شدن محدوده (scope) و **Dispose شدن JsonDocument** (که به دلیل استفاده از دستور `using` به‌طور خودکار اتفاق می‌افتد)، کوئری را پیمایش (enumerate) کنید.
 
 ---
@@ -1467,6 +1532,7 @@ using (var writer = new Utf8JsonWriter (outputStream, options))
 ```
 
 <div dir="rtl">
+
 👉 اما اگر به **قابلیت به‌روزرسانی مستقیم DOM** نیاز دارید، بهتر است از **JsonNode** استفاده کنید.
 
 ---
@@ -1493,6 +1559,7 @@ JsonNode node = JsonNode.Parse (jsonString);
 ```
 
 <div dir="rtl">
+
 هنگام فراخوانی `Parse` می‌توانید مثل JsonDocument یک **JsonDocumentOptions** هم بدهید تا نحوه مدیریت **کاماهای اضافی**، **کامنت‌ها** و **حداکثر عمق** کنترل شود.
 
 🔑 برخلاف **JsonDocument**، اینجا دیگر نیازی به **Dispose کردن** وجود ندارد.
@@ -1535,6 +1602,7 @@ int number = node.AsValue().GetValue<int>();
 ```
 
 <div dir="rtl">
+
 اما معمولاً لازم نیست این متدها را صدا بزنید، چون اعضای پرکاربرد مستقیماً روی خود کلاس **JsonNode** در دسترس‌اند:
 </div>
 
@@ -1545,6 +1613,7 @@ int number = node.GetValue<int>();
 ```
 
 <div dir="rtl">
+
 ### خواندن مقادیر ساده 🔹
 
 همان‌طور که دیدیم، می‌توانید یک مقدار ساده را با استفاده از متد **GetValue** و مشخص کردن نوع، استخراج یا تبدیل کنید. برای آسان‌تر کردن این کار، **JsonNode** عملگرهای تبدیل صریح (**explicit cast operators**) در C# را بازتعریف کرده است، که امکان استفاده از میانبر زیر را فراهم می‌کند:
@@ -1556,6 +1625,7 @@ int number = (int)node;
 ```
 
 <div dir="rtl">
+
 این روش برای انواع استاندارد عددی، از جمله `char`، `bool`، `DateTime`، `DateTimeOffset`، `Guid` (و نسخه‌های nullable آن‌ها) و همچنین `string` کار می‌کند.
 
 اگر مطمئن نیستید که تبدیل موفق خواهد بود، باید از الگوی زیر استفاده کنید:
@@ -1567,6 +1637,7 @@ if (node.AsValue().TryGetValue<int>(out var number))
 ```
 
 <div dir="rtl">
+
 از **.NET 8** به بعد، با فراخوانی `node.GetValueKind()` می‌توانید تشخیص دهید که نود یک رشته، عدد، آرایه، شیء یا مقدار true/false است.
 
 نودهایی که از متن JSON استخراج شده‌اند، به صورت داخلی توسط یک **JsonElement** پشتیبانی می‌شوند (که بخشی از API خواندنی **JsonDocument** است). می‌توانید **JsonElement** زیرین را به این شکل استخراج کنید:
@@ -1577,6 +1648,7 @@ JsonElement je = node.GetValue<JsonElement>();
 ```
 
 <div dir="rtl">
+
 با این حال، این روش زمانی که نود به صورت صریح ایجاد شده باشد (مثلاً هنگام به‌روزرسانی DOM) کار نمی‌کند. چنین نودهایی به جای **JsonElement** توسط مقدار واقعی تجزیه‌شده پشتیبانی می‌شوند (رجوع کنید به بخش «Making updates with JsonNode» در صفحه 579).
 
 ---
@@ -1597,6 +1669,7 @@ foreach (JsonNode child in node.AsArray())
 ```
 
 <div dir="rtl">
+
 به عنوان یک میانبر، می‌توانید از اندیس‌دهنده (**indexer**) مستقیماً از کلاس **JsonNode** استفاده کنید:
 </div>
 
@@ -1605,6 +1678,7 @@ Console.WriteLine((int)node[0]);   // 1
 ```
 
 <div dir="rtl">
+
 از **.NET 8** به بعد، می‌توانید با متد **GetValues<T>** داده‌ها را به صورت `IEnumerable<T>` دریافت کنید:
 </div>
 
@@ -1613,6 +1687,7 @@ int[] values = node.AsArray().GetValues<int>().ToArray();
 ```
 
 <div dir="rtl">
+
 ---
 
 ### خواندن اشیاء JSON 🗂️
@@ -1630,6 +1705,7 @@ int age = (int)node["Age"];           // 32
 ```
 
 <div dir="rtl">
+
 برای «کشف» ویژگی‌ها می‌توانیم از این الگو استفاده کنیم:
 </div>
 
@@ -1642,6 +1718,7 @@ foreach (KeyValuePair<string, JsonNode> keyValuePair in node.AsObject())
 ```
 
 <div dir="rtl">
+
 اگر مطمئن نیستید که یک ویژگی تعریف شده است، الگوی زیر نیز کاربردی است:
 </div>
 
@@ -1653,6 +1730,7 @@ if (node.AsObject().TryGetPropertyValue("Name", out JsonNode nameNode))
 ```
 
 <div dir="rtl">
+
 ---
 
 ### پیمایش Fluent و LINQ 🔍
@@ -1684,6 +1762,7 @@ if (node.AsObject().TryGetPropertyValue("Name", out JsonNode nameNode))
 ```
 
 <div dir="rtl">
+
 می‌توانیم سومین دوست نفر دوم را این‌گونه استخراج کنیم:
 </div>
 
@@ -1692,6 +1771,7 @@ string li = (string)node[1]["Friends"][2];
 ```
 
 <div dir="rtl">
+
 همچنین این فایل به راحتی قابل پرس‌وجو با **LINQ** است:
 </div>
 
@@ -1710,6 +1790,7 @@ var query =
 ```
 
 <div dir="rtl">
+
 برخلاف **JsonDocument**، **JsonNode** نیازی به Dispose ندارد، بنابراین نگرانی از بابت آزادسازی حافظه هنگام پیمایش تنبل وجود ندارد.
 
 ---
@@ -1728,6 +1809,7 @@ Console.WriteLine(node.ToJsonString());  // {"Color":"White","Valid":true}
 ```
 
 <div dir="rtl">
+
 خط دوم میانبری برای این دستور است:
 </div>
 
@@ -1736,6 +1818,7 @@ node["Color"] = JsonValue.Create("White");
 ```
 
 <div dir="rtl">
+
 به جای اختصاص یک مقدار ساده، می‌توانید یک **JsonArray** یا **JsonObject** اختصاص دهید.
 برای حذف یک ویژگی، ابتدا به **JsonObject** تبدیل کنید (یا **AsObject** را فراخوانی کنید) و سپس متد **Remove** را فراخوانی کنید:
 </div>
@@ -1745,6 +1828,7 @@ node.AsObject().Remove("Valid");
 ```
 
 <div dir="rtl">
+
 (همچنین **JsonObject** متد **Add** دارد که در صورت وجود ویژگی، استثناء ایجاد می‌کند.)
 
 **JsonArray** نیز امکان استفاده از اندیس‌دهنده برای جایگزینی عناصر را دارد:
@@ -1756,6 +1840,7 @@ node[0] = 10;
 ```
 
 <div dir="rtl">
+
 فراخوانی **AsArray**، متدهای **Add/Insert/Remove/RemoveAt** را در اختیار شما می‌گذارد. برای مثال، حذف اولین عنصر و اضافه کردن یک عنصر به انتها:
 </div>
 
@@ -1767,6 +1852,7 @@ Console.WriteLine(arrayNode.ToJsonString());  // [2,3,4]
 ```
 
 <div dir="rtl">
+
 از **.NET 8** به بعد، می‌توانید یک **JsonNode** را با فراخوانی **ReplaceWith** نیز به‌روزرسانی کنید:
 </div>
 
@@ -1777,6 +1863,7 @@ color.ReplaceWith("Blue");
 ```
 
 <div dir="rtl">
+
 ### ساخت DOM برای JsonNode به صورت برنامه‌نویسی 🏗️
 
 **JsonArray** و **JsonObject** سازندگانی دارند که از **object initialization syntax** پشتیبانی می‌کنند، و این امکان را می‌دهند که کل DOM یک **JsonNode** را در یک عبارت بسازید:
@@ -1799,6 +1886,7 @@ var node = new JsonArray
 ```
 
 <div dir="rtl">
+
 نتیجه این ساختار، JSON زیر خواهد بود:
 </div>
 

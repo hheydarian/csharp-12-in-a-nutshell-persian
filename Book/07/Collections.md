@@ -1,5 +1,6 @@
 
 <div dir="rtl">
+
 # فصل هفتم: **مجموعه‌ها (Collections) 📚**
 
 .NET یک مجموعه استاندارد از نوع‌ها را برای ذخیره‌سازی و مدیریت مجموعه‌ای از اشیاء ارائه می‌دهد. این نوع‌ها شامل لیست‌های قابل تغییر اندازه (resizable lists)، لیست‌های پیوندی (linked lists)، دیکشنری‌های مرتب و نامرتب (sorted و unsorted dictionaries) و همچنین آرایه‌ها (arrays) هستند. از بین این‌ها، تنها آرایه‌ها بخشی از زبان C# را تشکیل می‌دهند؛ بقیه مجموعه‌ها فقط کلاس‌هایی هستند که می‌توانید مانند هر کلاس دیگری نمونه‌سازی (instantiate) کنید.
@@ -49,6 +50,7 @@ public interface IEnumerator
 ```
 
 <div dir="rtl">
+
 متد `MoveNext` عنصر فعلی یا «کرسر» (cursor) را به موقعیت بعدی منتقل می‌کند و اگر دیگر عنصری در مجموعه وجود نداشته باشد، مقدار `false` برمی‌گرداند. `Current` عنصری را که در موقعیت فعلی قرار دارد برمی‌گرداند (معمولاً از نوع `object` به نوع خاص‌تر تبدیل می‌شود). قبل از دسترسی به اولین عنصر، حتماً باید `MoveNext` فراخوانی شود — این کار اجازه می‌دهد تا مجموعه خالی نیز مدیریت شود. متد `Reset`، در صورت پیاده‌سازی، کرسر را به ابتدای مجموعه بازمی‌گرداند تا امکان پیمایش مجدد فراهم شود. وجود `Reset` بیشتر برای سازگاری با **Component Object Model (COM)** است؛ فراخوانی مستقیم آن معمولاً اجتناب می‌شود چون همیشه پشتیبانی نمی‌شود و به طور کلی لازم نیست، زیرا ایجاد یک نمونه جدید از enumerator اغلب ساده‌تر است.
 
 معمولاً مجموعه‌ها خودشان enumerator را پیاده‌سازی نمی‌کنند؛ بلکه **enumerator** را از طریق اینترفیس `IEnumerable` فراهم می‌کنند:
@@ -62,6 +64,7 @@ public interface IEnumerable
 ```
 
 <div dir="rtl">
+
 با تعریف یک متد که یک enumerator بازمی‌گرداند، `IEnumerable` انعطاف‌پذیری ایجاد می‌کند تا منطق تکرار (iteration) به کلاس دیگری سپرده شود. همچنین این به این معنی است که چند مصرف‌کننده می‌توانند همزمان مجموعه را پیمایش کنند بدون اینکه با یکدیگر تداخل داشته باشند. می‌توان `IEnumerable` را «`IEnumeratorProvider`» در نظر گرفت، و این ابتدایی‌ترین اینترفیس است که کلاس‌های مجموعه پیاده‌سازی می‌کنند.
 
 نمونه زیر استفاده سطح پایین از `IEnumerable` و `IEnumerator` را نشان می‌دهد:
@@ -80,6 +83,7 @@ while (rator.MoveNext())
 ```
 
 <div dir="rtl">
+
 با این حال، به‌ندرت پیش می‌آید که متدها روی enumerator به این شکل فراخوانی شوند، زیرا C# یک میان‌بر نحوی فراهم می‌کند: دستور `foreach`. مثال بالا با استفاده از `foreach` به شکل زیر بازنویسی می‌شود:
 </div>
 
@@ -90,6 +94,7 @@ foreach (char c in s)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### `IEnumerable<T>` و `IEnumerator<T>` 🧩
@@ -110,6 +115,7 @@ public interface IEnumerable<T> : IEnumerable
 ```
 
 <div dir="rtl">
+
 با تعریف نسخه‌ای نوع‌دار (typed) از `Current` و `GetEnumerator`، این اینترفیس‌ها ایمنی نوع ایستا (static type safety) را تقویت می‌کنند، از سربار **boxing** در عناصر نوع مقدار (value-type) جلوگیری می‌کنند و برای مصرف‌کننده راحت‌تر هستند. آرایه‌ها به‌صورت خودکار `IEnumerable<T>` را پیاده‌سازی می‌کنند (که T نوع عضو آرایه است).
 
 به لطف ایمنی نوع ایستا، فراخوانی متد زیر با آرایه‌ای از کاراکترها باعث ایجاد خطای زمان کامپایل می‌شود:
@@ -120,6 +126,7 @@ void Test (IEnumerable<int> numbers) { ... }
 ```
 
 <div dir="rtl">
+
 یک روش استاندارد در کلاس‌های مجموعه این است که `IEnumerable<T>` را به‌صورت عمومی (public) نمایش دهند و `IEnumerable` غیر Generic را از طریق پیاده‌سازی صریح اینترفیس (explicit interface implementation) «مخفی» کنند. این کار به این دلیل است که اگر مستقیماً `GetEnumerator()` فراخوانی شود، یک `IEnumerator<T>` ایمن از نظر نوع بازگردانده شود.
 
 با این حال، گاهی این قانون برای سازگاری با نسخه‌های قدیمی شکسته می‌شود (زیرا Genericها قبل از C# 2.0 وجود نداشتند). یک مثال خوب آرایه‌ها هستند — این‌ها باید `IEnumerator` غیر Generic (یا همان نسخه «کلاسیک») را برگردانند تا کدهای قبلی خراب نشوند. برای به دست آوردن `IEnumerator<T>` Generic، باید نوع را به صورت صریح تبدیل (cast) کنید:
@@ -131,6 +138,7 @@ var rator = ((IEnumerable<int>)data).GetEnumerator();
 ```
 
 <div dir="rtl">
+
 خوشبختانه به لطف دستور `foreach`، به ندرت نیاز است چنین کدی نوشته شود.
 
 **IEnumerable<T> و IDisposable ♻️**
@@ -143,6 +151,7 @@ foreach (var element in somethingEnumerable) { ... }
 ```
 
 <div dir="rtl">
+
 به معادل منطقی زیر تبدیل می‌کند:
 </div>
 
@@ -156,6 +165,7 @@ using (var rator = somethingEnumerable.GetEnumerator())
 ```
 
 <div dir="rtl">
+
 بلوک `using` تضمین می‌کند که منابع به درستی Dispose شوند — درباره `IDisposable` در فصل ۱۲ بیشتر توضیح داده می‌شود.
 
 ---
@@ -192,6 +202,7 @@ public static int Count(IEnumerable e)
 ```
 
 <div dir="rtl">
+
 چون C# با اینترفیس‌های Generic امکان **covariance** را ارائه می‌دهد، ممکن است فکر کنید می‌توانستیم به جای آن `IEnumerable<object>` دریافت کنیم. اما این روش با عناصر نوع مقدار (value-type) و مجموعه‌های قدیمی که `IEnumerable<T>` را پیاده‌سازی نکرده‌اند، شکست می‌خورد — مثالی از این نوع، `ControlCollection` در Windows Forms است.
 
 > ⚠️ نکته: در مثال بالا، ارجاعات چرخه‌ای (cyclic references) می‌توانند باعث بازگشت نامتناهی و کرش شدن برنامه شوند. ساده‌ترین راه حل، استفاده از `HashSet` است (به بخش "HashSet<T> و SortedSet<T>" در صفحه ۳۹۲ مراجعه کنید).
@@ -231,6 +242,7 @@ public class MyCollection : IEnumerable
 ```
 
 <div dir="rtl">
+
 در نگاه اول، به نظر می‌رسد `GetEnumerator` هیچ enumerator‌ای باز نمی‌گرداند! اما کامپایلر هنگام پردازش `yield return`، یک کلاس enumerator پنهان می‌سازد و `GetEnumerator` را طوری تغییر می‌دهد که آن کلاس را نمونه‌سازی و بازگرداند.
 
 این روش ساده، قدرتمند و در پیاده‌سازی **LINQ-to-Objects** بسیار استفاده می‌شود.
@@ -256,6 +268,7 @@ public class MyGenCollection : IEnumerable<int>
 ```
 
 <div dir="rtl">
+
 چون `IEnumerable<T>` از `IEnumerable` ارث‌بری می‌کند، باید هر دو نسخه Generic و غیر Generic از `GetEnumerator` پیاده‌سازی شوند. نسخه غیر Generic معمولاً به‌صورت صریح (explicit) پیاده‌سازی می‌شود تا بتواند نسخه Generic را فراخوانی کند، زیرا `IEnumerator<T>` از `IEnumerator` ارث‌بری می‌کند.
 
 ---
@@ -302,6 +315,7 @@ public class MyIntList : IEnumerable
 ```
 
 <div dir="rtl">
+
 پیاده‌سازی `Reset` اختیاری است — می‌توانید به جای آن `NotSupportedException` پرتاب کنید.
 
 ---
@@ -337,6 +351,7 @@ class MyIntList : IEnumerable<int>
 ```
 
 <div dir="rtl">
+
 نسخه Generic سریع‌تر است زیرا `IEnumerator<int>.Current` نیاز به **casting** از `int` به `object` ندارد و سربار **boxing** را حذف می‌کند.
 
 **اینترفیس‌های ICollection و IList 🗂️**
@@ -404,6 +419,7 @@ public interface ICollection<T> : IEnumerable<T>, IEnumerable
 ```
 
 <div dir="rtl">
+
 نسخه غیر Generic `ICollection` مشابه است و مجموعه‌ای شمارش‌پذیر ارائه می‌دهد، اما قابلیت تغییر محتویات مجموعه یا بررسی عضویت عناصر را ندارد:
 </div>
 
@@ -418,6 +434,7 @@ public interface ICollection : IEnumerable
 ```
 
 <div dir="rtl">
+
 این نسخه غیر Generic همچنین ویژگی‌هایی برای کمک به **سینک کردن (synchronization)** دارد (فصل ۱۴) — این ویژگی‌ها در نسخه Generic حذف شدند زیرا **Thread Safety** دیگر ذاتاً بخشی از مجموعه‌ها محسوب نمی‌شود.
 
 هر دو اینترفیس نسبتاً ساده برای پیاده‌سازی هستند. اگر بخواهید یک `ICollection<T>` فقط خواندنی پیاده‌سازی کنید، متدهای `Add`، `Remove` و `Clear` باید `NotSupportedException` پرتاب کنند.
@@ -439,6 +456,7 @@ public interface IList<T> : ICollection<T>, IEnumerable<T>, IEnumerable
 ```
 
 <div dir="rtl">
+
 متد `IndexOf` جستجوی خطی (linear search) در لیست انجام می‌دهد و اگر عنصر مشخص شده پیدا نشود، مقدار `-1` برمی‌گرداند.
 
 نسخه غیر Generic `IList` اعضای بیشتری دارد، زیرا از `ICollection` کمتری ارث‌بری می‌کند:
@@ -461,6 +479,7 @@ public interface IList : ICollection, IEnumerable
 ```
 
 <div dir="rtl">
+
 در نسخه غیر Generic، متد `Add` یک **عدد صحیح (int)** برمی‌گرداند که نشان‌دهنده **اندیس عنصر اضافه‌شده** است. در مقابل، متد `Add` در `ICollection<T>` دارای نوع بازگشتی `void` است.
 
 کلاس عمومی `List<T>` نمونه بارز پیاده‌سازی هر دو اینترفیس `IList<T>` و `IList` است. آرایه‌های C# نیز هر دو نسخه Generic و Non-Generic `IList` را پیاده‌سازی می‌کنند، اگرچه متدهایی که برای اضافه یا حذف عناصر هستند، از طریق پیاده‌سازی صریح اینترفیس پنهان شده‌اند و در صورت فراخوانی، `NotSupportedException` پرتاب می‌کنند.
@@ -477,6 +496,7 @@ public object FirstOrNull(IList list)
 ```
 
 <div dir="rtl">
+
 این کد ممکن است ظاهراً بی‌خطا باشد، اما اگر با آرایه چندبعدی فراخوانی شود، یک استثنا پرتاب خواهد کرد. می‌توان در زمان اجرا بررسی کرد که آیا آرایه چندبعدی است یا خیر:
 </div>
 
@@ -485,6 +505,7 @@ list.GetType().IsArray && list.GetType().GetArrayRank() > 1
 ```
 
 <div dir="rtl">
+
 ---
 
 ### IReadOnlyCollection<T> و IReadOnlyList<T> 🔒
@@ -506,6 +527,7 @@ public interface IReadOnlyList<out T> : IReadOnlyCollection<T>,
 ```
 
 <div dir="rtl">
+
 از آنجا که پارامتر نوع (`T`) تنها در **موقعیت خروجی** استفاده می‌شود، به صورت **Covariant** علامت‌گذاری شده است. این امکان را می‌دهد که مثلاً **لیستی از گربه‌ها** به عنوان یک **لیست فقط خواندنی از حیوانات** تلقی شود.
 
 در مقابل، `T` در `ICollection<T>` و `IList<T>` Covariant نیست، زیرا در هر دو موقعیت ورودی و خروجی استفاده می‌شود.
@@ -549,6 +571,7 @@ numbers[1] = 54321;
 ```
 
 <div dir="rtl">
+
 <div align="center">
     
 ![Conventions-UsedThis-Book](../../assets/image/07/Table-7-3.jpeg) 
@@ -562,6 +585,7 @@ arrayB = arrayA
 ```
 
 <div dir="rtl">
+
 منجر به ایجاد **دو متغیری می‌شود که به همان آرایه ارجاع می‌دهند**.
 
 به همین ترتیب، **دو آرایه مجزا همیشه در آزمون برابری شکست خواهند خورد**، مگر اینکه از یک **مقایسه‌کننده برابری ساختاری (Structural Equality Comparer)** استفاده کنید که هر عنصر آرایه را مقایسه می‌کند:
@@ -579,6 +603,7 @@ Console.WriteLine(se1.Equals(a2, StructuralComparisons.StructuralEqualityCompare
 ```
 
 <div dir="rtl">
+
 آرایه‌ها می‌توانند با فراخوانی متد `Clone` کپی شوند:
 </div>
 
@@ -587,6 +612,7 @@ arrayB = arrayA.Clone();
 ```
 
 <div dir="rtl">
+
 اما این یک **کپی سطحی (Shallow Clone)** ایجاد می‌کند، یعنی فقط **حافظه‌ای که خود آرایه اشغال کرده است** کپی می‌شود. اگر آرایه شامل **اشیاء Value-Type** باشد، خود مقادیر کپی می‌شوند؛ اما اگر شامل **اشیاء Reference-Type** باشد، فقط **ارجاعات (References)** کپی می‌شوند، در نتیجه دو آرایه‌ای خواهید داشت که اعضای آن‌ها به **همان اشیاء** اشاره می‌کنند.
 
 شکل ۷-۳ اثر این موضوع را هنگام افزودن کد زیر به مثال نشان می‌دهد:
@@ -598,6 +624,7 @@ StringBuilder[] shallowClone = (StringBuilder[]) builders.Clone();
 ```
 
 <div dir="rtl">
+
 <div align="center">
     
 ![Conventions-UsedThis-Book](../../assets/image/07/Table-7-4.jpeg) 
@@ -623,6 +650,7 @@ int last = myArray[myArray.Length - 1];
 ```
 
 <div dir="rtl">
+
 همچنین می‌توانید یک آرایه را **پویا (Dynamic)** با استفاده از `Array.CreateInstance` بسازید. این روش به شما امکان می‌دهد نوع عنصر و **بعد (Rank)** را در زمان اجرا مشخص کنید و همچنین آرایه‌های **غیر صفر-مبنا** ایجاد کنید. آرایه‌های غیر صفر-مبنا با **.NET Common Language Specification (CLS)** سازگار نیستند و نباید به‌عنوان اعضای عمومی در کتابخانه‌هایی که ممکن است توسط برنامه‌ای در F# یا Visual Basic استفاده شوند، ارائه شوند.
 
 متدهای `GetValue` و `SetValue` اجازه می‌دهند عناصر آرایه‌های پویا یا معمولی را دسترسی یا مقداردهی کنید:
@@ -641,6 +669,7 @@ string s2 = cSharpArray[0];
 ```
 
 <div dir="rtl">
+
 آرایه‌های صفر-مبنا که به‌صورت پویا ایجاد می‌شوند، می‌توانند به آرایه‌ای از نوع مشابه یا **سازگار** در C# تبدیل شوند. برای مثال، اگر `Apple` از `Fruit` ارث‌بری کند، می‌توان `Apple[]` را به `Fruit[]` تبدیل کرد. این مسئله دلیل استفاده از کلاس `Array` به جای `object[]` برای نوع یکنواخت را توضیح می‌دهد، زیرا `object[]` با **آرایه‌های چندبعدی و Value-Type** سازگار نیست.
 
 `GetValue` و `SetValue` همچنین روی آرایه‌های ساخته شده توسط کامپایلر نیز کار می‌کنند و زمانی که می‌خواهید **متدی بنویسید که با هر نوع و بعدی از آرایه کار کند** مفید هستند. برای آرایه‌های چندبعدی، آن‌ها **آرایه‌ای از ایندکس‌ها** می‌پذیرند:
@@ -652,6 +681,7 @@ public void SetValue(object value, params int[] indices)
 ```
 
 <div dir="rtl">
+
 مثال زیر، **اولین عنصر هر آرایه‌ای را بدون توجه به بعد آن چاپ می‌کند**:
 </div>
 
@@ -673,6 +703,7 @@ void Demo()
 ```
 
 <div dir="rtl">
+
 ---
 
 برای **آرایه‌هایی با نوع ناشناخته اما بعد مشخص**، **Generics** راهکار ساده‌تر و کارآمدتری ارائه می‌دهند:
@@ -686,6 +717,7 @@ void WriteFirstValue<T>(T[] array)
 ```
 
 <div dir="rtl">
+
 متد `SetValue` در صورت ناسازگار بودن نوع عنصر با آرایه، استثنا پرتاب می‌کند.
 
 هنگام ایجاد آرایه—چه با **سینتکس زبان** و چه با `Array.CreateInstance`—عناصر آرایه **به‌صورت خودکار به مقدار پیش‌فرضشان مقداردهی می‌شوند**. برای آرایه‌های Reference-Type، این مقداردهی با `null` انجام می‌شود؛ برای آرایه‌های Value-Type، اعضا به صورت بیت‌به‌بیت صفر می‌شوند.
@@ -698,6 +730,7 @@ public static void Clear(Array array, int index, int length);
 ```
 
 <div dir="rtl">
+
 این متد اندازه آرایه را تغییر نمی‌دهد، بر خلاف `ICollection<T>.Clear` که تعداد عناصر را به صفر کاهش می‌دهد.
 
 ---
@@ -714,6 +747,7 @@ foreach (int val in myArray)
 ```
 
 <div dir="rtl">
+
 همچنین می‌توان از **متد استاتیک `Array.ForEach`** استفاده کرد:
 </div>
 
@@ -723,6 +757,7 @@ public delegate void Action<T>(T obj);
 ```
 
 <div dir="rtl">
+
 مثال بازنویسی شده با `Array.ForEach`:
 </div>
 
@@ -731,6 +766,7 @@ Array.ForEach(new[] { 1, 2, 3 }, Console.WriteLine);
 ```
 
 <div dir="rtl">
+
 و در C# 12، می‌توان این را ساده‌تر کرد:
 </div>
 
@@ -739,6 +775,7 @@ Array.ForEach([1, 2, 3], Console.WriteLine);
 ```
 
 <div dir="rtl">
+
 ### طول و بعد آرایه 📏
 
 کلاس `Array` متدها و ویژگی‌های زیر را برای **پرس‌وجو درباره طول و بعد** آرایه ارائه می‌دهد:
@@ -756,6 +793,7 @@ public int Rank { get; }    // تعداد بعدهای آرایه را باز م
 ```
 
 <div dir="rtl">
+
 * `GetLength` و `GetLongLength` طول یک بعد مشخص (0 برای آرایه‌های تک‌بعدی) را باز می‌گردانند.
 * `Length` و `LongLength` تعداد کل عناصر آرایه را در **تمامی ابعاد** بازمی‌گردانند.
 * `GetLowerBound` و `GetUpperBound` در آرایه‌های **غیر صفر-مبنا** کاربرد دارند. `GetUpperBound` همان نتیجه‌ی `GetLowerBound + GetLength` برای یک بعد مشخص را بازمی‌گرداند.
@@ -794,6 +832,7 @@ public delegate bool Predicate<T>(T obj);
 ```
 
 <div dir="rtl">
+
 مثال:
 </div>
 
@@ -806,6 +845,7 @@ bool ContainsA(string name) { return name.Contains("a"); }
 ```
 
 <div dir="rtl">
+
 همان مثال با **Lambda Expression**:
 </div>
 
@@ -815,6 +855,7 @@ string match = Array.Find(names, n => n.Contains("a")); // Jack
 ```
 
 <div dir="rtl">
+
 * `FindAll` آرایه‌ای شامل **تمام عناصر مطابق با Predicate** بازمی‌گرداند و مشابه `Enumerable.Where` در `System.Linq` است، با این تفاوت که خروجی به صورت آرایه است، نه `IEnumerable<T>`.
 
 * `Exists` باز می‌گرداند `true` اگر **هر عضو آرایه** معیار Predicate را برآورده کند، مشابه `Any` در `System.Linq.Enumerable`.
@@ -836,6 +877,7 @@ public static void Sort(Array keys, Array items);
 ```
 
 <div dir="rtl">
+
 هر یک از این متدها به‌صورت **Overload** می‌توانند پارامترهای زیر را هم بگیرند:
 
 * `int index` → شروع مرتب‌سازی از ایندکس مشخص
@@ -852,6 +894,7 @@ Array.Sort(numbers);  // آرایه حالا { 1, 2, 3 }
 ```
 
 <div dir="rtl">
+
 متدهای **جفت آرایه‌ای**، عناصر هر دو آرایه را **به‌صورت هم‌زمان مرتب** می‌کنند و ترتیب را براساس آرایه اول اعمال می‌کنند:
 </div>
 
@@ -864,6 +907,7 @@ Array.Sort(numbers, words);
 ```
 
 <div dir="rtl">
+
 > ⚠️ نکته: `Array.Sort` نیاز دارد که عناصر آرایه `IComparable` را پیاده‌سازی کنند. اگر عناصر قابل مقایسه ذاتی نباشند یا بخواهید ترتیب پیش‌فرض را تغییر دهید، باید **Comparison سفارشی** یا شیء `IComparer<T>` ارائه دهید.
 
 مثال با **Comparison Delegate**:
@@ -874,6 +918,7 @@ public delegate int Comparison<T>(T x, T y);
 ```
 
 <div dir="rtl">
+
 * اگر `x` قبل از `y` باشد → عدد منفی بازمی‌گرداند
 * اگر `x` بعد از `y` باشد → عدد مثبت بازمی‌گرداند
 * اگر برابر باشند → `0` بازمی‌گرداند
@@ -888,6 +933,7 @@ Array.Sort(numbers, (x, y) => x % 2 == y % 2 ? 0 : x % 2 == 1 ? -1 : 1);
 ```
 
 <div dir="rtl">
+
 * به جای `Array.Sort` می‌توانید از **LINQ** و متدهای `OrderBy` و `ThenBy` استفاده کنید.
   این روش **آرایه اصلی را تغییر نمی‌دهد** و خروجی را به صورت یک `IEnumerable<T>` مرتب‌شده ارائه می‌دهد.
 
@@ -904,6 +950,7 @@ public static void Reverse(Array array, int index, int length);
 ```
 
 <div dir="rtl">
+
 ---
 
 ### کپی کردن آرایه 📋
@@ -938,6 +985,7 @@ public delegate TOutput Converter<TInput, TOutput>(TInput input);
 ```
 
 <div dir="rtl">
+
 مثال:
 </div>
 
@@ -948,6 +996,7 @@ int[] wholes = Array.ConvertAll(reals, r => Convert.ToInt32(r));
 ```
 
 <div dir="rtl">
+
 * `Array.Resize` → با ایجاد آرایه جدید و کپی عناصر، آرایه را تغییر اندازه می‌دهد و نتیجه را از طریق پارامتر مرجع بازمی‌گرداند.
   ⚠️ توجه: سایر مراجع به آرایه اصلی **تغییری نمی‌کنند**.
 
@@ -1030,6 +1079,7 @@ public class List<T> : IList<T>, IReadOnlyList<T>
 ```
 
 <div dir="rtl">
+
 * `List<T>` همچنین **نسخه‌های نمونه‌ای تمام متدهای جستجو و مرتب‌سازی آرایه** را دارد.
 
 ---
@@ -1062,6 +1112,7 @@ List<int> lengths = words.ConvertAll(s => s.Length);
 ```
 
 <div dir="rtl">
+
 ---
 
 ### تفاوت با ArrayList ⚠️
@@ -1075,6 +1126,7 @@ string[] strArr = (string[])al.ToArray(typeof(string));
 ```
 
 <div dir="rtl">
+
 * چنین castهایی توسط کامپایلر **چک نمی‌شوند** و ممکن است در زمان اجرا خطا بدهند:
 </div>
 
@@ -1083,6 +1135,7 @@ int first = (int)al[0]; // Exception در زمان اجرا
 ```
 
 <div dir="rtl">
+
 * `ArrayList` مشابه `List<object>` عمل می‌کند و برای **لیست‌های چند نوعی** مناسب است.
 * مزیت انتخاب `ArrayList` در این حالت: **سهولت استفاده با Reflection** نسبت به `List<object>`
 
@@ -1096,6 +1149,7 @@ List<int> list = al.Cast<int>().ToList();
 ```
 
 <div dir="rtl">
+
 * `Cast` و `ToList` متدهای **Extension** در `System.Linq.Enumerable` هستند.
 
 ### LinkedList<T> 🔗
@@ -1118,6 +1172,7 @@ null <- [Node1] <-> [Node2] <-> [Node3] -> null
 ```
 
 <div dir="rtl">
+
 #### مزیت اصلی
 
 * درج عنصر در هر نقطه از لیست **بسیار سریع و کارآمد** است، زیرا فقط کافیست یک گره جدید بسازید و چند ارجاع را به‌روزرسانی کنید.
@@ -1154,6 +1209,7 @@ public sealed class LinkedListNode<T>
 ```
 
 <div dir="rtl">
+
 #### افزودن گره‌ها
 
 می‌توانید موقعیت گره جدید را **نسبت به گره‌ای دیگر** یا **در ابتدای/انتهای لیست** مشخص کنید:
@@ -1171,6 +1227,7 @@ public LinkedListNode<T> AddBefore(LinkedListNode<T> node, T value);
 ```
 
 <div dir="rtl">
+
 #### حذف گره‌ها
 
 متدهای مشابه برای حذف عناصر وجود دارد:
@@ -1185,6 +1242,7 @@ public void Remove(LinkedListNode<T> node);
 ```
 
 <div dir="rtl">
+
 #### خواص عمومی
 
 لیست داخلی LinkedList<T> شامل **تعداد عناصر** و **سر و ته لیست** است و با خواص زیر در دسترس قرار دارد:
@@ -1197,6 +1255,7 @@ public LinkedListNode<T> Last { get; }        // سریع
 ```
 
 <div dir="rtl">
+
 #### جستجو
 
 LinkedList<T> متدهای جستجوی زیر را ارائه می‌دهد (با پیمایش داخلی لیست):
@@ -1209,6 +1268,7 @@ public LinkedListNode<T> FindLast(T value);
 ```
 
 <div dir="rtl">
+
 #### کپی و پیمایش
 
 برای پردازش ایندکس‌بندی‌شده و استفاده از `foreach`:
@@ -1220,6 +1280,7 @@ public Enumerator<T> GetEnumerator();
 ```
 
 <div dir="rtl">
+
 #### مثال عملی:
 </div>
 
@@ -1241,6 +1302,7 @@ foreach (string s in tune)
 ```
 
 <div dir="rtl">
+
 > این مثال نشان می‌دهد چگونه می‌توان عناصر را اضافه، حذف و جستجو کرد و از پیمایش foreach برای چاپ استفاده کرد.
 ### Queue<T> و Stack<T> ⏳📚
 
@@ -1270,6 +1332,7 @@ Console.WriteLine(q.Dequeue()); // Exception (صف خالی)
 ```
 
 <div dir="rtl">
+
 > صف‌ها معمولاً با آرایه داخلی پیاده‌سازی می‌شوند و اندیس‌های سر و ته صف باعث سریع بودن عملیات Enqueue/Dequeue می‌شوند.
 
 ---
@@ -1301,6 +1364,7 @@ Console.WriteLine(s.Pop());     // Exception
 ```
 
 <div dir="rtl">
+
 > پشته‌ها هم مشابه صف‌ها با آرایه داخلی پیاده‌سازی می‌شوند و در صورت نیاز به تغییر اندازه، آرایه داخلی بزرگ‌تر جایگزین می‌شود.
 
 ---
@@ -1318,6 +1382,7 @@ bits[1] = true;
 ```
 
 <div dir="rtl">
+
 * عملیات‌های بیت به بیت: **And, Or, Xor, Not**
 </div>
 
@@ -1327,6 +1392,7 @@ Console.WriteLine(bits[1]);   // False
 ```
 
 <div dir="rtl">
+
 > BitArray برای ذخیره و پردازش مجموعه‌های بزرگ بیتی بسیار مناسب است.
 
 ### HashSet<T> و SortedSet<T> 🔹🔸
@@ -1366,6 +1432,7 @@ foreach (char c in letters)
 ```
 
 <div dir="rtl">
+
 ---
 
 #### عملیات مجموعه‌ای (Set Operations)
@@ -1387,6 +1454,7 @@ foreach (char c in letters) Console.Write(c); // euio
 ```
 
 <div dir="rtl">
+
 * روش‌های **غیرتغییری (Non-destructive)** برای بررسی مجموعه:
   `IsSubsetOf`, `IsProperSubsetOf`, `IsSupersetOf`, `IsProperSupersetOf`, `Overlaps`, `SetEquals`
 
@@ -1410,6 +1478,7 @@ foreach (char c in letters.GetViewBetween('f', 'i'))
 ```
 
 <div dir="rtl">
+
 ---
 
 ### نکته مهم
@@ -1459,6 +1528,7 @@ public interface IDictionary<TKey, TValue> : ICollection<KeyValuePair<TKey, TVal
 ```
 
 <div dir="rtl">
+
 * **Add**: یک عنصر جدید اضافه می‌کند، اگر کلید تکراری باشد، استثناء می‌دهد.
 * **Indexer (`this[TKey]`)**: اگر کلید موجود نباشد، استثناء پرتاب می‌کند.
 * **TryGetValue**: سعی می‌کند مقدار را دریافت کند، اگر کلید نباشد `false` برمی‌گرداند.
@@ -1488,6 +1558,7 @@ public struct DictionaryEntry
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ۴. Dictionary\<TKey,TValue> و Hashtable
@@ -1514,6 +1585,7 @@ if (!d.TryGetValue("onE", out val))
 ```
 
 <div dir="rtl">
+
 * کلیدها **تکراری نمی‌توانند باشند**.
 * عناصر مرتب یا به ترتیب اضافه شدن **ذخیره نمی‌شوند**.
 
@@ -1582,6 +1654,7 @@ foreach (MethodInfo m in sorted.Values)
 ```
 
 <div dir="rtl">
+
 نتیجه شمارش اول:
 </div>
 
@@ -1594,6 +1667,7 @@ ToString
 ```
 
 <div dir="rtl">
+
 نتیجه شمارش دوم:
 </div>
 
@@ -1606,6 +1680,7 @@ ToString returns a System.String
 ```
 
 <div dir="rtl">
+
 توجه کنید که دیکشنری از طریق **اندیسری (indexer)** پر شد. اگر به جای آن از متد **Add** استفاده می‌کردیم، خطا رخ می‌داد چون کلاس `object` متد **Equals** را overload کرده و نمی‌توان همان کلید را دوبار اضافه کرد. با استفاده از اندیسری، ورودی بعدی جایگزین ورودی قبلی می‌شود و این خطا جلوگیری می‌شود.
 
 همچنین می‌توانید چندین عضو با یک کلید را با تبدیل هر مقدار به یک **لیست** ذخیره کنید:
@@ -1616,6 +1691,7 @@ SortedList<string, List<MethodInfo>>
 ```
 
 <div dir="rtl">
+
 در ادامه مثال، بازیابی `MethodInfo` با کلید `"GetHashCode"` همانند یک دیکشنری معمولی انجام می‌شود:
 </div>
 
@@ -1624,6 +1700,7 @@ Console.WriteLine(sorted["GetHashCode"]);  // Int32 GetHashCode()
 ```
 
 <div dir="rtl">
+
 همه کارهایی که تاکنون انجام داده‌ایم، با **SortedDictionary<,>** نیز قابل اجرا است. اما دو خط زیر، که آخرین کلید و مقدار را بازیابی می‌کنند، فقط با **SortedList** کار می‌کنند:
 </div>
 
@@ -1633,6 +1710,7 @@ Console.WriteLine(sorted.Values[sorted.Count - 1].IsVirtual); // True
 ```
 
 <div dir="rtl">
+
 ### 🛠️ Collections قابل سفارشی‌سازی و پراکسی‌ها
 
 کلاس‌های مجموعه‌ای که در بخش‌های قبلی بررسی شد، راحت هستند چون می‌توانید مستقیماً نمونه‌سازی (instantiate) کنید، اما **امکان کنترل رفتار هنگام افزودن یا حذف یک آیتم** را به شما نمی‌دهند. در برنامه‌هایی با مجموعه‌های قوی‌تایپ (strongly typed)، گاهی به این کنترل نیاز دارید؛ برای مثال:
@@ -1667,6 +1745,7 @@ public class Collection<T> :
 ```
 
 <div dir="rtl">
+
 متدهای مجازی، **درگاه**ی برای “hook in” کردن شما فراهم می‌کنند تا رفتار پیش‌فرض لیست را تغییر یا تقویت کنید. ویژگی محافظت‌شده **Items** به پیاده‌ساز اجازه می‌دهد به **لیست داخلی (inner list)** دسترسی مستقیم داشته باشد و بدون فعال شدن متدهای مجازی، تغییرات داخلی ایجاد کند.
 
 لازم نیست متدهای مجازی override شوند؛ می‌توان تا زمانی که نیازی به تغییر رفتار پیش‌فرض لیست وجود دارد، آن‌ها را دست‌نخورده گذاشت. مثال زیر استفاده معمولی **Collection<T>** را نشان می‌دهد:
@@ -1701,6 +1780,7 @@ public class Zoo
 ```
 
 <div dir="rtl">
+
 همانطور که می‌بینیم، **AnimalCollection** از نظر عملکردی تفاوتی با یک `List<Animal>` ساده ندارد؛ نقش آن فراهم کردن پایه‌ای برای **گسترش آینده** است.
 
 ---
@@ -1760,6 +1840,7 @@ public class Zoo
 ```
 
 <div dir="rtl">
+
 **نکته مهم:** `Collection<T>` همچنین یک سازنده می‌پذیرد که یک `IList<T>` موجود را دریافت می‌کند. برخلاف سایر کلاس‌های مجموعه، لیست ارائه‌شده **proxied** می‌شود نه کپی؛ بنابراین تغییرات بعدی در لیست اصلی، در `Collection<T>` نیز منعکس می‌شود (هرچند متدهای مجازی آن فعال نمی‌شوند). به همین ترتیب، تغییرات اعمال‌شده از طریق `Collection<T>`، لیست زیرین را تغییر می‌دهد.
 
 ---
@@ -1802,6 +1883,7 @@ public abstract class KeyedCollection<TKey, TItem> : Collection<TItem>
 ```
 
 <div dir="rtl">
+
 * متد `GetKeyForItem` توسط پیاده‌ساز override می‌شود تا **کلید یک آیتم را از شیء زیرین** دریافت کند.
 * متد `ChangeItemKey` باید **هنگام تغییر کلید آیتم** فراخوانی شود تا دیکشنری داخلی به‌روزرسانی شود.
 * ویژگی `Dictionary` دیکشنری داخلی را برمی‌گرداند که برای **پیاده‌سازی جستجو** استفاده می‌شود و هنگام افزودن اولین آیتم ساخته می‌شود. می‌توان رفتار ایجاد دیکشنری داخلی را با تعیین **creation threshold** در سازنده تغییر داد، به طوری که تا رسیدن به آستانه، جستجو با خطی انجام شود.
@@ -1861,6 +1943,7 @@ public class Zoo
 ```
 
 <div dir="rtl">
+
 مثال استفاده از آن:
 </div>
 
@@ -1875,6 +1958,7 @@ Console.WriteLine(zoo.Animals["Mr Roo"].Popularity);        // 10
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🏛️ DictionaryBase
@@ -1907,6 +1991,7 @@ public class Test
 ```
 
 <div dir="rtl">
+
 با اینکه `Names` یک رابط فقط-خواندنی بازمی‌گرداند، مصرف‌کننده هنوز می‌تواند در زمان اجرا به `List<string>` یا `IList<string>` **downcast** کند و سپس متدهای `Add`، `Remove` یا `Clear` را فراخوانی کند.
 
 راه‌حل **ReadOnlyCollection<T>** این مشکل را به صورت محکم‌تر حل می‌کند:
@@ -1925,6 +2010,7 @@ public class Test
 ```
 
 <div dir="rtl">
+
 در این حالت، تنها اعضای داخل کلاس **Test** می‌توانند لیست `names` را تغییر دهند:
 </div>
 
@@ -1938,6 +2024,7 @@ t.Names.Add("test");                    // خطای کامپایل
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🛡️ Immutable Collections
@@ -1968,6 +2055,7 @@ System.Collections.Immutable
 ```
 
 <div dir="rtl">
+
 <div align="center">
     
 ![Conventions-UsedThis-Book](../../assets/image/07/Table-7-7.jpeg) 
@@ -1993,6 +2081,7 @@ ImmutableArray<int> array = ImmutableArray.Create<int>(1, 2, 3);
 ```
 
 <div dir="rtl">
+
 همچنین متد **CreateRange<T>** وجود دارد که مشابه `Create<T>` عمل می‌کند؛ تفاوت آن در این است که **پارامتر آن از نوع IEnumerable<T>** است، نه `params T[]`.
 
 می‌توانید یک **مجموعه immutable** را از یک `IEnumerable<T>` موجود با استفاده از **extension methodهای مناسب** بسازید (`ToImmutableArray`، `ToImmutableList`، `ToImmutableDictionary` و غیره):
@@ -2003,6 +2092,7 @@ var list = new[] { 1, 2, 3 }.ToImmutableList();
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔄 دستکاری Immutable Collections
@@ -2019,6 +2109,7 @@ Console.WriteLine(newList.Count);   // 4
 ```
 
 <div dir="rtl">
+
 متد **Remove** نیز به همین شکل عمل می‌کند و یک مجموعه جدید با آیتم حذف‌شده برمی‌گرداند.
 
 اضافه یا حذف مکرر به این روش **ناکارآمد است**، زیرا برای هر عملیات یک مجموعه immutable جدید ساخته می‌شود.
@@ -2030,6 +2121,7 @@ var anotherList = oldList.AddRange(new[] { 4, 5, 6 });
 ```
 
 <div dir="rtl">
+
 همچنین **ImmutableList** و **ImmutableArray** متدهای **Insert** و **InsertRange** برای درج آیتم در اندیس مشخص، **RemoveAt** برای حذف در اندیس مشخص و **RemoveAll** بر اساس predicate ارائه می‌دهند.
 
 ---
@@ -2051,6 +2143,7 @@ ImmutableArray<int> myImmutable = builder.ToImmutable();
 ```
 
 <div dir="rtl">
+
 همچنین می‌توانید **چندین تغییر را روی یک مجموعه immutable موجود به‌صورت گروهی** انجام دهید:
 </div>
 
@@ -2063,6 +2156,7 @@ ImmutableArray<int> myImmutable2 = builder2.ToImmutable(); // مجموعه جد�
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ⚡ Immutable Collections و عملکرد
@@ -2120,6 +2214,7 @@ Console.WriteLine(frozen.Contains(10));  // True
 ```
 
 <div dir="rtl">
+
 مجموعه‌های frozen برای **جستجوهایی که در ابتدای برنامه مقداردهی می‌شوند و در طول برنامه استفاده می‌شوند** عالی هستند:
 </div>
 
@@ -2141,6 +2236,7 @@ class Disassembler
 ```
 
 <div dir="rtl">
+
 مجموعه‌های frozen **رابط استاندارد dictionary/set** و نسخه‌های فقط‌خواندنی آن‌ها را پیاده‌سازی می‌کنند. در مثال بالا، **FrozenDictionary\<string,string>** به‌عنوان **فیلدی از نوع IReadOnlyDictionary\<string,string>** در دسترس قرار گرفته است.
 
 ---
@@ -2209,6 +2305,7 @@ public interface IEqualityComparer   // نسخه nongeneric
 ```
 
 <div dir="rtl">
+
 برای نوشتن **comparer سفارشی**، می‌توانید یکی یا هر دو interface را پیاده‌سازی کنید (پیاده‌سازی هر دو حداکثر سازگاری را فراهم می‌کند).
 
 چون این کار کمی وقت‌گیر است، یک جایگزین استفاده از **کلاس انتزاعی EqualityComparer** است:
@@ -2227,6 +2324,7 @@ public abstract class EqualityComparer<T> : IEqualityComparer, IEqualityComparer
 ```
 
 <div dir="rtl">
+
 کلاس **EqualityComparer** هر دو interface را پیاده‌سازی می‌کند و تنها کاری که شما باید انجام دهید، **override کردن دو متد انتزاعی** است.
 
 ---
@@ -2258,6 +2356,7 @@ public class LastFirstEqComparer : EqualityComparer<Customer>
 ```
 
 <div dir="rtl">
+
 حالا دو customer ایجاد می‌کنیم:
 </div>
 
@@ -2267,6 +2366,7 @@ Customer c2 = new Customer("Bloggs", "Joe");
 ```
 
 <div dir="rtl">
+
 چون **object.Equals** را override نکرده‌ایم، رفتار پیش‌فرض **reference equality** اعمال می‌شود:
 </div>
 
@@ -2276,6 +2376,7 @@ Console.WriteLine(c1.Equals(c2));  // False
 ```
 
 <div dir="rtl">
+
 در استفاده از Dictionary بدون تعیین equality comparer، همین رفتار پیش‌فرض اعمال می‌شود:
 </div>
 
@@ -2286,6 +2387,7 @@ Console.WriteLine(d.ContainsKey(c2));  // False
 ```
 
 <div dir="rtl">
+
 اما با استفاده از equality comparer سفارشی:
 </div>
 
@@ -2297,6 +2399,7 @@ Console.WriteLine(d.ContainsKey(c2));  // True
 ```
 
 <div dir="rtl">
+
 ⚠️ نکته: هنگام استفاده از Dictionary با یک **comparer سفارشی**، باید مراقب باشید که **FirstName یا LastName مشتری تغییر نکند**، چون تغییر HashCode باعث شکستن Dictionary می‌شود.
 
 ---
@@ -2318,6 +2421,7 @@ static bool Foo<T>(T x, T y)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🧩 ReferenceEqualityComparer.Instance (.NET 5+)
@@ -2347,6 +2451,7 @@ public interface IComparer<in T>
 ```
 
 <div dir="rtl">
+
 همانند **equality comparers**، یک کلاس انتزاعی وجود دارد که می‌توانید آن را subclass کنید به جای پیاده‌سازی مستقیم interfaceها:
 </div>
 
@@ -2360,6 +2465,7 @@ public abstract class Comparer<T> : IComparer, IComparer<T>
 ```
 
 <div dir="rtl">
+
 ---
 
 ### مثال: مرتب‌سازی Wish بر اساس Priority
@@ -2390,6 +2496,7 @@ class PriorityComparer : Comparer<Wish>
 ```
 
 <div dir="rtl">
+
 ✅ نکته: بررسی `object.Equals` اطمینان می‌دهد که هیچ‌گاه با روش `Equals` تناقض پیدا نکنیم. استفاده از متد **static object.Equals** بهتر از `x.Equals` است چون حتی وقتی `x` برابر null است، کار می‌کند.
 
 مرتب‌سازی یک لیست با استفاده از **PriorityComparer**:
@@ -2410,6 +2517,7 @@ foreach (Wish w in wishList)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### مثال: مرتب‌سازی رشته‌ها برای دفترچه تلفن
@@ -2430,6 +2538,7 @@ class SurnameComparer : Comparer<string>
 ```
 
 <div dir="rtl">
+
 استفاده در یک **SortedDictionary**:
 </div>
 
@@ -2444,6 +2553,7 @@ foreach (string s in dic.Values)
 ```
 
 <div dir="rtl">
+
 ---
 
 ### 🔤 StringComparer
@@ -2465,6 +2575,7 @@ public static StringComparer Create(CultureInfo culture, bool ignoreCase);
 ```
 
 <div dir="rtl">
+
 مثال: دیکشنری حساس به حروف که `"Joe"` و `"JOE"` را برابر می‌داند:
 </div>
 
@@ -2473,6 +2584,7 @@ var dict = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
 ```
 
 <div dir="rtl">
+
 مثال مرتب‌سازی آرایه‌ای با زبان **انگلیسی استرالیا**:
 </div>
 
@@ -2483,6 +2595,7 @@ Array.Sort<string>(names, StringComparer.Create(ci, false));
 ```
 
 <div dir="rtl">
+
 نسخه‌ای culture-aware از **SurnameComparer**:
 </div>
 
@@ -2511,6 +2624,7 @@ class SurnameComparer : Comparer<string>
 ```
 
 <div dir="rtl">
+
 ---
 
 ### ⚙️ IStructuralEquatable و IStructuralComparable
@@ -2533,6 +2647,7 @@ public interface IStructuralComparable
 ```
 
 <div dir="rtl">
+
 **IEqualityComparer / IComparer** که پاس داده می‌شوند، روی **هر عنصر از شیء مرکب** اعمال می‌شوند.
 
 مثال مقایسه آرایه‌ها:
@@ -2548,6 +2663,7 @@ Console.Write(se1.Equals(a2, EqualityComparer<int>.Default));  // True
 ```
 
 <div dir="rtl">
+
 مثال دیگر:
 </div>
 
