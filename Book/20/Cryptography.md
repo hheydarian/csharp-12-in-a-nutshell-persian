@@ -1,3 +1,6 @@
+
+<div dir="rtl">
+
 # فصل بیستم:  رمزنگاری
 
 در این فصل، ما به بررسی APIهای اصلی **Cryptography** در .NET می‌پردازیم:
@@ -8,11 +11,14 @@
 * **Public key encryption and signing**
 
 انواع (Types) پوشش داده شده در این فصل در **namespace**های زیر تعریف شده‌اند:
+</div>
 
 ```
 System.Security;
 System.Security.Cryptography;
 ```
+
+<div dir="rtl">
 
 ---
 
@@ -36,6 +42,7 @@ System.Security.Cryptography;
 ویژگی **Windows Data Protection** فقط روی ویندوز در دسترس است و در سیستم‌عامل‌های دیگر یک استثناء از نوع `PlatformNotSupportedException` ایجاد می‌کند.
 
 در بخش **“File and Directory Operations”** در صفحه ۷۲۳ توضیح دادیم که چگونه می‌توانید از `File.Encrypt` برای درخواست رمزنگاری شفاف (transparent) فایل توسط سیستم‌عامل استفاده کنید:
+</div>
 
 ```csharp
 File.WriteAllText ("myfile.txt", "");
@@ -43,9 +50,12 @@ File.Encrypt ("myfile.txt");
 File.AppendAllText ("myfile.txt", "sensitive data");
 ```
 
+<div dir="rtl">
+
 🔑 در این حالت، رمزنگاری از کلیدی استفاده می‌کند که از **رمز عبور کاربر لاگین‌شده** استخراج شده است. شما می‌توانید همین کلید استخراج‌شده ضمنی را برای رمزنگاری یک **آرایه‌ی بایت** با استفاده از **Windows Data Protection API (DPAPI)** به‌کار بگیرید.
 
 DPAPI از طریق کلاس `ProtectedData` در دسترس قرار گرفته است؛ کلاسی ساده با دو متد **static**:
+</div>
 
 ```csharp
 public static byte[] Protect
@@ -54,6 +64,8 @@ public static byte[] Protect
 public static byte[] Unprotect
  (byte[] encryptedData, byte[] optionalEntropy, DataProtectionScope scope);
 ```
+
+<div dir="rtl">
 
 🔒 هر چیزی که در `optionalEntropy` قرار دهید به کلید اضافه می‌شود و امنیت آن را افزایش می‌دهد.
 پارامتر `DataProtectionScope` دو گزینه دارد:
@@ -66,6 +78,7 @@ public static byte[] Unprotect
 ---
 
 ### نمونه‌ای ساده از رمزنگاری و رمزگشایی 🧩
+</div>
 
 ```csharp
 byte[] original = {1, 2, 3, 4, 5};
@@ -74,6 +87,8 @@ byte[] encrypted = ProtectedData.Protect (original, null, scope);
 byte[] decrypted = ProtectedData.Unprotect (encrypted, null, scope);
 // decrypted is now {1, 2, 3, 4, 5}
 ```
+
+<div dir="rtl">
 
 🛡 Windows Data Protection امنیت متوسطی در برابر مهاجمی که دسترسی کامل به رایانه دارد فراهم می‌کند؛ این موضوع بستگی به قدرت رمز عبور کاربر دارد.
 با **LocalMachine**، این روش فقط در برابر کسانی که دسترسی فیزیکی یا الکترونیکی محدود دارند مؤثر است.
@@ -97,6 +112,7 @@ byte[] decrypted = ProtectedData.Unprotect (encrypted, null, scope);
 ### استفاده از ComputeHash 🖥
 
 برای تولید hash، متد `ComputeHash` از یکی از زیرکلاس‌های `HashAlgorithm` (مثل `SHA1` یا `SHA256`) فراخوانی می‌شود:
+</div>
 
 ```csharp
 byte[] hash;
@@ -104,12 +120,17 @@ using (Stream fs = File.OpenRead ("checkme.doc"))
   hash = SHA1.Create().ComputeHash (fs);   // SHA1 hash is 20 bytes long
 ```
 
+<div dir="rtl">
+
 متد `ComputeHash` همچنین یک **آرایه‌ی بایت** را می‌پذیرد که برای hash کردن رمزهای عبور بسیار کاربردی است (روش امن‌تر در بخش **“Hashing Passwords”** در صفحه ۸۷۸ توضیح داده شده است):
+</div>
 
 ```csharp
 byte[] data = System.Text.Encoding.UTF8.GetBytes ("stRhong%pword");
 byte[] hash = SHA256.Create().ComputeHash (data);
 ```
+
+<div dir="rtl">
 
 📌 متد `GetBytes` در یک شیء از نوع `Encoding`، یک رشته (string) را به آرایه‌ی بایت تبدیل می‌کند؛ متد `GetString` آن را برعکس برمی‌گرداند.
 اما یک شیء `Encoding` نمی‌تواند یک آرایه‌ی بایت رمزنگاری‌شده یا hash شده را به رشته برگرداند، چون داده‌ی scramble شده معمولاً قوانین encoding متنی را نقض می‌کند.
@@ -187,6 +208,7 @@ byte[] hash = SHA256.Create().ComputeHash (data);
 **`KeyDerivation.Pbkdf2`** ✅
 
 مثال:
+</div>
 
 ```csharp
 byte[] encrypted = KeyDerivation.Pbkdf2 (
@@ -196,6 +218,8 @@ byte[] encrypted = KeyDerivation.Pbkdf2 (
    iterationCount: 100,
    numBytesRequested: 64);
 ```
+
+<div dir="rtl">
 
 📦 `KeyDerivation.Pbkdf2` نیازمند نصب بسته‌ی NuGet به نام:
 `Microsoft.AspNetCore.Cryptography.KeyDerivation` است.
@@ -224,6 +248,7 @@ byte[] encrypted = KeyDerivation.Pbkdf2 (
 ### نمونه رمزنگاری 📝
 
 رمزنگاری یک آرایه‌ی بایت هنگام نوشتن در فایل با کلید ۱۶ بایتی:
+</div>
 
 ```csharp
 byte[] key = {145,12,32,245,98,132,98,214,6,77,131,44,221,3,9,50};
@@ -236,9 +261,12 @@ using (Stream c = new CryptoStream (f, encryptor, CryptoStreamMode.Write))
  c.Write (data, 0, data.Length);
 ```
 
+<div dir="rtl">
+
 ---
 
 ### نمونه رمزگشایی 🔓
+</div>
 
 ```csharp
 byte[] key = {145,12,32,245,98,132,98,214,6,77,131,44,221,3,9,50};
@@ -251,6 +279,8 @@ using (Stream c = new CryptoStream (f, decryptor, CryptoStreamMode.Read))
  for (int b; (b = c.ReadByte()) > -1;)
    Console.Write (b + " ");   // خروجی: 1 2 3 4 5
 ```
+
+<div dir="rtl">
 
 ➡️ در این مثال، یک کلید ۱۶ بایتی به‌طور تصادفی ساخته شده است. اگر کلید اشتباه برای رمزگشایی استفاده شود، `CryptoStream` یک استثناء از نوع `CryptographicException` ایجاد می‌کند. گرفتن این استثناء تنها راه برای بررسی درستی کلید است.
 
@@ -294,6 +324,7 @@ using (Stream c = new CryptoStream (f, decryptor, CryptoStreamMode.Read))
 اعدادی که این کلاس تولید می‌کند واقعاً غیرقابل پیش‌بینی و **cryptographically strong** هستند (برخلاف `System.Random`).
 
 مثال:
+</div>
 
 ```csharp
 byte[] key = new byte [16];
@@ -303,12 +334,17 @@ rand.GetBytes (key);
 rand.GetBytes (iv);
 ```
 
+<div dir="rtl">
+
 از .NET 6 به بعد:
+</div>
 
 ```csharp
 byte[] key = RandomNumberGenerator.GetBytes (16);
 byte[] iv = RandomNumberGenerator.GetBytes (16);
 ```
+
+<div dir="rtl">
 
 اگر کلید و IV مشخص نکنید، مقادیر تصادفی قوی به‌طور خودکار تولید می‌شوند.
 می‌توانید این مقادیر را از طریق ویژگی‌های `Key` و `IV` در شیء `Aes` دریافت کنید.
@@ -316,6 +352,7 @@ byte[] iv = RandomNumberGenerator.GetBytes (16);
 ### 🔐 رمزنگاری در حافظه
 
 از **.NET 6** به بعد، می‌توانید برای ساده‌سازی فرآیند رمزنگاری و رمزگشایی آرایه‌های بایت از متدهای **EncryptCbc** و **DecryptCbc** استفاده کنید:
+</div>
 
 ```csharp
 public static byte[] Encrypt (byte[] data, byte[] key, byte[] iv)
@@ -333,11 +370,14 @@ public static byte[] Decrypt (byte[] data, byte[] key, byte[] iv)
 }
 ```
 
+<div dir="rtl">
+
 ---
 
 ### ⚙️ معادل سازگار با همه نسخه‌های .NET
 
 در نسخه‌های قدیمی‌تر، باید از **ICryptoTransform** و **CryptoStream** استفاده کنیم:
+</div>
 
 ```csharp
 public static byte[] Encrypt (byte[] data, byte[] key, byte[] iv)
@@ -363,11 +403,14 @@ static byte[] Crypt (byte[] data, ICryptoTransform cryptor)
 }
 ```
 
+<div dir="rtl">
+
 > 🔎 توجه: حالت **CryptoStreamMode.Write** هم برای رمزنگاری و هم برای رمزگشایی مناسب است، زیرا در هر دو حالت داده‌ها را به داخل یک **MemoryStream** تازه "پوش" می‌کنیم.
 
 ---
 
 ### 📝 نسخه مخصوص رشته‌ها (String)
+</div>
 
 ```csharp
 public static string Encrypt (string data, byte[] key, byte[] iv)
@@ -383,7 +426,10 @@ public static string Decrypt (string data, byte[] key, byte[] iv)
 }
 ```
 
+<div dir="rtl">
+
 **نمونه استفاده:**
+</div>
 
 ```csharp
 byte[] key = new byte[16];
@@ -398,11 +444,14 @@ string decrypted = Decrypt(encrypted, key, iv);
 Console.WriteLine(decrypted);   // Yeah!
 ```
 
+<div dir="rtl">
+
 ---
 
 ### ⛓️ زنجیره‌سازی استریم‌ها (Chaining Streams)
 
 از آن‌جایی که **CryptoStream یک دکوریتور** است، می‌توانید آن را با سایر استریم‌ها زنجیره کنید. در مثال زیر، یک متن فشرده و رمزنگاری‌شده را در فایل ذخیره کرده و سپس بازیابی می‌کنیم:
+</div>
 
 ```csharp
 byte[] key = new byte[16];
@@ -428,6 +477,8 @@ using (Aes algorithm = Aes.Create())
         Console.WriteLine(await r.ReadLineAsync());   // Small and secure!
 }
 ```
+
+<div dir="rtl">
 
 📌 در این مثال، همه متغیرهای یک‌حرفی بخشی از زنجیره هستند. اجزای اصلی مثل **algorithm**، **encryptor** و **decryptor** در واقع به **CryptoStream** کمک می‌کنند تا عملیات رمزنگاری و رمزگشایی انجام شود.
 
@@ -544,6 +595,7 @@ Origin مطمئن نیست که Target واقعی است یا فرد مخرب!
 در .NET چندین الگوریتم نامتقارن وجود دارد که **RSA** محبوب‌ترین آن‌هاست.
 
 #### 🔒 رمزنگاری و رمزگشایی با RSA
+</div>
 
 ```csharp
 byte[] data = { 1, 2, 3, 4, 5 };   // داده‌ای که می‌خواهیم رمز کنیم
@@ -554,12 +606,17 @@ using (var rsa = new RSACryptoServiceProvider())
 }
 ```
 
+<div dir="rtl">
+
 چون هیچ کلید عمومی یا خصوصی‌ای مشخص نکردیم، فراهم‌کننده رمزنگاری به‌طور خودکار یک جفت کلید (Key Pair) با طول پیش‌فرض **١٠٢٤ بیت** ساخت.
 می‌توانید کلیدهای بلندتر (در مضارب ٨ بایت) بخواهید. برای برنامه‌های امنیتی حساس، استفاده از **٢٠٤٨ بیت** توصیه می‌شود:
+</div>
 
 ```csharp
 var rsa = new RSACryptoServiceProvider(2048);
 ```
+
+<div dir="rtl">
 
 ساخت کلید محاسباتی سنگین است (حدود **١٠ میلی‌ثانیه** طول می‌کشد). به همین دلیل، پیاده‌سازی RSA تولید کلید را تا زمانی که واقعاً لازم باشد (مثلاً هنگام فراخوانی `Encrypt`) به تأخیر می‌اندازد. این فرصت را می‌دهد که اگر کلید موجودی دارید، آن را بارگذاری کنید.
 
@@ -573,6 +630,7 @@ var rsa = new RSACryptoServiceProvider(2048);
 پارامتر بولی تعیین می‌کند که کلید خصوصی هم ذخیره شود یا نه.
 
 مثال: ساخت یک جفت کلید و ذخیره آن روی دیسک:
+</div>
 
 ```csharp
 using (var rsa = new RSACryptoServiceProvider())
@@ -582,9 +640,12 @@ using (var rsa = new RSACryptoServiceProvider())
 }
 ```
 
+<div dir="rtl">
+
 چون کلیدی نداشتیم، اولین بار `ToXmlString` مجبور شد یک جفت کلید تازه بسازد.
 
 بارگذاری مجدد و استفاده از آن‌ها:
+</div>
 
 ```csharp
 byte[] data = Encoding.UTF8.GetBytes("Message to encrypt");
@@ -608,6 +669,8 @@ using (var rsaPublicPrivate = new RSACryptoServiceProvider())
 }
 ```
 
+<div dir="rtl">
+
 ---
 
 ### 🖊️ امضای دیجیتال (Digital Signing)
@@ -616,6 +679,7 @@ using (var rsaPublicPrivate = new RSACryptoServiceProvider())
 امضا مثل Hash است، با این تفاوت که تولید آن به کلید خصوصی نیاز دارد و جعل‌پذیر نیست. کلید عمومی برای تأیید امضا استفاده می‌شود.
 
 مثال:
+</div>
 
 ```csharp
 byte[] data = Encoding.UTF8.GetBytes("Message to sign");
@@ -645,6 +709,8 @@ using (var publicOnly = new RSACryptoServiceProvider())
 }
 ```
 
+<div dir="rtl">
+
 ---
 
 ### ⚙️ جزئیات عملکرد امضا
@@ -657,6 +723,7 @@ using (var publicOnly = new RSACryptoServiceProvider())
 از آنجا که هش اندازه کوچکی دارد، امضای اسناد بزرگ سریع انجام می‌شود (چون RSA به‌تنهایی پرهزینه‌تر است).
 
 می‌توانید هش را خودتان محاسبه کنید و سپس از **SignHash** به‌جای `SignData` استفاده کنید:
+</div>
 
 ```csharp
 using (var rsa = new RSACryptoServiceProvider())
@@ -665,6 +732,8 @@ using (var rsa = new RSACryptoServiceProvider())
     signature = rsa.SignHash(hash, CryptoConfig.MapNameToOID("SHA1"));
 }
 ```
+
+<div dir="rtl">
 
 `SignHash` باید بداند از چه الگوریتمی برای هش استفاده کرده‌اید. متد `CryptoConfig.MapNameToOID` این اطلاعات را از یک نام ساده مثل `"SHA1"` فراهم می‌کند.
 
@@ -683,4 +752,5 @@ using (var rsa = new RSACryptoServiceProvider())
 🔐 یک گواهی دیجیتال رکورد الکترونیکی کلید عمومی و نام فرستنده است که خودش توسط یک مرجع معتبر مستقل امضا شده است.
 
 📦 فضای نام `System.Security.Cryptography.X509Certificates` انواع لازم برای کار با گواهی‌ها را فراهم می‌کند.
+</div>
 

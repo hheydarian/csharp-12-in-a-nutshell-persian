@@ -1,3 +1,6 @@
+
+<div dir="rtl">
+
 # فصل دوازدهم: مدیریت Disposal و Garbage Collection
 
 برخی از اشیاء نیازمند کدهای مخصوص برای **جمع‌کردن (tear-down)** هستند تا منابعی مثل فایل‌های باز، قفل‌ها (locks)، هندل‌های سیستم‌عامل و اشیاء **unmanaged** آزاد بشن. در اصطلاح دات‌نت، به این کار **Disposal** گفته می‌شه و از طریق اینترفیس **IDisposable** پشتیبانی می‌شه.
@@ -18,6 +21,7 @@
 ## ♻️ IDisposable، Dispose و Close
 
 دات‌نت یک اینترفیس خاص برای تایپ‌هایی که نیازمند متد tear-down هستن تعریف کرده:
+</div>
 
 ```csharp
 public interface IDisposable
@@ -26,7 +30,10 @@ public interface IDisposable
 }
 ```
 
+<div dir="rtl">
+
 سی‌شارپ دستور **using** رو به‌عنوان یک میان‌بُر نحوی (syntactic shortcut) فراهم کرده تا به‌صورت خودکار متد **Dispose** روی اشیائی که از **IDisposable** پیروی می‌کنن فراخوانی بشه. این کار در پشت‌صحنه با استفاده از یک بلاک **try/finally** انجام می‌شه:
+</div>
 
 ```csharp
 using (FileStream fs = new FileStream("myFile.txt", FileMode.Open))
@@ -35,7 +42,10 @@ using (FileStream fs = new FileStream("myFile.txt", FileMode.Open))
 }
 ```
 
+<div dir="rtl">
+
 کامپایلر این رو به کد زیر تبدیل می‌کنه:
+</div>
 
 ```csharp
 FileStream fs = new FileStream("myFile.txt", FileMode.Open);
@@ -49,16 +59,22 @@ finally
 }
 ```
 
+<div dir="rtl">
+
 بلاک **finally** تضمین می‌کنه که متد **Dispose** حتی در صورتی که **Exception** رخ بده یا کد زودتر از بلاک خارج بشه، حتماً فراخوانی بشه.
 
 به‌طور مشابه، نوشتن کد به شکل زیر تضمین می‌کنه که **Dispose** به‌محض خروج **fs** از محدوده‌ی (scope) خودش انجام بشه:
+</div>
 
 ```csharp
 using FileStream fs = new FileStream("myFile.txt", FileMode.Open);
 // ... Write to the file ...
 ```
 
+<div dir="rtl">
+
 در سناریوهای ساده، نوشتن یک تایپ disposable فقط نیازمند پیاده‌سازی **IDisposable** و نوشتن متد **Dispose** هست:
+</div>
 
 ```csharp
 sealed class Demo : IDisposable
@@ -70,6 +86,8 @@ sealed class Demo : IDisposable
   }
 }
 ```
+
+<div dir="rtl">
 
 این الگو برای موارد ساده و کلاس‌های **sealed** (غیرقابل ارث‌بری) خیلی خوب عمل می‌کنه. در بخش «Calling Dispose from a Finalizer» (صفحه ۵۹۰) یک الگوی پیشرفته‌تر توضیح داده می‌شه که می‌تونه برای مصرف‌کنندگانی که **Dispose** رو فراموش می‌کنن، نقش پشتیبان داشته باشه.
 
@@ -186,10 +204,13 @@ sealed class Demo : IDisposable
 خود متد **Dispose** باعث آزادسازی حافظه‌ی مدیریت‌شده (Managed Memory) نمی‌شه—این فقط در زمان **Garbage Collection** اتفاق می‌افته.
 
 همچنین خوبه یک فیلد قرار بدید تا نشون بده شیء Dispose شده. اینطوری اگه بعداً مصرف‌کننده بخواد روی شیء متدی صدا بزنه، می‌تونید یک **ObjectDisposedException** پرتاب کنید:
+</div>
 
 ```csharp
 public bool IsDisposed { get; private set; }
 ```
+
+<div dir="rtl">
 
 علاوه بر این، (هرچند از نظر فنی ضروری نیست) بهتره هندلرهای event داخلی شیء رو هم در متد Dispose پاک کنید (با مقداردهی **null**). این باعث می‌شه اون eventها حین یا بعد از Dispose شدن، اجرا نشن.
 
@@ -202,6 +223,7 @@ public bool IsDisposed { get; private set; }
 گاهی مفیده که **IDisposable** رو پیاده‌سازی کنیم بدون اینکه یک کلاس کامل بنویسیم.
 
 فرض کنید می‌خواید در یک کلاس، متدهایی برای **suspend** و **resume** کردن پردازش event داشته باشید:
+</div>
 
 ```csharp
 class Foo
@@ -218,7 +240,10 @@ class Foo
 }
 ```
 
+<div dir="rtl">
+
 این API دست‌وپاگیر هست چون مصرف‌کننده‌ها باید حتماً **ResumeEvents** رو صدا بزنن. برای مطمئن بودن، باید این کار رو داخل یک بلاک **finally** انجام بدن (در صورتی که Exception رخ بده):
+</div>
 
 ```csharp
 var foo = new Foo();
@@ -233,7 +258,10 @@ finally
 }
 ```
 
+<div dir="rtl">
+
 یک الگوی بهتر اینه که متد **ResumeEvents** رو حذف کنیم و متد **SuspendEvents** یک **IDisposable** برگردونه. مصرف‌کننده‌ها می‌تونن اینطوری استفاده کنن:
+</div>
 
 ```csharp
 using (foo.SuspendEvents())
@@ -242,7 +270,10 @@ using (foo.SuspendEvents())
 }
 ```
 
+<div dir="rtl">
+
 اما مشکل اینجاست که پیاده‌سازی متد **SuspendEvents** برای ما زحمت اضافه درست می‌کنه:
+</div>
 
 ```csharp
 public IDisposable SuspendEvents()
@@ -263,11 +294,14 @@ class SuspendToken : IDisposable
 }
 ```
 
+<div dir="rtl">
+
 ---
 
 ### 🪄 الگوی Anonymous Disposal
 
 این مشکل با استفاده از یک کلاس **Disposable** قابل استفاده‌ی مجدد حل می‌شه:
+</div>
 
 ```csharp
 public class Disposable : IDisposable
@@ -284,7 +318,10 @@ public class Disposable : IDisposable
 }
 ```
 
+<div dir="rtl">
+
 حالا می‌تونیم متد **SuspendEvents** رو به‌شکل زیر ساده کنیم:
+</div>
 
 ```csharp
 public IDisposable SuspendEvents()
@@ -293,11 +330,15 @@ public IDisposable SuspendEvents()
   return Disposable.Create(() => _suspendCount--);
 }
 ```
+
+<div dir="rtl">
+
 ## ⚙️ Garbage Collection خودکار
 
 فرقی نمی‌کنه یک شیء نیازمند متد **Dispose** برای منطق tear-down سفارشی باشه یا نه، در هر صورت حافظه‌ای که روی heap اشغال کرده باید در یک نقطه آزاد بشه. این بخش به‌طور کامل به‌صورت خودکار توسط **CLR** و از طریق یک **Garbage Collector (GC)** خودکار مدیریت می‌شه. شما هیچ‌وقت حافظه‌ی مدیریت‌شده (Managed Memory) رو خودتون آزاد نمی‌کنید.
 
 مثال:
+</div>
 
 ```csharp
 public void Test()
@@ -306,6 +347,8 @@ public void Test()
   ...
 }
 ```
+
+<div dir="rtl">
 
 وقتی متد **Test** اجرا می‌شه، یک آرایه برای نگهداری ۱۰۰۰ بایت روی heap تخصیص داده می‌شه. این آرایه توسط متغیر **myArray** که روی stack متغیرهای محلی قرار داره، مرجع‌دهی می‌شه. وقتی متد خارج می‌شه، این متغیر محلی از scope خارج می‌شه، یعنی دیگه هیچ چیزی به اون آرایه روی heap اشاره نمی‌کنه. در این حالت، آرایه‌ی بی‌صاحب می‌تونه در فرآیند Garbage Collection آزاد بشه.
 
@@ -325,6 +368,7 @@ GC همه‌ی زباله‌ها رو در هر بار جمع‌آوری پاک 
 GC تلاش می‌کنه بین **زمانی که صرف جمع‌آوری می‌کنه** و **میزان حافظه‌ای که برنامه مصرف می‌کنه (Working Set)** تعادل برقرار کنه. به همین دلیل، برنامه‌ها می‌تونن بیشتر از نیازشون حافظه مصرف کنن، به‌ویژه وقتی آرایه‌های موقت بزرگ ساخته می‌شن.
 
 شما می‌تونید مصرف حافظه‌ی یک پردازه رو از طریق **Windows Task Manager** یا **Resource Monitor** مانیتور کنید—یا به‌صورت برنامه‌نویسی، با استفاده از **PerformanceCounter**:
+</div>
 
 ```csharp
 // این تایپ‌ها در System.Diagnostics هستن:
@@ -333,6 +377,8 @@ using PerformanceCounter pc = new PerformanceCounter
      ("Process", "Private Bytes", procName);
 Console.WriteLine(pc.NextValue());
 ```
+
+<div dir="rtl">
 
 این کد **Private Working Set** رو برمی‌گردونه که بهترین نشونه برای مصرف حافظه‌ی برنامه‌ست. این مقدار به‌طور خاص حافظه‌ای رو که CLR به‌صورت داخلی آزاد کرده و آماده‌ست به سیستم‌عامل پس بده (اگه یک پردازه‌ی دیگه به اون نیاز داشته باشه)، شامل نمی‌شه.
 
@@ -359,6 +405,7 @@ Root می‌تونه یکی از موارد زیر باشه:
 ## ⚰️ Finalizers
 
 پیش از اینکه یک شیء از حافظه آزاد بشه، اگر **Finalizer** داشته باشه، اجرا می‌شه. یک Finalizer شبیه به یک سازنده (**Constructor**) تعریف می‌شه، با این تفاوت که قبل از اسم کلاس علامت `~` قرار می‌گیره:
+</div>
 
 ```csharp
 class Test
@@ -369,6 +416,8 @@ class Test
   }
 }
 ```
+
+<div dir="rtl">
 
 (اگرچه در نحو نوشتن شبیه سازنده‌ست، اما **Finalizer**‌ها نمی‌تونن `public` یا `static` باشن، پارامتر بگیرن یا سازنده‌ی پایه (base class) رو صدا بزنن.)
 
@@ -413,6 +462,7 @@ class Test
 این الگو به‌عنوان **پشتیبان** هم به‌کار می‌ره، برای وقتی که مصرف‌کننده شیء فراموش کنه Dispose رو صدا بزنه. در این حالت، بهتره خطا رو لاگ کنید تا بعداً بتونید مشکل رو رفع کنید.
 
 یک الگوی استاندارد برای پیاده‌سازی این روش به شکل زیره:
+</div>
 
 ```csharp
 class Test : IDisposable
@@ -438,6 +488,8 @@ class Test : IDisposable
 }
 ```
 
+<div dir="rtl">
+
 در اینجا:
 
 * متد **Dispose بدون پارامتر**، `virtual` نیست و فقط نسخه‌ی توسعه‌یافته رو با مقدار `true` صدا می‌زنه.
@@ -462,6 +514,7 @@ class Test : IDisposable
 فرض کنید یک Finalizer، شیء زنده‌ای رو طوری تغییر بده که به شیء در حال مرگ ارجاع بده. در این صورت، وقتی GC بعدی اجرا بشه، CLR اون شیء رو دیگه بی‌صاحب نمی‌بینه و بنابراین از جمع‌آوری فرار می‌کنه. به این سناریو **Resurrection** می‌گن.
 
 مثال: نوشتن کلاسی برای مدیریت یک فایل موقت:
+</div>
 
 ```csharp
 public class TempFileRef
@@ -472,11 +525,14 @@ public class TempFileRef
 }
 ```
 
+<div dir="rtl">
+
 ⚠️ مشکل: `File.Delete` ممکنه استثنا پرتاب کنه (مثلاً به خاطر نداشتن دسترسی، در حال استفاده بودن فایل یا قبلاً حذف شدن). این خطا باعث کرش کل برنامه می‌شه و مانع اجرای Finalizerهای دیگه هم خواهد شد.
 
 می‌تونیم استثنا رو با یک بلوک catch خالی ببلعیم، اما هیچ‌وقت متوجه نمی‌شیم که خطایی رخ داده. یا می‌تونیم یک API پیچیده‌ی گزارش خطا صدا بزنیم، اما این بار نخ Finalizer رو سنگین می‌کنه. بنابراین باید عملیات Finalizer رو به وظایف ساده، مطمئن و سریع محدود کنیم.
 
 راه بهتر: ثبت خطا در یک کالکشن استاتیک:
+</div>
 
 ```csharp
 public class TempFileRef
@@ -501,6 +557,8 @@ public class TempFileRef
 }
 ```
 
+<div dir="rtl">
+
 اضافه کردن شیء به کالکشن **FailedDeletions** یک مرجع جدید براش ایجاد می‌کنه و باعث می‌شه زنده بمونه تا زمانی که dequeue بشه.
 
 `ConcurrentQueue<T>` نسخه‌ی **Thread-Safe** از `Queue<T>` هست و در فضای نام `System.Collections.Concurrent` تعریف شده (بخش ۲۲).
@@ -514,6 +572,7 @@ public class TempFileRef
 یک شیء که **Resurrect** شده (دوباره زنده شده) دیگه Finalizerش برای بار دوم اجرا نمی‌شه—مگر اینکه شما متد **GC.ReRegisterForFinalize** رو صدا بزنید.
 
 در مثال زیر، ما تلاش می‌کنیم در Finalizer یک فایل موقت رو حذف کنیم (مثل مثال قبلی). اما اگر حذف شکست خورد، شیء رو دوباره ثبت می‌کنیم تا در Garbage Collection بعدی دوباره امتحان کنه:
+</div>
 
 ```csharp
 public class TempFileRef
@@ -534,6 +593,8 @@ public class TempFileRef
   }
 }
 ```
+
+<div dir="rtl">
 
 بعد از سومین تلاش ناموفق، Finalizer ما بدون سر و صدا از حذف فایل دست می‌کشه.
 🔧 می‌تونیم این رو بهتر کنیم و با مثال قبلی ترکیب کنیم—یعنی بعد از سومین شکست، شیء رو به صف **FailedDeletions** اضافه کنیم.
@@ -588,10 +649,13 @@ GC یک **Tracing GC** محسوب می‌شه، چون جلوی هر دسترس�
 ### 📊 نظارت بر وضعیت Heap
 
 می‌تونید اطلاعات وضعیت فعلی Heap رو با فراخوانی:
+</div>
 
 ```csharp
 GC.GetGCMemoryInfo();
 ```
+
+<div dir="rtl">
 
 از .NET 5 به بعد، این متد داده‌های مربوط به کارایی رو هم برمی‌گردونه.
 
@@ -639,6 +703,7 @@ GC.GetGCMemoryInfo();
 📌 نتیجه: اشیاء کوتاه‌عمر خیلی بهینه با GC کار می‌کنن.
 
 مثلاً در این متد، StringBuilderهایی که ساخته شدن به احتمال زیاد خیلی سریع توی Gen0 جمع‌آوری می‌شن:
+</div>
 
 ```csharp
 string Foo()
@@ -650,6 +715,8 @@ string Foo()
   return sb2.ToString();
 }
 ```
+
+<div dir="rtl">
 
 ---
 
@@ -672,11 +739,15 @@ GC یک heap جداگانه برای اشیاء بزرگ‌تر از **۸۵,۰۰
 ### راهکارها:
 
 1. فشرده‌سازی LOH در جمع‌آوری بعدی:
+</div>
 
-   ```csharp
+```csharp
    GCSettings.LargeObjectHeapCompactionMode =
        GCLargeObjectHeapCompactionMode.CompactOnce;
    ```
+
+<div dir="rtl">
+
 2. استفاده از **Array Pooling** (صفحه 599) برای برنامه‌هایی که زیاد آرایه‌های بزرگ می‌سازن.
 
 📌 نکته: LOH نسلی (Generational) نیست—همه‌ی اشیاء LOH در Gen2 قرار می‌گیرن.
@@ -691,6 +762,7 @@ GC یک heap جداگانه برای اشیاء بزرگ‌تر از **۸۵,۰۰
 * **Server** (برای پردازش‌های سنگین)
 
 فعال‌سازی حالت Server در `.csproj`:
+</div>
 
 ```xml
 <PropertyGroup>
@@ -698,7 +770,10 @@ GC یک heap جداگانه برای اشیاء بزرگ‌تر از **۸۵,۰۰
 </PropertyGroup>
 ```
 
+<div dir="rtl">
+
 و در فایل `.runtimeconfig.json` میاد:
+</div>
 
 ```json
 "runtimeOptions": {
@@ -707,6 +782,8 @@ GC یک heap جداگانه برای اشیاء بزرگ‌تر از **۸۵,۰۰
   }
 }
 ```
+
+<div dir="rtl">
 
 ### تفاوت‌ها:
 
@@ -724,6 +801,7 @@ GC یک heap جداگانه برای اشیاء بزرگ‌تر از **۸۵,۰۰
 در هر دو حالت Workstation و Server، پیش‌فرض **Background GC** فعاله.
 
 می‌تونید در `.csproj` غیرفعالش کنید:
+</div>
 
 ```xml
 <PropertyGroup>
@@ -731,7 +809,10 @@ GC یک heap جداگانه برای اشیاء بزرگ‌تر از **۸۵,۰۰
 </PropertyGroup>
 ```
 
+<div dir="rtl">
+
 و در `.runtimeconfig.json`:
+</div>
 
 ```json
 "runtimeOptions": {
@@ -740,6 +821,8 @@ GC یک heap جداگانه برای اشیاء بزرگ‌تر از **۸۵,۰۰
   }
 }
 ```
+
+<div dir="rtl">
 
 ### اثرات:
 
@@ -767,10 +850,14 @@ GC یک heap جداگانه برای اشیاء بزرگ‌تر از **۸۵,۰۰
 ### مراحل:
 
 1. ثبت‌نام برای اعلان:
+</div>
 
-   ```csharp
+```csharp
    GC.RegisterForFullGCNotification();
    ```
+
+<div dir="rtl">
+
 2. اجرای یک Thread که:
 
    * `GC.WaitForFullGCApproach` → وقتی GC نزدیکه.
@@ -800,12 +887,15 @@ GC یک heap جداگانه برای اشیاء بزرگ‌تر از **۸۵,۰۰
 
 ✅ راه‌حل:
 بلافاصله بعد از انجام فعالیت روزانه، صدا بزنید:
+</div>
 
 ```csharp
 GC.Collect();
 GC.WaitForPendingFinalizers();
 GC.Collect();
 ```
+
+<div dir="rtl">
 
 این تضمین می‌کنه حتی اشیائی که Finalizer دارن هم پاک بشن. (گاهی داخل یک حلقه اجرا می‌شه چون اجرای Finalizerها خودش باعث آزاد شدن اشیاء بیشتری می‌شه).
 
@@ -839,15 +929,22 @@ GC.Collect();
 راه‌حل:
 
 * به CLR اعلام کنید که حافظه‌ی Unmanaged تخصیص داده شده:
+</div>
 
-  ```csharp
+```csharp
   GC.AddMemoryPressure(size);
   ```
-* وقتی آزاد شد:
 
-  ```csharp
+<div dir="rtl">
+
+* وقتی آزاد شد:
+</div>
+
+```csharp
   GC.RemoveMemoryPressure(size);
   ```
+
+<div dir="rtl">
 
 ---
 
@@ -856,20 +953,26 @@ GC.Collect();
 اگر زیاد آرایه می‌سازید، می‌تونید با **Array Pooling** بار GC رو کم کنید. این قابلیت از .NET Core 3 معرفی شد.
 
 * اجاره‌ی آرایه:
+</div>
 
-  ```csharp
+```csharp
   int[] pooledArray = ArrayPool<int>.Shared.Rent(100); // حداقل 100 بایت
   ```
 
-  (ممکنه آرایه‌ای بزرگ‌تر برگرده، معمولاً در توان‌های ۲ تخصیص داده می‌شه).
+<div dir="rtl">
+
+(ممکنه آرایه‌ای بزرگ‌تر برگرده، معمولاً در توان‌های ۲ تخصیص داده می‌شه).
 
 * برگرداندن آرایه:
+</div>
 
-  ```csharp
+```csharp
   ArrayPool<int>.Shared.Return(pooledArray);
   ```
 
-  (می‌تونید یک `bool` هم بدید که قبل از بازگشت، آرایه پاک بشه).
+<div dir="rtl">
+
+(می‌تونید یک `bool` هم بدید که قبل از بازگشت، آرایه پاک بشه).
 
 📌 محدودیت:
 اگر بعد از Return همچنان از آرایه استفاده کنید → خطای جدی رخ می‌ده ❌. چون ممکنه توسط APIهای دیگه مثل **ASP.NET Core** دوباره استفاده بشه.
@@ -879,12 +982,15 @@ GC.Collect();
 ## 🛠️ Pool اختصاصی
 
 به‌جای Pool اشتراکی می‌تونید Pool شخصی بسازید:
+</div>
 
 ```csharp
 var myPool = ArrayPool<int>.Create();
 int[] array = myPool.Rent(100);
 ...
 ```
+
+<div dir="rtl">
 
 این کار:
 
@@ -898,6 +1004,7 @@ int[] array = myPool.Rent(100);
 با این حال، برنامه‌های بزرگ و پیچیده .NET می‌توانند نوعی فرم خفیف از همین مشکل را نشان دهند که نتیجه آن مشابه است: برنامه در طول عمر خود حافظه بیشتری مصرف می‌کند تا نهایتاً نیاز به راه‌اندازی مجدد پیدا کند. خبر خوب این است که **نشت حافظه مدیریت‌شده** معمولاً راحت‌تر قابل تشخیص و پیشگیری است.
 
 نشت حافظه مدیریت‌شده زمانی رخ می‌دهد که اشیاء استفاده‌نشده به‌واسطه مراجع فراموش‌شده یا استفاده‌نشده هنوز زنده بمانند. یک نمونه رایج **event handlers** هستند—این‌ها یک مرجع به شیء هدف نگه می‌دارند (مگر اینکه هدف یک متد static باشد). به‌عنوان مثال، کلاس‌های زیر را در نظر بگیرید:
+</div>
 
 ```csharp
 class Host
@@ -917,7 +1024,10 @@ class Client
 }
 ```
 
+<div dir="rtl">
+
 کلاس تست زیر یک متد دارد که ۱۰۰۰ شیء Client ایجاد می‌کند:
+</div>
 
 ```csharp
 class Test
@@ -933,21 +1043,29 @@ class Test
 }
 ```
 
+<div dir="rtl">
+
 ممکن است انتظار داشته باشید پس از اجرای **CreateClients**، این ۱۰۰۰ شیء Client واجد شرایط جمع‌آوری شوند. متأسفانه، هر Client یک مرجع دیگر هم دارد: شیء **\_host** که event **Click** هر نمونه Client را نگه می‌دارد.
 
 این مشکل ممکن است نادیده گرفته شود اگر event **Click** اجرا نشود یا متد **HostClicked** کاری انجام ندهد که توجه را جلب کند.
 
 یکی از راه‌حل‌ها این است که **Client** را پیاده‌سازی کنید تا **IDisposable** باشد و در متد **Dispose**، **event handler** را لغو اشتراک کنید:
+</div>
 
 ```csharp
 public void Dispose() { _host.Click -= HostClicked; }
 ```
 
+<div dir="rtl">
+
 سپس مصرف‌کنندگان Client پس از اتمام استفاده از نمونه‌ها آن‌ها را Dispose می‌کنند:
+</div>
 
 ```csharp
 Array.ForEach(clients, c => c.Dispose());
 ```
+
+<div dir="rtl">
 
 ---
 
@@ -958,6 +1076,7 @@ Array.ForEach(clients, c => c.Dispose());
 تایمرهای فراموش‌شده نیز می‌توانند باعث نشت حافظه شوند (در فصل 21 تایمرها را بررسی کرده‌ایم). دو سناریوی متفاوت وجود دارد، بسته به نوع تایمر:
 
 ابتدا تایمر در **System.Timers** را بررسی می‌کنیم. در مثال زیر، کلاس **Foo** (هنگام نمونه‌سازی) هر ثانیه متد **tmr\_Elapsed** را فراخوانی می‌کند:
+</div>
 
 ```csharp
 using System.Timers;
@@ -974,12 +1093,15 @@ class Foo
 }
 ```
 
+<div dir="rtl">
+
 متأسفانه، نمونه‌های Foo هرگز جمع‌آوری نمی‌شوند! مشکل این است که runtime خودش به تایمرهای فعال مرجع دارد تا بتواند event **Elapsed** آن‌ها را اجرا کند؛ بنابراین:
 
 * runtime شیء **\_timer** را زنده نگه می‌دارد.
 * **\_timer** شیء Foo را از طریق **tmr\_Elapsed** زنده نگه می‌دارد.
 
 راه حل واضح است: چون **Timer** پیاده‌سازی **IDisposable** دارد، با Dispose کردن تایمر، اجرای آن متوقف شده و runtime دیگر به شیء مرجع ندارد:
+</div>
 
 ```csharp
 class Foo : IDisposable
@@ -989,11 +1111,14 @@ class Foo : IDisposable
 }
 ```
 
+<div dir="rtl">
+
 یک دستورالعمل خوب این است که اگر هر فیلدی در کلاس شما به شیئی اختصاص دارد که **IDisposable** را پیاده‌سازی کرده، خودتان IDisposable را پیاده‌سازی کنید.
 
 تایمرهای **WPF** و **Windows Forms** نیز به همین شکل رفتار می‌کنند.
 
 تایمر در **System.Threading**، با این حال، خاص است. .NET به تایمرهای threading فعال مرجع ندارد؛ بلکه مستقیماً delegate‌های callback را مرجع می‌کند. این بدان معناست که اگر Dispose کردن تایمر threading فراموش شود، یک finalizer می‌تواند اجرا شود و تایمر را به‌صورت خودکار متوقف و Dispose کند:
+</div>
 
 ```csharp
 static void Main()
@@ -1006,9 +1131,12 @@ static void Main()
 static void TimerTick(object notUsed) { Console.WriteLine("tick"); }
 ```
 
+<div dir="rtl">
+
 اگر این مثال در حالت release (debug غیرفعال و بهینه‌سازی فعال) کامپایل شود، تایمر قبل از اینکه یک بار هم اجرا شود، جمع‌آوری و نهایی خواهد شد!
 
 دوباره، این مشکل با Dispose کردن تایمر هنگام اتمام استفاده برطرف می‌شود:
+</div>
 
 ```csharp
 using (var tmr = new System.Threading.Timer(TimerTick, null, 1000, 1000))
@@ -1018,6 +1146,8 @@ using (var tmr = new System.Threading.Timer(TimerTick, null, 1000, 1000))
 }
 ```
 
+<div dir="rtl">
+
 فراخوانی ضمنی **tmr.Dispose** در پایان **using** باعث می‌شود که متغیر **tmr** “استفاده‌شده” در نظر گرفته شود و تا پایان بلوک توسط GC مرده محسوب نشود.
 
 طنز این است که این فراخوانی Dispose در واقع عمر شیء را طولانی‌تر می‌کند! 🎯
@@ -1025,10 +1155,13 @@ using (var tmr = new System.Threading.Timer(TimerTick, null, 1000, 1000))
 🕵️‍♂️ **تشخیص نشت حافظه (Diagnosing Memory Leaks)**
 
 ساده‌ترین راه برای جلوگیری از **نشت حافظه مدیریت‌شده** این است که از همان ابتدا مصرف حافظه را در حین نوشتن برنامه تحت نظر داشته باشید. می‌توانید مصرف فعلی حافظه اشیاء برنامه را به این صورت به‌دست آورید (آرگومان **true** به GC می‌گوید ابتدا یک جمع‌آوری انجام دهد):
+</div>
 
 ```csharp
 long memoryUsed = GC.GetTotalMemory(true);
 ```
+
+<div dir="rtl">
 
 اگر از توسعه مبتنی بر تست (**test-driven development**) استفاده می‌کنید، می‌توانید از **unit test**ها برای اطمینان از آزاد شدن حافظه استفاده کنید. اگر این بررسی شکست خورد، فقط کافی است تغییرات اخیر خود را بررسی کنید.
 
@@ -1043,6 +1176,7 @@ long memoryUsed = GC.GetTotalMemory(true);
 گاهی اوقات مفید است که یک مرجع به شیئی داشته باشیم که برای **GC** «نامرئی» باشد و مانع جمع‌آوری آن نشود. این نوع مرجع را **weak reference** می‌نامند و با کلاس **System.WeakReference** پیاده‌سازی می‌شود.
 
 برای استفاده از **WeakReference**، آن را با شیء هدف ایجاد کنید:
+</div>
 
 ```csharp
 var sb = new StringBuilder("this is a test");
@@ -1050,7 +1184,10 @@ var weak = new WeakReference(sb);
 Console.WriteLine(weak.Target); // This is a test
 ```
 
+<div dir="rtl">
+
 اگر شیء هدف تنها توسط یک یا چند **weak reference** مرجع شود، GC آن را واجد شرایط جمع‌آوری می‌داند. پس از جمع‌آوری، ویژگی **Target** برابر **null** خواهد بود:
+</div>
 
 ```csharp
 var weak = GetWeakRef();
@@ -1060,16 +1197,22 @@ Console.WriteLine(weak.Target); // (nothing)
 WeakReference GetWeakRef() => new WeakReference(new StringBuilder("weak"));
 ```
 
+<div dir="rtl">
+
 برای جلوگیری از جمع‌آوری هدف بین بررسی null و استفاده از آن، آن را به یک متغیر محلی اختصاص دهید:
+</div>
 
 ```csharp
 var sb = (StringBuilder)weak.Target;
 if (sb != null) { /* استفاده از sb */ }
 ```
 
+<div dir="rtl">
+
 پس از اختصاص هدف به یک متغیر محلی، آن یک **strong root** پیدا می‌کند و تا زمانی که متغیر در استفاده باشد، جمع‌آوری نمی‌شود.
 
 کلاس زیر از **weak references** برای پیگیری همه اشیاء **Widget** که ایجاد شده‌اند استفاده می‌کند، بدون اینکه مانع جمع‌آوری آن‌ها شود:
+</div>
 
 ```csharp
 class Widget
@@ -1092,6 +1235,8 @@ class Widget
 }
 ```
 
+<div dir="rtl">
+
 تنها نکته این است که این **static list** با گذشت زمان رشد می‌کند و **weak references** با **target null** جمع می‌شوند. بنابراین، باید یک **استراتژی پاکسازی** پیاده‌سازی کنید.
 
 ---
@@ -1099,6 +1244,7 @@ class Widget
 💾 **Weak References و Caching**
 
 یکی از کاربردهای **WeakReference**، **cache کردن اشیاء بزرگ** است. این روش اجازه می‌دهد داده‌های پرحجم به طور موقت ذخیره شوند بدون اینکه مصرف حافظه بیش از حد شود:
+</div>
 
 ```csharp
 _weakCache = new WeakReference(...); // _weakCache یک فیلد است
@@ -1106,6 +1252,8 @@ _weakCache = new WeakReference(...); // _weakCache یک فیلد است
 var cache = _weakCache.Target;
 if (cache == null) { /* cache را دوباره ایجاد و به _weakCache اختصاص دهید */ }
 ```
+
+<div dir="rtl">
 
 این استراتژی در عمل فقط تا حدی مؤثر است، زیرا شما کنترلی بر زمان اجرای GC و نسل جمع‌آوری شده ندارید. به‌ویژه اگر cache شما در **Gen0** باشد، ممکن است ظرف میکروثانیه جمع‌آوری شود. بنابراین، بهتر است از **cache دو سطحی** استفاده کنید: ابتدا با **strong references** شروع کنید و سپس به **weak references** تبدیل کنید.
 
@@ -1118,6 +1266,7 @@ if (cache == null) { /* cache را دوباره ایجاد و به _weakCache ا
 تصور کنید یک **delegate** که فقط **weak references** به اهداف خود نگه می‌دارد. چنین delegate‌ای اهداف را زنده نگه نمی‌دارد—مگر اینکه آن اهداف مرجع مستقلی داشته باشند. البته این مانع اجرای delegate نمی‌شود که ممکن است به هدف بدون مرجع برسد، بین زمانی که هدف واجد شرایط جمع‌آوری شده و GC هنوز آن را جمع‌آوری نکرده است.
 
 برای اینکه چنین راه‌حلی مؤثر باشد، کد شما باید در این سناریو مقاوم باشد. در این صورت می‌توانید کلاس **weak delegate** را به این شکل پیاده‌سازی کنید:
+</div>
 
 ```csharp
 public class WeakDelegate<TDelegate> where TDelegate : Delegate
@@ -1180,6 +1329,8 @@ public class WeakDelegate<TDelegate> where TDelegate : Delegate
 }
 ```
 
+<div dir="rtl">
+
 در متدهای **Combine** و **Remove**، تبدیل مرجع از target به **Delegate** با **as operator** انجام می‌شود تا از ابهام بالقوه بین **custom conversion** و **reference conversion** جلوگیری شود.
 
 در ویژگی **Target**، یک **multicast delegate** ایجاد می‌کنیم که همه delegateهای زنده‌ای که توسط **weak references** نگه داشته شده‌اند را ترکیب می‌کند و مابقی (dead) را از لیست حذف می‌کند تا لیست \_targets بی‌پایان رشد نکند.
@@ -1187,6 +1338,7 @@ public class WeakDelegate<TDelegate> where TDelegate : Delegate
 ---
 
 📌 مثال استفاده از این delegate در پیاده‌سازی event:
+</div>
 
 ```csharp
 public class Foo

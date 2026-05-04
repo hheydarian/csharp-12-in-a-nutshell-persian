@@ -1,3 +1,6 @@
+
+<div dir="rtl">
+
 # درس هفدهم:  اسمبلی‌ها (Assemblies) 
 
 یک **assembly** واحد پایه‌ای برای استقرار (deployment) در .NET است و همچنین محفظه‌ای برای تمام **type**ها به شمار می‌آید. یک اسمبلی شامل **type**های کامپایل‌شده به همراه کد **Intermediate Language (IL)**، منابع اجرایی (**runtime resources**) و اطلاعاتی برای مدیریت نسخه‌ها و ارجاع به سایر اسمبلی‌ها است. همچنین اسمبلی یک مرز برای **type resolution** تعریف می‌کند. در .NET، یک اسمبلی معمولاً شامل یک فایل با پسوند `.dll` است.
@@ -87,11 +90,14 @@
 برای مشخص کردن ویژگی‌هایی که توسط تب **Package** پشتیبانی نمی‌شوند، یا در صورت عدم کار با فایل .csproj، می‌توانید **assembly attributes** را در کد منبع تعیین کنید (اغلب در فایلی به نام `AssemblyInfo.cs`).
 
 مثال: برای دسترسی دادن به **type**های داخلی به یک پروژه تست واحد:
+</div>
 
 ```csharp
 using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("MyUnitTestProject")]
 ```
+
+<div dir="rtl">
 
 ---
 
@@ -100,6 +106,7 @@ using System.Runtime.CompilerServices;
 **Application Manifest** یک فایل XML است که اطلاعاتی درباره‌ی اسمبلی به سیستم‌عامل منتقل می‌کند. این فایل در هنگام ساخت، به‌عنوان یک **Win32 resource** داخل فایل اجرایی قرار می‌گیرد. اگر موجود باشد، قبل از بارگذاری اسمبلی توسط CLR خوانده شده و پردازش می‌شود و می‌تواند نحوه اجرای فرآیند برنامه در ویندوز را تحت تأثیر قرار دهد.
 
 یک **manifest** در .NET دارای عنصر ریشه‌ای به نام `assembly` در فضای نام XML زیر است:
+</div>
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -108,7 +115,10 @@ using System.Runtime.CompilerServices;
 </assembly>
 ```
 
+<div dir="rtl">
+
 مثالی که درخواست دسترسی مدیریتی (**administrative elevation**) می‌کند:
+</div>
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -122,6 +132,8 @@ using System.Runtime.CompilerServices;
   </trustInfo>
 </assembly>
 ```
+
+<div dir="rtl">
 
 > ⚠️ برنامه‌های **UWP** دارای manifest بسیار پیچیده‌تری هستند که در فایل `Package.appxmanifest` توصیف شده است و شامل اعلام قابلیت‌های برنامه است که مشخص می‌کند سیستم‌عامل چه مجوزهایی می‌دهد. ساده‌ترین روش برای ویرایش این فایل، استفاده از **Visual Studio** است که با دوبار کلیک روی فایل، یک دیالوگ نمایش می‌دهد.
 
@@ -159,10 +171,13 @@ using System.Runtime.CompilerServices;
 ### 🔹 کلاس Assembly 🔹
 
 کلاس **Assembly** در فضای نام `System.Reflection` دروازه‌ای برای دسترسی به **metadata** اسمبلی‌ها در زمان اجرا (**runtime**) است. روش‌های مختلفی برای به‌دست آوردن یک **assembly object** وجود دارد؛ ساده‌ترین روش، استفاده از ویژگی **Assembly** یک **Type** است:
+</div>
 
 ```csharp
 Assembly a = typeof(Program).Assembly;
 ```
+
+<div dir="rtl">
 
 همچنین می‌توانید با فراخوانی یکی از **static method**های کلاس **Assembly** یک شیء اسمبلی به‌دست آورید:
 
@@ -212,10 +227,13 @@ Assembly a = typeof(Program).Assembly;
 ### 🔹 چگونه یک اسمبلی را Strongly Name کنیم 🔹
 
 برای دادن **strong name** به یک اسمبلی، ابتدا یک جفت کلید عمومی/خصوصی با ابزار `sn.exe` تولید کنید:
+</div>
 
 ```bash
 sn.exe -k MyKeyPair.snk
 ```
+
+<div dir="rtl">
 
 **Visual Studio** میانبری به نام **Developer Command Prompt for VS** نصب می‌کند که یک **command prompt** با مسیر ابزارهای توسعه (مانند `sn.exe`) فراهم می‌آورد.
 
@@ -243,16 +261,22 @@ sn.exe -k MyKeyPair.snk
 نام ساده از ویژگی‌ها استخراج نمی‌شود، بلکه از نام فایل اصلی کامپایل‌شده (بدون پسوند) می‌آید. مثلاً نام ساده اسمبلی `System.Xml.dll` برابر با `System.Xml` است. تغییر نام فایل، نام ساده اسمبلی را تغییر نمی‌دهد.
 
 شماره نسخه از ویژگی **AssemblyVersion** می‌آید و رشته‌ای شامل چهار قسمت است:
+</div>
 
 ```
 major.minor.build.revision
 ```
 
+<div dir="rtl">
+
 مثال:
+</div>
 
 ```csharp
 [assembly: AssemblyVersion("2.5.6.7")]
 ```
+
+<div dir="rtl">
 
 فرهنگ از ویژگی **AssemblyCulture** گرفته می‌شود و برای **satellite assembly**ها کاربرد دارد (در بخش «Resources and Satellite Assemblies» صفحه ۷۷۶ توضیح داده شده است).
 
@@ -263,16 +287,22 @@ major.minor.build.revision
 ### 🔹 اسامی کامل (Fully Qualified Names) 🔹
 
 یک نام کامل اسمبلی رشته‌ای است که شامل هر چهار بخش هویت است، به شکل:
+</div>
 
 ```
 simple-name, Version=version, Culture=culture, PublicKeyToken=public-key
 ```
 
+<div dir="rtl">
+
 مثال: نام کامل `System.Private.CoreLib.dll`:
+</div>
 
 ```
 System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e
 ```
+
+<div dir="rtl">
 
 اگر ویژگی **AssemblyVersion** وجود نداشته باشد، نسخه به صورت `0.0.0.0` نمایش داده می‌شود. اگر unsigned باشد، **public key token** برابر `null` است.
 
@@ -318,17 +348,23 @@ System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d
 * **GetPublicKeyToken** آخرین ۸ بایت استفاده‌شده برای تعیین هویت را برمی‌گرداند.
 
 مثال: به‌دست آوردن نام ساده یک اسمبلی:
+</div>
 
 ```csharp
 Console.WriteLine(typeof(string).Assembly.GetName().Name);
 // System.Private.CoreLib
 ```
 
+<div dir="rtl">
+
 دریافت نسخه اسمبلی:
+</div>
 
 ```csharp
 string v = myAssembly.GetName().Version.ToString();
 ```
+
+<div dir="rtl">
 
 ---
 
@@ -404,26 +440,35 @@ CLR امضای **Authenticode** را به‌عنوان بخشی از هویت ا
 می‌توانید از ابزار **signtool** که همراه Visual Studio نصب می‌شود استفاده کنید.
 
 مثال امضا فایل `LINQPad.exe` با گواهی در **My Store** به نام `"Joseph Albahari"` با الگوریتم SHA-256:
+</div>
 
 ```bash
 signtool sign /n "Joseph Albahari" /fd sha256 LINQPad.exe
 ```
 
+<div dir="rtl">
+
 همچنین می‌توانید توضیح و URL محصول را اضافه کنید:
+</div>
 
 ```bash
 ... /d LINQPad /du http://www.linqpad.net
 ```
+
+<div dir="rtl">
 
 > ⚠️ معمولاً برای حفظ اعتبار پس از انقضای گواهی، باید **time-stamping server** هم مشخص شود.
 
 #### Time Stamping
 
 با استفاده از time-stamping، برنامه‌هایی که قبل از انقضای گواهی امضا شده‌اند، هنوز معتبر باقی می‌مانند. CA یک URI برای این منظور ارائه می‌دهد، مانند:
+</div>
 
 ```bash
 ... /tr http://timestamp.comodoca.com/authenticode /td SHA256
 ```
+
+<div dir="rtl">
 
 #### بررسی امضا
 
@@ -443,6 +488,7 @@ signtool sign /n "Joseph Albahari" /fd sha256 LINQPad.exe
 یک **assembly resource** در نهایت یک **byte stream** با نام مشخص است. می‌توان یک اسمبلی را مانند یک دیکشنری از **byte arrays** در نظر گرفت که کلیدهای آن رشته هستند.
 
 مثال در **ildasm** از اسمبلی که دو resource به نام‌های `banner.jpg` و `data.xml` دارد:
+</div>
 
 ```
 .mresource public banner.jpg
@@ -454,6 +500,8 @@ signtool sign /n "Joseph Albahari" /fd sha256 LINQPad.exe
   // Offset: 0x00001458 Length: 0x0000027E
 }
 ```
+
+<div dir="rtl">
 
 در این مثال، `banner.jpg` و `data.xml` مستقیماً به اسمبلی اضافه شده‌اند، هر کدام به‌عنوان **embedded resource** خود. این ساده‌ترین روش برای کار با منابع است.
 
@@ -480,10 +528,13 @@ signtool sign /n "Joseph Albahari" /fd sha256 LINQPad.exe
 
 Visual Studio همیشه نام منابع را با **namespace پیش‌فرض پروژه** و همچنین نام هر **زیرپوشه** که فایل در آن قرار دارد، پیشوند می‌کند.
 مثلاً اگر namespace پیش‌فرض پروژه `Westwind.Reports` باشد و فایل `banner.jpg` در پوشه `pictures` باشد، نام resource به شکل زیر خواهد بود:
+</div>
 
 ```
 Westwind.Reports.pictures.banner.jpg
 ```
+
+<div dir="rtl">
 
 > ⚠️ نام منابع **حساس به حروف بزرگ و کوچک** است، بنابراین نام پوشه‌های پروژه که شامل منابع هستند، به‌طور مؤثر حساس به حروف خواهند بود.
 
@@ -492,6 +543,7 @@ Westwind.Reports.pictures.banner.jpg
 #### دسترسی به منابع
 
 برای دسترسی به یک resource، متد **GetManifestResourceStream** روی اسمبلی حاوی آن را صدا بزنید. این متد یک **Stream** برمی‌گرداند که می‌توانید مانند هر Stream دیگری آن را بخوانید:
+</div>
 
 ```csharp
 Assembly a = Assembly.GetEntryAssembly();
@@ -502,7 +554,10 @@ using (XmlReader r = XmlReader.Create(s))
 }
 ```
 
+<div dir="rtl">
+
 مثال دیگر برای تصویر:
+</div>
 
 ```csharp
 System.Drawing.Image image;
@@ -510,7 +565,10 @@ using (Stream s = a.GetManifestResourceStream("TestProject.banner.jpg"))
     image = System.Drawing.Image.FromStream(s);
 ```
 
+<div dir="rtl">
+
 Stream بازگشتی قابل **seek** است، بنابراین می‌توانید به شکل زیر نیز داده‌ها را بخوانید:
+</div>
 
 ```csharp
 byte[] data;
@@ -518,12 +576,17 @@ using (Stream s = a.GetManifestResourceStream("TestProject.banner.jpg"))
     data = new BinaryReader(s).ReadBytes((int)s.Length);
 ```
 
+<div dir="rtl">
+
 > ⚠️ اگر از Visual Studio برای جاسازی resource استفاده کرده‌اید، فراموش نکنید پیشوند namespace را لحاظ کنید.
 > برای کاهش خطا، می‌توانید پیشوند را با یک نوع مشخص کنید:
+</div>
 
 ```csharp
 using (Stream s = a.GetManifestResourceStream(typeof(X), "data.xml"))
 ```
+
+<div dir="rtl">
 
 `X` می‌تواند هر نوعی باشد که دارای namespace موردنظر شما است (معمولاً نوعی در همان پوشه پروژه).
 
@@ -559,6 +622,7 @@ using (Stream s = a.GetManifestResourceStream(typeof(X), "data.xml"))
 #### .resx Files
 
 فایل‌های `.resx` فرمتی در زمان طراحی هستند که برای تولید `.resources` استفاده می‌شوند. این فایل‌ها با XML ساخته می‌شوند و ساختار آن‌ها به صورت **name/value pairs** است:
+</div>
 
 ```xml
 <root>
@@ -570,6 +634,8 @@ using (Stream s = a.GetManifestResourceStream(typeof(X), "data.xml"))
   </data>
 </root>
 ```
+
+<div dir="rtl">
 
 در Visual Studio برای ایجاد `.resx`:
 
@@ -590,15 +656,19 @@ using (Stream s = a.GetManifestResourceStream(typeof(X), "data.xml"))
 کلاسی با همان نام `.resx` تولید می‌شود و دارای **properties** برای دسترسی به هر آیتم است.
 
 **ResourceManager** برای خواندن فایل‌های `.resources` جاسازی‌شده در اسمبلی استفاده می‌شود:
+</div>
 
 ```csharp
 ResourceManager r = new ResourceManager("welcome",
                                         Assembly.GetExecutingAssembly());
 ```
 
+<div dir="rtl">
+
 > ⚠️ اگر resource در Visual Studio کامپایل شده، آرگومان اول باید **namespace-prefixed** باشد.
 
 دسترسی به محتوا:
+</div>
 
 ```csharp
 string greeting = r.GetString("Greeting");
@@ -606,7 +676,10 @@ int fontSize = (int) r.GetObject("DefaultFontSize");
 Image image = (Image) r.GetObject("flag.png");
 ```
 
+<div dir="rtl">
+
 برای فهرست کردن محتویات یک فایل `.resources`:
+</div>
 
 ```csharp
 ResourceManager r = new ResourceManager(...);
@@ -615,11 +688,14 @@ foreach (System.Collections.DictionaryEntry entry in set)
     Console.WriteLine(entry.Key);
 ```
 
+<div dir="rtl">
+
 ---
 
 ### 🔹 ایجاد resource با pack URI در Visual Studio 🔹
 
 در برنامه‌های WPF، فایل‌های XAML باید بتوانند منابع را از طریق URI بخوانند، مانند:
+</div>
 
 ```xml
 <Button>
@@ -627,7 +703,10 @@ foreach (System.Collections.DictionaryEntry entry in set)
 </Button>
 ```
 
+<div dir="rtl">
+
 یا اگر resource در اسمبلی دیگری باشد:
+</div>
 
 ```xml
 <Button>
@@ -635,12 +714,15 @@ foreach (System.Collections.DictionaryEntry entry in set)
 </Button>
 ```
 
+<div dir="rtl">
+
 > ⚠️ کلمه **Component** کلیدواژه ثابت است.
 
 برای ایجاد چنین منابعی نمی‌توان از فایل‌های `.resx` استفاده کرد. باید فایل‌ها را به پروژه اضافه کرده و **Build Action** را روی **Resource** قرار دهید (نه Embedded Resource).
 Visual Studio سپس آن‌ها را به فایل `.resources` به نام `<AssemblyName>.g.resources` تبدیل می‌کند و همچنین فایل‌های XAML کامپایل‌شده (.baml) نیز در همانجا قرار می‌گیرند.
 
 برای بارگذاری منابع با **URI-key** به‌صورت برنامه‌نویسی:
+</div>
 
 ```csharp
 Uri u = new Uri("flag.png", UriKind.Relative);
@@ -650,13 +732,19 @@ using (Stream s = Application.GetResourceStream(u).Stream)
 }
 ```
 
+<div dir="rtl">
+
 همچنین می‌توان از **absolute URI** به شکل زیر استفاده کرد:
+</div>
 
 ```csharp
 Uri u = new Uri("pack://application:,,,/flag.png");
 ```
 
+<div dir="rtl">
+
 اگر بخواهید **Assembly object** مشخص کنید، می‌توانید از **ResourceManager** استفاده کنید:
+</div>
 
 ```csharp
 Assembly a = Assembly.GetExecutingAssembly();
@@ -666,6 +754,8 @@ using (Stream s = r.GetStream("flag.png"))
     ...
 }
 ```
+
+<div dir="rtl">
 
 **ResourceManager** همچنین اجازه می‌دهد محتوای یک کانتینر `.g.resources` داخل یک اسمبلی را فهرست کنید.
 
@@ -690,6 +780,7 @@ using (Stream s = r.GetStream("flag.png"))
 #### مسیرهای استقرار Satellite Assemblies
 
 Satellite assemblies در زیرپوشه‌های فولدر اسمبلی قرار می‌گیرند:
+</div>
 
 ```
 programBaseFolder\MyProgram.exe
@@ -697,6 +788,8 @@ programBaseFolder\MyProgram.exe
                  \XX\MyProgram.resources.dll
                  \XX\MyLibrary.resources.dll
 ```
+
+<div dir="rtl">
 
 `XX` به کد دو حرفی زبان اشاره دارد (مثلاً `de` برای آلمانی) یا ترکیبی از زبان و منطقه (مثل `en-GB` برای انگلیسی در بریتانیا).
 این سیستم نامگذاری به CLR اجازه می‌دهد تا به‌صورت خودکار satellite assembly مناسب را پیدا و بارگذاری کند.
@@ -706,6 +799,7 @@ programBaseFolder\MyProgram.exe
 #### ساخت Satellite Assemblies
 
 فرض کنید مثال قبلی ما با `.resx` شامل این بود:
+</div>
 
 ```xml
 <root>
@@ -716,7 +810,10 @@ programBaseFolder\MyProgram.exe
 </root>
 ```
 
+<div dir="rtl">
+
 و در زمان اجرا آن را به شکل زیر خواندیم:
+</div>
 
 ```csharp
 ResourceManager r = new ResourceManager("welcome",
@@ -724,8 +821,11 @@ ResourceManager r = new ResourceManager("welcome",
 Console.Write(r.GetString("Greeting"));
 ```
 
+<div dir="rtl">
+
 حال فرض کنید می‌خواهیم وقتی برنامه روی نسخه آلمانی ویندوز اجرا شد، `hello` به `hallo` تبدیل شود.
 ابتدا یک فایل `.resx` دیگر به نام `welcome.de.resx` ایجاد می‌کنیم که مقدار را جایگزین کند:
+</div>
 
 ```xml
 <root>
@@ -735,6 +835,8 @@ Console.Write(r.GetString("Greeting"));
 </root>
 ```
 
+<div dir="rtl">
+
 در **Visual Studio** تنها کافی است این کار را انجام دهید. هنگام **rebuild**، به‌طور خودکار یک **satellite assembly** به نام `MyApp.resources.dll` در یک زیرپوشه `de` ساخته می‌شود.
 
 ---
@@ -742,11 +844,14 @@ Console.Write(r.GetString("Greeting"));
 #### تست Satellite Assemblies
 
 برای شبیه‌سازی اجرای برنامه روی سیستم‌عاملی با زبان متفاوت، باید **CurrentUICulture** را با کلاس `Thread` تغییر دهید:
+</div>
 
 ```csharp
 System.Threading.Thread.CurrentThread.CurrentUICulture
     = new System.Globalization.CultureInfo("de");
 ```
+
+<div dir="rtl">
 
 > ⚠️ `CultureInfo.CurrentUICulture` نسخه فقط‌خواندنی همین property است.
 
@@ -773,33 +878,45 @@ System.Threading.Thread.CurrentThread.CurrentUICulture
 * .NET مطابق استاندارد **RFC1766** از کدهای دو حرفی برای فرهنگ‌ها و زیرفرهنگ‌ها استفاده می‌کند:
 
 **مثال کد فرهنگ‌ها:**
+</div>
 
 ```
 En  → انگلیسی
 de  → آلمانی
 ```
 
+<div dir="rtl">
+
 **مثال کد زیرفرهنگ‌ها:**
+</div>
 
 ```
 en-AU  → انگلیسی استرالیا
 de-AT  → آلمانی اتریش
 ```
 
+<div dir="rtl">
+
 * فرهنگ‌ها در .NET با کلاس `System.Globalization.CultureInfo` نمایش داده می‌شوند.
 * بررسی فرهنگ فعلی برنامه:
+</div>
 
 ```csharp
 Console.WriteLine(System.Threading.Thread.CurrentThread.CurrentCulture);
 Console.WriteLine(System.Threading.Thread.CurrentThread.CurrentUICulture);
 ```
 
+<div dir="rtl">
+
 مثال برای سیستم محلی‌سازی‌شده برای استرالیا:
+</div>
 
 ```
 CurrentCulture      → en-AU
 CurrentUICulture    → en-US
 ```
+
+<div dir="rtl">
 
 > ⚠️ `CurrentCulture` تنظیمات منطقه‌ای **Control Panel ویندوز** را نشان می‌دهد، در حالی که `CurrentUICulture` زبان سیستم عامل را مشخص می‌کند.
 > تنظیمات منطقه‌ای شامل **منطقه زمانی، قالب تاریخ و ارز** است. `CurrentCulture` رفتار پیش‌فرض توابعی مانند `DateTime.Parse` را تعیین می‌کند.
@@ -823,12 +940,15 @@ CurrentUICulture    → en-US
 2. صریحاً، وقتی شما متدی مانند `Assembly.Load(AssemblyName)` را فراخوانی می‌کنید.
 
 مثال: یک برنامه با اسمبلی اصلی و تعدادی کتابخانه استاتیک:
+</div>
 
 ```
 AdventureGame.dll    // Main assembly
 Terrain.dll          // Referenced assembly
 UIEngine.dll         // Referenced assembly
 ```
+
+<div dir="rtl">
 
 > منظور از **statically referenced** این است که AdventureGame.dll هنگام کامپایل با ارجاع به Terrain.dll و UIEngine.dll ساخته شده است.
 > کامپایلر خودش نیاز به حل وابستگی ندارد، زیرا مسیرهای اسمبلی‌ها به او داده شده‌اند. اما در زمان اجرا، باید این اسمبلی‌ها **resolve** شوند.
@@ -845,6 +965,7 @@ UIEngine.dll         // Referenced assembly
 
 هر **Assembly** در .NET دقیقاً در یک **ALC** قرار دارد.
 می‌توانید ALC یک اسمبلی را به این شکل دریافت کنید:
+</div>
 
 ```csharp
 Assembly assem = Assembly.GetExecutingAssembly();
@@ -852,12 +973,17 @@ AssemblyLoadContext context = AssemblyLoadContext.GetLoadContext(assem);
 Console.WriteLine(context.Name);
 ```
 
+<div dir="rtl">
+
 همچنین، می‌توانید تمام اسمبلی‌های متعلق به یک ALC را با استفاده از property `Assemblies` ببینید:
+</div>
 
 ```csharp
 foreach (Assembly a in context.Assemblies)
     Console.WriteLine(a.FullName);
 ```
+
+<div dir="rtl">
 
 کلاس **`AssemblyLoadContext`** همچنین یک property ایستاتیک **`All`** دارد که همه ALCها را فهرست می‌کند.
 
@@ -866,10 +992,13 @@ foreach (Assembly a in context.Assemblies)
 #### 🔹 ساخت و سفارشی‌سازی ALC
 
 * می‌توانید یک **ALC جدید** فقط با نمونه‌سازی `AssemblyLoadContext` و ارائه یک نام ایجاد کنید:
+</div>
 
 ```csharp
 var alc = new AssemblyLoadContext("MyALC");
 ```
+
+<div dir="rtl">
 
 * معمولاً بهتر است کلاس را **subclass کنید** تا بتوانید منطق حل وابستگی‌ها (Load) را سفارشی‌سازی کنید و اسمبلی‌ها را از نامشان بارگذاری نمایید.
 
@@ -880,18 +1009,24 @@ var alc = new AssemblyLoadContext("MyALC");
 ALC دو متد مهم برای بارگذاری فراهم می‌کند:
 
 1. **از مسیر فایل:**
+</div>
 
 ```csharp
 Assembly assem = alc.LoadFromAssemblyPath(@"c:\temp\foo.dll");
 ```
 
+<div dir="rtl">
+
 2. **از Stream (مثلاً حافظه):**
+</div>
 
 ```csharp
 byte[] bytes = File.ReadAllBytes(@"c:\temp\foo.dll");
 var ms = new MemoryStream(bytes);
 Assembly assem = alc.LoadFromStream(ms);
 ```
+
+<div dir="rtl">
 
 > پارامتر دوم در `LoadFromStream` می‌تواند حاوی اطلاعات debug (.pdb) باشد تا stack traceها شامل اطلاعات سورس شوند.
 
@@ -901,6 +1036,7 @@ Assembly assem = alc.LoadFromStream(ms);
 
 * **نام ساده اسمبلی باید در یک ALC منحصر به فرد باشد.**
   برای بارگذاری نسخه‌های مختلف، باید ALCهای جداگانه بسازید:
+</div>
 
 ```csharp
 var alc1 = new AssemblyLoadContext("ALC1");
@@ -909,6 +1045,8 @@ var assem1 = alc1.LoadFromAssemblyPath(@"c:\temp\foo.dll");
 var alc2 = new AssemblyLoadContext("ALC2");
 var assem2 = alc2.LoadFromAssemblyPath(@"c:\temp\foo.dll");
 ```
+
+<div dir="rtl">
 
 > حتی اگر محتویات اسمبلی‌ها یکسان باشند، **typeهای آن‌ها با هم ناسازگار هستند**.
 
@@ -933,10 +1071,13 @@ var assem2 = alc2.LoadFromAssemblyPath(@"c:\temp\foo.dll");
 ### 🔹 Assembly Resolution in .NET – بارگذاری و حل وابستگی اسمبلی‌ها
 
 کلاس **`AssemblyLoadContext`** علاوه بر بارگذاری اسمبلی‌ها از مسیر یا استریم، یک روش دیگر هم دارد: **بارگذاری از نام اسمبلی**.
+</div>
 
 ```csharp
 public Assembly LoadFromAssemblyName(AssemblyName assemblyName);
 ```
+
+<div dir="rtl">
 
 * در این روش شما **مسیر فایل** را مشخص نمی‌کنید.
 * ALC مسئول **حل وابستگی و پیدا کردن اسمبلی** است.
@@ -988,6 +1129,7 @@ public Assembly LoadFromAssemblyName(AssemblyName assemblyName);
 * bar.dll به عنوان وابستگی خصوصی foo.dll
 
 #### روش ۱: subclass و override Load
+</div>
 
 ```csharp
 using System.IO;
@@ -1014,11 +1156,14 @@ var alc = new FolderBasedALC(@"c:\temp");
 Assembly foo = alc.LoadFromAssemblyName(new AssemblyName("foo"));
 ```
 
+<div dir="rtl">
+
 > Load method با null برگرداندن، اجازه می‌دهد **وابستگی‌های BCL** توسط Default ALC حل شوند.
 
 ---
 
 #### روش ۲: رویداد Resolving
+</div>
 
 ```csharp
 var alc = new AssemblyLoadContext("test");
@@ -1030,6 +1175,8 @@ alc.Resolving += (context, assemblyName) =>
 
 Assembly foo = alc.LoadFromAssemblyName(new AssemblyName("foo"));
 ```
+
+<div dir="rtl">
 
 * مزیت: ساده‌تر است، چون Default ALC ابتدا بررسی می‌شود.
 * عیب: اگر برنامه اصلی خودش نیاز به foo.dll یا bar.dll داشته باشد، ایزوله‌سازی برقرار نمی‌شود.
@@ -1049,6 +1196,7 @@ ALC پیش‌فرض جایی است که **assembly شروع برنامه** با
 ALC پیش‌فرض ابتدا در **مسیرهای پیش‌فرض جستجو (default probing paths)** به دنبال اسمبلی‌ها می‌گردد تا آن‌ها را به‌طور خودکار حل کند (صفحه 791 را ببینید)؛ این مسیرها معمولاً همان مکان‌های مشخص‌شده در فایل‌های **.deps.json** و **.runtimeconfig.json** برنامه هستند.
 
 اگر ALC نتواند یک اسمبلی را در مسیرهای پیش‌فرض پیدا کند، رویداد **Resolving** آن فراخوانی می‌شود. مدیریت این رویداد به شما اجازه می‌دهد تا اسمبلی را از مکان‌های دیگر بارگذاری کنید. به این ترتیب، می‌توانید وابستگی‌های برنامه را در مسیرهای اضافی مانند زیرپوشه‌ها، پوشه‌های مشترک یا حتی به‌صورت یک منبع باینری داخل **host assembly** قرار دهید:
+</div>
 
 ```csharp
 AssemblyLoadContext.Default.Resolving += (loadContext, assemblyName) =>
@@ -1058,6 +1206,8 @@ AssemblyLoadContext.Default.Resolving += (loadContext, assemblyName) =>
     // ...
 };
 ```
+
+<div dir="rtl">
 
 > رویداد **Resolving** در ALC پیش‌فرض همچنین وقتی یک **Custom ALC** نتواند اسمبلی را حل کند (یعنی متد Load آن null برگرداند) و ALC پیش‌فرض نیز نتواند اسمبلی را حل کند، فراخوانی می‌شود.
 
@@ -1076,10 +1226,13 @@ AssemblyLoadContext.Default.Resolving += (loadContext, assemblyName) =>
 اگر اسمبلی در مکانی است که ALC به‌طور خودکار آن را پیدا نمی‌کند، باز هم می‌توانید همین روش را دنبال کرده و علاوه بر آن رویداد **Resolving** را مدیریت کنید.
 
 توجه داشته باشید که هنگام فراخوانی `LoadFromAssemblyName` نیازی به ارائه نام کامل نیست؛ **نام ساده کافی است** (و حتی اگر اسمبلی دارای Strong Name باشد معتبر است):
+</div>
 
 ```csharp
 AssemblyLoadContext.Default.LoadFromAssemblyName("System.Xml");
 ```
+
+<div dir="rtl">
 
 اما اگر **Public Key Token** را در نام قرار دهید، باید با آنچه بارگذاری شده مطابقت داشته باشد.
 
@@ -1104,6 +1257,7 @@ AssemblyLoadContext.Default.LoadFromAssemblyName("System.Xml");
 در بخش قبل، نسبت به بارگذاری مستقیم اسمبلی در **ALC پیش‌فرض** هشدار دادیم. معمولاً چیزی که می‌خواهید، بارگذاری/حل در **ALC جاری** است.
 
 در اکثر موارد، **ALC جاری** همان ALCی است که شامل **assembly در حال اجرا** است:
+</div>
 
 ```csharp
 var executingAssem = Assembly.GetExecutingAssembly();
@@ -1112,7 +1266,10 @@ Assembly assem = alc.LoadFromAssemblyName(...);  // حل بر اساس نام
 // یا: = alc.LoadFromAssemblyPath(...);  // بارگذاری بر اساس مسیر
 ```
 
+<div dir="rtl">
+
 یک روش انعطاف‌پذیر و واضح‌تر برای به‌دست آوردن ALC:
+</div>
 
 ```csharp
 var myAssem = typeof(SomeTypeInMyAssembly).Assembly;
@@ -1120,11 +1277,14 @@ var alc = AssemblyLoadContext.GetLoadContext(myAssem);
 ...
 ```
 
+<div dir="rtl">
+
 گاهی امکان تعیین “ALC جاری” وجود ندارد.
 مثلاً اگر مسئول نوشتن **binary serializer** در .NET باشید، این serializer نام کامل نوع‌ها (شامل نام اسمبلی) را می‌نویسد و باید هنگام **deserialization** حل شوند. سؤال این است: از کدام ALC استفاده کنیم؟
 مشکل این است که اگر به **executing assembly** اتکا کنیم، ALC همان assembly را برمی‌گرداند که serializer را دارد، نه assembly‌ای که serializer را فراخوانی می‌کند.
 
 راه حل بهترین: **صریح بودن**:
+</div>
 
 ```csharp
 public object Deserialize(Stream stream, AssemblyLoadContext alc)
@@ -1133,7 +1293,10 @@ public object Deserialize(Stream stream, AssemblyLoadContext alc)
 }
 ```
 
+<div dir="rtl">
+
 با این کار، **caller** مشخص می‌کند که چه چیزی “ALC جاری” است:
+</div>
 
 ```csharp
 var assem = typeof(SomeTypeThatIWillBeDeserializing).Assembly;
@@ -1141,9 +1304,12 @@ var alc = AssemblyLoadContext.GetLoadContext(assem);
 var obj = Deserialize(someStream, alc);
 ```
 
+<div dir="rtl">
+
 ### 🔹 Assembly.Load و ALCهای زمینه‌ای (Contextual ALCs) ⚙️
 
 برای سناریوی رایج بارگذاری یک اسمبلی در **ALC در حال اجرای جاری**، معمولاً کد زیر را می‌نویسیم:
+</div>
 
 ```csharp
 var executingAssem = Assembly.GetExecutingAssembly();
@@ -1151,25 +1317,36 @@ var alc = AssemblyLoadContext.GetLoadContext(executingAssem);
 Assembly assem = alc.LoadFromAssemblyName(...);
 ```
 
+<div dir="rtl">
+
 برای راحتی توسعه‌دهندگان، مایکروسافت متد زیر را در کلاس **Assembly** تعریف کرده است:
+</div>
 
 ```csharp
 public static Assembly Load(string assemblyString);
 ```
 
+<div dir="rtl">
+
 همچنین نسخه‌ای کاملاً مشابه وجود دارد که **یک شی AssemblyName** می‌پذیرد:
+</div>
 
 ```csharp
 public static Assembly Load(AssemblyName assemblyRef);
 ```
 
+<div dir="rtl">
+
 > این متدها با متد قدیمی **Load(byte\[])** که رفتار کاملاً متفاوتی دارد متفاوت هستند (صفحه 798 را ببینید).
 
 همانند `LoadFromAssemblyName`، شما می‌توانید نام **ساده، جزئی یا کامل** اسمبلی را مشخص کنید:
+</div>
 
 ```csharp
 Assembly a = Assembly.Load("System.Private.Xml");
 ```
+
+<div dir="rtl">
 
 این دستور اسمبلی `System.Private.Xml` را در **هر ALCی که assembly در آن بارگذاری شده است**، بارگذاری می‌کند.
 
@@ -1190,22 +1367,29 @@ Assembly a = Assembly.Load("System.Private.Xml");
 
 > نکته مهم: از **Assembly.Load** برای بارگذاری یک اسمبلی که به صورت استاتیک ارجاع شده استفاده نکنید.
 > کافی است به یک **type** در آن assembly ارجاع دهید و assembly را از آن دریافت کنید:
+</div>
 
 ```csharp
 Assembly a = typeof(System.Xml.Formatting).Assembly;
 ```
 
+<div dir="rtl">
+
 یا حتی:
+</div>
 
 ```csharp
 Assembly a = System.Xml.Formatting.Indented.GetType().Assembly;
 ```
+
+<div dir="rtl">
 
 این روش از **hardcoding نام اسمبلی** جلوگیری می‌کند و همزمان فرآیند **assembly resolution** در ALC در حال اجرای کد را فعال می‌کند (همان کاری که Assembly.Load انجام می‌دهد).
 
 ---
 
 اگر می‌خواستید خودتان متد Assembly.Load را بنویسید، تقریباً چنین چیزی می‌شد:
+</div>
 
 ```csharp
 [MethodImpl(MethodImplOptions.NoInlining)]
@@ -1216,6 +1400,8 @@ Assembly Load(string name)
     return callingAlc.LoadFromAssemblyName(new AssemblyName(name));
 }
 ```
+
+<div dir="rtl">
 
 ---
 
@@ -1233,6 +1419,7 @@ Assembly Load(string name)
 * این پراپرتی استاتیک است، اما مقدار آن در **AsyncLocal** ذخیره می‌شود و می‌تواند در threadهای مختلف مقادیر جداگانه داشته باشد و همچنان در عملیات‌های asynchronous حفظ شود.
 
 اگر این پراپرتی غیر-null باشد، **Assembly.Load** به‌طور خودکار از آن استفاده می‌کند و اولویت بالاتری نسبت به ALC فراخواننده دارد:
+</div>
 
 ```csharp
 Method1();
@@ -1251,10 +1438,13 @@ void Method2() => Assembly.Load("..."); // از myALC استفاده می‌کن
 void Method3() => Assembly.Load("..."); // از ALC فراخواننده استفاده می‌کند
 ```
 
+<div dir="rtl">
+
 ---
 
 قبلاً نشان دادیم چگونه می‌توان یک متد مشابه Assembly.Load نوشت.
 نسخه‌ای دقیق‌تر که **contextual reflection** را هم در نظر می‌گیرد، چنین است:
+</div>
 
 ```csharp
 [MethodImpl(MethodImplOptions.NoInlining)]
@@ -1266,6 +1456,8 @@ Assembly Load(string name)
 }
 ```
 
+<div dir="rtl">
+
 هرچند contextual reflection برای اجرای کد legacy مفید است، **راه حل مقاوم‌تر** همان است که قبلاً گفتیم: کد فراخواننده را تغییر دهید تا **LoadFromAssemblyName** روی ALC مشخص‌شده توسط caller فراخوانی شود.
 
 > در .NET Framework هیچ معادلی برای EnterContextualReflection وجود ندارد و نیاز هم نیست، چون ایزوله‌سازی اساساً با **application domain** انجام می‌شود، که هر domain خودش یک default load context دارد و بنابراین ایزوله‌سازی حتی با استفاده از ALC پیش‌فرض هم امکان‌پذیر است.
@@ -1273,11 +1465,14 @@ Assembly Load(string name)
 
 ALCها می‌توانند **کتابخانه‌های native** را نیز بارگذاری و حل کنند.
 حل وابستگی native زمانی اتفاق می‌افتد که شما متدی خارجی را فراخوانی کنید که با صفت `[DllImport]` مشخص شده است:
+</div>
 
 ```csharp
 [DllImport("SomeNativeLibrary.dll")]
 static extern int SomeNativeMethod(string text);
 ```
+
+<div dir="rtl">
 
 چون در `[DllImport]` مسیر کامل مشخص نشده، فراخوانی `SomeNativeMethod` باعث **trigger شدن حل وابستگی در همان ALC** می‌شود که اسمبلی تعریف‌کننده `SomeNativeMethod` در آن قرار دارد.
 
@@ -1289,6 +1484,7 @@ static extern int SomeNativeMethod(string text);
 * متد **بارگذاری**: `LoadUnmanagedDllFromPath`
 
 مثال:
+</div>
 
 ```csharp
 protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
@@ -1299,6 +1495,8 @@ protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
 }
 ```
 
+<div dir="rtl">
+
 اگر نتوانید فایل را پیدا کنید، می‌توانید `IntPtr.Zero` برگردانید. در این صورت CLR رویداد `ResolvingUnmanagedDll` را در ALC فعال می‌کند.
 
 ---
@@ -1307,6 +1505,7 @@ protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
 
 متد `LoadUnmanagedDllFromPath` **protected** است، بنابراین معمولاً نمی‌توانید از handler رویداد `ResolvingUnmanagedDll` مستقیماً آن را فراخوانی کنید.
 با این حال، می‌توانید همان نتیجه را با **`NativeLibrary.Load`** استاتیک به دست آورید:
+</div>
 
 ```csharp
 someALC.ResolvingUnmanagedDll += (requestingAssembly, unmanagedDllName) =>
@@ -1314,6 +1513,8 @@ someALC.ResolvingUnmanagedDll += (requestingAssembly, unmanagedDllName) =>
     return NativeLibrary.Load("(full path to unmanaged DLL)");
 };
 ```
+
+<div dir="rtl">
 
 > کتابخانه‌های native معمولاً توسط ALC حل و بارگذاری می‌شوند، اما متعلق به ALC نیستند.
 > پس از بارگذاری، هر کتابخانه native مستقل است و مسئول حل وابستگی‌های transitve خود است.
@@ -1330,16 +1531,22 @@ someALC.ResolvingUnmanagedDll += (requestingAssembly, unmanagedDllName) =>
 
 **AssemblyDependencyResolver** این مشکل را حل می‌کند.
 ابتدا آن را با مسیر اسمبلی مورد نظر برای بررسی وابستگی‌ها نمونه‌سازی می‌کنیم:
+</div>
 
 ```csharp
 var resolver = new AssemblyDependencyResolver(@"c:\temp\foo.dll");
 ```
 
+<div dir="rtl">
+
 سپس برای پیدا کردن مسیر یک وابستگی، متد `ResolveAssemblyToPath` را فراخوانی می‌کنیم:
+</div>
 
 ```csharp
 string path = resolver.ResolveAssemblyToPath(new AssemblyName("bar"));
 ```
+
+<div dir="rtl">
 
 اگر `.deps.json` وجود نداشته باشد یا شامل اطلاعاتی درباره `bar.dll` نباشد، مسیر به صورت پیش‌فرض به `c:\temp\bar.dll` ارزیابی می‌شود.
 
@@ -1352,6 +1559,7 @@ string path = resolver.ResolveAssemblyToPath(new AssemblyName("bar"));
 1. یک پروژه Console به نام `ClientApp` بسازید.
 2. یک reference به `Microsoft.Data.SqlClient` اضافه کنید.
 3. کلاس زیر را اضافه کنید:
+</div>
 
 ```csharp
 using Microsoft.Data.SqlClient;
@@ -1366,6 +1574,8 @@ namespace ClientApp
 }
 ```
 
+<div dir="rtl">
+
 اگر برنامه را بسازید و در پوشه خروجی نگاه کنید، فایل `Microsoft.Data.SqlClient.dll` وجود دارد.
 اما این فایل هنگام اجرا بارگذاری نمی‌شود و تلاش برای بارگذاری صریح آن باعث Exception می‌شود.
 assembly واقعی در زیرپوشه `runtimes\win` (یا `runtimes/unix`) قرار دارد و **ALC پیش‌فرض با parsing فایل `ClientApp.deps.json` آن را بارگذاری می‌کند**.
@@ -1374,6 +1584,7 @@ assembly واقعی در زیرپوشه `runtimes\win` (یا `runtimes/unix`) ق
 
 اگر بخواهید `ClientApp.dll` را از برنامه دیگری بارگذاری کنید، نیاز به یک **ALC سفارشی** دارید که وابستگی آن یعنی `Microsoft.Data.SqlClient.dll` را حل کند.
 کافی نیست فقط پوشه `ClientApp.dll` را بررسی کنید، بلکه باید **AssemblyDependencyResolver** مسیر دقیق فایل را برای پلتفرم فعلی پیدا کند:
+</div>
 
 ```csharp
 string path = @"C:\source\ClientApp\bin\Debug\netcoreapp3.0\ClientApp.dll";
@@ -1382,21 +1593,29 @@ var sqlClient = new AssemblyName("Microsoft.Data.SqlClient");
 Console.WriteLine(resolver.ResolveAssemblyToPath(sqlClient));
 ```
 
+<div dir="rtl">
+
 خروجی در ویندوز معمولاً چنین است:
+</div>
 
 ```
 C:\source\ClientApp\bin\Debug\netcoreapp3.0\runtimes\win\lib\netcoreapp2.1\Microsoft.Data.SqlClient.dll
 ```
+
+<div dir="rtl">
 
 > یک مثال کامل در بخش **Writing a Plug-In System** در صفحه 799 ارائه شده است.
 ### 🔹 خارج کردن ALCها از حافظه و آزادسازی منابع 🗑️
 
 در موارد ساده، می‌توان یک **AssemblyLoadContext غیر پیش‌فرض** را از حافظه خارج کرد تا هم حافظه آزاد شود و هم قفل فایل‌های بارگذاری‌شده رفع شود.
 برای این کار، هنگام ایجاد ALC باید **پارامتر `isCollectible` را true** قرار دهید:
+</div>
 
 ```csharp
 var alc = new AssemblyLoadContext("test", isCollectible: true);
 ```
+
+<div dir="rtl">
 
 سپس می‌توانید متد `Unload` را فراخوانی کنید تا فرآیند unload آغاز شود.
 
@@ -1415,12 +1634,15 @@ var alc = new AssemblyLoadContext("test", isCollectible: true);
 
 اگر هنوز از **.NET Framework** استفاده می‌کنید یا لایبری می‌نویسید که باید با .NET Framework سازگار باشد، نمی‌توانید از **AssemblyLoadContext** استفاده کنید.
 بارگذاری با متدهای زیر انجام می‌شود:
+</div>
 
 ```csharp
 public static Assembly LoadFrom(string assemblyFile);
 public static Assembly LoadFile(string path);
 public static Assembly Load(byte[] rawAssembly);
 ```
+
+<div dir="rtl">
 
 * `LoadFile` و `Load(byte[])` ایزوله‌سازی ارائه می‌دهند.
 * `LoadFrom` چنین ایزوله‌سازی ندارد.
@@ -1460,6 +1682,7 @@ public static Assembly Load(byte[] rawAssembly);
 با `LoadFile` یا `Load(byte[])`، هر اسمبلی یک ALC جداگانه دارد. این باعث ایزوله‌سازی می‌شود، اما مدیریت آن کمی پیچیده‌تر است.
 
 برای حل وابستگی‌ها، رویداد **AppDomain.CurrentDomain.AssemblyResolve** را مدیریت کنید:
+</div>
 
 ```csharp
 AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
@@ -1470,15 +1693,21 @@ AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
 };
 ```
 
+<div dir="rtl">
+
 > `args` شامل property ای به نام `RequestingAssembly` نیز هست که مشخص می‌کند کدام اسمبلی trigger کننده resolution بوده است.
 
 پس از یافتن اسمبلی، می‌توانید با `Assembly.LoadFile` آن را بارگذاری کنید.
 همچنین می‌توانید تمام assemblyهای بارگذاری شده در AppDomain فعلی را با `AppDomain.CurrentDomain.GetAssemblies()` فهرست کنید.
 این روش در .NET 5+ نیز کار می‌کند و معادل است با:
+</div>
 
 ```csharp
 AssemblyLoadContext.All.SelectMany(a => a.Assemblies)
 ```
+
+<div dir="rtl">
+
 ### 🔹 نوشتن یک سیستم پلاگین با ALCهای قابل خارج‌سازی 🧩
 
 برای نشان دادن کامل مفاهیمی که در این بخش بررسی کردیم، بیایید یک **سیستم پلاگین** بسازیم که از **ALCهای قابل unload** استفاده می‌کند تا هر پلاگین به صورت ایزوله اجرا شود.
@@ -1492,12 +1721,15 @@ AssemblyLoadContext.All.SelectMany(a => a.Assemblies)
 | Plugin.Host   | اپلیکیشن Console   | پیدا کردن و اجرای پلاگین‌ها                                  |
 
 فرض کنید پروژه‌ها در مسیرهای زیر قرار دارند:
+</div>
 
 ```
 c:\source\PluginDemo\Plugin.Common
 c:\source\PluginDemo\Capitalizer
 c:\source\PluginDemo\Plugin.Host
 ```
+
+<div dir="rtl">
 
 تمام پروژه‌ها به **Plugin.Common** ارجاع می‌دهند و هیچ ارجاع بین پروژه‌های دیگر وجود ندارد.
 
@@ -1512,6 +1744,7 @@ c:\source\PluginDemo\Plugin.Host
 
 در **Plugin.Common**، پلاگین‌ها یک وظیفه بسیار ساده دارند: **تغییر یک رشته متن**.
 این interface به شکل زیر تعریف می‌شود:
+</div>
 
 ```csharp
 namespace Plugin.Common
@@ -1523,6 +1756,8 @@ namespace Plugin.Common
 }
 ```
 
+<div dir="rtl">
+
 همین کافی است برای Plugin.Common.
 
 ---
@@ -1531,6 +1766,7 @@ namespace Plugin.Common
 
 پلاگین **Capitalizer** به **Plugin.Common** ارجاع می‌دهد و یک کلاس دارد.
 برای ساده نگه داشتن، هیچ وابستگی اضافی ندارد:
+</div>
 
 ```csharp
 public class CapitalizerPlugin : Plugin.Common.ITextPlugin
@@ -1539,16 +1775,23 @@ public class CapitalizerPlugin : Plugin.Common.ITextPlugin
 }
 ```
 
+<div dir="rtl">
+
 اگر هر دو پروژه را بسازید و به پوشه خروجی **Capitalizer** نگاه کنید، دو اسمبلی زیر را خواهید دید:
+</div>
 
 ```
 Capitalizer.dll      // اسمبلی پلاگین ما
 Plugin.Common.dll    // اسمبلی ارجاع داده شده
 ```
+
+<div dir="rtl">
+
 ### 🔹 Plugin.Host 🖥️
 
 **Plugin.Host** یک اپلیکیشن Console است که شامل دو کلاس است.
 کلاس اول یک **ALC سفارشی** برای بارگذاری پلاگین‌ها است:
+</div>
 
 ```csharp
 class PluginLoadContext : AssemblyLoadContext
@@ -1587,6 +1830,8 @@ class PluginLoadContext : AssemblyLoadContext
 }
 ```
 
+<div dir="rtl">
+
 در **constructor**، مسیر اصلی اسمبلی پلاگین و یک flag برای تعیین اینکه ALC قابل unload باشد یا خیر، دریافت می‌شود.
 
 * متد **Load** جایی است که وابستگی‌ها مدیریت می‌شوند.
@@ -1595,11 +1840,14 @@ class PluginLoadContext : AssemblyLoadContext
 * اگر نسخه‌ای از Plugin.Common.dll در پوشه خروجی پلاگین باشد و ما آن را بارگذاری کنیم، دو نسخه از همان اسمبلی وجود خواهد داشت: یکی در Default ALC میزبان و دیگری در PluginLoadContext پلاگین. این باعث ناسازگاری و خطا می‌شود.
 
 برای حل این مشکل، بررسی می‌کنیم:
+</div>
 
 ```csharp
 if (assemblyName.Name == typeof(ITextPlugin).Assembly.GetName().Name)
     return null;
 ```
+
+<div dir="rtl">
 
 > بازگرداندن **null** باعث می‌شود Default ALC میزبان، اسمبلی را حل کند.
 > می‌توانستیم typeof(ITextPlugin).Assembly را هم برگردانیم و نتیجه درست بود. چون PluginLoadContext در **Plugin.Host** تعریف شده، هر نوعی که مستقیماً از این کلاس ارجاع شود، در Default ALC میزبان حل می‌شود.
@@ -1612,6 +1860,7 @@ if (assemblyName.Name == typeof(ITextPlugin).Assembly.GetName().Name)
 ### 🔹 کلاس Program
 
 برای سادگی، مسیر پلاگین Capitalizer به صورت hardcode شده است (در عمل، مسیرها را می‌توان با جستجوی DLLها یا خواندن فایل کانفیگ پیدا کرد):
+</div>
 
 ```csharp
 class Program
@@ -1649,6 +1898,8 @@ class Program
 }
 ```
 
+<div dir="rtl">
+
 * ابتدا یک **ALC جدید** برای پلاگین ساخته می‌شود.
 * سپس اسمبلی پلاگین بارگذاری می‌شود.
 * با **Reflection** نوعی که ITextPlugin را پیاده‌سازی می‌کند پیدا می‌کنیم.
@@ -1657,10 +1908,13 @@ class Program
 > اگر نیاز به فراخوانی مکرر TransformText داشتید، بهتر است **ALC را کش کنید** و بعد از هر فراخوانی unload نکنید.
 
 خروجی:
+</div>
 
 ```
 BIG APPLE
 ```
+
+<div dir="rtl">
 
 ---
 
@@ -1668,6 +1922,7 @@ BIG APPLE
 
 کد ما اکنون قابلیت حل و ایزوله‌سازی وابستگی‌ها را دارد.
 برای مثال، ابتدا یک **NuGet reference** به **Humanizer.Core** نسخه 2.6.2 اضافه کنید:
+</div>
 
 ```xml
 <ItemGroup>
@@ -1675,7 +1930,10 @@ BIG APPLE
 </ItemGroup>
 ```
 
+<div dir="rtl">
+
 سپس کلاس **CapitalizerPlugin** را به شکل زیر تغییر دهید:
+</div>
 
 ```csharp
 using Humanizer;
@@ -1688,17 +1946,23 @@ namespace Capitalizer
 }
 ```
 
+<div dir="rtl">
+
 خروجی برنامه اکنون:
+</div>
 
 ```
 BigApple
 ```
+
+<div dir="rtl">
 
 ---
 
 ### 🔹 پلاگین جدید: Pluralizer
 
 یک پروژه کتابخانه جدید ایجاد کنید و NuGet reference به **Humanizer.Core** نسخه 2.7.9 اضافه کنید:
+</div>
 
 ```xml
 <ItemGroup>
@@ -1706,7 +1970,10 @@ BigApple
 </ItemGroup>
 ```
 
+<div dir="rtl">
+
 کلاس **PluralizerPlugin** را اضافه کنید که مشابه Capitalizer است، اما متد **Pluralize** را فراخوانی می‌کند:
+</div>
 
 ```csharp
 using Humanizer;
@@ -1719,9 +1986,12 @@ namespace Pluralizer
 }
 ```
 
+<div dir="rtl">
+
 ---
 
 ### 🔹 فراخوانی پلاگین Pluralizer در Main
+</div>
 
 ```csharp
 static void Main()
@@ -1734,18 +2004,24 @@ static void Main()
 }
 ```
 
+<div dir="rtl">
+
 خروجی:
+</div>
 
 ```
 BigApple
 big apples
 ```
 
+<div dir="rtl">
+
 ---
 
 ### 🔹 مشاهده ALCها و اسمبلی‌ها
 
 اگر **UseCollectibleContexts** را **false** کنید و کد زیر را به Main اضافه کنید:
+</div>
 
 ```csharp
 foreach (var context in AssemblyLoadContext.All)
@@ -1756,7 +2032,10 @@ foreach (var context in AssemblyLoadContext.All)
 }
 ```
 
+<div dir="rtl">
+
 * دو نسخه مختلف از **Humanizer** را مشاهده خواهید کرد، هر کدام در **ALC جداگانه**:
+</div>
 
 ```
 Context: PluginLoadContext Capitalizer.dll
@@ -1770,4 +2049,8 @@ Context: DefaultAssemblyLoadContext Default
   Assembly: Host, Version=1.0.0.0, ...
 ```
 
+<div dir="rtl">
+
 حتی اگر هر دو پلاگین نسخه یکسان Humanizer را استفاده کنند، **ایزوله‌سازی ALCها** مزیت دارد، زیرا **متغیرهای static هر پلاگین جدا خواهند بود**.
+</div>
+

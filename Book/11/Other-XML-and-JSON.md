@@ -1,3 +1,6 @@
+
+<div dir="rtl">
+
 # فصل یازدهم: سایر تکنولوژی‌های XML و JSON
 
 در **فصل ۱۰**، ما API مربوط به **LINQ-to-XML** و به‌طور کلی XML را بررسی کردیم.
@@ -12,6 +15,7 @@
 **XmlReader** یک کلاس با کارایی بالا است که برای خواندن یک جریان (Stream) از XML به‌صورت سطح پایین و فقط رو به جلو استفاده می‌شود.
 
 به مثال زیر از یک فایل XML به نام `customer.xml` توجه کنید:
+</div>
 
 ```xml
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
@@ -21,12 +25,17 @@
 </customer>
 ```
 
+<div dir="rtl">
+
 برای ساختن یک شیء از نوع `XmlReader`، کافی است متد استاتیک `XmlReader.Create` را صدا بزنید و یک `Stream`، یا یک `TextReader`، یا یک رشته‌ی URI به آن بدهید:
+</div>
 
 ```csharp
 using XmlReader reader = XmlReader.Create("customer.xml");
 ...
 ```
+
+<div dir="rtl">
 
 از آن‌جایی که **XmlReader** می‌تواند داده‌ها را از منابعی کند (مثل `Stream`‌ها و URIها) بخواند، نسخه‌های **asynchronous** برای بیشتر متدهای خود ارائه می‌دهد تا بتوانید به‌سادگی کدهای **nonblocking** بنویسید.
 (ما موضوع **asynchrony** را به‌طور کامل در فصل ۱۴ بررسی می‌کنیم.)
@@ -34,15 +43,19 @@ using XmlReader reader = XmlReader.Create("customer.xml");
 ---
 
 برای ساختن یک `XmlReader` که از **رشته (string)** بخواند:
+</div>
 
 ```csharp
 using XmlReader reader = XmlReader.Create(
     new System.IO.StringReader(myString));
 ```
 
+<div dir="rtl">
+
 شما همچنین می‌توانید یک شیء از نوع `XmlReaderSettings` ارسال کنید تا گزینه‌های **Parsing** و **Validation** را کنترل کنید.
 
 سه ویژگی مهم این کلاس که برای پرش از محتوای اضافی بسیار مفید هستند:
+</div>
 
 ```csharp
 bool IgnoreComments                  // پرش از روی nodeهای توضیحی؟
@@ -50,7 +63,10 @@ bool IgnoreProcessingInstructions    // پرش از روی دستورهای پر
 bool IgnoreWhitespace                // پرش از روی فضاهای خالی؟
 ```
 
+<div dir="rtl">
+
 در مثال زیر، به Reader می‌گوییم که nodeهای فضای خالی را **نادیده بگیرد**، چون معمولاً در سناریوهای رایج مزاحم هستند:
+</div>
 
 ```csharp
 XmlReaderSettings settings = new XmlReaderSettings();
@@ -59,17 +75,22 @@ using XmlReader reader = XmlReader.Create("customer.xml", settings);
 ...
 ```
 
+<div dir="rtl">
+
 ---
 
 ویژگی مفید دیگر در `XmlReaderSettings`، گزینه‌ی **ConformanceLevel** است.
 مقدار پیش‌فرض آن **Document** است؛ یعنی به Reader می‌گوید انتظار یک **سند XML معتبر با یک ریشه‌ی واحد** را داشته باشد.
 
 اما این موضوع مشکل‌ساز می‌شود اگر بخواهید فقط یک بخش داخلی از XML را بخوانید که شامل چندین node است:
+</div>
 
 ```xml
 <firstname>Jim</firstname>
 <lastname>Bo</lastname>
 ```
+
+<div dir="rtl">
 
 برای اینکه این قطعه بدون خطا خوانده شود، باید مقدار `ConformanceLevel` را روی **Fragment** قرار دهید.
 
@@ -104,6 +125,7 @@ Reader جریان XML را به‌ترتیب متنی (به‌صورت **Depth-F
 ### مثال: خواندن همه Nodeها 👇
 
 در این مثال، ما هر node موجود در جریان XML را می‌خوانیم و نوع هر node را چاپ می‌کنیم:
+</div>
 
 ```csharp
 XmlReaderSettings settings = new XmlReaderSettings();
@@ -129,7 +151,10 @@ while (reader.Read())
 }
 ```
 
+<div dir="rtl">
+
 خروجی:
+</div>
 
 ```
 XmlDeclaration
@@ -142,6 +167,8 @@ Element Name=customer
   EndElement Name=lastname
 EndElement Name=customer
 ```
+
+<div dir="rtl">
 
 🔎 توجه کنید که **Attributes** (ویژگی‌ها) در پیمایش مبتنی بر `Read` لحاظ نمی‌شوند. (برای این موضوع به بخش **Reading Attributes** در صفحه‌ی ۵۵۹ مراجعه کنید.)
 
@@ -185,12 +212,16 @@ EndElement Name=customer
 * `ReadEndElement` بررسی می‌کند که `NodeType` فعلی از نوع **EndElement** باشد و سپس متد `Read` را صدا می‌زند.
 
 به‌عنوان مثال، برای خواندن:
+</div>
 
 ```xml
 <firstname>Jim</firstname>
 ```
 
+<div dir="rtl">
+
 می‌توانیم کد زیر را بنویسیم:
+</div>
 
 ```csharp
 reader.ReadStartElement("firstname");
@@ -198,6 +229,8 @@ Console.WriteLine(reader.Value);
 reader.Read();
 reader.ReadEndElement();
 ```
+
+<div dir="rtl">
 
 ---
 
@@ -210,10 +243,13 @@ reader.ReadEndElement();
 * و یک **end element**
 
 سپس محتوای داخلی را به‌صورت یک رشته بازمی‌گرداند:
+</div>
 
 ```csharp
 string firstName = reader.ReadElementContentAsString("firstname", "");
 ```
+
+<div dir="rtl">
 
 آرگومان دوم به **namespace** اشاره دارد که در این مثال خالی است.
 
@@ -224,6 +260,7 @@ string firstName = reader.ReadElementContentAsString("firstname", "");
 ### مثال کامل‌تر 📝
 
 بیایید به سند XML زیر برگردیم:
+</div>
 
 ```xml
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
@@ -234,7 +271,10 @@ string firstName = reader.ReadElementContentAsString("firstname", "");
 </customer>
 ```
 
+<div dir="rtl">
+
 و آن را این‌طور بخوانیم:
+</div>
 
 ```csharp
 XmlReaderSettings settings = new XmlReaderSettings();
@@ -251,6 +291,8 @@ decimal creditLimit = r.ReadElementContentAsDecimal("creditlimit", "");
 r.MoveToContent();      // پرش از روی کامنت
 r.ReadEndElement();     // خواندن تگ پایانی customer
 ```
+
+<div dir="rtl">
 
 ---
 
@@ -270,6 +312,7 @@ r.ReadEndElement();     // خواندن تگ پایانی customer
 ### Elementهای اختیاری 🌀
 
 در مثال قبلی، فرض کنید که `<lastname>` اختیاری باشد. راه‌حل ساده است:
+</div>
 
 ```csharp
 r.ReadStartElement("customer");
@@ -278,6 +321,8 @@ string lastName     = r.Name == "lastname"
                      ? r.ReadElementContentAsString() : null;
 decimal creditLimit = r.ReadElementContentAsDecimal("creditlimit", "");
 ```
+
+<div dir="rtl">
 
 ---
 
@@ -293,35 +338,47 @@ decimal creditLimit = r.ReadElementContentAsDecimal("creditlimit", "");
 نحوه‌ی برخورد `XmlReader` با Elementهای خالی می‌تواند یک **دام خطرناک** باشد 😅.
 
 به این مثال توجه کنید:
+</div>
 
 ```xml
 <customerList></customerList>
 ```
 
+<div dir="rtl">
+
 در XML، این معادل است با:
+</div>
 
 ```xml
 <customerList/>
 ```
 
+<div dir="rtl">
+
 اما `XmlReader` این دو را متفاوت تفسیر می‌کند.
 
 * در حالت اول، کد زیر به‌خوبی کار می‌کند:
+</div>
 
 ```csharp
 reader.ReadStartElement("customerList");
 reader.ReadEndElement();
 ```
 
+<div dir="rtl">
+
 * اما در حالت دوم، `ReadEndElement` یک استثنا پرتاب می‌کند چون از نظر XmlReader هیچ **end element** مجزایی وجود ندارد.
 
 راه‌حل: بررسی کنید که آیا Element خالی است یا خیر:
+</div>
 
 ```csharp
 bool isEmpty = reader.IsEmptyElement;
 reader.ReadStartElement("customerList");
 if (!isEmpty) reader.ReadEndElement();
 ```
+
+<div dir="rtl">
 
 در عمل، این مشکل فقط زمانی آزاردهنده است که Element موردنظر قرار است **child element**‌ها داشته باشد (مثل یک customer list).
 برای Elementهایی که تنها متن ساده دارند (مثل firstname)، می‌توانید کل این موضوع را با استفاده از متدهایی مثل `ReadElementContentAsString` نادیده بگیرید.
@@ -366,18 +423,24 @@ if (!isEmpty) reader.ReadEndElement();
 استفاده از Indexer معادل با صدا زدن متد `GetAttribute` است.
 
 به مثال زیر توجه کنید:
+</div>
 
 ```xml
 <customer id="123" status="archived"/>
 ```
 
+<div dir="rtl">
+
 می‌توانیم Attributeهای آن را این‌طور بخوانیم:
+</div>
 
 ```csharp
 Console.WriteLine(reader["id"]);              // 123
 Console.WriteLine(reader["status"]);          // archived
 Console.WriteLine(reader["bogus"] == null);   // True
 ```
+
+<div dir="rtl">
 
 ⚠️ نکته: `XmlReader` باید **روی یک Start Element** قرار داشته باشد تا بتوان Attributeها را خواند.
 بعد از اینکه `ReadStartElement` فراخوانی شد، Attributeها برای همیشه از دست می‌روند!
@@ -387,11 +450,14 @@ Console.WriteLine(reader["bogus"] == null);   // True
 ### دسترسی بر اساس موقعیت (Ordinal Position) 🔢
 
 اگرچه ترتیب Attributeها از نظر معنایی بی‌اهمیت است، شما می‌توانید آن‌ها را با شماره‌ی Index بخوانید:
+</div>
 
 ```csharp
 Console.WriteLine(reader[0]);   // 123
 Console.WriteLine(reader[1]);   // archived
 ```
+
+<div dir="rtl">
 
 همچنین Indexer این امکان را می‌دهد که **Namespace** مربوط به یک Attribute (اگر وجود داشته باشد) را مشخص کنید.
 
@@ -414,12 +480,16 @@ Console.WriteLine(reader[1]);   // archived
 ### مثال عملی 📝
 
 بازگردیم به مثال قبلی:
+</div>
 
 ```xml
 <customer id="123" status="archived"/>
 ```
 
+<div dir="rtl">
+
 می‌توانیم این‌طور عمل کنیم:
+</div>
 
 ```csharp
 reader.MoveToAttribute("status");
@@ -429,6 +499,8 @@ reader.MoveToAttribute("id");
 int id = reader.ReadContentAsInt();
 ```
 
+<div dir="rtl">
+
 🔍 اگر Attribute مشخص‌شده وجود نداشته باشد، `MoveToAttribute` مقدار **false** برمی‌گرداند.
 
 ---
@@ -436,6 +508,7 @@ int id = reader.ReadContentAsInt();
 ### پیمایش همه Attributeها 🔄
 
 می‌توانید هر Attribute را به‌ترتیب پیمایش کنید:
+</div>
 
 ```csharp
 if (reader.MoveToFirstAttribute())
@@ -446,12 +519,17 @@ if (reader.MoveToFirstAttribute())
     while (reader.MoveToNextAttribute());
 ```
 
+<div dir="rtl">
+
 🔽 خروجی:
+</div>
 
 ```
 id=123
 status=archived
 ```
+
+<div dir="rtl">
 
 ---
 
@@ -477,16 +555,22 @@ status=archived
 ### 📝 نام‌فضاها (Namespaces) و پیشوندها (Prefixes)
 
 کد زیر با دو حالت اول کار می‌کند:
+</div>
 
 ```csharp
 reader.ReadStartElement("customer");
 ```
 
+<div dir="rtl">
+
 اما برای رسیدگی به حالت سوم باید از کد زیر استفاده کنیم:
+</div>
 
 ```csharp
 reader.ReadStartElement("x:customer");
 ```
+
+<div dir="rtl">
 
 سیستم دوم از دو ویژگی حساس به نام‌فضا استفاده می‌کند: **NamespaceURI** و **LocalName**. این ویژگی‌ها پیشوندها و نام‌فضاهای پیش‌فرضی که توسط عناصر والد تعریف شده‌اند را در نظر می‌گیرند. پیشوندها به‌طور خودکار گسترش می‌یابند. این یعنی:
 
@@ -496,6 +580,7 @@ reader.ReadStartElement("x:customer");
 وقتی دو آرگومان نام به متدی مثل `ReadStartElement` می‌دهید، درواقع از همین سیستم دوم استفاده می‌کنید.
 
 به‌عنوان مثال، کد XML زیر را در نظر بگیرید:
+</div>
 
 ```xml
 <customer xmlns="DefaultNamespace" xmlns:other="OtherNamespace">
@@ -504,13 +589,18 @@ reader.ReadStartElement("x:customer");
     ...
 ```
 
+<div dir="rtl">
+
 می‌توانیم آن را این‌طور بخوانیم:
+</div>
 
 ```csharp
 reader.ReadStartElement("customer", "DefaultNamespace");
 reader.ReadStartElement("address",  "DefaultNamespace");
 reader.ReadStartElement("city",     "OtherNamespace");
 ```
+
+<div dir="rtl">
 
 ✅ انتزاع پیشوندها معمولاً همان چیزی است که می‌خواهید. اما اگر لازم باشد، می‌توانید ببینید چه پیشوندی استفاده شده است (از طریق ویژگی **Prefix**) و سپس آن را به یک نام‌فضا تبدیل کنید (با فراخوانی **LookupNamespace**).
 
@@ -523,6 +613,7 @@ reader.ReadStartElement("city",     "OtherNamespace");
 مانند **XmlTextReader**، یک XmlWriter را با فراخوانی **Create** (با یک شیء تنظیمات اختیاری) می‌سازید.
 
 در مثال زیر، ما **تورفتگی (Indenting)** را فعال می‌کنیم تا خروجی برای انسان خواناتر شود و سپس یک فایل XML ساده می‌نویسیم:
+</div>
 
 ```csharp
 XmlWriterSettings settings = new XmlWriterSettings();
@@ -534,7 +625,10 @@ writer.WriteElementString("lastname", "Bo");
 writer.WriteEndElement();
 ```
 
+<div dir="rtl">
+
 این کد سند زیر را تولید می‌کند (همان فایلی که در اولین مثال XmlReader خواندیم):
+</div>
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -543,6 +637,8 @@ writer.WriteEndElement();
   <lastname>Bo</lastname>
 </customer>
 ```
+
+<div dir="rtl">
 
 ---
 
@@ -557,6 +653,7 @@ writer.WriteEndElement();
 ### 🔡 نوشتن مقادیر
 
 * متد **WriteValue** یک گره متنی منفرد می‌نویسد. این متد هم رشته‌ها و هم انواع غیررشته‌ای مثل `bool` و `DateTime` را می‌پذیرد و به‌طور داخلی از **XmlConvert** برای تبدیل رشته‌های سازگار با XML استفاده می‌کند:
+</div>
 
 ```csharp
 writer.WriteStartElement("birthdate");
@@ -564,11 +661,16 @@ writer.WriteValue(DateTime.Now);
 writer.WriteEndElement();
 ```
 
+<div dir="rtl">
+
 * در مقابل، اگر این‌طور بنویسیم:
+</div>
 
 ```csharp
 WriteElementString("birthdate", DateTime.Now.ToString());
 ```
+
+<div dir="rtl">
 
 خروجی ناسازگار با XML خواهد بود و امکان تفسیر نادرست دارد.
 
@@ -580,6 +682,7 @@ WriteElementString("birthdate", DateTime.Now.ToString());
 ### 🏷️ نوشتن Attributeها
 
 می‌توانید درست بعد از نوشتن یک StartElement، Attributeها را بنویسید:
+</div>
 
 ```csharp
 writer.WriteStartElement("customer");
@@ -587,13 +690,18 @@ writer.WriteAttributeString("id", "1");
 writer.WriteAttributeString("status", "archived");
 ```
 
+<div dir="rtl">
+
 برای نوشتن مقادیر غیررشته‌ای، از این الگو استفاده کنید:
+</div>
 
 ```csharp
 WriteStartAttribute();
 WriteValue(...);
 WriteEndAttribute();
 ```
+
+<div dir="rtl">
 
 ---
 
@@ -630,6 +738,7 @@ XmlWriter متدهایی برای نوشتن انواع دیگر گره‌ها �
 نسخه‌های Overload متدهای Write\* به شما امکان می‌دهند یک عنصر یا Attribute را به یک نام‌فضا متصل کنید.
 
 بیایید محتوای فایل XML قبلی را بازنویسی کنیم و این بار همه عناصر را به نام‌فضای `http://oreilly.com` متصل کنیم، و در عنصر `customer` پیشوند `o` را تعریف کنیم:
+</div>
 
 ```csharp
 writer.WriteStartElement("o", "customer", "http://oreilly.com");
@@ -638,7 +747,10 @@ writer.WriteElementString("o", "lastname", "http://oreilly.com", "Bo");
 writer.WriteEndElement();
 ```
 
+<div dir="rtl">
+
 خروجی این خواهد بود:
+</div>
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -647,6 +759,8 @@ writer.WriteEndElement();
   <o:lastname>Bo</o:lastname>
 </o:customer>
 ```
+
+<div dir="rtl">
 
 🔍 توجه کنید که برای اختصار، **XmlWriter** اعلام نام‌فضای عناصر فرزند را حذف می‌کند چون قبلاً توسط عنصر والد تعریف شده‌اند.
 
@@ -657,6 +771,7 @@ writer.WriteEndElement();
 ### 📂 کار با داده‌های سلسله‌مراتبی (Hierarchical Data)
 
 در نظر بگیرید کلاس‌های زیر را داریم:
+</div>
 
 ```csharp
 public class Contacts
@@ -668,7 +783,10 @@ public class Customer { public string FirstName, LastName; }
 public class Supplier { public string Name; }
 ```
 
+<div dir="rtl">
+
 فرض کنید می‌خواهیم از **XmlReader** و **XmlWriter** برای **سریال‌سازی (Serialization)** یک شیء `Contacts` به XML استفاده کنیم. خروجی مدنظر به این صورت است:
+</div>
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -687,6 +805,8 @@ public class Supplier { public string Name; }
 </contacts>
 ```
 
+<div dir="rtl">
+
 ---
 
 ### ✨ بهترین روش
@@ -701,6 +821,7 @@ public class Supplier { public string Name; }
 ---
 
 ### 👤 کلاس Customer
+</div>
 
 ```csharp
 public class Customer
@@ -729,6 +850,8 @@ public class Customer
 }
 ```
 
+<div dir="rtl">
+
 🔍 دقت کنید:
 
 * `ReadXml` عناصر شروع و پایان بیرونی را می‌خواند. اگر این کار توسط Caller انجام می‌شد، کلاس Customer نمی‌توانست Attributeهای خودش را بخواند.
@@ -742,6 +865,7 @@ public class Customer
 ---
 
 ### 🏢 کلاس Supplier
+</div>
 
 ```csharp
 public class Supplier
@@ -763,11 +887,14 @@ public class Supplier
 }
 ```
 
+<div dir="rtl">
+
 ---
 
 ### 📒 کلاس Contacts
 
 در کلاس `Contacts`، باید در `ReadXml` عناصر را پیمایش کنیم و بررسی کنیم که هر زیرعنصر یک `customer` است یا یک `supplier`. همچنین باید حالت عنصر خالی `<contacts/>` را مدیریت کنیم:
+</div>
 
 ```csharp
 public void ReadXml (XmlReader r)
@@ -805,9 +932,12 @@ public void WriteXml (XmlWriter w)
 }
 ```
 
+<div dir="rtl">
+
 ---
 
 ### 📤 سریال‌سازی Contacts به XML
+</div>
 
 ```csharp
 var settings = new XmlWriterSettings();
@@ -820,9 +950,12 @@ cts.WriteXml(writer);
 writer.WriteEndElement();
 ```
 
+<div dir="rtl">
+
 ---
 
 ### 📥 دسریال‌سازی از همان فایل
+</div>
 
 ```csharp
 var settings = new XmlReaderSettings();
@@ -836,6 +969,8 @@ var cts = new Contacts();
 cts.ReadXml(reader);
 ```
 
+<div dir="rtl">
+
 ---
 
 ### 🔄 ترکیب XmlReader/XmlWriter با X-DOM
@@ -848,14 +983,18 @@ cts.ReadXml(reader);
 ### 📖 استفاده از XmlReader همراه با XElement
 
 برای خواندن یک عنصر جاری به یک **X-DOM**، از متد:
+</div>
 
 ```csharp
 XNode.ReadFrom(XmlReader)
 ```
 
+<div dir="rtl">
+
 استفاده می‌کنیم. این متد فقط بخش جاری از زیردرخت را می‌خواند، نه کل سند را.
 
 مثال:
+</div>
 
 ```xml
 <log>
@@ -868,7 +1007,10 @@ XNode.ReadFrom(XmlReader)
 </log>
 ```
 
+<div dir="rtl">
+
 اگر یک میلیون عنصر `<logentry>` داشته باشیم، بارگذاری کل آن در X-DOM حافظه زیادی مصرف می‌کند. راه‌حل بهتر: پیمایش تک‌به‌تک با XmlReader و پردازش هر عنصر به‌وسیله XElement:
+</div>
 
 ```csharp
 XmlReaderSettings settings = new XmlReaderSettings();
@@ -886,6 +1028,8 @@ while (r.Name == "logentry")
 r.ReadEndElement();
 ```
 
+<div dir="rtl">
+
 ---
 
 ### 🧩 استفاده از XElement در ReadXml
@@ -893,6 +1037,7 @@ r.ReadEndElement();
 اگر الگوی بالا را دنبال کنید، می‌توانید XElement را مستقیماً در متدهای `ReadXml` یا `WriteXml` استفاده کنید، بدون اینکه Caller متوجه شود.
 
 مثال بازنویسی متد `ReadXml` برای Customer:
+</div>
 
 ```csharp
 public void ReadXml (XmlReader r)
@@ -904,6 +1049,8 @@ public void ReadXml (XmlReader r)
 }
 ```
 
+<div dir="rtl">
+
 ---
 
 ### 🌐 مدیریت نام‌فضاها در XElement
@@ -911,6 +1058,7 @@ public void ReadXml (XmlReader r)
 **XElement** با XmlReader همکاری می‌کند تا نام‌فضاها را حفظ کند و پیشوندها را درست گسترش دهد—even اگر در سطح بیرونی تعریف شده باشند.
 
 مثال XML:
+</div>
 
 ```xml
 <log xmlns="http://loggingspace">
@@ -918,11 +1066,14 @@ public void ReadXml (XmlReader r)
   ...
 ```
 
+<div dir="rtl">
+
 در این حالت، `XElement`هایی که در سطح `logentry` ساخته می‌شوند، نام‌فضای بیرونی را به‌درستی به ارث می‌برند. ✅
 
 ### 📄 استفاده از XmlWriter همراه با XElement
 
 شما می‌توانید از **XElement** فقط برای نوشتن المنت‌های داخلی در یک **XmlWriter** استفاده کنید. کد زیر یک میلیون المنت **logentry** را داخل یک فایل XML می‌نویسد، بدون اینکه کل فایل در حافظه ذخیره شود:
+</div>
 
 ```csharp
 using XmlWriter w = XmlWriter.Create ("logfile.xml");
@@ -937,6 +1088,8 @@ for (int i = 0; i < 1000000; i++)
 }
 w.WriteEndElement ();
 ```
+
+<div dir="rtl">
 
 استفاده از **XElement** فقط اندکی سربار در اجرا ایجاد می‌کند. اگر همین مثال را طوری تغییر دهیم که در همه‌جا از **XmlWriter** استفاده کنیم، هیچ تفاوت محسوسی در زمان اجرا دیده نمی‌شود.
 
@@ -969,6 +1122,7 @@ APIهای JSON مایکروسافت اما این مزیت را دارند که 
 کلاس **System.Text.Json.Utf8JsonReader** یک **خواننده بهینه‌شده رو به جلو** برای متن JSON با **کدگذاری UTF-8** است. از نظر مفهومی، بسیار شبیه **XmlReader** است که پیش‌تر در این فصل معرفی شد و تقریباً به همان شکل استفاده می‌شود.
 
 فایل JSON زیر را در نظر بگیرید (با نام people.json):
+</div>
 
 ```json
 {
@@ -978,6 +1132,8 @@ APIهای JSON مایکروسافت اما این مزیت را دارند که 
   "Friends":["Dylan","Ian"]
 }
 ```
+
+<div dir="rtl">
 
 * آکولادها `{}` یک **شیء JSON** را نشان می‌دهند (که شامل propertyهایی مثل `"FirstName"` و `"LastName"` است).
 * براکت‌ها `[]` یک **آرایه JSON** را نشان می‌دهند (که شامل مقادیر تکراری است). در اینجا مقادیر تکراری رشته هستند، اما می‌توانند اشیاء یا حتی آرایه‌های دیگر هم باشند.
@@ -992,6 +1148,7 @@ APIهای JSON مایکروسافت اما این مزیت را دارند که 
 * شروع یا پایان یک آرایه
 * نام یک property
 * مقدار یک property یا یک آرایه (رشته، عدد، true، false یا null)
+</div>
 
 ```csharp
 byte[] data = File.ReadAllBytes ("people.json");
@@ -1029,9 +1186,12 @@ while (reader.Read())
 }
 ```
 
+<div dir="rtl">
+
 ---
 
 ### 📊 خروجی برنامه
+</div>
 
 ```
 Start of object
@@ -1045,6 +1205,8 @@ Value: Ian
 End of array
 End of object
 ```
+
+<div dir="rtl">
 
 ✅ از آنجایی که **Utf8JsonReader** مستقیماً با UTF-8 کار می‌کند، می‌تواند **گام‌به‌گام tokenها** را بدون تبدیل ورودی به UTF-16 (فرمت رشته‌های .NET) بخواند. تبدیل به UTF-16 فقط وقتی انجام می‌شود که متدی مثل **GetString()** فراخوانی شود.
 
@@ -1084,6 +1246,7 @@ End of object
 ---
 
 ### 🖥️ نمونه کد استفاده از Utf8JsonWriter
+</div>
 
 ```csharp
 var options = new JsonWriterOptions { Indented = true };
@@ -1104,7 +1267,10 @@ using (var writer = new Utf8JsonWriter (stream, options))
 }
 ```
 
+<div dir="rtl">
+
 📄 خروجی فایل تولیدشده به این صورت خواهد بود:
+</div>
 
 ```json
 {
@@ -1115,6 +1281,8 @@ using (var writer = new Utf8JsonWriter (stream, options))
 }
 ```
 
+<div dir="rtl">
+
 از .NET 6 به بعد، متد **WriteRawValue** اضافه شد که به شما اجازه می‌دهد **یک رشته یا آرایه بایت** را مستقیماً داخل جریان JSON بنویسید. این قابلیت در موارد خاص مفید است؛ مثلاً وقتی می‌خواهید عددی همیشه همراه با **اعشار** ذخیره شود (مثل `1.0` به‌جای `1`).
 
 ---
@@ -1122,10 +1290,13 @@ using (var writer = new Utf8JsonWriter (stream, options))
 ### 📐 تنظیمات JsonWriterOptions
 
 در مثال بالا، ویژگی **Indented = true** تنظیم شده بود تا خروجی خواناتر شود. اگر این کار انجام نمی‌شد، خروجی به این شکل فشرده می‌بود:
+</div>
 
 ```json
 {"FirstName":"Dylan","LastName":"Lockwood","Age":46...}
 ```
+
+<div dir="rtl">
 
 گزینه‌های **JsonWriterOptions** همچنین شامل موارد زیر هستند:
 
@@ -1170,11 +1341,14 @@ using (var writer = new Utf8JsonWriter (stream, options))
 ### 🏗️ ایجاد یک JsonDocument
 
 متد **Parse** به‌صورت استاتیک یک **JsonDocument** را از **stream**، **string** یا **memory buffer** می‌سازد:
+</div>
 
 ```csharp
 using JsonDocument document = JsonDocument.Parse (jsonString);
 ...
 ```
+
+<div dir="rtl">
 
 هنگام فراخوانی `Parse` می‌توانید یک **JsonDocumentOptions** هم بدهید تا نحوه مدیریت **کاماهای اضافی**، **کامنت‌ها** و **حداکثر عمق تو در تو شدن (nesting depth)** کنترل شود (این موارد در بخش **JsonReaderOptions** صفحه 570 توضیح داده شدند).
 
@@ -1183,12 +1357,15 @@ using JsonDocument document = JsonDocument.Parse (jsonString);
 ### 🌳 دسترسی به RootElement
 
 پس از ساخت، می‌توانید از طریق ویژگی **RootElement** به DOM دسترسی داشته باشید:
+</div>
 
 ```csharp
 using JsonDocument document = JsonDocument.Parse ("123");
 JsonElement root = document.RootElement;
 Console.WriteLine (root.ValueKind);   // Number
 ```
+
+<div dir="rtl">
 
 یک **JsonElement** می‌تواند یک **مقدار JSON** (رشته، عدد، true/false، null)، یا یک **آرایه** یا یک **شیء** را نمایش دهد.
 ویژگی **ValueKind** مشخص می‌کند که نوع آن چیست.
@@ -1206,11 +1383,14 @@ Console.WriteLine (root.ValueKind);   // Number
 ### 🔢 خواندن مقادیر ساده
 
 اگر المنت یک مقدار JSON باشد، می‌توانید مقدار آن را با متدهایی مثل `GetString()`، `GetInt32()`، `GetBoolean()` و غیره بگیرید:
+</div>
 
 ```csharp
 using JsonDocument document = JsonDocument.Parse ("123");
 int number = document.RootElement.GetInt32();
 ```
+
+<div dir="rtl">
 
 همچنین متدهایی برای تبدیل رشته‌های JSON به انواع رایج CLR مثل **DateTime** (و حتی داده‌های دودویی base-64) وجود دارد.
 نسخه‌های **TryGet**\* این متدها هم هستند که در صورت خطا، **استثنا پرتاب نمی‌کنند**.
@@ -1225,12 +1405,15 @@ int number = document.RootElement.GetInt32();
 * `GetArrayLength()` → تعداد عناصر آرایه را برمی‌گرداند.
 
 همچنین می‌توانید با ایندکس به المنت خاصی دسترسی داشته باشید:
+</div>
 
 ```csharp
 using JsonDocument document = JsonDocument.Parse (@"[1, 2, 3, 4, 5]");
 int length = document.RootElement.GetArrayLength();   // 5
 int value  = document.RootElement[3].GetInt32();      // 4
 ```
+
+<div dir="rtl">
 
 ---
 
@@ -1243,6 +1426,7 @@ int value  = document.RootElement[3].GetInt32();      // 4
 * `TryGetProperty(string propertyName, out JsonElement value)` → ویژگی را فقط در صورت وجود برمی‌گرداند.
 
 مثال:
+</div>
 
 ```csharp
 using JsonDocument document = JsonDocument.Parse (@"{ ""Age"": 32}");
@@ -1250,7 +1434,10 @@ JsonElement root = document.RootElement;
 int age = root.GetProperty ("Age").GetInt32();
 ```
 
+<div dir="rtl">
+
 یا کشف ویژگی‌ها به‌صورت پویا:
+</div>
 
 ```csharp
 JsonProperty ageProp = root.EnumerateObject().First();
@@ -1260,9 +1447,12 @@ Console.WriteLine (value.ValueKind);    // Number
 Console.WriteLine (value.GetInt32());   // 32
 ```
 
+<div dir="rtl">
+
 ### 🔎 JsonDocument و LINQ
 
 کلاس **JsonDocument** به‌خوبی با **LINQ** سازگار است. فرض کنید فایل JSON زیر را داریم:
+</div>
 
 ```json
 [
@@ -1287,7 +1477,10 @@ Console.WriteLine (value.GetInt32());   // 32
 ]
 ```
 
+<div dir="rtl">
+
 می‌توانیم با استفاده از **JsonDocument** و **LINQ** داده‌ها را کوئری کنیم:
+</div>
 
 ```csharp
 using var stream = File.OpenRead (jsonPath);
@@ -1305,6 +1498,8 @@ var query =
   };
 ```
 
+<div dir="rtl">
+
 ⚠️ توجه کنید: از آنجا که کوئری‌های **LINQ** به‌صورت **Lazy** اجرا می‌شوند، باید قبل از خارج شدن محدوده (scope) و **Dispose شدن JsonDocument** (که به دلیل استفاده از دستور `using` به‌طور خودکار اتفاق می‌افتد)، کوئری را پیمایش (enumerate) کنید.
 
 ---
@@ -1315,6 +1510,7 @@ var query =
 این روش امکانی برای تولید نسخه‌ای تغییر یافته از JSON فراهم می‌کند.
 
 برای نمونه، در این مثال، JSON قبلی را به یک فایل جدید می‌نویسیم که فقط شامل افرادی است که **دو یا بیشتر دوست دارند**:
+</div>
 
 ```csharp
 using var json = File.OpenRead (jsonPath);
@@ -1335,6 +1531,8 @@ using (var writer = new Utf8JsonWriter (outputStream, options))
 }
 ```
 
+<div dir="rtl">
+
 👉 اما اگر به **قابلیت به‌روزرسانی مستقیم DOM** نیاز دارید، بهتر است از **JsonNode** استفاده کنید.
 
 ---
@@ -1354,10 +1552,13 @@ using (var writer = new Utf8JsonWriter (outputStream, options))
 ### 🛠️ ساخت JsonNode
 
 متد استاتیک **Parse** یک **JsonNode** را از **stream**، **string**، **memory buffer** یا **Utf8JsonReader** می‌سازد:
+</div>
 
 ```csharp
 JsonNode node = JsonNode.Parse (jsonString);
 ```
+
+<div dir="rtl">
 
 هنگام فراخوانی `Parse` می‌توانید مثل JsonDocument یک **JsonDocumentOptions** هم بدهید تا نحوه مدیریت **کاماهای اضافی**، **کامنت‌ها** و **حداکثر عمق** کنترل شود.
 
@@ -1392,6 +1593,7 @@ JsonNode node = JsonNode.Parse (jsonString);
 * `AsArray()`
 
 مثال:
+</div>
 
 ```csharp
 var node = JsonNode.Parse ("123");  // Parses to a JsonValue
@@ -1399,7 +1601,10 @@ int number = node.AsValue().GetValue<int>();
 // همانند ((JsonValue)node).GetValue<int>();
 ```
 
+<div dir="rtl">
+
 اما معمولاً لازم نیست این متدها را صدا بزنید، چون اعضای پرکاربرد مستقیماً روی خود کلاس **JsonNode** در دسترس‌اند:
+</div>
 
 ```csharp
 var node = JsonNode.Parse ("123");
@@ -1407,31 +1612,42 @@ int number = node.GetValue<int>();
 // همانند node.AsValue().GetValue<int>();
 ```
 
+<div dir="rtl">
+
 ### خواندن مقادیر ساده 🔹
 
 همان‌طور که دیدیم، می‌توانید یک مقدار ساده را با استفاده از متد **GetValue** و مشخص کردن نوع، استخراج یا تبدیل کنید. برای آسان‌تر کردن این کار، **JsonNode** عملگرهای تبدیل صریح (**explicit cast operators**) در C# را بازتعریف کرده است، که امکان استفاده از میانبر زیر را فراهم می‌کند:
+</div>
 
 ```csharp
 var node = JsonNode.Parse("123");
 int number = (int)node;
 ```
 
+<div dir="rtl">
+
 این روش برای انواع استاندارد عددی، از جمله `char`، `bool`، `DateTime`، `DateTimeOffset`، `Guid` (و نسخه‌های nullable آن‌ها) و همچنین `string` کار می‌کند.
 
 اگر مطمئن نیستید که تبدیل موفق خواهد بود، باید از الگوی زیر استفاده کنید:
+</div>
 
 ```csharp
 if (node.AsValue().TryGetValue<int>(out var number))
     Console.WriteLine(number);
 ```
 
+<div dir="rtl">
+
 از **.NET 8** به بعد، با فراخوانی `node.GetValueKind()` می‌توانید تشخیص دهید که نود یک رشته، عدد، آرایه، شیء یا مقدار true/false است.
 
 نودهایی که از متن JSON استخراج شده‌اند، به صورت داخلی توسط یک **JsonElement** پشتیبانی می‌شوند (که بخشی از API خواندنی **JsonDocument** است). می‌توانید **JsonElement** زیرین را به این شکل استخراج کنید:
+</div>
 
 ```csharp
 JsonElement je = node.GetValue<JsonElement>();
 ```
+
+<div dir="rtl">
 
 با این حال، این روش زمانی که نود به صورت صریح ایجاد شده باشد (مثلاً هنگام به‌روزرسانی DOM) کار نمی‌کند. چنین نودهایی به جای **JsonElement** توسط مقدار واقعی تجزیه‌شده پشتیبانی می‌شوند (رجوع کنید به بخش «Making updates with JsonNode» در صفحه 579).
 
@@ -1441,6 +1657,7 @@ JsonElement je = node.GetValue<JsonElement>();
 
 یک **JsonNode** که نماینده یک آرایه JSON است، از نوع **JsonArray** خواهد بود.
 **JsonArray** رابط `IList<JsonNode>` را پیاده‌سازی می‌کند، بنابراین می‌توانید روی آن پیمایش کنید و عناصر را مانند یک آرایه یا لیست دسترسی داشته باشید:
+</div>
 
 ```csharp
 var node = JsonNode.Parse(@"[1, 2, 3, 4, 5]");
@@ -1451,17 +1668,25 @@ foreach (JsonNode child in node.AsArray())
 }
 ```
 
+<div dir="rtl">
+
 به عنوان یک میانبر، می‌توانید از اندیس‌دهنده (**indexer**) مستقیماً از کلاس **JsonNode** استفاده کنید:
+</div>
 
 ```csharp
 Console.WriteLine((int)node[0]);   // 1
 ```
 
+<div dir="rtl">
+
 از **.NET 8** به بعد، می‌توانید با متد **GetValues<T>** داده‌ها را به صورت `IEnumerable<T>` دریافت کنید:
+</div>
 
 ```csharp
 int[] values = node.AsArray().GetValues<int>().ToArray();
 ```
+
+<div dir="rtl">
 
 ---
 
@@ -1471,6 +1696,7 @@ int[] values = node.AsArray().GetValues<int>().ToArray();
 **JsonObject** رابط `IDictionary<string, JsonNode>` را پیاده‌سازی می‌کند، بنابراین می‌توانید یک عضو را با اندیس‌دهنده دریافت کنید و همچنین روی کلید/مقدارهای دیکشنری پیمایش کنید.
 
 همانند **JsonArray**، می‌توانید اندیس‌دهنده را مستقیماً از کلاس **JsonNode** استفاده کنید:
+</div>
 
 ```csharp
 var node = JsonNode.Parse(@"{ ""Name"":""Alice"", ""Age"": 32}");
@@ -1478,7 +1704,10 @@ string name = (string)node["Name"];  // Alice
 int age = (int)node["Age"];           // 32
 ```
 
+<div dir="rtl">
+
 برای «کشف» ویژگی‌ها می‌توانیم از این الگو استفاده کنیم:
+</div>
 
 ```csharp
 foreach (KeyValuePair<string, JsonNode> keyValuePair in node.AsObject())
@@ -1488,7 +1717,10 @@ foreach (KeyValuePair<string, JsonNode> keyValuePair in node.AsObject())
 }
 ```
 
+<div dir="rtl">
+
 اگر مطمئن نیستید که یک ویژگی تعریف شده است، الگوی زیر نیز کاربردی است:
+</div>
 
 ```csharp
 if (node.AsObject().TryGetPropertyValue("Name", out JsonNode nameNode))
@@ -1497,11 +1729,14 @@ if (node.AsObject().TryGetPropertyValue("Name", out JsonNode nameNode))
 }
 ```
 
+<div dir="rtl">
+
 ---
 
 ### پیمایش Fluent و LINQ 🔍
 
 می‌توانید با استفاده از اندیس‌دهنده‌ها، به عمق ساختار JSON دسترسی پیدا کنید. به عنوان مثال، با داشتن فایل JSON زیر:
+</div>
 
 ```json
 [
@@ -1526,13 +1761,19 @@ if (node.AsObject().TryGetPropertyValue("Name", out JsonNode nameNode))
 ]
 ```
 
+<div dir="rtl">
+
 می‌توانیم سومین دوست نفر دوم را این‌گونه استخراج کنیم:
+</div>
 
 ```csharp
 string li = (string)node[1]["Friends"][2];
 ```
 
+<div dir="rtl">
+
 همچنین این فایل به راحتی قابل پرس‌وجو با **LINQ** است:
+</div>
 
 ```csharp
 JsonNode node = JsonNode.Parse(File.ReadAllText(jsonPath));
@@ -1548,6 +1789,8 @@ var query =
     };
 ```
 
+<div dir="rtl">
+
 برخلاف **JsonDocument**، **JsonNode** نیازی به Dispose ندارد، بنابراین نگرانی از بابت آزادسازی حافظه هنگام پیمایش تنبل وجود ندارد.
 
 ---
@@ -1556,6 +1799,7 @@ var query =
 
 **JsonObject** و **JsonArray** قابل تغییر هستند، بنابراین می‌توانید محتوای آن‌ها را به‌روزرسانی کنید.
 ساده‌ترین روش برای جایگزینی یا افزودن ویژگی به یک **JsonObject**، استفاده از اندیس‌دهنده است:
+</div>
 
 ```csharp
 var node = JsonNode.Parse(@"{ ""Color"": ""Red"" }");
@@ -1564,29 +1808,41 @@ node["Valid"] = true;
 Console.WriteLine(node.ToJsonString());  // {"Color":"White","Valid":true}
 ```
 
+<div dir="rtl">
+
 خط دوم میانبری برای این دستور است:
+</div>
 
 ```csharp
 node["Color"] = JsonValue.Create("White");
 ```
 
+<div dir="rtl">
+
 به جای اختصاص یک مقدار ساده، می‌توانید یک **JsonArray** یا **JsonObject** اختصاص دهید.
 برای حذف یک ویژگی، ابتدا به **JsonObject** تبدیل کنید (یا **AsObject** را فراخوانی کنید) و سپس متد **Remove** را فراخوانی کنید:
+</div>
 
 ```csharp
 node.AsObject().Remove("Valid");
 ```
 
+<div dir="rtl">
+
 (همچنین **JsonObject** متد **Add** دارد که در صورت وجود ویژگی، استثناء ایجاد می‌کند.)
 
 **JsonArray** نیز امکان استفاده از اندیس‌دهنده برای جایگزینی عناصر را دارد:
+</div>
 
 ```csharp
 var node = JsonNode.Parse("[1, 2, 3]");
 node[0] = 10;
 ```
 
+<div dir="rtl">
+
 فراخوانی **AsArray**، متدهای **Add/Insert/Remove/RemoveAt** را در اختیار شما می‌گذارد. برای مثال، حذف اولین عنصر و اضافه کردن یک عنصر به انتها:
+</div>
 
 ```csharp
 var arrayNode = JsonNode.Parse("[1, 2, 3]");
@@ -1595,7 +1851,10 @@ arrayNode.AsArray().Add(4);
 Console.WriteLine(arrayNode.ToJsonString());  // [2,3,4]
 ```
 
+<div dir="rtl">
+
 از **.NET 8** به بعد، می‌توانید یک **JsonNode** را با فراخوانی **ReplaceWith** نیز به‌روزرسانی کنید:
+</div>
 
 ```csharp
 var node = JsonNode.Parse(@"{ ""Color"": ""Red"" }");
@@ -1603,9 +1862,12 @@ var color = node["Color"];
 color.ReplaceWith("Blue");
 ```
 
+<div dir="rtl">
+
 ### ساخت DOM برای JsonNode به صورت برنامه‌نویسی 🏗️
 
 **JsonArray** و **JsonObject** سازندگانی دارند که از **object initialization syntax** پشتیبانی می‌کنند، و این امکان را می‌دهند که کل DOM یک **JsonNode** را در یک عبارت بسازید:
+</div>
 
 ```csharp
 var node = new JsonArray
@@ -1623,7 +1885,10 @@ var node = new JsonArray
 };
 ```
 
+<div dir="rtl">
+
 نتیجه این ساختار، JSON زیر خواهد بود:
+</div>
 
 ```json
 [

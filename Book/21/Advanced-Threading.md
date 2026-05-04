@@ -1,3 +1,6 @@
+
+<div dir="rtl">
+
 # فصل بیست و یکم:  Threading پیشرفته 
 
 ما در **فصل ۱۴** با مبانی اولیه‌ی **Threading** شروع کردیم تا مقدمه‌ای برای **Tasks** و **Asynchrony** باشد. به طور مشخص، نشان دادیم چطور می‌توان یک **Thread** را شروع و پیکربندی کرد و مفاهیم اساسی مثل **Thread Pooling**، **Blocking**، **Spinning** و **Synchronization Contexts** را پوشش دادیم. همچنین به **Locking** و **Thread Safety** پرداختیم و ساده‌ترین سازه‌ی سیگنال‌دهی، یعنی **ManualResetEvent** را معرفی کردیم.
@@ -60,6 +63,7 @@
 ### 🔒 The `lock` Statement (دستور lock)
 
 برای نشان دادن نیاز به **Locking**، کلاس زیر را در نظر بگیرید:
+</div>
 
 ```csharp
 class ThreadUnsafe
@@ -73,9 +77,12 @@ class ThreadUnsafe
 }
 ```
 
+<div dir="rtl">
+
 این کلاس **Thread-Safe** نیست: اگر متد `Go` به‌طور همزمان توسط دو **Thread** فراخوانی شود، امکان رخ دادن خطای **Division by Zero** وجود دارد. چرا؟ چون ممکن است در همان لحظه‌ای که یک **Thread** بین اجرای دستور `if` و `Console.WriteLine` است، **Thread** دیگر مقدار `_val2` را برابر صفر قرار دهد.
 
 اینجاست که دستور **lock** مشکل را حل می‌کند:
+</div>
 
 ```csharp
 class ThreadSafe
@@ -93,6 +100,8 @@ class ThreadSafe
 }
 ```
 
+<div dir="rtl">
+
 فقط یک **Thread** در هر لحظه می‌تواند شیء همگام‌ساز (در اینجا `_locker`) را قفل کند. هر **Thread** دیگری که برای قفل رقابت کند، **Blocked** می‌شود تا زمانی که قفل آزاد شود.
 
 اگر بیش از یک **Thread** برای قفل رقابت کند، آن‌ها در یک **Ready Queue** قرار می‌گیرند و به ترتیب ورود، قفل به آن‌ها داده می‌شود (البته ✍️ در بعضی شرایط سیستم‌عامل **Windows** و **CLR** ممکن است این عدالت نقض شود).
@@ -106,6 +115,7 @@ class ThreadSafe
 دستور `lock` در C# در حقیقت یک **میان‌بر نحوی (Syntactic Shortcut)** برای فراخوانی متدهای `Monitor.Enter` و `Monitor.Exit` به همراه یک بلوک `try/finally` است.
 
 به‌طور ساده، کدی که در متد `Go` اتفاق می‌افتد، معادل زیر است:
+</div>
 
 ```csharp
 Monitor.Enter (_locker);
@@ -116,6 +126,8 @@ try
 }
 finally { Monitor.Exit (_locker); }
 ```
+
+<div dir="rtl">
 
 ⚠️ اگر متد `Monitor.Exit` بدون این‌که قبلاً `Monitor.Enter` روی همان شیء صدا زده شده باشد، فراخوانی شود، یک **Exception** پرتاب می‌شود.
 
@@ -131,14 +143,18 @@ finally { Monitor.Exit (_locker); }
 * اما اگر قفل گرفته شده باشد، چون هیچ‌وقت وارد بلوک `try/finally` نمی‌شویم، قفل آزاد نخواهد شد. این یعنی **Leak شدن قفل**.
 
 برای جلوگیری از این مشکل، متد زیر در **Monitor.Enter** تعریف شده است:
+</div>
 
 ```csharp
 public static void Enter (object obj, ref bool lockTaken);
 ```
 
+<div dir="rtl">
+
 🔎 اگر و فقط اگر متد `Enter` یک **Exception** پرتاب کند و قفل گرفته نشده باشد، مقدار `lockTaken` برابر **false** خواهد بود.
 
 الگوی درست استفاده از آن (و همان چیزی که کامپایلر C# در پشت‌صحنه برای دستور `lock` تولید می‌کند) به شکل زیر است:
+</div>
 
 ```csharp
 bool lockTaken = false;
@@ -149,6 +165,8 @@ try
 }
 finally { if (lockTaken) Monitor.Exit (_locker); }
 ```
+
+<div dir="rtl">
 
 ---
 
@@ -170,6 +188,7 @@ finally { if (lockTaken) Monitor.Exit (_locker); }
 شیء همگام‌ساز معمولاً **private** است (چون این کار باعث می‌شود منطق قفل‌گذاری بهتر **Encapsulate** شود) و معمولاً یک **Instance Field** یا یک **Static Field** است.
 
 گاهی اوقات شیء همگام‌ساز همان شیء محافظت‌شده است. مانند فیلد `_list` در مثال زیر:
+</div>
 
 ```csharp
 class ThreadSafe
@@ -186,19 +205,27 @@ class ThreadSafe
 }
 ```
 
+<div dir="rtl">
+
 البته داشتن یک فیلد اختصاصی برای قفل‌گذاری (مثل `_locker` در مثال قبلی) کنترل دقیق‌تری روی **Scope** و **Granularity** قفل فراهم می‌کند.
 
 همچنین می‌توانید از شیء حاوی (یعنی `this`) به‌عنوان شیء همگام‌ساز استفاده کنید:
+</div>
 
 ```csharp
 lock (this) { ... }
 ```
 
+<div dir="rtl">
+
 یا حتی از نوع کلاس استفاده کنید:
+</div>
 
 ```csharp
 lock (typeof(Widget)) { ... }   // برای محافظت از فیلدهای static
 ```
+
+<div dir="rtl">
 
 ❌ عیب این روش‌ها این است که منطق قفل‌گذاری **Encapsulate** نمی‌شود و همین می‌تواند مدیریت **Deadlock** و **Blocking** بیش از حد را سخت‌تر کند.
 
@@ -217,6 +244,7 @@ lock (typeof(Widget)) { ... }   // برای محافظت از فیلدهای sta
 حتی در ساده‌ترین حالت—مثلاً یک عمل **Assignment** روی یک فیلد—باید **Synchronization** را در نظر بگیرید.
 
 به مثال زیر توجه کنید:
+</div>
 
 ```csharp
 class ThreadUnsafe
@@ -227,7 +255,10 @@ class ThreadUnsafe
 }
 ```
 
+<div dir="rtl">
+
 این کلاس **Thread-Safe** نیست. نسخه‌ی ایمن‌تر آن به شکل زیر است:
+</div>
 
 ```csharp
 static readonly object _locker = new object();
@@ -236,6 +267,8 @@ static int _x;
 static void Increment() { lock (_locker) _x++; }
 static void Assign()    { lock (_locker) _x = 123; }
 ```
+
+<div dir="rtl">
 
 ---
 
@@ -253,6 +286,7 @@ static void Assign()    { lock (_locker) _x = 123; }
 این قاعده فقط مخصوص قفل‌ها نیست؛ بلکه برای همه‌ی سازه‌های **Synchronization** صدق می‌کند.
 
 مثال: اگر یک سازه‌ی سیگنال‌دهی تضمین کند که فقط یک **Thread** در هر لحظه متغیری را بخواند/بنویسد، دیگر نیازی به قفل ندارید:
+</div>
 
 ```csharp
 var signal = new ManualResetEvent(false);
@@ -261,6 +295,8 @@ new Thread(() => { x++; signal.Set(); }).Start();
 signal.WaitOne();
 Console.WriteLine(x);   // همیشه 1
 ```
+
+<div dir="rtl">
 
 در بخش «**Nonblocking Synchronization**» توضیح داده‌ایم که چرا چنین نیازی پیش می‌آید و چگونه **Memory Barriers** و کلاس **Interlocked** می‌توانند جایگزین قفل در این سناریوها باشند.
 
@@ -271,10 +307,13 @@ Console.WriteLine(x);   // همیشه 1
 اگر گروهی از متغیرها همیشه درون یک قفل خوانده یا نوشته شوند، می‌توان گفت این متغیرها به شکل **Atomic** دسترسی دارند.
 
 مثال:
+</div>
 
 ```csharp
 lock (locker) { if (x != 0) y /= x; }
 ```
+
+<div dir="rtl">
 
 در این حالت، متغیرهای `x` و `y` به‌صورت **Atomic** دسترسی داده می‌شوند؛ یعنی هیچ **Thread** دیگری نمی‌تواند در میانه‌ی این عملیات آن‌ها را تغییر دهد و نتیجه را بی‌اعتبار کند. بنابراین، شما هرگز خطای **Division by Zero** دریافت نمی‌کنید، مشروط بر این‌که `x` و `y` همیشه در همین قفل انحصاری دسترسی داده شوند.
 
@@ -285,6 +324,7 @@ lock (locker) { if (x != 0) y /= x; }
 اتمیک بودن قفل نقض می‌شود اگر داخل بلوک قفل یک **Exception** رخ دهد (چه برنامه چندریسمانی باشد چه نباشد).
 
 مثال:
+</div>
 
 ```csharp
 decimal _savingsBalance, _checkBalance;
@@ -297,6 +337,8 @@ void Transfer(decimal amount)
   }
 }
 ```
+
+<div dir="rtl">
 
 اگر متد `GetBankFee()` یک **Exception** پرتاب کند، بانک پول از دست می‌دهد! 🏦💸
 
@@ -313,6 +355,7 @@ void Transfer(decimal amount)
 ### 🔐 قفل‌های تو در تو (Nested Locking)
 
 یک **Thread** می‌تواند بارها یک شیء را به‌صورت تو در تو (یا **Reentrant**) قفل کند:
+</div>
 
 ```csharp
 lock (locker)
@@ -323,7 +366,10 @@ lock (locker)
     }
 ```
 
+<div dir="rtl">
+
 یا به روش دیگر:
+</div>
 
 ```csharp
 Monitor.Enter (locker); 
@@ -337,9 +383,12 @@ Monitor.Exit (locker);
 Monitor.Exit (locker);
 ```
 
+<div dir="rtl">
+
 در این حالت‌ها، شیء تنها زمانی **آزاد (unlock)** می‌شود که یا خارجی‌ترین دستور `lock` پایان یافته باشد، یا تعداد متناظری از `Monitor.Exit` اجرا شده باشد.
 
 🔁 **قفل تو در تو** زمانی مفید است که یک متد از داخل یک قفل، متد دیگری را صدا بزند:
+</div>
 
 ```csharp
 object locker = new object();
@@ -356,6 +405,8 @@ void AnotherMethod()
 }
 ```
 
+<div dir="rtl">
+
 ✅ در اینجا Thread تنها روی اولین (خارجی‌ترین) قفل مسدود می‌شود.
 
 ---
@@ -365,6 +416,7 @@ void AnotherMethod()
 **Deadlock** زمانی اتفاق می‌افتد که دو Thread هرکدام منتظر یک منبع باشند که توسط دیگری قفل شده است؛ در نتیجه هیچ‌کدام قادر به ادامه کار نخواهند بود.
 
 مثال ساده با دو قفل:
+</div>
 
 ```csharp
 object locker1 = new object();
@@ -384,6 +436,8 @@ lock (locker2)
     lock (locker1);       // Deadlock
 }
 ```
+
+<div dir="rtl">
 
 📌 در این حالت، هر Thread یکی از قفل‌ها را گرفته و منتظر دیگری است → **بن‌بست دائمی**.
 
@@ -461,6 +515,7 @@ lock (locker2)
 ### 🎯 کاربرد متداول: محدود کردن اجرای چندین نسخه از یک برنامه
 
 مثال:
+</div>
 
 ```csharp
 // با نام‌گذاری Mutex، آن را در سطح کل کامپیوتر قابل‌دسترس می‌کنیم.
@@ -484,6 +539,8 @@ void RunProgram()
     Console.ReadLine();
 }
 ```
+
+<div dir="rtl">
 
 📌 نکته:
 
@@ -538,6 +595,7 @@ void RunProgram()
 شما می‌توانید با استفاده از **locking** کدی که thread-unsafe است را به کدی thread-safe تبدیل کنید. یکی از کاربردهای خوب این کار در **.NET** است: تقریباً همه‌ی انواع **nonprimitive** (غیرابتدایی) در .NET زمانی که ساخته می‌شوند، thread-safe نیستند (برای چیزی بیشتر از دسترسی فقط‌خواندنی). با این حال، شما می‌توانید آن‌ها را در کد چندنخی (multithreaded) استفاده کنید، به شرطی که همه‌ی دسترسی‌ها به یک شیء مشخص با استفاده از یک **lock** محافظت شوند.
 
 در اینجا مثالی داریم که در آن دو نخ به‌طور همزمان یک آیتم را به همان **List collection** اضافه می‌کنند و سپس آن لیست را پیمایش می‌کنند:
+</div>
 
 ```csharp
 class ThreadSafe
@@ -558,6 +616,8 @@ class ThreadSafe
 }
 ```
 
+<div dir="rtl">
+
 ---
 
 ### قفل‌گذاری و ایمنی نخ‌ها 🔐
@@ -571,16 +631,22 @@ class ThreadSafe
 ### قفل‌گذاری روی اشیاء thread-safe ⚡
 
 گاهی لازم است حتی هنگام دسترسی به اشیاء **thread-safe** نیز از قفل استفاده کنید. برای توضیح، فرض کنید که کلاس **List** در .NET واقعاً thread-safe بود و ما می‌خواستیم یک آیتم به لیست اضافه کنیم:
+</div>
 
 ```csharp
 if (!_list.Contains (newItem)) _list.Add (newItem);
 ```
 
+<div dir="rtl">
+
 صرف‌نظر از اینکه لیست thread-safe باشد یا نه، این دستور قطعاً thread-safe نیست! کل عبارت **if** باید درون یک قفل قرار گیرد تا از پیش‌دستی (preemption) بین بررسی عضویت و اضافه کردن آیتم جلوگیری شود. این قفل باید در همه‌ی جاهایی که لیست را تغییر می‌دهیم استفاده شود. برای مثال، دستور زیر نیز باید در همان قفل پیچیده شود تا از پیش‌دستی نسبت به عبارت قبلی جلوگیری کند:
+</div>
 
 ```csharp
 _list.Clear();
 ```
+
+<div dir="rtl">
 
 به عبارت دیگر، باید دقیقاً همانند کلاس‌های مجموعه‌ی thread-unsafe قفل‌گذاری کنیم (که این موضوع ایمنی نخِ فرضیِ کلاس **List** را بی‌اثر می‌سازد).
 
@@ -593,10 +659,13 @@ _list.Clear();
 پیچیدن دسترسی به یک شیء در یک قفل سفارشی فقط وقتی کار می‌کند که همه‌ی نخ‌های همروند از آن قفل آگاه باشند و از آن استفاده کنند. این ممکن است وقتی شیء در سطح وسیعی استفاده می‌شود برقرار نباشد. بدترین حالت در مورد **static members** در یک نوع عمومی (public type) رخ می‌دهد.
 
 برای مثال، تصور کنید که ویژگی ایستای **DateTime.Now** در ساختار **DateTime** thread-safe نبود و دو فراخوانی همزمان می‌توانست خروجی درهم یا یک **exception** ایجاد کند. تنها راه‌حل با قفل‌گذاری خارجی این بود که قبل از فراخوانی DateTime.Now نوع را قفل کنیم:
+</div>
 
 ```csharp
 lock(typeof(DateTime))
 ```
+
+<div dir="rtl">
 
 این فقط زمانی جواب می‌دهد که همه‌ی برنامه‌نویسان با این کار موافق باشند (که بعید است). علاوه بر این، قفل‌گذاری روی یک نوع مشکلات خودش را ایجاد می‌کند.
 
@@ -628,13 +697,17 @@ lock(typeof(DateTime))
 سرورهای برنامه (Application servers) باید **چندنخی (multithreaded)** باشند تا بتوانند درخواست‌های همزمان کلاینت‌ها را مدیریت کنند. برنامه‌های **ASP.NET Core** و **Web API** به‌صورت ضمنی چندنخی هستند. این یعنی هنگام نوشتن کد در سمت سرور، اگر احتمال تعامل میان نخ‌هایی که درخواست‌های کلاینت را پردازش می‌کنند وجود داشته باشد، باید **ایمنی نخ (thread safety)** را در نظر بگیرید. خوشبختانه، چنین احتمالی نادر است؛ یک کلاس معمولی در سرور یا **stateless** است (هیچ فیلدی ندارد) یا یک مدل فعال‌سازی دارد که برای هر کلاینت یا هر درخواست یک نمونه‌ی جدا از شیء می‌سازد. تعامل معمولاً فقط از طریق **static fields** رخ می‌دهد، که گاهی برای کش کردن بخش‌هایی از دیتابیس در حافظه جهت بهبود کارایی استفاده می‌شوند.
 
 برای مثال، فرض کنید متدی به نام **RetrieveUser** دارید که یک دیتابیس را کوئری می‌گیرد:
+</div>
 
 ```csharp
 // User is a custom class with fields for user data
 internal User RetrieveUser (int id) { ... }
 ```
 
+<div dir="rtl">
+
 اگر این متد به دفعات فراخوانی شود، می‌توان عملکرد را با کش کردن نتایج در یک **Dictionary** ایستا بهبود داد. در اینجا یک راه‌حل ساده‌ی مفهومی آورده شده است که ایمنی نخ را نیز در نظر می‌گیرد:
+</div>
 
 ```csharp
 static class UserCache
@@ -653,6 +726,8 @@ static class UserCache
 }
 ```
 
+<div dir="rtl">
+
 در اینجا باید حداقل هنگام خواندن و به‌روزرسانی دیکشنری قفل‌گذاری کنیم تا ایمنی نخ تضمین شود. این طراحی یک مصالحه‌ی عملی میان سادگی و کارایی در قفل‌گذاری است. اما یک مشکل کوچک ایجاد می‌شود: اگر دو نخ به‌طور همزمان این متد را با یک شناسه‌ی یکسان (که قبلاً واکشی نشده) فراخوانی کنند، متد **RetrieveUser** دوبار اجرا می‌شود و دیکشنری بی‌دلیل به‌روزرسانی خواهد شد.
 
 قفل کردن کل متد جلوی این مشکل را می‌گیرد، اما ناکارآمدی بیشتری ایجاد می‌کند: کل کش برای مدت فراخوانی **RetrieveUser** قفل می‌شود و در این مدت سایر نخ‌ها برای واکشی کاربران دیگر بلاک خواهند شد.
@@ -662,6 +737,7 @@ static class UserCache
 ### راه‌حل ایده‌آل با Task<User> ⚡
 
 برای یک راه‌حل ایده‌آل، باید استراتژی‌ای که در بخش «Completing synchronously» صفحه ۶۷۷ توضیح داده شد را به‌کار بگیریم. به جای کش کردن **User**، ما **Task<User>** را کش می‌کنیم و فراخواننده آن را **await** می‌کند:
+</div>
 
 ```csharp
 static class UserCache
@@ -678,6 +754,8 @@ static class UserCache
   }
 }
 ```
+
+<div dir="rtl">
 
 در این نسخه، یک قفل واحد کل منطق متد را پوشش می‌دهد. این کار به همروندی (concurrency) آسیبی نمی‌زند زیرا تنها کاری که داخل قفل انجام می‌دهیم، دسترسی به دیکشنری و (احتمالاً) شروع یک عملیات **asynchronous** با فراخوانی **Task.Run** است.
 
@@ -700,13 +778,17 @@ static class UserCache
 ### یک مثال ساده 📊
 
 فرض کنید دو فیلد زیر داریم:
+</div>
 
 ```csharp
 int _percentComplete;
 string _statusMessage;
 ```
 
+<div dir="rtl">
+
 حالا اگر بخواهیم آن‌ها را به‌طور اتمی (atomic) بخوانیم و بنویسیم، به جای قفل‌گذاری مستقیم روی این فیلدها، می‌توانیم یک کلاس immutable تعریف کنیم:
+</div>
 
 ```csharp
 class ProgressStatus    // Represents progress of some activity
@@ -722,14 +804,20 @@ class ProgressStatus    // Represents progress of some activity
 }
 ```
 
+<div dir="rtl">
+
 سپس می‌توانیم یک فیلد از این نوع به همراه یک شیء قفل تعریف کنیم:
+</div>
 
 ```csharp
 readonly object _statusLocker = new object();
 ProgressStatus _status;
 ```
 
+<div dir="rtl">
+
 اکنون می‌توانیم مقادیر این نوع را بدون نگه داشتن قفل برای مدت طولانی بخوانیم و بنویسیم:
+</div>
 
 ```csharp
 var status = new ProgressStatus (50, "Working on it");
@@ -738,7 +826,10 @@ var status = new ProgressStatus (50, "Working on it");
 lock (_statusLocker) _status = status;    // Very brief lock
 ```
 
+<div dir="rtl">
+
 برای خواندن شیء، ابتدا یک کپی از مرجع شیء را (داخل قفل) می‌گیریم. سپس می‌توانیم مقادیرش را بدون نیاز به نگه داشتن قفل بخوانیم:
+</div>
 
 ```csharp
 ProgressStatus status;
@@ -747,6 +838,8 @@ int pc = status.PercentComplete;
 string msg = status.StatusMessage;
 ...
 ```
+
+<div dir="rtl">
 
 ### قفل غیرانحصاری (Nonexclusive Locking) 🔓
 
@@ -783,6 +876,7 @@ Semaphore می‌تواند حداکثر تعداد (maximum count) داشته �
 Semaphore برای جلوگیری از اجرای بیش از حد نخ‌ها روی یک بخش خاص از کد مفید است.
 
 مثالی داریم که پنج نخ تلاش می‌کنند وارد یک کلاب شوند که فقط سه نخ همزمان اجازه ورود دارند:
+</div>
 
 ```csharp
 class TheClub
@@ -805,7 +899,10 @@ class TheClub
 }
 ```
 
+<div dir="rtl">
+
 نمونه خروجی ممکن:
+</div>
 
 ```
 1 wants to enter
@@ -822,9 +919,12 @@ class TheClub
 5 is in!
 ```
 
+<div dir="rtl">
+
 ---
 
 همچنین قانونی است که Semaphore را با **مقدار اولیه صفر** ایجاد کنید و سپس با **Release** تعداد آن را افزایش دهید. مثال زیر دو Semaphore معادل را نشان می‌دهد:
+</div>
 
 ```csharp
 var semaphore1 = new SemaphoreSlim(3);
@@ -832,10 +932,13 @@ var semaphore2 = new SemaphoreSlim(0);
 semaphore2.Release(3);
 ```
 
+<div dir="rtl">
+
 اگر Semaphore نام‌گذاری شده باشد، می‌تواند مانند Mutex بین فرآیندها نیز مورد استفاده قرار گیرد. (Semaphore نام‌گذاری شده فقط در Windows موجود است، در حالی که Mutex نام‌گذاری شده روی Unix هم کار می‌کند.)
 ### Semaphoreها و قفل‌های آسنکرون (Asynchronous Semaphores and Locks) ⏳
 
 قفل کردن (lock) **در یک عبارت await غیرمجاز است**:
+</div>
 
 ```csharp
 lock (_locker)
@@ -845,6 +948,8 @@ lock (_locker)
 }
 ```
 
+<div dir="rtl">
+
 دلیلش ساده است: قفل‌ها به یک **نخ خاص** تعلق دارند، و هنگام بازگشت از `await` معمولاً نخ تغییر می‌کند. علاوه بر این، **lock بلوک‌کننده است** و بلوک کردن برای یک بازه طولانی دقیقاً همان چیزی است که در برنامه‌های آسنکرون نمی‌خواهید.
 
 ---
@@ -852,6 +957,7 @@ lock (_locker)
 با این حال، گاهی اوقات می‌خواهیم عملیات آسنکرون **به صورت متوالی اجرا شوند** یا تعداد عملیات همزمان را محدود کنیم تا بیش از n عملیات همزمان رخ ندهد.
 
 مثال: یک مرورگر وب ممکن است نیاز داشته باشد تا دانلودها را به‌صورت آسنکرون و همزمان انجام دهد، اما بخواهد محدودیت حداکثر ۱۰ دانلود همزمان را اعمال کند. این کار را می‌توان با **SemaphoreSlim** انجام داد:
+</div>
 
 ```csharp
 SemaphoreSlim _semaphore = new SemaphoreSlim(10);
@@ -870,6 +976,8 @@ async Task<byte[]> DownloadWithSemaphoreAsync(string uri)
 }
 ```
 
+<div dir="rtl">
+
 * اگر `initialCount` Semaphore را به ۱ کاهش دهیم، حداکثر هم‌زمانی به ۱ محدود می‌شود و عملاً یک **قفل آسنکرون** ایجاد می‌کند.
 
 ---
@@ -877,6 +985,7 @@ async Task<byte[]> DownloadWithSemaphoreAsync(string uri)
 ### نوشتن یک متد extension به نام `EnterAsync`
 
 متد extension زیر استفاده آسنکرون از **SemaphoreSlim** را ساده‌تر می‌کند، با استفاده از کلاس **Disposable** که در بخش “Anonymous Disposal” معرفی شد:
+</div>
 
 ```csharp
 public static async Task<IDisposable> EnterAsync(this SemaphoreSlim ss)
@@ -886,7 +995,10 @@ public static async Task<IDisposable> EnterAsync(this SemaphoreSlim ss)
 }
 ```
 
+<div dir="rtl">
+
 با این متد می‌توانیم روش قبلی دانلود را به شکل ساده‌تر بازنویسی کنیم:
+</div>
 
 ```csharp
 async Task<byte[]> DownloadWithSemaphoreAsync(string uri)
@@ -896,6 +1008,8 @@ async Task<byte[]> DownloadWithSemaphoreAsync(string uri)
 }
 ```
 
+<div dir="rtl">
+
 ---
 
 ### Parallel.ForEachAsync
@@ -903,6 +1017,7 @@ async Task<byte[]> DownloadWithSemaphoreAsync(string uri)
 از **.NET 6**، روش دیگری برای محدود کردن هم‌زمانی آسنکرون وجود دارد: **Parallel.ForEachAsync**.
 
 فرض کنید آرایه‌ای از URIها داریم که می‌خواهیم دانلود کنیم. می‌توانیم آنها را به‌صورت همزمان دانلود کنیم و هم‌زمانی را به حداکثر ۱۰ عملیات محدود کنیم:
+</div>
 
 ```csharp
 await Parallel.ForEachAsync(
@@ -914,6 +1029,8 @@ await Parallel.ForEachAsync(
         Console.WriteLine($"Downloaded {download.Length} bytes");
     });
 ```
+
+<div dir="rtl">
 
 * سایر متدهای کلاس **Parallel** بیشتر برای سناریوهای برنامه‌نویسی موازی محاسباتی (**compute-bound**) استفاده می‌شوند، که در فصل ۲۲ بررسی شده‌اند.
 ### قفل‌های خواندن/نوشتن (Reader/Writer Locks) 📖
@@ -949,6 +1066,7 @@ await Parallel.ForEachAsync(
 ---
 
 ### متدهای مهم `ReaderWriterLockSlim`
+</div>
 
 ```csharp
 public void EnterReadLock();
@@ -956,6 +1074,8 @@ public void ExitReadLock();
 public void EnterWriteLock();
 public void ExitWriteLock();
 ```
+
+<div dir="rtl">
 
 * نسخه‌های **Try** هم وجود دارد که timeout می‌پذیرند (مشابه `Monitor.TryEnter`)
 * کلاس قدیمی ReaderWriterLock روش‌های مشابهی به نام‌های `AcquireXXX` و `ReleaseXXX` دارد که در صورت timeout **ApplicationException** پرتاب می‌کند.
@@ -965,6 +1085,7 @@ public void ExitWriteLock();
 ### مثال عملی
 
 سه نخ مرتباً یک لیست را می‌خوانند و دو نخ دیگر هر ۱۰۰ میلی‌ثانیه یک عدد تصادفی به لیست اضافه می‌کنند:
+</div>
 
 ```csharp
 class SlimDemo
@@ -1009,8 +1130,11 @@ class SlimDemo
 }
 ```
 
+<div dir="rtl">
+
 * در کد تولیدی واقعی، معمولاً از **try/finally** برای اطمینان از آزاد شدن قفل‌ها در صورت بروز استثنا استفاده می‌کنیم.
 * خروجی نمونه:
+</div>
 
 ```
 Thread B added 61
@@ -1020,6 +1144,8 @@ Thread A added 33
 ...
 ```
 
+<div dir="rtl">
+
 ---
 
 ### مزیت اصلی
@@ -1027,16 +1153,20 @@ Thread A added 33
 `ReaderWriterLockSlim` **امکان خواندن همزمان بیشتری نسبت به قفل ساده فراهم می‌کند**.
 
 * برای مشاهده تعداد نخ‌های concurrent خواننده می‌توانیم در متد Write بنویسیم:
+</div>
 
 ```csharp
 Console.WriteLine(_rw.CurrentReadCount + " concurrent readers");
 ```
+
+<div dir="rtl">
 
 * اغلب اوقات این مقدار ۳ concurrent readers خواهد بود، زیرا متدهای Read بیشتر زمان خود را در حلقه `foreach` می‌گذرانند.
 
 ---
 
 ### ویژگی‌ها و پروپرتی‌های مانیتورینگ
+</div>
 
 ```csharp
 public bool IsReadLockHeld            { get; }
@@ -1049,6 +1179,8 @@ public int  RecursiveReadCount        { get; }
 public int  RecursiveUpgradeCount     { get; }
 public int  RecursiveWriteCount       { get; }
 ```
+
+<div dir="rtl">
 
 این ویژگی‌ها به برنامه‌نویس امکان **مانیتور کردن وضعیت قفل‌ها** و بهینه‌سازی عملکرد را می‌دهد.
 ### قفل‌های قابل ارتقا (Upgradeable Locks) 🔄
@@ -1103,6 +1235,7 @@ public int  RecursiveWriteCount       { get; }
 ### مثال عملی از Upgradeable Lock و قفل بازگشتی 🔄
 
 می‌توانیم **Upgradeable Lock** را با تغییر متد `Write` در مثال قبلی نشان دهیم، به طوری که **یک عدد به لیست اضافه شود فقط اگر قبلاً وجود نداشته باشد**:
+</div>
 
 ```csharp
 while (true)
@@ -1123,6 +1256,8 @@ while (true)
 }
 ```
 
+<div dir="rtl">
+
 ---
 
 ### قفل بازگشتی (Lock Recursion) 🔁
@@ -1131,6 +1266,7 @@ while (true)
 * `ReaderWriterLockSlim` به طور پیش‌فرض **قفل‌های بازگشتی یا تو در تو را مجاز نمی‌داند**.
 
 مثال خطا‌دهنده:
+</div>
 
 ```csharp
 var rw = new ReaderWriterLockSlim();
@@ -1140,21 +1276,30 @@ rw.ExitReadLock();
 rw.ExitReadLock();
 ```
 
+<div dir="rtl">
+
 برای پشتیبانی از قفل بازگشتی، باید هنگام ساخت کلاس مشخص کنیم:
+</div>
 
 ```csharp
 var rw = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 ```
 
+<div dir="rtl">
+
 💡 قانون اصلی برای قفل‌های بازگشتی: پس از گرفتن یک قفل، **قفل‌های بعدی می‌توانند کمتر اما نه بیشتر از نوع اولیه باشند**:
+</div>
 
 ```
 Read Lock → Upgradeable Lock → Write Lock
 ```
 
+<div dir="rtl">
+
 * ارتقاء upgradeable lock به write lock همیشه مجاز است.
 
 مثال ترکیبی:
+</div>
 
 ```csharp
 rw.EnterWriteLock();
@@ -1164,6 +1309,8 @@ Console.WriteLine(rw.IsWriteLockHeld);  // True
 rw.ExitReadLock();
 rw.ExitWriteLock();
 ```
+
+<div dir="rtl">
 
 ---
 
@@ -1187,6 +1334,7 @@ rw.ExitWriteLock();
 * یک نخ با `WaitOne()` منتظر می‌ماند و یک نخ دیگر با `Set()` آن را آزاد می‌کند.
 
 ساخت AutoResetEvent:
+</div>
 
 ```csharp
 var auto = new AutoResetEvent(false);  
@@ -1194,7 +1342,10 @@ var auto = new AutoResetEvent(false);
 var auto = new EventWaitHandle(false, EventResetMode.AutoReset);
 ```
 
+<div dir="rtl">
+
 مثال ساده:
+</div>
 
 ```csharp
 class BasicWaitHandle
@@ -1217,12 +1368,18 @@ class BasicWaitHandle
 }
 ```
 
+<div dir="rtl">
+
 **خروجی:**
+</div>
 
 ```
 Waiting... (pause) Notified
 ```
- <div align="center">
+
+<div dir="rtl">
+
+<div align="center">
     
 ![Conventions-UsedThis-Book](../../assets/image/21/Table-21-2.jpeg) 
 </div>
@@ -1259,6 +1416,7 @@ Waiting... (pause) Notified
 * راه‌حل: نخ اصلی **صبر کند تا worker آماده شود** قبل از ارسال سیگنال. این کار با یک `AutoResetEvent` دیگر انجام می‌شود.
 
 مثال کامل:
+</div>
 
 ```csharp
 class TwoWaySignaling
@@ -1302,12 +1460,17 @@ class TwoWaySignaling
 }
 ```
 
+<div dir="rtl">
+
 **خروجی:**
+</div>
 
 ```
 ooo
 ahhh
 ```
+
+<div dir="rtl">
 
 * در شکل 21-2 فرآیند آماده شدن و سیگنال‌دهی دوطرفه نشان داده شده است.
  <div align="center">
@@ -1331,11 +1494,14 @@ ahhh
 * عملکرد کلی مشابه `AutoResetEvent` است.
 
 #### ساخت ManualResetEvent:
+</div>
 
 ```csharp
 var manual1 = new ManualResetEvent(false);
 var manual2 = new EventWaitHandle(false, EventResetMode.ManualReset);
 ```
+
+<div dir="rtl">
 
 * نسخه بهینه‌تری به نام `ManualResetEventSlim` وجود دارد که برای **زمان انتظار کوتاه** بهینه شده و امکان **استفاده از CancellationToken** را دارد.
 * `ManualResetEventSlim` subclass از `WaitHandle` نیست اما دارای ویژگی `WaitHandle` است که یک **object مبتنی بر WaitHandle** برمی‌گرداند.
@@ -1356,6 +1522,7 @@ var manual2 = new EventWaitHandle(false, EventResetMode.ManualReset);
 * `CountdownEvent`: برای **منتظر ماندن روی چند نخ** استفاده می‌شود.
 
 #### CountdownEvent
+</div>
 
 ```csharp
 var countdown = new CountdownEvent(3); // مقدار اولیه ۳ نخ
@@ -1375,6 +1542,8 @@ void SaySomething(object thing)
 }
 ```
 
+<div dir="rtl">
+
 * می‌توان count را با `AddCount` افزایش داد، اما اگر شمارش به صفر رسیده باشد، **استثنا ایجاد می‌کند**.
 * برای جلوگیری از خطا، از `TryAddCount` استفاده می‌کنیم که **false** برمی‌گرداند اگر شمارش صفر باشد.
 * برای “unsignal” کردن یک CountdownEvent از `Reset()` استفاده می‌کنیم که **count را به مقدار اولیه بازنشانی می‌کند**.
@@ -1386,6 +1555,7 @@ void SaySomething(object thing)
 
 * می‌توان یک EventWaitHandle **نام‌دار** ایجاد کرد که بین چند پردازش کار کند.
 * نام تنها یک رشته است و باید **منحصربه‌فرد باشد** تا با سایر منابع تداخل نکند.
+</div>
 
 ```csharp
 EventWaitHandle wh = new EventWaitHandle(
@@ -1395,6 +1565,8 @@ EventWaitHandle wh = new EventWaitHandle(
 );
 ```
 
+<div dir="rtl">
+
 * اگر دو برنامه این کد را اجرا کنند، می‌توانند **به هم سیگنال دهند**: wait handle در همه نخ‌ها و پردازش‌ها کار می‌کند.
 * توجه: **Named EventWaitHandle فقط در Windows موجود است**.
 ### Wait Handles و Continuations 🔄
@@ -1402,6 +1574,7 @@ EventWaitHandle wh = new EventWaitHandle(
 به جای **منتظر ماندن روی یک wait handle** و بلاک کردن نخ، می‌توان یک **continuation** به آن ضمیمه کرد با استفاده از `ThreadPool.RegisterWaitForSingleObject`.
 
 #### مثال:
+</div>
 
 ```csharp
 var starter = new ManualResetEvent(false);
@@ -1422,6 +1595,8 @@ void Go(object data, bool timedOut)
     // انجام کار...
 }
 ```
+
+<div dir="rtl">
 
 * زمانی که wait handle **signaled** می‌شود (یا timeout رخ می‌دهد)، delegate روی یک نخ از ThreadPool اجرا می‌شود.
 * پس از آن باید `Unregister` فراخوانی شود تا **handle غیرمدیریت‌شده** آزاد شود.
@@ -1454,16 +1629,22 @@ void Go(object data, bool timedOut)
 **SignalAndWait** ابتدا **Set** را روی یک **WaitHandle** فراخوانی می‌کند و سپس **WaitOne** را روی **WaitHandle** دیگر صدا می‌زند. پس از سیگنال‌دهی به **handle** اول، به ابتدای صف انتظار برای **handle** دوم می‌رود؛ این کار کمک می‌کند تا عملیات موفق شود (هرچند که عملیات واقعاً اتمی نیست). می‌توان این متد را به‌عنوان «تبادل یک سیگنال با سیگنال دیگر» تصور کرد و آن را روی یک جفت **EventWaitHandle** استفاده کرد تا دو **thread** در یک نقطه زمانی با هم ملاقات یا **rendezvous** داشته باشند. هم **AutoResetEvent** و هم **ManualResetEvent** مناسب این کار هستند.
 
 * **Thread اول** اجرا می‌کند:
+</div>
 
 ```csharp
 WaitHandle.SignalAndWait (wh1, wh2);
 ```
 
+<div dir="rtl">
+
 * **Thread دوم** کار معکوس را انجام می‌دهد:
+</div>
 
 ```csharp
 WaitHandle.SignalAndWait (wh2, wh1);
 ```
+
+<div dir="rtl">
 
 ---
 
@@ -1491,6 +1672,7 @@ WaitHandle.SignalAndWait (wh2, wh1);
 #### مثال عملی:
 
 در این مثال، هر یک از سه **thread** اعداد ۰ تا ۴ را چاپ می‌کنند و هم‌زمان با دیگر **thread**ها جلو می‌روند:
+</div>
 
 ```csharp
 var barrier = new Barrier(3);
@@ -1508,21 +1690,30 @@ void Speak()
 }
 ```
 
+<div dir="rtl">
+
 **خروجی:**
+</div>
 
 ```
 0 0 0 1 1 1 2 2 2 3 3 3 4 4 4
 ```
 
+<div dir="rtl">
+
 یک ویژگی بسیار مفید **Barrier** این است که می‌توانید **post-phase action** را هنگام ایجاد آن مشخص کنید. این یک **delegate** است که بعد از آنکه **SignalAndWait** به تعداد مشخص فراخوانی شد اجرا می‌شود، اما قبل از اینکه **threads** آزاد شوند.
 
 در مثال ما، اگر **Barrier** را به این صورت ایجاد کنیم:
+</div>
 
 ```csharp
 static Barrier _barrier = new Barrier(3, barrier => Console.WriteLine());
 ```
 
+<div dir="rtl">
+
 خروجی به صورت خط به خط خواهد بود:
+</div>
 
 ```
 0 0 0 
@@ -1531,6 +1722,8 @@ static Barrier _barrier = new Barrier(3, barrier => Console.WriteLine());
 3 3 3 
 4 4 4
 ```
+
+<div dir="rtl">
 
 این ویژگی باعث می‌شود هماهنگی **threads** بسیار منظم و خوانا باشد. ✅
 
@@ -1548,6 +1741,7 @@ static Barrier _barrier = new Barrier(3, barrier => Console.WriteLine());
 ### مقداردهی تنبل (Lazy Initialization) 🐢💡
 
 یکی از مشکلات رایج در **threading** این است که چگونه یک **فیلد مشترک** را به صورت **تنبل و thread-safe** مقداردهی کنیم. این نیاز زمانی ایجاد می‌شود که یک فیلد از نوعی داشته باشیم که **ساخت آن هزینه‌بر باشد**:
+</div>
 
 ```csharp
 class Foo
@@ -1558,9 +1752,12 @@ class Foo
 class Expensive { /* فرض کنید ساخت این کلاس پرهزینه است */ }
 ```
 
+<div dir="rtl">
+
 مشکل این کد این است که **ساخت Foo** هزینه‌ی **ساخت Expensive** را نیز متحمل می‌شود، حتی اگر فیلد **Expensive** هیچ‌وقت دسترسی پیدا نکند.
 
 راه حل واضح این است که **نمونه را فقط در صورت نیاز ایجاد کنیم**:
+</div>
 
 ```csharp
 class Foo
@@ -1578,10 +1775,13 @@ class Foo
 }
 ```
 
+<div dir="rtl">
+
 اما سوال اینجاست: آیا این **thread-safe** است؟
 اگر دو **thread** همزمان به این property دسترسی پیدا کنند، ممکن است هر دو شرط **if** را برآورده کنند و هر thread یک نمونه‌ی متفاوت از **Expensive** ایجاد کند. این می‌تواند منجر به خطاهای ظریف شود؛ بنابراین به طور کلی، این کد **امن برای thread نیست**.
 
 راه حل **امن برای thread** این است که **چک کردن و مقداردهی را داخل یک lock** انجام دهیم:
+</div>
 
 ```csharp
 Expensive _expensive;
@@ -1600,6 +1800,8 @@ public Expensive Expensive
 }
 ```
 
+<div dir="rtl">
+
 ---
 
 ### کلاس Lazy<T> ⚡
@@ -1610,6 +1812,7 @@ public Expensive Expensive
 این الگو یک **خواندن volatile اضافی** انجام می‌دهد تا اگر شیء از قبل مقداردهی شده بود، هزینه‌ی گرفتن lock را نداشته باشیم.
 
 #### نحوه استفاده از Lazy<T>:
+</div>
 
 ```csharp
 Lazy<Expensive> _expensive = new Lazy<Expensive>(
@@ -1617,6 +1820,8 @@ Lazy<Expensive> _expensive = new Lazy<Expensive>(
 
 public Expensive Expensive { get { return _expensive.Value; } }
 ```
+
+<div dir="rtl">
 
 اگر **false** به سازنده‌ی **Lazy<T>** بدهید، الگویی **غیر امن برای thread** ایجاد می‌کند، همانند الگویی که در ابتدای این بخش توضیح داده شد—که در محیط‌های **single-threaded** مناسب است. ✅
 
@@ -1628,6 +1833,7 @@ public Expensive Expensive { get { return _expensive.Value; } }
 * یک **حالت مقداردهی دیگر** ارائه می‌دهد که در آن **چندین thread می‌توانند برای مقداردهی رقابت کنند**.
 
 برای استفاده از **LazyInitializer**، قبل از دسترسی به فیلد، **EnsureInitialized** را فراخوانی کنید و **ارجاع فیلد و delegate کارخانه** را پاس دهید:
+</div>
 
 ```csharp
 Expensive _expensive;
@@ -1641,6 +1847,8 @@ public Expensive Expensive
     }
 }
 ```
+
+<div dir="rtl">
 
 همچنین می‌توانید یک آرگومان اضافی پاس دهید تا **چند thread رقیب برای مقداردهی رقابت کنند**. این شبیه مثال thread-unsafe اولیه ما است، اما **اولین thread که تمام می‌شود همیشه برنده است** و در نهایت تنها یک نمونه خواهید داشت.
 
@@ -1675,10 +1883,13 @@ public Expensive Expensive
 ۱. **\[ThreadStatic]**
 
 ساده‌ترین روش، علامت‌گذاری یک **فیلد static** با **ThreadStatic** است:
+</div>
 
 ```csharp
 [ThreadStatic] static int _x;
 ```
+
+<div dir="rtl">
 
 هر thread نسخه‌ی جداگانه‌ای از `_x` خواهد دید.
 
@@ -1696,10 +1907,13 @@ public Expensive Expensive
 کلاس **ThreadLocal<T>** امکان **ذخیره‌سازی محلی برای thread** را هم برای فیلدهای static و هم instance فراهم می‌کند و اجازه می‌دهد **مقدار پیش‌فرض** مشخص کنید.
 
 مثال: ساخت یک **ThreadLocal<int>** با مقدار پیش‌فرض ۳ برای هر thread:
+</div>
 
 ```csharp
 static ThreadLocal<int> _x = new ThreadLocal<int>(() => 3);
 ```
+
+<div dir="rtl">
 
 سپس از property **Value** برای دریافت یا تنظیم مقدار محلی هر thread استفاده می‌کنید.
 
@@ -1714,20 +1928,26 @@ static ThreadLocal<int> _x = new ThreadLocal<int>(() => 3);
 2. تولید یک **شیء Random جداگانه برای هر thread**.
 
 با **ThreadLocal<T>**، گزینه دوم خیلی آسان می‌شود:
+</div>
 
 ```csharp
 var localRandom = new ThreadLocal<Random>(() => new Random());
 Console.WriteLine(localRandom.Value.Next());
 ```
 
+<div dir="rtl">
+
 🔹 نکته: تابع کارخانه ما برای ایجاد شیء **Random** کمی ساده است، چون سازنده بدون پارامتر Random از **ساعت سیستم** برای seed استفاده می‌کند. این ممکن است برای دو شیء Random که در حدود **۱۰ میلی‌ثانیه** از هم ایجاد شده‌اند، یکسان باشد.
 
 یک روش برای رفع این مشکل:
+</div>
 
 ```csharp
 var localRandom = new ThreadLocal<Random>
 (() => new Random(Guid.NewGuid().GetHashCode()));
 ```
+
+<div dir="rtl">
 
 این روش در **فصل ۲۲** در مثال **parallel spellchecking** (در بخش PLINQ صفحه ۹۳۵) استفاده شده است.
 
@@ -1743,6 +1963,7 @@ var localRandom = new ThreadLocal<Random>
 * هر دو متد نیاز به یک **LocalDataStoreSlot** برای شناسایی slot دارند.
 
 می‌توانید از همان slot برای همه threadها استفاده کنید و هر thread همچنان **مقدار جداگانه‌ای** دریافت می‌کند. مثال:
+</div>
 
 ```csharp
 class Test
@@ -1763,12 +1984,17 @@ class Test
 }
 ```
 
+<div dir="rtl">
+
 در این مثال، از **Thread.GetNamedDataSlot** استفاده کردیم که یک **slot نام‌گذاری‌شده** ایجاد می‌کند—این اجازه می‌دهد slot بین همه بخش‌های برنامه به اشتراک گذاشته شود.
 به طور جایگزین، می‌توانید با یک slot بدون نام، که با **Thread.AllocateDataSlot** ایجاد شده است، کنترل محدوده آن را خودتان داشته باشید:
+</div>
 
 ```csharp
 LocalDataStoreSlot _secSlot = Thread.AllocateDataSlot();
 ```
+
+<div dir="rtl">
 
 ⚠️ نکته:
 
@@ -1782,6 +2008,7 @@ LocalDataStoreSlot _secSlot = Thread.AllocateDataSlot();
 روش‌های پیشین **Thread-local storage** با **async functions** سازگار نیستند، چون بعد از **await**، اجرای کد می‌تواند روی یک thread دیگر ادامه پیدا کند.
 
 کلاس **AsyncLocal<T>** این مشکل را حل می‌کند و مقدار خود را **بعد از await حفظ می‌کند**:
+</div>
 
 ```csharp
 static AsyncLocal<string> _asyncLocalTest = new AsyncLocal<string>();
@@ -1795,7 +2022,10 @@ async void Main()
 }
 ```
 
+<div dir="rtl">
+
 **AsyncLocal<T>** همچنین می‌تواند عملیات شروع‌شده روی **threadهای جداگانه** را از هم جدا نگه دارد، چه توسط **Thread.Start** و چه **Task.Run**:
+</div>
 
 ```csharp
 static AsyncLocal<string> _asyncLocalTest = new AsyncLocal<string>();
@@ -1818,9 +2048,12 @@ async void Test(string value)
 // two two
 ```
 
+<div dir="rtl">
+
 یک نکته جالب درباره **AsyncLocal<T>**:
 
 * اگر یک شیء AsyncLocal<T> **قبلاً مقداری داشته باشد**، وقتی یک thread جدید شروع شود، thread جدید **آن مقدار را به ارث می‌برد**:
+</div>
 
 ```csharp
 static AsyncLocal<string> _asyncLocalTest = new AsyncLocal<string>();
@@ -1834,7 +2067,10 @@ void Main()
 void AnotherMethod() => Console.WriteLine(_asyncLocalTest.Value);  // test
 ```
 
+<div dir="rtl">
+
 * با این حال، thread جدید **یک کپی از مقدار دریافت می‌کند**، بنابراین هر تغییری که روی آن انجام دهد، روی مقدار اصلی تأثیر نمی‌گذارد:
+</div>
 
 ```csharp
 static AsyncLocal<string> _asyncLocalTest = new AsyncLocal<string>();
@@ -1850,6 +2086,8 @@ void Main()
 void AnotherMethod() => _asyncLocalTest.Value = "ha-ha!";
 ```
 
+<div dir="rtl">
+
 ⚠️ توجه: thread جدید **یک کپی سطحی (shallow copy)** از مقدار دریافت می‌کند.
 
 * بنابراین اگر **Async<string>** را با **Async<StringBuilder>** یا **Async\<List<string>>** جایگزین کنید، thread جدید می‌تواند **StringBuilder را پاک کند یا آیتم‌ها را به List اضافه/حذف کند** و این روی مقدار اصلی تأثیر خواهد گذاشت.
@@ -1858,6 +2096,7 @@ void AnotherMethod() => _asyncLocalTest.Value = "ha-ha!";
 اگر نیاز دارید یک **متد** به صورت **دوره‌ای و منظم** اجرا شود، ساده‌ترین راه استفاده از **timer** است.
 
 **Timerها** هم راحت و هم بهینه از نظر حافظه و منابع هستند، مخصوصاً در مقایسه با تکنیک‌های زیر:
+</div>
 
 ```csharp
 new Thread(delegate() {
@@ -1868,6 +2107,8 @@ new Thread(delegate() {
     }
 }).Start();
 ```
+
+<div dir="rtl">
 
 * این روش یک **thread** را دائماً مشغول نگه می‌دارد.
 * بدون کدنویسی اضافه، متد **DoSomeAction** هر روز در زمان متفاوتی اجرا می‌شود.
@@ -1901,6 +2142,7 @@ new Thread(delegate() {
 **PeriodicTimer** در واقع یک timer سنتی نیست؛ بلکه **کلاسی برای ساده‌سازی حلقه‌های asynchronous** است.
 
 با ظهور **async و await**، معمولاً به timerهای سنتی نیاز نیست. به جای آن، الگوی زیر خوب کار می‌کند:
+</div>
 
 ```csharp
 StartPeriodicOperation();
@@ -1915,10 +2157,13 @@ async void StartPeriodicOperation()
 }
 ```
 
+<div dir="rtl">
+
 * اگر این کد را از **UI thread** فراخوانی کنید، مانند یک **timer تک‌thread‌ای** رفتار خواهد کرد، چون **await** همیشه روی همان **synchronization context** برمی‌گردد.
 * برای رفتار به صورت **multi-threaded timer** کافی است **.ConfigureAwait(false)** به await اضافه کنید.
 
 **PeriodicTimer** این الگو را ساده می‌کند:
+</div>
 
 ```csharp
 var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
@@ -1932,6 +2177,8 @@ async void StartPeriodicOperation()
 }
 ```
 
+<div dir="rtl">
+
 * همچنین می‌توان با **dispose کردن** نمونه **PeriodicTimer**، timer را متوقف کرد.
 * در این صورت **WaitForNextTickAsync** مقدار **false** برمی‌گرداند و حلقه پایان می‌یابد.
 
@@ -1940,6 +2187,7 @@ async void StartPeriodicOperation()
 **System.Threading.Timer** ساده‌ترین **timer چند‌نخی** است: فقط یک **constructor** و دو **method** دارد (برای مینیمالیست‌ها و نویسندگان کتاب‌ها واقعاً لذت‌بخش!).
 
 در مثال زیر، یک **timer** متد **Tick** را صدا می‌زند، که بعد از ۵ ثانیه `"tick..."` را چاپ می‌کند و سپس هر ثانیه یک‌بار این کار را تکرار می‌کند، تا زمانی که کاربر **Enter** را فشار دهد:
+</div>
 
 ```csharp
 using System;
@@ -1958,6 +2206,8 @@ void Tick(object data)
 }
 ```
 
+<div dir="rtl">
+
 * برای تغییر فاصله‌ی اجرای timer بعد از ساخت آن، می‌توان از متد **Change** استفاده کرد.
 * اگر بخواهید timer فقط یک‌بار اجرا شود، از **Timeout.Infinite** در آرگومان آخر **constructor** استفاده کنید.
 
@@ -1974,6 +2224,7 @@ void Tick(object data)
 * **SynchronizingObject** با متدهای **Invoke** و **BeginInvoke** برای فراخوانی ایمن متدها روی عناصر WPF و کنترل‌های Windows Forms
 
 مثالی از آن:
+</div>
 
 ```csharp
 using System;
@@ -1993,6 +2244,8 @@ tmr.Dispose();               // متوقف کردن دائم timer
 void tmr_Elapsed(object sender, EventArgs e)
     => Console.WriteLine("Tick");
 ```
+
+<div dir="rtl">
 
 * **Timerهای چند‌نخی** از **thread pool** استفاده می‌کنند تا چند thread بتوانند به تعداد زیادی timer سرویس بدهند.
 
@@ -2039,3 +2292,5 @@ void tmr_Elapsed(object sender, EventArgs e)
 * این تایمرها برای **کارهای کوچک** و معمولاً به‌روزرسانی UI مناسب‌اند (مثلاً نمایش ساعت یا countdown).
 
 * از نظر دقت، تایمرهای تک‌نخی مشابه تایمرهای چند‌نخی هستند (ده‌ها میلی‌ثانیه)، اما معمولاً کمی کمتر دقیق‌اند چون ممکن است هنگام پردازش درخواست‌های دیگر UI یا eventهای تایمر تأخیر ایجاد شود.
+</div>
+
